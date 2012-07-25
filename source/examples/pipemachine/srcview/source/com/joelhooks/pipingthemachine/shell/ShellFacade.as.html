@@ -1,0 +1,111 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<base href="http://joelhooks.com" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ShellFacade.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ PureMVC AS3 MultiCore Pipes and Statemachine Integration – Piping the Machine
+ Copyright (c) 2009 Joel Hooks &lt;joel.hooks@puremvc.org&gt;
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">shell</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">shell</span>.<span class="ActionScriptDefault_Text">controller</span>.<span class="ActionScriptDefault_Text">AddNewDoodadCommand</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">shell</span>.<span class="ActionScriptDefault_Text">controller</span>.<span class="ActionScriptDefault_Text">StartupCommand</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">shell</span>.<span class="ActionScriptDefault_Text">controller</span>.<span class="ActionScriptDefault_Text">state</span>.<span class="ActionScriptDefault_Text">AssembleCommand</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">shell</span>.<span class="ActionScriptDefault_Text">controller</span>.<span class="ActionScriptDefault_Text">state</span>.<span class="ActionScriptDefault_Text">FailCommand</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">shell</span>.<span class="ActionScriptDefault_Text">controller</span>.<span class="ActionScriptDefault_Text">state</span>.<span class="ActionScriptDefault_Text">PlumbCommand</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">patterns</span>.<span class="ActionScriptDefault_Text">facade</span>.<span class="ActionScriptDefault_Text">Facade</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ShellFacade</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Facade</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">//---------------------------------------------------------------------------
+</span>        <span class="ActionScriptComment">// State Machine related constants ( In order of runtime sequence /FSM )
+</span>        <span class="ActionScriptComment">//---------------------------------------------------------------------------
+</span>        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">STARTING</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                   <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;state/starting/puremvc&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">STARTUP</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                  <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/startup&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">STARTED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                   <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;acion/completed/startup&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">STARTUP_FAILED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>            <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;action/startup/failed&quot;</span>;
+
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">PLUMBING</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                  <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;state/plumbing&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">PLUMB</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                    <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/plumb&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">PLUMBED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                  <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;action/plumbing&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">PLUMB_FAILED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>            <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;action/plumbing/failed&quot;</span>;
+
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ASSEMBLING</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                    <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;state/assembling&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ASSEMBLE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/assemble&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ASSEMBLED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                  <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;action/assembled&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ASSEMBLY_FAILED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>        <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;action/assembly/failed&quot;</span>;
+
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">NAVIGATING</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                  <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;state/navigating&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">NAVIGATE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/navigate&quot;</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FAILING</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                  <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;state/failing&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FAIL</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                        <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/fail&quot;</span>;
+        
+        <span class="ActionScriptComment">//---------------------------------------------------------------------------
+</span>        <span class="ActionScriptComment">// Shell notification constants
+</span>        <span class="ActionScriptComment">//---------------------------------------------------------------------------
+</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">GET_LOGGER_WINDOW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>            <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/get/logger/window&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ADD_LOGGER_WINDOW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>            <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/add/logger/window&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">SEND_MESSAGE_TO_LOGGER</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>        <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/send/message/to/logger&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">CONNECT_MODULE_TO_LOGGER</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>        <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/connect/module/to/logger&quot;</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ADD_NEW_DOODAD</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/add/new/doodad&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">GET_DOODAD_UI</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/get/doodad/ui&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ADD_DOODAD_UI</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/add/doodad/ui&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">REMOVE_DOODAD</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>                <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;note/remove/doodad&quot;</span>;
+                
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ShellFacade</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * ShellFacade Factory Method
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getInstance</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ShellFacade</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">instanceMap</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">instanceMap</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptBracket/Brace">]</span>  <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ShellFacade</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">instanceMap</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">ShellFacade</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Register Commands with the Controller 
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeController</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">initializeController</span><span class="ActionScriptBracket/Brace">()</span>;            
+            <span class="ActionScriptDefault_Text">registerCommand</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">STARTUP</span>,     <span class="ActionScriptDefault_Text">StartupCommand</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">//Register the state commands. The StateMachince is configured to 
+</span>            <span class="ActionScriptComment">//use these commands for the process of changing states.
+</span>            <span class="ActionScriptDefault_Text">registerCommand</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">PLUMB</span>,     <span class="ActionScriptDefault_Text">PlumbCommand</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">registerCommand</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ASSEMBLE</span>,  <span class="ActionScriptDefault_Text">AssembleCommand</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">registerCommand</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FAIL</span>,         <span class="ActionScriptDefault_Text">FailCommand</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">//module commands
+</span>            <span class="ActionScriptDefault_Text">registerCommand</span><span class="ActionScriptBracket/Brace">(ADD</span><span class="ActionScriptDefault_Text">_NEW_DOODAD</span>, <span class="ActionScriptDefault_Text">AddNewDoodadCommand</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Application startup
+         * 
+         * @param app a reference to the application component 
+         */</span>  
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">startup</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">app</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">PipingTheMachine</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">sendNotification</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">STARTUP</span>, <span class="ActionScriptDefault_Text">app</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

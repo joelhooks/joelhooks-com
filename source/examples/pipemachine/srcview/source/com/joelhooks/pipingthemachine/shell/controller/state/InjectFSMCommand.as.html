@@ -1,0 +1,87 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<base href="http://joelhooks.com" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>InjectFSMCommand.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ PureMVC AS3 MultiCore Pipes and Statemachine Integration – Piping the Machine
+ Copyright (c) 2009 Joel Hooks &lt;joel.hooks@puremvc.org&gt;
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">shell</span>.<span class="ActionScriptDefault_Text">controller</span>.<span class="ActionScriptDefault_Text">state</span>
+<span class="ActionScriptBracket/Brace">{</span>    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">shell</span>.<span class="ActionScriptDefault_Text">ShellFacade</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">INotification</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">patterns</span>.<span class="ActionScriptDefault_Text">command</span>.<span class="ActionScriptDefault_Text">SimpleCommand</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">statemachine</span>.<span class="ActionScriptDefault_Text">FSMInjector</span>;
+
+    <span class="ActionScriptASDoc">/**
+     * Create and inject the StateMachine.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">InjectFSMCommand</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">SimpleCommand</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Configure and inject the Finite State Machine.
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">execute</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">note</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">INotification</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create the FSM definition
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fsm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptOperator">=</span> 
+            <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">fsm</span> <span class="ActionScriptDefault_Text">initial</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">STARTING</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">&gt;</span>
+            
+                <span class="ActionScriptOperator">&lt;!--</span> <span class="ActionScriptDefault_Text">STARTUP</span> <span class="ActionScriptDefault_Text">THE</span> <span class="ActionScriptDefault_Text">SHELL</span> <span class="ActionScriptOperator">--&gt;</span>
+                <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">state</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">STARTING</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">&gt;</span>
+
+                   <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">transition</span> <span class="ActionScriptDefault_Text">action</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">STARTED</span><span class="ActionScriptBracket/Brace">}</span> 
+                                  <span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">PLUMBING</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">/&gt;</span>
+
+                   <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">transition</span> <span class="ActionScriptDefault_Text">action</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">STARTUP_FAILED</span><span class="ActionScriptBracket/Brace">}</span> 
+                                  <span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">FAILING</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">/&gt;</span>
+                <span class="ActionScriptOperator">&lt;/</span><span class="ActionScriptDefault_Text">state</span><span class="ActionScriptOperator">&gt;</span>
+                
+                <span class="ActionScriptOperator">&lt;!--</span> <span class="ActionScriptDefault_Text">PLUMB</span> <span class="ActionScriptDefault_Text">THE</span> <span class="ActionScriptDefault_Text">CORES</span> <span class="ActionScriptOperator">--&gt;</span>                                
+                <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">state</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">PLUMBING</span><span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptDefault_Text">changed</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">PLUMB</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">&gt;</span>
+
+                   <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">transition</span> <span class="ActionScriptDefault_Text">action</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">PLUMBED</span><span class="ActionScriptBracket/Brace">}</span> 
+                                  <span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">ASSEMBLING</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">/&gt;</span>
+                   
+                   <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">transition</span> <span class="ActionScriptDefault_Text">action</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">PLUMB_FAILED</span><span class="ActionScriptBracket/Brace">}</span> 
+                                  <span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">FAILING</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">/&gt;</span>
+
+                <span class="ActionScriptOperator">&lt;/</span><span class="ActionScriptDefault_Text">state</span><span class="ActionScriptOperator">&gt;</span>
+
+                <span class="ActionScriptOperator">&lt;!--</span> <span class="ActionScriptDefault_Text">ASSEMBLE</span> <span class="ActionScriptDefault_Text">THE</span> <span class="ActionScriptDefault_Text">VIEW</span> <span class="ActionScriptOperator">--&gt;</span>
+                <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">state</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">ASSEMBLING</span><span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptDefault_Text">changed</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">ASSEMBLE</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">&gt;</span>
+
+                   <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">transition</span> <span class="ActionScriptDefault_Text">action</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">ASSEMBLED</span><span class="ActionScriptBracket/Brace">}</span> 
+                                  <span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">NAVIGATING</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">/&gt;</span>
+                   
+                   <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">transition</span> <span class="ActionScriptDefault_Text">action</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">ASSEMBLY_FAILED</span><span class="ActionScriptBracket/Brace">}</span> 
+                                  <span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">FAILING</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">/&gt;</span>
+
+                <span class="ActionScriptOperator">&lt;/</span><span class="ActionScriptDefault_Text">state</span><span class="ActionScriptOperator">&gt;</span>
+
+                <span class="ActionScriptOperator">&lt;!--</span> <span class="ActionScriptDefault_Text">READY</span> <span class="ActionScriptDefault_Text">TO</span> <span class="ActionScriptDefault_Text">ACCEPT</span> <span class="ActionScriptDefault_Text">BROWSER</span> <span class="ActionScriptDefault_Text">OR</span> <span class="ActionScriptDefault_Text">USER</span> <span class="ActionScriptDefault_Text">NAVIGATION</span> <span class="ActionScriptOperator">--&gt;</span>
+                <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">state</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">NAVIGATING</span><span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptDefault_Text">changed</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">NAVIGATE</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">/&gt;</span>
+                
+                <span class="ActionScriptOperator">&lt;!--</span> <span class="ActionScriptDefault_Text">REPORT</span> <span class="ActionScriptDefault_Text">FAILURE</span> <span class="ActionScriptDefault_Text">FROM</span> <span class="ActionScriptDefault_Text">ANY</span> <span class="ActionScriptDefault_Text">STATE</span> <span class="ActionScriptOperator">--&gt;</span>
+                <span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">state</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">FAILING</span><span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptDefault_Text">changed</span><span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">ShellFacade</span>.<span class="ActionScriptDefault_Text">FAIL</span><span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptOperator">/&gt;</span>
+
+            <span class="ActionScriptOperator">&lt;/</span><span class="ActionScriptDefault_Text">fsm</span><span class="ActionScriptOperator">&gt;</span>;
+            
+            <span class="ActionScriptComment">// Create and inject the StateMachine 
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">injector</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FSMInjector</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FSMInjector</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">fsm</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">injector</span>.<span class="ActionScriptDefault_Text">initializeNotifier</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">multitonKey</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">injector</span>.<span class="ActionScriptDefault_Text">inject</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>The Flickr AS3 API and Flexjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Pleat Menu &#8211; Flex Component (draft)' href='http://joelhooks.com/2009/04/18/pleat-menu-flex-component-draft/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=148' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,685] -->
+<link rel="canonical" href="http://joelhooks.com/2009/03/16/the-flickr-as3-api-and-flex/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_FlickrTesting_1965856867","8.0.0");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-148 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-148" class="post-148 post type-post status-publish format-standard hentry category-actionscript category-flex">
+					<h1>The Flickr AS3 API and Flex</h1>
+		
+					<div class="entry-content">
+						<p>We&#8217;ve been using wordpress for <a onclick="javascript:pageTracker._trackPageview('/outgoing/provinsal.com');"  href="http://provinsal.com">our family photo blog</a> for years. It worked well, 4 images in a horizontal scroll. It was kinda tough to navigate though. If you were looking for an image you had to click more&#8230; more&#8230; more&#8230; etc through 3 or 4 years of photos. I wanted something easier to update and navigate. I also wanted to play around with the Flickr API. Luckily the <a onclick="javascript:pageTracker._trackPageview('/outgoing/code.google.com/p/as3flickrlib/');"  href="http://code.google.com/p/as3flickrlib/">Adobe Flickr AS3 library</a> is very complete. Unfortunately it is very lacking in examples, but the API is well documented so it didn&#8217;t take too long to get my bearings.</p>
+<p>Here&#8217;s what I came out with. Really it is meant to fill the browser, so check it out <a onclick="javascript:pageTracker._trackPageview('/outgoing/provinsal.com');"  href="http://provinsal.com" target="_blank">here</a> too if you are interested. <a href="/examples/flickr_api/srcview">Source is enabled</a> on the movie. Codes sloppy, but it gets the job done. <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+<div align="center">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_FlickrTesting_1965856867"
+			class="flashmovie"
+			width="440"
+			height="510">
+	<param name="movie" value="/examples/flickr_api/FlickrTesting.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="/examples/flickr_api/FlickrTesting.swf"
+			name="fm_FlickrTesting_1965856867"
+			width="440"
+			height="510">
+	<!--<![endif]-->
+		
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object></div>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2009/03/16/the-flickr-as3-api-and-flex/">The Flickr AS3 API and Flex</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-248">
+        <div id="dsq-comment-header-248" class="dsq-comment-header">
+            <cite id="dsq-cite-248">
+                <span id="dsq-author-user-248">Brett Adam</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-248" class="dsq-comment-body">
+            <div id="dsq-comment-message-248" class="dsq-comment-message"><p>Thanks for the example but&#8230;.could you perhaps fix whatever is preventing the source being available? ISE 500</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-249">
+        <div id="dsq-comment-header-249" class="dsq-comment-header">
+            <cite id="dsq-cite-249">
+http://joelhooks.com                <span id="dsq-author-user-249">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-249" class="dsq-comment-body">
+            <div id="dsq-comment-message-249" class="dsq-comment-message"><p><a href="http://joelhooks.com/examples/flickr_api/srcview/index.html" rel="nofollow">http://joelhooks.com/examples/flickr_api/srcview/index.html</a></p>
+<p>works for me&#8230;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-250">
+        <div id="dsq-comment-header-250" class="dsq-comment-header">
+            <cite id="dsq-cite-250">
+http://www.gullinbursti-creations.com/                <span id="dsq-author-user-250">Matt H</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-250" class="dsq-comment-body">
+            <div id="dsq-comment-message-250" class="dsq-comment-message"><p>Very nicely done! I&#8217;m on the home stretch w/ a Flickr / AS3 project, the lack of examples &amp; call sequencing logic to the API has been a great lesson in programmatic flow to say the least. On top of that, I decided it&#8217;d be a great intro to PureMVC. Hey, I was lookin&#8217; for a challenge. All I can say it has been a rough ride, but the knowledge gained is invaluable.</p>
+<p>Here&#8217;s the project&#8217;s URL, there&#8217;s view source enabled so if anyone has any suggestions / criticisms on my 1st PureMVC project, I&#8217;ll gladly accept some advice. I know there&#8217;s still some funny business happening within, but it seems like it&#8217;ll turn out to be a solid app.<br />
+[=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=]&gt;<br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/expo.gullinbursti.cc/le_as3Flickr/');"  href="http://expo.gullinbursti.cc/le_as3Flickr/" rel="nofollow">http://expo.gullinbursti.cc/le_as3Flickr/</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2009/03/16/the-flickr-as3-api-and-flex/';
+    var disqus_identifier = '148 http://joelhooks.com/?p=148';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "The Flickr AS3 API and Flex";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=148');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2009\/03\/16\/the-flickr-as3-api-and-flex\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.224 seconds. Made 5 queries to database and 14 cached queries. Memory used - 16.09MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

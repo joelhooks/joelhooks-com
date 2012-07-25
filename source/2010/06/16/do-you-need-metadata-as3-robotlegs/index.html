@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Do we really need THAT much metadata in AS3? Not with Robotlegs&#8230;joelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Write high quality unit tested Actionscript 3 for fun and profit&#8230;' href='http://joelhooks.com/2010/12/20/write-high-quality-unit-tested-actionscript-3-for-fun-and-profit/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=527' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,728] -->
+<link rel="canonical" href="http://joelhooks.com/2010/06/16/do-you-need-metadata-as3-robotlegs/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_RobotlegsFlickrGallery_499928491","10.0.0");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-527 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-527" class="post-527 post type-post status-publish format-standard hentry category-design-patterns category-dev-tools category-robotlegs category-software-architecture">
+					<h1>Do we really need THAT much metadata in AS3? Not with Robotlegs&#8230;</h1>
+		
+					<div class="entry-content">
+						<p>There was a time in the push for a Robotlegs 1.0 that a nometa implementation existed. <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robertpenner');"  href="http://github.com/robertpenner">Robert Penner</a> still uses it, if I&#8217;m not mistaken. It doesn&#8217;t have as much convenience as the regular meta-loving MVCS implementation, meaning it doesn&#8217;t inject a bunch of classes into the MVCS base classes. Is that bad? Not really. I find myself rarely using the injected classes anyway. At the time I pushed back on the nometa implementation and its inclusion in the core. I still think that is proper, because it would just tend to cloud the implementation and make it more difficult to document and support, both of these being key pillars in making Robotlegs a successful project that people will actually use. The concept of using as little metadata as possible in my applications is very appealing.</p>
+<div align="center"><a onclick="javascript:pageTracker._trackPageview('/outgoing/xkcd.com/754/');"  href="http://xkcd.com/754/"><img src="http://imgs.xkcd.com/comics/dependencies.png" alt="" /></a></div>
+<p><span id="more-527"></span><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/tschneidereit/SwiftSuspenders#readme');"  href="http://github.com/tschneidereit/SwiftSuspenders#readme">SwiftSuspenders</a> beautifully supports constructor injection. This means that you don&#8217;t need to annotate any methods or the class with metadata for it to honor injection into the constructor. With the [Inject] tag, you are marking required dependencies. They aren&#8217;t optional. If there is no rule to supply the injection you will get a runtime error saying as such. So, given these non-optional dependencies, injecting them into the constructor makes a lot of sense. One drawback to this approach is that if you are injecting a lot of dependencies your constructor might get really big. In fact, the limit is 10 parameters. Guess what? If your class requires that many dependencies, it already smells bad. Clean it up and think <a onclick="javascript:pageTracker._trackPageview('/outgoing/butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod');"  href="http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod">single responsibility</a>. For the love of Uncle Bob, keep it clean.</p>
+<p>To illustrate this point I have refactored the Image Gallery example. It was my first example for Robotlegs almost a year ago. The original version resides in the Robotlegs Demo Bundle. In this refactoring I removed all occurrences of the [Inject] metadata tag. In addition, I removed all of the extensions of Robotlegs mvcs implementation sub-classes with the exception of Mediator. There are no Actor or Command subclasses. So what you end up with is a Command, Model, and Service tier that is completely meta and framework free. That rocks. It is just AS3 code doing its job. I love that.</p>
+
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_RobotlegsFlickrGallery_499928491"
+			class="flashmovie"
+			width="700"
+			height="700">
+	<param name="movie" value="http://joelhooks.com/examples/galleryNoMeta/RobotlegsFlickrGallery.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="http://joelhooks.com/examples/galleryNoMeta/RobotlegsFlickrGallery.swf"
+			name="fm_RobotlegsFlickrGallery_499928491"
+			width="700"
+			height="700">
+	<!--<![endif]-->
+		
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-FlickrGalleryNoMeta');"  href="http://github.com/joelhooks/robotlegs-examples-FlickrGalleryNoMeta">Here&#8217;s a link to the source for this project on Github</a>.</p>
+<p>Tooling is very lacking for metadata in all of the IDEs currently available. The <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.elementriver.com/sourcemate/');"  href="http://www.elementriver.com/sourcemate/">SourceMate</a> plugin from ElementRiver is a nice addition to Flash Builder if you make use of metadata. It actually gives you code completion, which in and of itself is a huge improvement over&#8230; nothing. I hope to see more IDE support for metadata soon. It would really make it a lot easier to manage.</p>
+<p>In my professional life, I use all of the Actionscript DI frameworks (<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.robotlegs.org/');"  href="http://www.robotlegs.org/">Robotlegs</a>, <a onclick="javascript:pageTracker._trackPageview('/outgoing/swizframework.org/');"  href="http://swizframework.org/">Swiz</a>, and <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.spicefactory.org/parsley/');"  href="http://www.spicefactory.org/parsley/">Parsley</a>). They are all great, when used appropriately within a defined set of patterns and practices. I worry about the trend for increased use of metadata. I think the complexity overhead is large. Sure, <strong>you</strong> get it, but there is a responsibility to build systems that can be understood by a wide range of developers without weeks of remedial training on a complex metadata based <a onclick="javascript:pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Domain-specific_language');"  href="http://en.wikipedia.org/wiki/Domain-specific_language">DSL</a>. The less complex we make our complex systems the better. They are easier to train for, document, and build.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2010/06/16/do-you-need-metadata-as3-robotlegs/">Do we really need THAT much metadata in AS3? Not with Robotlegs&#8230;</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-490">
+        <div id="dsq-comment-header-490" class="dsq-comment-header">
+            <cite id="dsq-cite-490">
+http://twitter.com/ianmclean                <span id="dsq-author-user-490">Ian McLean</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-490" class="dsq-comment-body">
+            <div id="dsq-comment-message-490" class="dsq-comment-message"><p>Metadata isn&#39;t required to make this happen if RL triggers the constructor injector on commands automatically but isn&#39;t what happens there even more magical than what happens when you use [Inject]? </p>
+<p>[Inject] is somewhat self documenting in that you know that the values are being filled by an injector somewhere. For someone who isn&#39;t familiar with this feature of RL just looking at constructor parameters its non-obvious that those values are automatically being looked at by the injector and filled.</p>
+<p>Also, what is the case for being able to specify params in a constructor that have no mapping but don&#39;t generate an error? If an injection hasn&#39;t been mapped for a param then there is no other way for value to be set and it doesn&#39;t have much business being there. I think error thrown when using [Inject] are very helpful as things can silently fail otherwise.</p>
+<p>Just a bit of devils advocate, although I do agree about the flagrant overuse of metadata in some frameworks.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-491">
+        <div id="dsq-comment-header-491" class="dsq-comment-header">
+            <cite id="dsq-cite-491">
+http://twitter.com/stray_and_ruby                <span id="dsq-author-user-491">stray</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-491" class="dsq-comment-body">
+            <div id="dsq-comment-message-491" class="dsq-comment-message"><p>You totally get it. The complexity curve I mean.</p>
+<p>Coding for a coder who isn&#39;t as sharp as you are isn&#39;t just helpful to others &#8211; it&#39;s helpful to yourself. There *will* come a day when your kid puked 6 times in the night and you&#39;ve got to hit the deadline, and on those days it&#39;s very useful to have designed your software so that you don&#39;t have to be at the top of your game to work with it!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-493">
+        <div id="dsq-comment-header-493" class="dsq-comment-header">
+            <cite id="dsq-cite-493">
+http://joelhooks.com                <span id="dsq-author-user-493">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-493" class="dsq-comment-body">
+            <div id="dsq-comment-message-493" class="dsq-comment-message"><p>You still get the awesome error checking with SwiftSuspenders:</p>
+<p>exception, information=Error: Injector is missing a rule to handle injection into target [class GalleryLabelMediator]. Target dependency: String, method: constructor, parameter: 3</p>
+<p>(I threw in a string param to test it out)</p>
+<p>I&#39;m not rewriting the best practices here. Property injection is still recommended, but constructor injection is nice and NOT having meta at all is very appealing.</p>
+<p>No, it isn&#39;t more magical. It is very mechanical. All three DI types are of the same level of wizardry.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-494">
+        <div id="dsq-comment-header-494" class="dsq-comment-header">
+            <cite id="dsq-cite-494">
+http://twitter.com/mattupstate                <span id="dsq-author-user-494">Matt W</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-494" class="dsq-comment-body">
+            <div id="dsq-comment-message-494" class="dsq-comment-message"><p>Can you explain why you didn&#39;t remove inheritance for mediators?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-495">
+        <div id="dsq-comment-header-495" class="dsq-comment-header">
+            <cite id="dsq-cite-495">
+http://joelhooks.com                <span id="dsq-author-user-495">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-495" class="dsq-comment-body">
+            <div id="dsq-comment-message-495" class="dsq-comment-message"><p>I didn&#39;t want to implement IMediator. Actors/Commands don&#39;t have a lot going on, where mediators do. It would have required more thought, and I am mostly interested in portable service/model tiers so I left it at that for this example.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-496">
+        <div id="dsq-comment-header-496" class="dsq-comment-header">
+            <cite id="dsq-cite-496">
+http://twitter.com/ianmclean                <span id="dsq-author-user-496">Ian McLean</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-496" class="dsq-comment-body">
+            <div id="dsq-comment-message-496" class="dsq-comment-message"><p>Well my point being that the [Inject] marker is an indication that something is special about the properties that its assigned to whereas no such indication for constructor params &#8211; you would assume they&#39;re as ordinary as anything else and not receiving injections (at least just by looking at code examples).</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-497">
+        <div id="dsq-comment-header-497" class="dsq-comment-header">
+            <cite id="dsq-cite-497">
+http://twitter.com/ianmclean                <span id="dsq-author-user-497">Ian McLean</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-497" class="dsq-comment-body">
+            <div id="dsq-comment-message-497" class="dsq-comment-message"><p>you want to see the framework attempt to inject eventMap/evenDispatcher rather than inherit them? whats the need? easier migration of mediators from projects built on other frameworks?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-498">
+        <div id="dsq-comment-header-498" class="dsq-comment-header">
+            <cite id="dsq-cite-498">
+http://joelhooks.com                <span id="dsq-author-user-498">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-498" class="dsq-comment-body">
+            <div id="dsq-comment-message-498" class="dsq-comment-message"><p>There is nothing special about the properties though, and in fact, making them private and initializing them via non-optional constructor arguments is a lot more special than mutable public properties.</p>
+<p>I don&#39;t disagree about newcomers.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-516">
+        <div id="dsq-comment-header-516" class="dsq-comment-header">
+            <cite id="dsq-cite-516">
+http://twitter.com/mattupstate                <span id="dsq-author-user-516">Matt W</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-516" class="dsq-comment-body">
+            <div id="dsq-comment-message-516" class="dsq-comment-message"><p>Thanks for the explanation. I tend to forget mediators are never really portable.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-541">
+        <div id="dsq-comment-header-541" class="dsq-comment-header">
+            <cite id="dsq-cite-541">
+                <span id="dsq-author-user-541">Glidias</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-541" class="dsq-comment-body">
+            <div id="dsq-comment-message-541" class="dsq-comment-message"><p>The Command /Service/Actor base classes in RobotLegs which are mostly optional and I seldom use those as well. (which isn&#39;t the best reason). Models could to dispatch events to act as a suitable bindable data source, and extending from Actor prevents one form natively doing so.  </p>
+<p>I didn&#39;t know RobotLegs/Swiftsuspenders automatically inject into constructor arguments without requiring the [Inject] metadata above the class. This means it&#39;s possible to code classes in Haxe without having to rely on metadata, and just use consturctor arguments to clearly define core dependencies (which was what I had wished..and thought it wasn&#39;t possible). Especially so in game development, a given game engine/manager should not involve too many dependencies, just what it&#39;s needed for it to run. Haxe is great for inlining core engine-related settings/alchemy byte assemblies, while RobotLegs is good for the application-end bootstrapping. But I digress..</p>
+<p>The use of metadata is  more for convenient wiring &#8220;in the last-minute&#8221; due to &#8220;unexpectedly&#8221; required-to-add features (and often many numerous models/services/etc. required within a class). As such, it&#39;s more hackish, though it works in allowing one to conveniently declare additional resources to be injected to your class, the mediator (or injected class thereof), will definitely end up doing too many things &#8220;for-the-application&#8221;, violating single responsibility and preventing the class to be used elsewhere simply because it&#39;s handles many models/services/etc. across different tiers in an app. However, I must say metadata helps deliver many injections for fast deliver of application requirements, even though it&#39;s pretty much &#8220;dead&#8221; at that point and would only work &#8220;for the project&#8221;. In most cases, a application-specific mediator will have to &#8220;mediate&#8221; lots of stuff across a more complicated (and changing) application anyway, thus the use of metadata is useful for such cases. (Generally, mediators only fall within this non-reusable category).  However, I must say such a practice is more out of a result of last-minute changes/additional requirements, and not for long-term good application design.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-561">
+        <div id="dsq-comment-header-561" class="dsq-comment-header">
+            <cite id="dsq-cite-561">
+                <span id="dsq-author-user-561">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-561" class="dsq-comment-body">
+            <div id="dsq-comment-message-561" class="dsq-comment-message"><p>Excellent mate im gonna download and try now</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-563">
+        <div id="dsq-comment-header-563" class="dsq-comment-header">
+            <cite id="dsq-cite-563">
+                <span id="dsq-author-user-563">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-563" class="dsq-comment-body">
+            <div id="dsq-comment-message-563" class="dsq-comment-message"><p>wow youve got a bunch of libs in there. Are all those adobe ones you put in there external from the flex/flash sdk?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-564">
+        <div id="dsq-comment-header-564" class="dsq-comment-header">
+            <cite id="dsq-cite-564">
+http://joelhooks.com                <span id="dsq-author-user-564">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-564" class="dsq-comment-body">
+            <div id="dsq-comment-message-564" class="dsq-comment-message"><p>yes.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-565">
+        <div id="dsq-comment-header-565" class="dsq-comment-header">
+            <cite id="dsq-cite-565">
+                <span id="dsq-author-user-565">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-565" class="dsq-comment-body">
+            <div id="dsq-comment-message-565" class="dsq-comment-message"><p>Would you reccomend studing these and adding to my own master source repo? thx</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-570">
+        <div id="dsq-comment-header-570" class="dsq-comment-header">
+            <cite id="dsq-cite-570">
+                <span id="dsq-author-user-570">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-570" class="dsq-comment-body">
+            <div id="dsq-comment-message-570" class="dsq-comment-message"><p>I&#39;ve just almost gotton used to the syntax with [inject] and now I don&#39;t ned it lol</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-571">
+        <div id="dsq-comment-header-571" class="dsq-comment-header">
+            <cite id="dsq-cite-571">
+                <span id="dsq-author-user-571">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-571" class="dsq-comment-body">
+            <div id="dsq-comment-message-571" class="dsq-comment-message"><p>Any chance you could explain why you need to do this:</p>
+<p>this.searchTermInput.validateNow();</p>
+<p>in the code for the GallerySearch view </p>
+<p>	protected function handleSearch():void<br />			{<br />				this.dispatchEvent(new GallerySearchEvent(GallerySearchEvent.SEARCH, this.searchTermInput.text));<br />				this.searchTermInput.text = &#8220;&#8221;;<br />				this.searchTermInput.validateNow();<br />			}</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-588">
+        <div id="dsq-comment-header-588" class="dsq-comment-header">
+            <cite id="dsq-cite-588">
+                <span id="dsq-author-user-588">Iki_xx</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-588" class="dsq-comment-body">
+            <div id="dsq-comment-message-588" class="dsq-comment-message"><p>What about this:<br />As stated in the Robotlegs Internals document (excerpt):<br />No metadata! And, the property is available immediately. Brilliant, except that there is a bug in most versions of the Flash Player (pre 10.1) that throws a spanner in the works: the constructor argument information that we need is not available until after at least one instance of that class has been constructed. This means that the DI container has to create a dummy, throw-away instance whenever it encounters such a class for the first time. It’s not a big deal, but it’s something to be aware of – especially if your constructors perform actual work.</p>
+<p>What is the best way to handle this?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-621">
+        <div id="dsq-comment-header-621" class="dsq-comment-header">
+            <cite id="dsq-cite-621">
+http://twitter.com/StimuliTV                <span id="dsq-author-user-621">Doug Gray</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-621" class="dsq-comment-body">
+            <div id="dsq-comment-message-621" class="dsq-comment-message"><p>Hey Joel,</p>
+<p>I&#39;m looking over the code for this example and i like the idea of not adding features i wont use but still keeping with the framework using more explicit code. I&#39;m new to Robotlegs so my understanding of all the DI options is not great at the moment so my question is this.</p>
+<p>Is there a specific swc or (preferably) source folder i can use (and learn from) currently available where these dependencies have been removed or can you explain what i would need to remove from the last source on github?</p>
+<p>Cheers<br />Doug</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-636">
+        <div id="dsq-comment-header-636" class="dsq-comment-header">
+            <cite id="dsq-cite-636">
+                <span id="dsq-author-user-636">Anthony McCormick</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-636" class="dsq-comment-body">
+            <div id="dsq-comment-message-636" class="dsq-comment-message"><p>Hi nice post, I too think that if an element is required then it should be injected through the constrictor <br />I do have one question however you said that <br />&#8220;your constructor might get really big. In fact, the limit is 10 parameters.&#8221; <br />Do you mean that this is a restriction imposed by robotlegs? <br />Thanks for the post<br />Anthony</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-637">
+        <div id="dsq-comment-header-637" class="dsq-comment-header">
+            <cite id="dsq-cite-637">
+http://joelhooks.com                <span id="dsq-author-user-637">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-637" class="dsq-comment-body">
+            <div id="dsq-comment-message-637" class="dsq-comment-message"><p>It is a limit imposed by SwiftSuspenders.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/tschneidereit/SwiftSuspenders/blob/master/src/org/swiftsuspenders/injectionpoints/ConstructorInjectionPoint.as#L39');"  href="https://github.com/tschneidereit/SwiftSuspenders/blob/master/src/org/swiftsuspenders/injectionpoints/ConstructorInjectionPoint.as#L39" rel="nofollow">https://github.com/tschneidere&#8230;</a></p>
+<p>Looks nuts, but that is how you have to do it in AS3.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2010/06/16/do-you-need-metadata-as3-robotlegs/';
+    var disqus_identifier = '527 http://joelhooks.com/?p=527';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Do we really need THAT much metadata in AS3? Not with Robotlegs&#8230;";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=527');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2010\/06\/16\/do-you-need-metadata-as3-robotlegs\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.252 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.21MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

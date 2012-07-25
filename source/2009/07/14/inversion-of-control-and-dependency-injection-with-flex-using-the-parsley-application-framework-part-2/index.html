@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2joelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Robotlegs AS3: A Dependency Injection Driven MVCS Framework for Flash/Flex – Inspired by PureMVC' href='http://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-%e2%80%93-inspired-by-puremvc/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=226' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,768] -->
+<meta name="description" content="A detailed photo gallery example of using the Parsley Inversion of Control Container with Flex." />
+<meta name="keywords" content="adobe, flex, ioc, inversion of control, dependency injection, di, design patterns, slideshow, component, development, framework, consultant, puremvc, actionscript" />
+<link rel="canonical" href="http://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_ParsleyGallery_1524227167","10.0.0","http://joelhooks.com/wp-content/plugins/kimili-flash-embed/lib/expressInstall.swf");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-226 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-226" class="post-226 post type-post status-publish format-standard hentry category-design-patterns category-flex category-object-oriented-concepts">
+					<h1>Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2</h1>
+		
+					<div class="entry-content">
+						<p>This is the second part in a series exploring Inversion of Control and Dependency Injection containers available for Flex. In <a href="http://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/">the first part of the series we discussed what IoC and DI</a> are and how they can benefit our applications. In this part, we will explore the Parsley IoC Container through a simple image gallery application.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/IoC-DI-Flex-Example/tree/master');"  href="http://github.com/joelhooks/IoC-DI-Flex-Example/tree/master">Here&#8217;s the source on github&#8230;</a></p>
+<div align="center">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_ParsleyGallery_1524227167"
+			class="flashmovie"
+			width="500"
+			height="600">
+	<param name="movie" value="http://joelhooks.com/examples/parsleyGallery/ParsleyGallery.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="http://joelhooks.com/examples/parsleyGallery/ParsleyGallery.swf"
+			name="fm_ParsleyGallery_1524227167"
+			width="500"
+			height="600">
+	<!--<![endif]-->
+		
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object></div>
+<div class="note-block">The above is a simple image gallery that is grabbing the top 100 &#8216;interestingness&#8217; images from Flickr. It is built with Flex 4 and uses a mix of halo components (the images) and spark components for layout. Parsley in its current state does NOT support the Flex 4.0.0 SDK. It IS however opensource, and only required a single change to function in Flex 4. Namely, there is a call to Application.application which has been &#8216;deprecated&#8217; (and by that they mean completely broken) and replaced by FlexGlobals.topLevelApplication. The modified SWC files are included in the source repository for the project. <strong>The modified swc files WILL NOT function with Flex 3.*.*</strong></div>
+<p><span id="more-226"></span></p>
+<h2>Less talk. More Code.</h2>
+<p>One aspect of an IoC/DI container that is consistent across frameworks is the need to bootstrap the configuration. Parsley provides several ways to accomplish this.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.spicefactory.org/parsley/docs/2.0/manual/config.php#intro');"  href="http://www.spicefactory.org/parsley/docs/2.0/manual/config.php#intro">from the docs</a>:</p>
+<blockquote><p>Configuring and initializing the Parsley Framework usually consists of the following steps:</p>
+<p><strong>Step 1</strong>: Telling the IOC Container which classes it should manage. This can be done with MXML, XML files or in ActionScript. All three mechanisms will be described in the following sections.</p>
+<p><strong>Step 2:</strong> Configure the container services like Dependency Injection or Messaging for each individual class. This can be done with the mechanism you had chosen for step 1 (e.g. with MXML or XML configuration tags) or &#8211; in most cases &#8211; conveniently with AS3 Metadata Tags right within the classes themselves.</p>
+<p><strong>Step 3:</strong> Initialize the IOC Container (usually on application startup). In Parsley 2 this is a one-liner in most cases. See the sections below for examples.</p></blockquote>
+<p>In the image gallery sample step one is accomplished in Beans.mxml. Beans is, I assume, a throwback to Java that I don&#8217;t fully understand, but it seems to be a popular convention and I&#8217;m not here to rock the boat.</p>
+<h3>Beans.mxml</h3>
+
+<div class="wp_codebox"><table><tr id="p2261"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="code" id="p226code1"><pre class="xml" style="font-family:monospace;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span> <span style="color: #000066;">encoding</span>=<span style="color: #ff0000;">&quot;utf-8&quot;</span><span style="color: #000000; font-weight: bold;">?&gt;</span></span>
+<span style="color: #808080; font-style: italic;">&lt;!--</span>
+<span style="color: #808080; font-style: italic;">	Inversion of Control/Dependency Injection Using Parsley</span>
+<span style="color: #808080; font-style: italic;">	Image Gallery</span>
+&nbsp;
+<span style="color: #808080; font-style: italic;">	Any portion of this demonstration may be reused for any purpose where not</span>
+<span style="color: #808080; font-style: italic;">	licensed by another party restricting such use. Please leave the credits intact.</span>
+&nbsp;
+<span style="color: #808080; font-style: italic;">	Joel Hooks</span>
+<span style="color: #808080; font-style: italic;">	http://joelhooks.com</span>
+<span style="color: #808080; font-style: italic;">	joelhooks@gmail.com</span>
+<span style="color: #808080; font-style: italic;">--&gt;</span>
+<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;mx:Object</span></span>
+<span style="color: #009900;">    <span style="color: #000066;">xmlns:mx</span>=<span style="color: #ff0000;">&quot;http://www.adobe.com/2006/mxml&quot;</span></span>
+<span style="color: #009900;">    <span style="color: #000066;">xmlns</span>=<span style="color: #ff0000;">&quot;http://www.spicefactory.org/parsley&quot;</span></span>
+<span style="color: #009900;">    <span style="color: #000066;">xmlns:models</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.models.*&quot;</span></span>
+<span style="color: #009900;">    <span style="color: #000066;">xmlns:controllers</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.controllers.*&quot;</span></span>
+<span style="color: #009900;">    <span style="color: #000066;">xmlns:presentation</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.models.presentation.*&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+&nbsp;
+    <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;mx:Script<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+    	<span style="color: #339933;">&lt;![CDATA[</span>
+<span style="color: #339933;">    		import com.joelhooks.parsley.example.delegates.FlickrImageServiceDelegate;</span>
+<span style="color: #339933;">    	]]&gt;</span>
+    <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/mx:Script<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+&nbsp;
+    <span style="color: #808080; font-style: italic;">&lt;!-- Service Delegate --&gt;</span>
+    <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;object</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;photoServiceDelegate&quot;</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;{FlickrImageServiceDelegate}&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+    	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;property</span> <span style="color: #000066;">name</span>=<span style="color: #ff0000;">&quot;apiKey&quot;</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;YOUR_KEY_HERE&quot;</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+    	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;property</span> <span style="color: #000066;">name</span>=<span style="color: #ff0000;">&quot;secret&quot;</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;YOUR_SECRET_HERE&quot;</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+    <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/object<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+&nbsp;
+    <span style="color: #808080; font-style: italic;">&lt;!-- Model --&gt;</span>
+    <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;presentation:FlickrGalleryPresentationModel</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;galleryPresentationModel&quot;</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+&nbsp;
+    <span style="color: #808080; font-style: italic;">&lt;!-- Actions --&gt;</span>
+    <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;controllers:RetrieveGalleryAction</span> <span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+    <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;controllers:DisplayGalleryAction</span> <span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+    <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;controllers:SelectImageAction</span> <span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+&nbsp;
+<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/mx:Object<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></pre></td></tr></table></div>
+
+<p>The application has several actors that Parsley needs to be aware of, and this is where you let the container know what they are. In most cases we can simple use MXML notation to include our classes in the configuration. The photo service, in this case Flickr, needs additional configuration so it is added a bit differently utilizing the Parsley Object and Property tags. When using this method the class needs to be imported as above to provide a reference. In addition to the service the presentation model is also added to the configuration, as well as several actions that will react to various events. The Model and Controller of the MVC triad are what we are configuring here. The View is handled a bit differently.</p>
+<p>The configuration is loaded in the preinitialize handle of the main application MXML.</p>
+<h3>ParsleyGallery.mxml:</h3>
+
+<div class="wp_codebox"><table><tr id="p2262"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+</pre></td><td class="code" id="p226code2"><pre class="xml" style="font-family:monospace;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span> <span style="color: #000066;">encoding</span>=<span style="color: #ff0000;">&quot;utf-8&quot;</span><span style="color: #000000; font-weight: bold;">?&gt;</span></span>
+<span style="color: #808080; font-style: italic;">&lt;!--</span>
+<span style="color: #808080; font-style: italic;">	Inversion of Control/Dependency Injection Using Parsley</span>
+<span style="color: #808080; font-style: italic;">	Image Gallery</span>
+&nbsp;
+<span style="color: #808080; font-style: italic;">	Any portion of this demonstration may be reused for any purpose where not</span>
+<span style="color: #808080; font-style: italic;">	licensed by another party restricting such use. Please leave the credits intact.</span>
+&nbsp;
+<span style="color: #808080; font-style: italic;">	Joel Hooks</span>
+<span style="color: #808080; font-style: italic;">	http://joelhooks.com</span>
+<span style="color: #808080; font-style: italic;">	joelhooks@gmail.com</span>
+<span style="color: #808080; font-style: italic;">--&gt;</span>
+<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:Application</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:fx</span>=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">preinitialize</span>=<span style="color: #ff0000;">&quot;onPreInitialize()&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:s</span>=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:mx</span>=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/halo&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">minWidth</span>=<span style="color: #ff0000;">&quot;1024&quot;</span> <span style="color: #000066;">minHeight</span>=<span style="color: #ff0000;">&quot;768&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:tag</span>=<span style="color: #ff0000;">&quot;org.spicefactory.parsley.flex.tag.*&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:spicefactory</span>=<span style="color: #ff0000;">&quot;http://www.spicefactory.org/parsley/flex&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">addedToStage</span>=<span style="color: #ff0000;">&quot;this.addedToStageHandler(event)&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">applicationComplete</span>=<span style="color: #ff0000;">&quot;trace('application complete');&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:views</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.views.*&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:delegates</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.delegates.*&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:layout<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:VerticalLayout</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:layout<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;fx:Script<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #339933;">&lt;![CDATA[</span>
+<span style="color: #339933;">			import com.joelhooks.parsley.example.delegates.FlickrImageServiceDelegate;</span>
+<span style="color: #339933;">			import mx.controls.Button;</span>
+<span style="color: #339933;">			import org.spicefactory.lib.reflect.types.Void;</span>
+<span style="color: #339933;">			import org.spicefactory.lib.logging.Logger;</span>
+<span style="color: #339933;">			import mx.logging.LogEventLevel;</span>
+<span style="color: #339933;">			import com.joelhooks.parsley.example.events.GalleryImageServiceEvent;</span>
+<span style="color: #339933;">			import org.spicefactory.parsley.flex.FlexContextBuilder;</span>
+&nbsp;
+<span style="color: #339933;">			protected function onPreInitialize():void</span>
+<span style="color: #339933;">			{</span>
+<span style="color: #339933;">				this.logTarget.level = LogEventLevel.ALL;</span>
+<span style="color: #339933;">				FlexContextBuilder.build(Beans);</span>
+<span style="color: #339933;">			}</span>
+&nbsp;
+<span style="color: #339933;">			protected function addedToStageHandler(event:Event):void</span>
+<span style="color: #339933;">			{</span>
+<span style="color: #339933;">				//Let the container know that this component is ready to be added</span>
+<span style="color: #339933;">				//to the view context</span>
+<span style="color: #339933;">				dispatchEvent(new Event('configureIOC', true));</span>
+<span style="color: #339933;">			}</span>
+&nbsp;
+<span style="color: #339933;">		]]&gt;</span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/fx:Script<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;fx:Declarations<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;mx:TraceTarget</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;logTarget&quot;</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/fx:Declarations<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;views:GalleryView</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:Application<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></pre></td></tr></table></div>
+
+<p>We want to make sure that the Parsley container is configured at the first opportunity, and preinitialize provides this hook. After the application has been added to the stage, we need to dispatch a message to the container so that it can be added to the ViewContext allowing the visual components to interact with the container. This is done by dispatching a bubbling &#8216;configureIOC&#8217; event in the addedtoStage handler.</p>
+<p>This needs to be done for all viewComponents that require access to the container as you will see in the child GalleryView. At this point, the application is fully configured within the IoC Container. Our actors that have been configured in Beans.mxml have had their appropriate dependencies injected, and our Actions are ready to receive messages from the other objects in the container.</p>
+<h3>DisplayGalleryAction.as:</h3>
+
+<div class="wp_codebox"><table><tr id="p2263"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="code" id="p226code3"><pre class="actionscript" style="font-family:monospace;"><span style="color: #808080; font-style: italic;">/*
+	Inversion of Control/Dependency Injection Using Parsley
+	Image Gallery
+&nbsp;
+	Any portion of this demonstration may be reused for any purpose where not
+	licensed by another party restricting such use. Please leave the credits intact.
+&nbsp;
+	Joel Hooks
+	http://joelhooks.com
+	joelhooks@gmail.com
+*/</span>
+package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">controllers</span>
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">events</span>.<span style="color: #006600;">GalleryEvent</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">events</span>.<span style="color: #006600;">GalleryImageEvent</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">models</span>.<span style="color: #006600;">presentation</span>.<span style="color: #006600;">IGalleryPresentationModel</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">models</span>.<span style="color: #006600;">vo</span>.<span style="color: #006600;">GalleryImage</span>;
+&nbsp;
+	<span style="color: #0066CC;">import</span> flash.<span style="color: #006600;">events</span>.<span style="color: #006600;">EventDispatcher</span>;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Event<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">name</span>=<span style="color: #ff0000;">&quot;selectGalleryImage&quot;</span>, <span style="color: #0066CC;">type</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.events.GalleryImageEvent&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#93;</span>
+	<span style="color: #66cc66;">&#91;</span>ManagedEvents<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;selectGalleryImage&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> DisplayGalleryAction <span style="color: #0066CC;">extends</span> EventDispatcher
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#40;</span>id=<span style="color: #ff0000;">&quot;galleryPresentationModel&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#93;</span>
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> galleryPresentationModel:IGalleryPresentationModel;
+&nbsp;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> DisplayGalleryAction<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+		<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+		<span style="color: #66cc66;">&#91;</span>MessageHandler<span style="color: #66cc66;">&#40;</span>selector=<span style="color: #ff0000;">&quot;galleryLoaded&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#93;</span>
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> handleGalleryLoaded<span style="color: #66cc66;">&#40;</span>event:GalleryEvent<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">galleryPresentationModel</span>.<span style="color: #006600;">gallery</span> = event.<span style="color: #006600;">gallery</span>
+			<span style="color: #0066CC;">trace</span><span style="color: #66cc66;">&#40;</span>event.<span style="color: #006600;">gallery</span>.<span style="color: #006600;">photos</span>.<span style="color: #0066CC;">length</span><span style="color: #66cc66;">&#41;</span>;
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">dispatchEvent</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> GalleryImageEvent<span style="color: #66cc66;">&#40;</span>GalleryImageEvent.<span style="color: #006600;">SELECT_GALLERY_IMAGE</span>,
+				event.<span style="color: #006600;">gallery</span>.<span style="color: #006600;">photos</span><span style="color: #66cc66;">&#91;</span><span style="color: #cc66cc;">0</span><span style="color: #66cc66;">&#93;</span> as GalleryImage<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The DisplayGalleryAction class is wired to listen for the system message (event) galleryLoaded. It has no interest in where this message originates, and simply responds as instructed when the message is received. The handleGalleryLoaded method is designated as the MessageHandler for the galleryLoaded message. The message is an actionscript event that has been intercepted by the container and routed to interested parties. You will notice that the handleGalleryLoaded method is constructed exactly like any other Actionscript event handler (with the addition of the Parsley metadata). In this case it receives the custom GalleryEvent that carries some information.</p>
+<p>Additionally, DisplayGalleryAction has been injected with our FlickrGalleryPresentationModel from Beans.mxml. FlickrGalleryPresentationModel implements IGalleryPresentationModel, and Parsley will inject any class that implements this interface and has the appropriate ID &#8216;galleryPresentationModel&#8217;.</p>
+<p>DisplayGalleryAction also dispatches the ManagedEvent &#8216;selectGalleryImage&#8217;. Any container actor that dispatches events that need to be distributed to other interested parties need to let the container know. The class is annotated with AS3 metadata designating which ManagedEvent the class will be sending to the container.</p>
+<div class="note-block">It is important to note that Parsley does not impose any strict patterns on your application. Any of the actors can be wired to received dependency injections and send/receive messages from the container. It is up to you to architect your application in the manner most appropriate to your environment.</div>
+<p>DisplayGalleryAction receives Messages from FlickrImageServiceDelegate. it could, of course, receive its Messages from any class that is managed by the container, but in this case it is only interested in the data loaded by the delegate.</p>
+<h3>FlickrImageServiceDelegate.as:</h3>
+
+<div class="wp_codebox"><table><tr id="p2264"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+</pre></td><td class="code" id="p226code4"><pre class="actionscript" style="font-family:monospace;"><span style="color: #808080; font-style: italic;">/*
+	Inversion of Control/Dependency Injection Using Parsley
+	Image Gallery
+&nbsp;
+	Any portion of this demonstration may be reused for any purpose where not
+	licensed by another party restricting such use. Please leave the credits intact.
+&nbsp;
+	Joel Hooks
+	http://joelhooks.com
+	joelhooks@gmail.com
+*/</span>
+package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">delegates</span>
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">adobe</span>.<span style="color: #006600;">webapis</span>.<span style="color: #006600;">flickr</span>.<span style="color: #006600;">FlickrService</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">adobe</span>.<span style="color: #006600;">webapis</span>.<span style="color: #006600;">flickr</span>.<span style="color: #006600;">Photo</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">adobe</span>.<span style="color: #006600;">webapis</span>.<span style="color: #006600;">flickr</span>.<span style="color: #006600;">events</span>.<span style="color: #006600;">FlickrResultEvent</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">adobe</span>.<span style="color: #006600;">webapis</span>.<span style="color: #006600;">flickr</span>.<span style="color: #006600;">methodgroups</span>.<span style="color: #006600;">Photos</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">adobe</span>.<span style="color: #006600;">webapis</span>.<span style="color: #006600;">flickr</span>.<span style="color: #006600;">methodgroups</span>.<span style="color: #006600;">helpers</span>.<span style="color: #006600;">PhotoSearchParams</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">events</span>.<span style="color: #006600;">GalleryEvent</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">events</span>.<span style="color: #006600;">GalleryImageServiceEvent</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">models</span>.<span style="color: #006600;">vo</span>.<span style="color: #006600;">Gallery</span>;
+	<span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">models</span>.<span style="color: #006600;">vo</span>.<span style="color: #006600;">GalleryImage</span>;
+&nbsp;
+	<span style="color: #0066CC;">import</span> flash.<span style="color: #006600;">events</span>.<span style="color: #006600;">Event</span>;
+	<span style="color: #0066CC;">import</span> flash.<span style="color: #006600;">events</span>.<span style="color: #006600;">EventDispatcher</span>;
+&nbsp;
+	<span style="color: #0066CC;">import</span> mx.<span style="color: #006600;">collections</span>.<span style="color: #006600;">ArrayCollection</span>;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Event<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">name</span>=<span style="color: #ff0000;">&quot;serviceReady&quot;</span>, <span style="color: #0066CC;">type</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.events.GalleryImageServiceEvent&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#93;</span>
+	<span style="color: #66cc66;">&#91;</span>Event<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">name</span>=<span style="color: #ff0000;">&quot;galleryLoaded&quot;</span>,<span style="color: #0066CC;">type</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.events.GalleryEvent&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#93;</span>
+	<span style="color: #66cc66;">&#91;</span>ManagedEvents<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;galleryLoaded,serviceReady&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> FlickrImageServiceDelegate <span style="color: #0066CC;">extends</span> EventDispatcher <span style="color: #0066CC;">implements</span> IGalleryImageServiceDelegate
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> service:FlickrService;
+		<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> photos:Photos;
+&nbsp;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> apiKey:<span style="color: #0066CC;">String</span>;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> secret:<span style="color: #0066CC;">String</span>;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> NSID:<span style="color: #0066CC;">String</span>;
+&nbsp;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> FlickrImageServiceDelegate<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+		<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+		<span style="color: #66cc66;">&#91;</span>PostConstruct<span style="color: #66cc66;">&#93;</span>
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> init<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			<span style="color: #0066CC;">trace</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Configuring Service&quot;</span><span style="color: #66cc66;">&#41;</span>;
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">service</span> = <span style="color: #000000; font-weight: bold;">new</span> FlickrService<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">this</span>.<span style="color: #006600;">apiKey</span><span style="color: #66cc66;">&#41;</span>;
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">photos</span> = <span style="color: #000000; font-weight: bold;">new</span> Photos<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">this</span>.<span style="color: #006600;">service</span><span style="color: #66cc66;">&#41;</span>;
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">dispatchEvent</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> GalleryImageServiceEvent<span style="color: #66cc66;">&#40;</span>GalleryImageServiceEvent.<span style="color: #006600;">SERVICE_READY</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> loadGallery<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			service.<span style="color: #006600;">addEventListener</span><span style="color: #66cc66;">&#40;</span>FlickrResultEvent.<span style="color: #006600;">INTERESTINGNESS_GET_LIST</span>, handleSearchResult<span style="color: #66cc66;">&#41;</span>;
+			service.<span style="color: #006600;">interestingness</span>.<span style="color: #006600;">getList</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+		<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+		protected <span style="color: #000000; font-weight: bold;">function</span> handleSearchResult<span style="color: #66cc66;">&#40;</span>event:FlickrResultEvent<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">processFlickrPhotoResults</span><span style="color: #66cc66;">&#40;</span>event.<span style="color: #0066CC;">data</span>.<span style="color: #006600;">photos</span>.<span style="color: #006600;">photos</span><span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+		protected <span style="color: #000000; font-weight: bold;">function</span> processFlickrPhotoResults<span style="color: #66cc66;">&#40;</span>results:<span style="color: #0066CC;">Array</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			<span style="color: #000000; font-weight: bold;">var</span> gallery:Gallery = <span style="color: #000000; font-weight: bold;">new</span> Gallery<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+			gallery.<span style="color: #006600;">photos</span> = <span style="color: #000000; font-weight: bold;">new</span> ArrayCollection<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+			<span style="color: #b1b100;">for</span> <span style="color: #b1b100;">each</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">var</span> flickrPhoto:Photo <span style="color: #b1b100;">in</span> results<span style="color: #66cc66;">&#41;</span>
+			<span style="color: #66cc66;">&#123;</span>
+				<span style="color: #000000; font-weight: bold;">var</span> photo:GalleryImage = <span style="color: #000000; font-weight: bold;">new</span> GalleryImage<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+				<span style="color: #000000; font-weight: bold;">var</span> baseURL:<span style="color: #0066CC;">String</span> = <span style="color: #ff0000;">'http://farm'</span> + flickrPhoto.<span style="color: #006600;">farmId</span> + <span style="color: #ff0000;">'.static.flickr.com/'</span> + flickrPhoto.<span style="color: #006600;">server</span> + <span style="color: #ff0000;">'/'</span> + flickrPhoto.<span style="color: #006600;">id</span> + <span style="color: #ff0000;">'_'</span> + flickrPhoto.<span style="color: #006600;">secret</span>;
+				photo.<span style="color: #006600;">thumbURL</span> = baseURL + <span style="color: #ff0000;">'_s.jpg'</span>;
+				photo.<span style="color: #0066CC;">URL</span> = baseURL + <span style="color: #ff0000;">'.jpg'</span>;
+				gallery.<span style="color: #006600;">photos</span>.<span style="color: #006600;">addItem</span><span style="color: #66cc66;">&#40;</span> photo <span style="color: #66cc66;">&#41;</span>;
+			<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">dispatchEvent</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> GalleryEvent<span style="color: #66cc66;">&#40;</span>GalleryEvent.<span style="color: #006600;">GALLERY_LOADED</span>, gallery<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>As we&#8217;ve seen, the FlickrImageServiceDelegate is an implementation of the IGalleryImageServiceDelegate interface. This allows us to program to an interface instead of an implementation for that loose coupling goodness we all crave. This will come in very handy when we want to modify the application to handle multiple services or build mock objects for the purpose of unit testing (the subject of part 3).</p>
+<p>As with the DisplayGalleryAction class, FlickrImageServiceDelegate is configured to send ManagedEvent messages to the container. One of these events is &#8216;serviceReady&#8217;. FlickrImageServiceDelegate utilizes the [PostConstruct] annotation on its init method. When this class was configured, we injected properties (the apiKey and secret), and the service cannot be configured without these. Using [PostConstruct] the container is ordered to run the annotated method after the class has been configured thus ensuring our properties have been injected as expected. FlickrImageServiceDelegate then dispatches the &#8216;serviceReady&#8217; Message so that the actors waiting to get to work can do what they need to do.</p>
+<p>The GalleryView is responsible for displaying the data and accepting user interaction.</p>
+<h3>GalleryView.mxml</h3>
+
+<div class="wp_codebox"><table><tr id="p2265"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+</pre></td><td class="code" id="p226code5"><pre class="xml" style="font-family:monospace;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span> <span style="color: #000066;">encoding</span>=<span style="color: #ff0000;">&quot;utf-8&quot;</span><span style="color: #000000; font-weight: bold;">?&gt;</span></span>
+<span style="color: #808080; font-style: italic;">&lt;!--</span>
+<span style="color: #808080; font-style: italic;">	Inversion of Control/Dependency Injection Using Parsley</span>
+<span style="color: #808080; font-style: italic;">	Image Gallery</span>
+&nbsp;
+<span style="color: #808080; font-style: italic;">	Any portion of this demonstration may be reused for any purpose where not</span>
+<span style="color: #808080; font-style: italic;">	licensed by another party restricting such use. Please leave the credits intact.</span>
+&nbsp;
+<span style="color: #808080; font-style: italic;">	Joel Hooks</span>
+<span style="color: #808080; font-style: italic;">	http://joelhooks.com</span>
+<span style="color: #808080; font-style: italic;">	joelhooks@gmail.com</span>
+<span style="color: #808080; font-style: italic;">--&gt;</span>
+<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:Group</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:fx</span>=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:s</span>=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:mx</span>=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/halo&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">width</span>=<span style="color: #ff0000;">&quot;500&quot;</span> <span style="color: #000066;">height</span>=<span style="color: #ff0000;">&quot;600&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">addedToStage</span>=<span style="color: #ff0000;">&quot;dispatchEvent(new Event('configureIOC', true));&quot;</span> <span style="color: #000066;">creationComplete</span>=<span style="color: #ff0000;">&quot;creationCompleteHandler(event)&quot;</span> <span style="color: #000066;">xmlns:display</span>=<span style="color: #ff0000;">&quot;com.joelhooks.display.*&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+&nbsp;
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:layout<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:BasicLayout</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:layout<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;fx:Metadata<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		[Event(name=&quot;selectGalleryImage&quot;, type=&quot;com.joelhooks.parsley.example.events.GalleryImageEvent&quot;)]
+		[ManagedEvents(&quot;selectGalleryImage&quot;)]
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/fx:Metadata<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+&nbsp;
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;fx:Script<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #339933;">&lt;![CDATA[</span>
+<span style="color: #339933;">			import org.spicefactory.lib.reflect.types.Void;</span>
+<span style="color: #339933;">			import mx.events.FlexEvent;</span>
+<span style="color: #339933;">			import com.joelhooks.parsley.example.events.GalleryImageEvent;</span>
+<span style="color: #339933;">			import com.joelhooks.parsley.example.models.presentation.IGalleryPresentationModel;</span>
+<span style="color: #339933;">			import com.joelhooks.parsley.example.views.renderers.GalleryImageThumbnailItemRenderer;</span>
+<span style="color: #339933;">			import mx.collections.ArrayCollection;</span>
+&nbsp;
+<span style="color: #339933;">			[Bindable]</span>
+<span style="color: #339933;">			[Inject(id=&quot;galleryPresentationModel&quot;)]</span>
+<span style="color: #339933;">			public var model:IGalleryPresentationModel;</span>
+&nbsp;
+&nbsp;
+<span style="color: #339933;">			protected function creationCompleteHandler(event:FlexEvent):void</span>
+<span style="color: #339933;">			{</span>
+<span style="color: #339933;">				this.dgThumbnails.addEventListener( GalleryImageEvent.SELECT_GALLERY_IMAGE, handleSelectImage);</span>
+<span style="color: #339933;">			}</span>
+&nbsp;
+<span style="color: #339933;">			protected function handleSelectImage(event:GalleryImageEvent):void</span>
+<span style="color: #339933;">			{</span>
+<span style="color: #339933;">				this.dispatchEvent(event);</span>
+<span style="color: #339933;">			}</span>
+&nbsp;
+<span style="color: #339933;">		]]&gt;</span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/fx:Script<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:Group</span> <span style="color: #000066;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span> <span style="color: #000066;">height</span>=<span style="color: #ff0000;">&quot;100%&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:Rect</span> <span style="color: #000066;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span> <span style="color: #000066;">height</span>=<span style="color: #ff0000;">&quot;100%&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+			<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:fill<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+				<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;mx:SolidColor</span> <span style="color: #000066;">color</span>=<span style="color: #ff0000;">&quot;#000000&quot;</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+			<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:fill<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:Rect<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:Group<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:Group</span> <span style="color: #000066;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span>  <span style="color: #000066;">height</span>=<span style="color: #ff0000;">&quot;100%&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:layout<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+			<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:VerticalLayout</span> <span style="color: #000066;">gap</span>=<span style="color: #ff0000;">&quot;0&quot;</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:layout<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;display:ImageSwap</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;image&quot;</span> <span style="color: #000066;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span> <span style="color: #000066;">height</span>=<span style="color: #ff0000;">&quot;100%&quot;</span> <span style="color: #000066;">source</span>=<span style="color: #ff0000;">&quot;{this.model.selectedImage.URL}&quot;</span> <span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+&nbsp;
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:DataGroup</span></span>
+<span style="color: #009900;">			<span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;dgThumbnails&quot;</span></span>
+<span style="color: #009900;">			<span style="color: #000066;">clipAndEnableScrolling</span>=<span style="color: #ff0000;">&quot;true&quot;</span></span>
+<span style="color: #009900;">			<span style="color: #000066;">width</span>=<span style="color: #ff0000;">&quot;500&quot;</span></span>
+<span style="color: #009900;">			<span style="color: #000066;">height</span>=<span style="color: #ff0000;">&quot;85&quot;</span> <span style="color: #000066;">mouseEnabled</span>=<span style="color: #ff0000;">&quot;{!image.changingImages}&quot;</span> <span style="color: #000066;">mouseChildren</span>=<span style="color: #ff0000;">&quot;{!image.changingImages}&quot;</span></span>
+<span style="color: #009900;">			<span style="color: #000066;">dataProvider</span>=<span style="color: #ff0000;">&quot;{this.model.gallery.photos}&quot;</span></span>
+<span style="color: #009900;">			<span style="color: #000066;">itemRenderer</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.views.renderers.GalleryImageThumbnailItemRenderer&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+			<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:layout<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+				<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:HorizontalLayout</span> <span style="color: #000066;">gap</span>=<span style="color: #ff0000;">&quot;0&quot;</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+			<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:layout<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:DataGroup<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+		<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:HScrollBar</span> <span style="color: #000066;">viewport</span>=<span style="color: #ff0000;">&quot;{this.dgThumbnails}&quot;</span> <span style="color: #000066;">width</span>=<span style="color: #ff0000;">&quot;500&quot;</span><span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+	<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:Group<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/s:Group<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></pre></td></tr></table></div>
+
+<p>As with the main application MXML, the GalleryView sends a &#8216;configureIOC&#8217; event to the container when it is added to the stage. This allows it to participate in the Messaging system and have its dependencies injected. GalleryView dispatches one message, &#8216;selectGalleryImage&#8217;, when a user clicks a thumbnail. It is also injected with a reference to the applications IGalleryPresentationModel (FlickrGalleryPresentationModel) where it accesses the array collection containing the objects presented in the thumbnail DataGroup.</p>
+<p>There are two more Actions, RetreiveGalleryAction and SelectImageAction that function as their names imply. In addition the project has several custom events that are used for messaging. I&#8217;m not going to detail these as it would be repetitive, but it is worth noting that this only scratches the surface of the features that are available in Parsley. The docs are extensive, and the API is extremely robust. Typically you won&#8217;t ever need to access the API directly after you make the call in the preinitialize method to bootstrap the container. After that it does its work silently in the background.</p>
+<h2>So I think&#8230;</h2>
+<p>Parsley could be considered a &#8216;magical&#8217; black box framework. This is the trade off you get removing all of the boiler plate code you see in other frameworks. Looking at the extent of classes and libraries that make up Parsley is intimidating. You are placing a lot of trust in a complicated framework and have to hope that trust isn&#8217;t misplaced. There is something to be said for a simple &#8216;non-magical&#8217; framework like PureMVC. Yes, it comes at the cost of boiler plate code, but comprehension is less of a concern.</p>
+<p>The biggest challenge Parsley presents to learning the framework is that code examples are scarce (at best) outside of the out of context examples in the (excellent otherwise) documentation and a <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.sitronnier.com/blog/parsley-2-basic-flex-example');"  href="http://www.sitronnier.com/blog/parsley-2-basic-flex-example">couple blog posts</a>. Researching the framework, I actually found myself referring to SWiZ examples to understand some of the applied concepts. This is interesting in that the SWiZ examples really do carry over, as the frameworks have significant overlap in scope and functionality. There is <a onclick="javascript:pageTracker._trackPageview('/outgoing/groups.google.com/group/swiz-framework/browse_thread/thread/dc418a286c9a3f76');"  href="http://groups.google.com/group/swiz-framework/browse_thread/thread/dc418a286c9a3f76">a thread on the SWiZ Google Group</a> that goes into this, and I was surprised to see the complete lack of knowledge even to the existence of Parsley. I&#8217;ve been aware of the framework since early 2008, but didn&#8217;t take time to get my head around it. It really is perplexing as to why there aren&#8217;t more examples floating around, as Parsley is very mature and robust at this stage in its development. That is something that I really love about PureMVC. Cliff has done such an excellent job centralizing the examples and framework tutorials with <a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/PureMVC_AS3/');"  href="http://trac.puremvc.org/PureMVC_AS3/">the manifold project</a>. The effort it takes to maintain are huge, so I understand that most don&#8217;t have the time or inclination to do so, but it is much appreciated to be sure.</p>
+<p>In Part 3 we will go into swapping out the service and get a little unit testing coverage on the application.</p>
+<div class="note-block">I got a little distracted with <a href="http://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-–-inspired-by-puremvc/">Robotlegs</a> and wrote <a href="http://joelhooks.com/2009/07/21/unit-testing-with-inversion-of-control-ioc-and-dependency-injection-di-with-the-robotlegs-framework-and-flexunit-4/">part 3</a> of this tutorial with that framework instead. Parsley is awesome, but Robotlegs suits my needs and makes me smile.</div>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/">Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-273">
+        <div id="dsq-comment-header-273" class="dsq-comment-header">
+            <cite id="dsq-cite-273">
+http://twitter.com/velobr                <span id="dsq-author-user-273">Marvin Froeder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-273" class="dsq-comment-body">
+            <div id="dsq-comment-message-273" class="dsq-comment-message"><p>Is this Parsley a Swiz fork?!</p>
+<p>I&#39;m currently using Swiz and found Parsley very similar.</p>
+<p>VELO</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-274">
+        <div id="dsq-comment-header-274" class="dsq-comment-header">
+            <cite id="dsq-cite-274">
+http://joelhooks.com                <span id="dsq-author-user-274">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-274" class="dsq-comment-body">
+            <div id="dsq-comment-message-274" class="dsq-comment-message"><p>No, they were developed completely independently of one another.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-466">
+        <div id="dsq-comment-header-466" class="dsq-comment-header">
+            <cite id="dsq-cite-466">
+http://twitter.com/velobr                <span id="dsq-author-user-466">Marvin Froeder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-466" class="dsq-comment-body">
+            <div id="dsq-comment-message-466" class="dsq-comment-message"><p>Is this Parsley a Swiz fork?!</p>
+<p>I&#39;m currently using Swiz and found Parsley very similar.</p>
+<p>VELO</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-467">
+        <div id="dsq-comment-header-467" class="dsq-comment-header">
+            <cite id="dsq-cite-467">
+http://joelhooks.com                <span id="dsq-author-user-467">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-467" class="dsq-comment-body">
+            <div id="dsq-comment-message-467" class="dsq-comment-message"><p>No, they were developed completely independently of one another.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-276">
+        <div id="dsq-comment-header-276" class="dsq-comment-header">
+            <cite id="dsq-cite-276">
+                <span id="dsq-author-user-276">dbuzz2000</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-276" class="dsq-comment-body">
+            <div id="dsq-comment-message-276" class="dsq-comment-message"><p>I got that:<br />TypeError: Error #1010: A term is undefined and has no properties.<br />	at com.joelhooks.parsley.example.delegates::FlickrImageServiceDelegate/handleSearchResult()[C:_projects.examlpesex_parsleyflickr_IoC_DIsrccomjoelhooksparsleyexampledelegatesFlickrImageServiceDelegate.as:62]</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-465">
+        <div id="dsq-comment-header-465" class="dsq-comment-header">
+            <cite id="dsq-cite-465">
+                <span id="dsq-author-user-465">dbuzz2000</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-465" class="dsq-comment-body">
+            <div id="dsq-comment-message-465" class="dsq-comment-message"><p>I got that:<br />TypeError: Error #1010: A term is undefined and has no properties.<br />	at com.joelhooks.parsley.example.delegates::FlickrImageServiceDelegate/handleSearchResult()[C:_projects.examlpesex_parsleyflickr_IoC_DIsrccomjoelhooksparsleyexampledelegatesFlickrImageServiceDelegate.as:62]</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-863">
+        <div id="dsq-comment-header-863" class="dsq-comment-header">
+            <cite id="dsq-cite-863">
+                <span id="dsq-author-user-863">Theguest</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-863" class="dsq-comment-body">
+            <div id="dsq-comment-message-863" class="dsq-comment-message"><p>Great Article, I also found this important fact about parsleys silent failure issue http://stageaction.wordpress.com/2011/11/17/flex-parsley-silent-failure/</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/';
+    var disqus_identifier = '226 http://joelhooks.com/?p=226';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=226');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2009\/07\/14\/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.303 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.22MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

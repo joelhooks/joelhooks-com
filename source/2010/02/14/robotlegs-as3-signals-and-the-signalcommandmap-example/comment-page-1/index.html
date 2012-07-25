@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Robotlegs, AS3-Signals and the SignalCommandMap Examplejoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='IntelliJ Idea Flex and Actionscript 3 Workflow: [Part 1] Creating a Flex Project' href='http://joelhooks.com/2010/03/21/intellij-idea-flex-and-actionscript-3-workflow-part-1-creating-a-flex-project/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=432' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,713] -->
+<link rel="canonical" href="http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_index_793768494","10.0.0","http://joelhooks.com/wp-content/plugins/kimili-flash-embed/lib/expressInstall.swf");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-432 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-432" class="post-432 post type-post status-publish format-standard hentry category-actionscript category-design-patterns category-flex category-object-oriented-concepts category-robotlegs category-software-architecture">
+					<h1>Robotlegs, AS3-Signals and the SignalCommandMap Example</h1>
+		
+					<div class="entry-content">
+						<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/robotlegs.org');"  href="http://robotlegs.org">Robotlegs</a> and <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robertpenner/as3-signals');"  href="http://github.com/robertpenner/as3-signals">AS3-Signals</a> play really well together. Both apply solid object-oriented principles to accomplish their respective goals. Signals is extremely well suited for automated Dependency Injection. By combining Signals and Robotlegs you are able to eliminate the use of Flash Events in the framework layer of your application. Eliminating Events means eliminating the ambiguity that can accompany Events and their String registry based approach to the <a onclick="javascript:pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Observer_pattern');"  href="http://en.wikipedia.org/wiki/Observer_pattern">Observer pattern</a>. Signals provides a strongly-typed object-oriented approach to this same pattern.</p>
+<p>With the standard <a onclick="javascript:pageTracker._trackPageview('/outgoing/wiki.github.com/robotlegs/robotlegs-framework/best-practices');"  href="http://wiki.github.com/robotlegs/robotlegs-framework/best-practices">Robotlegs MVCS implementation</a> you leverage the events provided by Actionscript 3 to communicate amongst the various actors of an application. From models and services dispatching notifications of their actions to triggering commands, events are a core piece of the implementation. To facilitate the use of Signals within MVCS it was necessary to create an extension to allow for Signals to be registered as Command triggers. This need spawned the <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/signals-extensions-CommandSignal');"  href="http://github.com/joelhooks/signals-extensions-CommandSignal">SignalCommandMap utility</a>.</p>
+<p>The SignalCommandMap extends the normal MVCS context and creates a SignalContext. The SignalContext instantiates and provides access to the SignalCommandMap alongside the other maps that are standard to Robotlegs. The SignalCommandMap allows you to map Signal classes and instances to commands that will be executed when the Signal dispatch() method is called. The value objects that are passed in the dispatch are then injected into the command alongside any other mapped injections you have created.</p>
+<p>Let&#8217;s take a look at a simple example that makes use of the SignalCommandMap and discuss some of the underlying code to see how it works:</p>
+<div align="center">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_index_793768494"
+			class="flashmovie"
+			width="320"
+			height="550">
+	<param name="movie" value="http://joelhooks.com/examples/robotlegsSignalsCafe/index.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="http://joelhooks.com/examples/robotlegsSignalsCafe/index.swf"
+			name="fm_index_793768494"
+			width="320"
+			height="550">
+	<!--<![endif]-->
+		
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object></div>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-RobotlegsSignalsCafe');"  href="http://github.com/joelhooks/robotlegs-examples-RobotlegsSignalsCafe">Source available on Github</a> (<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-RobotlegsSignalsCafe/zipball/v0.2.4212342');"  href="http://github.com/joelhooks/robotlegs-examples-RobotlegsSignalsCafe/zipball/v0.2.4212342">zip</a>)<br />
+<span id="more-432"></span><br />
+The example is a menu that allows you to add food which is displayed in a list. The total cost of your selected items is displayed and you can remove items from your order. First let&#8217;s get started by taking a look at the context of the Application, which extends SignalContext:</p>
+<h6>SignalCafeContext.as Bootstraps the Application</h6>
+
+<div class="wp_codebox"><table><tr id="p4321"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code" id="p432code1"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> SignalCafeContext <span style="color: #0066CC;">extends</span> SignalContext
+<span style="color: #66cc66;">&#123;</span>
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+      injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>FoodOrderModel<span style="color: #66cc66;">&#41;</span>;
+      injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>FoodOrderUpdated<span style="color: #66cc66;">&#41;</span>;
+      injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>FoodItemAddedToOrder<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+      signalCommandMap.<span style="color: #006600;">mapSignalClass</span><span style="color: #66cc66;">&#40;</span>AddFoodItemToOrder, AddFoodItemToOrderCommand<span style="color: #66cc66;">&#41;</span>;
+      signalCommandMap.<span style="color: #006600;">mapSignalClass</span><span style="color: #66cc66;">&#40;</span>FoodItemSelected, FoodItemSelectedCommand<span style="color: #66cc66;">&#41;</span>;
+      signalCommandMap.<span style="color: #006600;">mapSignalClass</span><span style="color: #66cc66;">&#40;</span>RemoveAllOfSelectedItem, RemoveAllSelectedItemCommand<span style="color: #66cc66;">&#41;</span>;
+      signalCommandMap.<span style="color: #006600;">mapSignalClass</span><span style="color: #66cc66;">&#40;</span>NoFoodItemSelected, NoFoodItemSelectedCommand<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+      mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>FoodSelectionView, FoodSelectionViewMediator<span style="color: #66cc66;">&#41;</span>;
+      mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>CurrentOrderView, CurrentOrderViewMediator<span style="color: #66cc66;">&#41;</span>;
+      mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>FoodOrderSummaryView, FoodOrderSummaryViewMediator<span style="color: #66cc66;">&#41;</span>;
+      mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>FoodItemRemovalView, FoodItemRemovalViewMediator<span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>A SignalContext is structured exactly the same as a standard Robotlegs MVCS Context class. You override the startup() method and bootstrap your application. The major difference here is that you are mapping signals to commands instead of mapping events to commands. With the SignalCommandMap you are not restricted to just using Signals for triggering commands. You could mix events and Signals liberally as your needs or requirements dictated. As a warning, this could quickly became confusing and choosing one or the other might be a saner choice.</p>
+<p>SignalCafeContext is mapping 4 Signals to 4 commands. The Signals are typed extensions of the base Signal class. This is necessary to provide Robotlegs (and more specifically in this case SwiftSuspenders) object types to differentiate for the purposes of injection. You could use named injections, but this would rapidly riddle your application with strings that would need to be laboriously checked for accuracy. Avoiding strings in favor of compiler-checked object types is always a good choice.</p>
+<p>The strongly typed Signals are relatively simple. They contain a constructor and no additional methods or properties are added to the Signal. You can of course add properties and methods to the extended Signals,, but it wasn&#8217;t necessary for this example. The SignalCommandMap will accept any class that implements the ISignal interface. Let&#8217;s take a look at one of the commands triggered by a Signal mapped in the SignalCafeContext:</p>
+<h6>AddFoodItemToOrder.as triggers the AddFoodItemToOrderCommand</h6>
+
+<div class="wp_codebox"><table><tr id="p4322"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code" id="p432code2"><pre class="actionscirpt" style="font-family:monospace;">public class AddFoodItemToOrder extends Signal
+{
+	public function AddFoodItemToOrder()
+	{
+		super(FoodType);
+	}
+}</pre></td></tr></table></div>
+
+<p>That is the whole of the extended Signal. As mentioned, it is not very complex at all. You will notice that super(FoodType) is being called. Signals take constructor arguments consisting of classes or interfaces that will be used as the value objects transmitted via the dispatch() method. In this case we are using FoodType as this value to ensure that our Signal will carry the payload that the mapped command is expecting.</p>
+<p>Command signals are named a bit differently than standard reaction Signals. A Signal that is triggering a command is &#8220;requesting action&#8221; or specifying an action that needs to occur. Standard signals are typically past tense, or informative, describing an action that has occurred. By using this standard it is much easier to differentiate quickly what each Signal&#8217;s purpose is. This can help with overall clarity within your application.</p>
+<p>The AddFoodItemToOrder signal is dispatched by the FoodSelectionViewMediator which is mediating the DropDownList of FoodTypes and the &#8220;Add Some Food&#8221; button:</p>
+<h6>FoodSelectionViewMediator.as mediates a view and dispatches a Signal when the user has clicked the &#8220;Add Some Food&#8221; button</h6>
+
+<div class="wp_codebox"><table><tr id="p4323"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code" id="p432code3"><pre class="actionscript" style="font-family:monospace;">	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> FoodSelectionViewMediator <span style="color: #0066CC;">extends</span> Mediator
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:FoodSelectionView;
+&nbsp;
+		<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> addItem:AddFoodItemToOrder;
+&nbsp;
+		override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			view.<span style="color: #006600;">itemTypeAdded</span>.<span style="color: #0066CC;">add</span><span style="color: #66cc66;">&#40;</span>handleItemTypeAdded<span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+		protected <span style="color: #000000; font-weight: bold;">function</span> handleItemTypeAdded<span style="color: #66cc66;">&#40;</span>itemType:FoodType<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			addItem.<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span>itemType<span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>When the AddFoodItemToOrder Signal&#8217;s dispatch(aFoodTypeInstance) is called the AddFoodItemToOrderCommand is triggered:</p>
+<h6>AddFoodItemToOrderCommand.as is executed in response to AddFoodItemToOrder Signal dispatch</h6>
+
+<div class="wp_codebox"><table><tr id="p4324"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code" id="p432code4"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> AddFoodItemToOrderCommand <span style="color: #0066CC;">extends</span> SignalCommand
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> itemType:FoodType;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> model:FoodOrderModel;
+&nbsp;
+	override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> execute<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		model.<span style="color: #006600;">addItemToOrder</span><span style="color: #66cc66;">&#40;</span>itemType<span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>AddFoodItemToOrderCommand has two public properties that are marked for injection. The itemType property is a FoodType object. As you will recall, FoodType is the parameter that was passed to the AddFoodItemToOrder Signal super constructor. The AddFoodItemToOrder Signal dispatch() included an instance of a FoodType object which will be injected into the AddFoodItemToOrderCommand alongside any other injections that have been mapped and specified. In this case we are also injecting the FoodOrderModel instance that was mapped as a singleton in the SignalCafeContext.</p>
+<div class="note-block">It is important to note that the parameters passed via the Signals dispatch() method will be instantly mapped and unmapped when the command is executed. If you&#8217;ve previously mapped a class that is being delivered via a Signal command mapping, that mapping will be overwritten and removed. To avoid this, favor using typed value objects as Signal parameters.</div>
+<p>The AddFoodItemToOrderCommand has a simple job. It accesses the FoodOrderModel instance and calls its addItemToOrder method adding the FoodType parameter that was dispatched with the Signal to trigger the command.</p>
+<p>That covers the basics of using the SignalCommandMap within a Robotlegs application. There are options that this example doesn&#8217;t cover. I would recommend looking through the SignalCommandMap unit test suite for a thorough review of its capabilities. There are several more commands and Signals in the example for you to look over as well. Additionally the example uses Signals within views and the model to dispatch notifications. Outside of binding and UI events, no events are being passed within the application.</p>
+<p>Hopefully this will give you the basic understanding of using the SignalCommandMap in a Robotlegs application. Let me know if you have any criticisms, comments, suggestions, or ideas regarding the utility&#8217;s implementation at <a onclick="javascript:pageTracker._trackPageview('/outgoing/knowledge.robotlegs.org');"  href="http://knowledge.robotlegs.org">http://knowledge.robotlegs.org</a></p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/">Robotlegs, AS3-Signals and the SignalCommandMap Example</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+            <div class="navigation">
+                <div class="nav-previous"></div>
+                <div class="nav-next"><a href="http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/#comments" >Newer Comments <span class="meta-nav">&rarr;</span></a></div>
+            </div> <!-- .navigation -->
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-324">
+        <div id="dsq-comment-header-324" class="dsq-comment-header">
+            <cite id="dsq-cite-324">
+http://dnalot.com/                <span id="dsq-author-user-324">Jon Toland</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-324" class="dsq-comment-body">
+            <div id="dsq-comment-message-324" class="dsq-comment-message"><p>That&#39;s hot.  Could SignalsCommandMap throw an error if it tries to map a dispatched payload that was already mapped in the Context?  I think that might aver unpleasant surprises.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-325">
+        <div id="dsq-comment-header-325" class="dsq-comment-header">
+            <cite id="dsq-cite-325">
+                <span id="dsq-author-user-325">Will</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-325" class="dsq-comment-body">
+            <div id="dsq-comment-message-325" class="dsq-comment-message"><p>When instantiating a custom class extended from SignalContext I am unable to pass the contextView &#038; autoStartup parameters usually passable to a regular Context. I there a reason for this?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-326">
+        <div id="dsq-comment-header-326" class="dsq-comment-header">
+            <cite id="dsq-cite-326">
+http://twitter.com/robpenner                <span id="dsq-author-user-326">robpenner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-326" class="dsq-comment-body">
+            <div id="dsq-comment-message-326" class="dsq-comment-message"><p>I fixed the SignalContext constructor issue here: <br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robertpenner/signals-extensions-CommandSignal/commit/645c2fb75e2c57f5d56d12e3e70faa37b814708d');"  href="http://github.com/robertpenner/signals-extensions-CommandSignal/commit/645c2fb75e2c57f5d56d12e3e70faa37b814708d" rel="nofollow">http://github.com/robertpenner/signals-extensio&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-327">
+        <div id="dsq-comment-header-327" class="dsq-comment-header">
+            <cite id="dsq-cite-327">
+http://joelhooks.com                <span id="dsq-author-user-327">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-327" class="dsq-comment-body">
+            <div id="dsq-comment-message-327" class="dsq-comment-message"><p>That would definitely be the way to go. Unfortunately until SwiftSuspenders and Robotlegs hit the next dot-release the IInjector API isn&#39;t there to accomplish it. It will be more robust in the near future.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-408">
+        <div id="dsq-comment-header-408" class="dsq-comment-header">
+            <cite id="dsq-cite-408">
+http://dnalot.com/                <span id="dsq-author-user-408">Jonathan Toland</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-408" class="dsq-comment-body">
+            <div id="dsq-comment-message-408" class="dsq-comment-message"><p>That&#39;s hot.  Could SignalsCommandMap throw an error if it tries to map a dispatched payload that was already mapped in the Context?  I think that might aver unpleasant surprises.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-406">
+        <div id="dsq-comment-header-406" class="dsq-comment-header">
+            <cite id="dsq-cite-406">
+                <span id="dsq-author-user-406">Will</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-406" class="dsq-comment-body">
+            <div id="dsq-comment-message-406" class="dsq-comment-message"><p>When instantiating a custom class extended from SignalContext I am unable to pass the contextView &#038; autoStartup parameters usually passable to a regular Context. I there a reason for this?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-407">
+        <div id="dsq-comment-header-407" class="dsq-comment-header">
+            <cite id="dsq-cite-407">
+http://twitter.com/robpenner                <span id="dsq-author-user-407">robpenner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-407" class="dsq-comment-body">
+            <div id="dsq-comment-message-407" class="dsq-comment-message"><p>I fixed the SignalContext constructor issue here: <br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robertpenner/signals-extensions-CommandSignal/commit/645c2fb75e2c57f5d56d12e3e70faa37b814708d');"  href="http://github.com/robertpenner/signals-extensions-CommandSignal/commit/645c2fb75e2c57f5d56d12e3e70faa37b814708d" rel="nofollow">http://github.com/robertpenner/signals-extensio&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-409">
+        <div id="dsq-comment-header-409" class="dsq-comment-header">
+            <cite id="dsq-cite-409">
+http://joelhooks.com                <span id="dsq-author-user-409">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-409" class="dsq-comment-body">
+            <div id="dsq-comment-message-409" class="dsq-comment-message"><p>That would definitely be the way to go. Unfortunately until SwiftSuspenders and Robotlegs hit the next dot-release the IInjector API isn&#39;t there to accomplish it. It will be more robust in the near future.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-328">
+        <div id="dsq-comment-header-328" class="dsq-comment-header">
+            <cite id="dsq-cite-328">
+                <span id="dsq-author-user-328">Will</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-328" class="dsq-comment-body">
+            <div id="dsq-comment-message-328" class="dsq-comment-message"><p>Shouldn&#39;t the constructor for AddFoodItemToOrder accept a Class as a parameter since you are calling the super&#39;s constructor with super(FoodType)?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-329">
+        <div id="dsq-comment-header-329" class="dsq-comment-header">
+            <cite id="dsq-cite-329">
+                <span id="dsq-author-user-329">Will</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-329" class="dsq-comment-body">
+            <div id="dsq-comment-message-329" class="dsq-comment-message"><p>Wait&#8230; I get it&#8230; nevermind :/</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-330">
+        <div id="dsq-comment-header-330" class="dsq-comment-header">
+            <cite id="dsq-cite-330">
+http://joelhooks.com                <span id="dsq-author-user-330">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-330" class="dsq-comment-body">
+            <div id="dsq-comment-message-330" class="dsq-comment-message"><p>it *is* kinda hidden in there, but at the same time I don&#39;t want they value type changed and it kicks a RTE quickly if a wrong type is passed.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-403">
+        <div id="dsq-comment-header-403" class="dsq-comment-header">
+            <cite id="dsq-cite-403">
+                <span id="dsq-author-user-403">Will</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-403" class="dsq-comment-body">
+            <div id="dsq-comment-message-403" class="dsq-comment-message"><p>Shouldn&#39;t the constructor for AddFoodItemToOrder accept a Class as a parameter since you are calling the super&#39;s constructor with super(FoodType)?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-404">
+        <div id="dsq-comment-header-404" class="dsq-comment-header">
+            <cite id="dsq-cite-404">
+                <span id="dsq-author-user-404">Will</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-404" class="dsq-comment-body">
+            <div id="dsq-comment-message-404" class="dsq-comment-message"><p>Wait&#8230; I get it&#8230; nevermind :/</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-405">
+        <div id="dsq-comment-header-405" class="dsq-comment-header">
+            <cite id="dsq-cite-405">
+http://joelhooks.com                <span id="dsq-author-user-405">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-405" class="dsq-comment-body">
+            <div id="dsq-comment-message-405" class="dsq-comment-message"><p>it *is* kinda hidden in there, but at the same time I don&#39;t want they value type changed and it kicks a RTE quickly if a wrong type is passed.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-331">
+        <div id="dsq-comment-header-331" class="dsq-comment-header">
+            <cite id="dsq-cite-331">
+                <span id="dsq-author-user-331">sjhewitt</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-331" class="dsq-comment-body">
+            <div id="dsq-comment-message-331" class="dsq-comment-message"><p>I came across a small problem (caused by the use of the .constructor property) when trying to inject a ListCollectionView into a Command, so thought I&#39;d write a post about the changes I made to SignalCommandMap to overcome it. Any thoughts are welcome!<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/blog.sjhewitt.co.uk/2010/02/robotlegs-and-as3signals-injecting-interfaces-and-named-arguments/');"  href="http://blog.sjhewitt.co.uk/2010/02/robotlegs-and-as3signals-injecting-interfaces-and-named-arguments/" rel="nofollow">http://blog.sjhewitt.co.uk/2010/02/robotlegs-an&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-400">
+        <div id="dsq-comment-header-400" class="dsq-comment-header">
+            <cite id="dsq-cite-400">
+                <span id="dsq-author-user-400">sjhewitt</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-400" class="dsq-comment-body">
+            <div id="dsq-comment-message-400" class="dsq-comment-message"><p>I came across a small problem (caused by the use of the .constructor property) when trying to inject a ListCollectionView into a Command, so thought I&#39;d write a post about the changes I made to SignalCommandMap to overcome it and try to improve the argument injection. Any thoughts are welcome!<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/blog.sjhewitt.co.uk/2010/02/robotlegs-and-as3signals-injecting-interfaces-and-named-arguments/');"  href="http://blog.sjhewitt.co.uk/2010/02/robotlegs-and-as3signals-injecting-interfaces-and-named-arguments/" rel="nofollow">http://blog.sjhewitt.co.uk/2010/02/robotlegs-an&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-332">
+        <div id="dsq-comment-header-332" class="dsq-comment-header">
+            <cite id="dsq-cite-332">
+http://dnalot.com/                <span id="dsq-author-user-332">Jon Toland</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-332" class="dsq-comment-body">
+            <div id="dsq-comment-message-332" class="dsq-comment-message"><p>Your first proposition sounds interesting.  In practice we (CommandMap too) should be calling IReflector#getClass.  Till&#39;s implementation actually has the same bug but it&#39;s already fixed in Injector#injectInto so I&#39;ll file a bug and/or patch right away.  I recently proposed CommandMap#executedCommand and wonder whether it could be modified to accommodate SignalCommandMap#routeSignalToCommand too:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/gist.github.com/11597e33a30351a2e2ad');"  href="https://gist.github.com/11597e33a30351a2e2ad" rel="nofollow">https://gist.github.com/11597e33a30351a2e2ad</a></p>
+<p>Could your second proposal work without explicit naming injections?  Maybe Joel could implicitly name repeated types ordinally.  Thus your Command would be like:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/gist.github.com/310118');"  href="http://gist.github.com/310118" rel="nofollow">http://gist.github.com/310118</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-333">
+        <div id="dsq-comment-header-333" class="dsq-comment-header">
+            <cite id="dsq-cite-333">
+                <span id="dsq-author-user-333">Will</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-333" class="dsq-comment-body">
+            <div id="dsq-comment-message-333" class="dsq-comment-message"><p>Should signals be used when a mediator simply needs to respond to a change in the model? I assume in order to do this the signal will need to be registered as a singleton using injector.mapSingleton(MySignal) as a Command is not needed in this use case.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-334">
+        <div id="dsq-comment-header-334" class="dsq-comment-header">
+            <cite id="dsq-cite-334">
+                <span id="dsq-author-user-334">sjhewitt</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-334" class="dsq-comment-body">
+            <div id="dsq-comment-message-334" class="dsq-comment-message"><p>I thought about using a reflector, but i would still run into the problem of not being able to inject to interfaces. Personally, i think the contract created using Signal.valueClasses should be honoured when it is set, otherwise falling back to the usual method.</p>
+<p>Implicitly named injectors could be used, but does add quite a bit more complexity to the signal routing. It could also be possible to create an IInjectedSignal interface that extends ISignal and adds a command something like:<br />mapValues(injector, valueObjects)  and unmapValues(injector, valueObjects)<br />Then the routeSignalToCommand works like this:<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/gist.github.com/310237');"  href="http://gist.github.com/310237" rel="nofollow">http://gist.github.com/310237</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-401">
+        <div id="dsq-comment-header-401" class="dsq-comment-header">
+            <cite id="dsq-cite-401">
+http://dnalot.com/                <span id="dsq-author-user-401">Jonathan Toland</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-401" class="dsq-comment-body">
+            <div id="dsq-comment-message-401" class="dsq-comment-message"><p>Your first proposition sounds interesting.  In practice we (CommandMap too) should be calling IReflector#getClass.  Till&#39;s implementation actually has the same bug but it&#39;s already fixed in Injector#injectInto so I&#39;ll file a bug and/or patch right away.  I recently proposed CommandMap#executedCommand and wonder whether it could be modified to accommodate SignalCommandMap#routeSignalToCommand too:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/gist.github.com/11597e33a30351a2e2ad');"  href="https://gist.github.com/11597e33a30351a2e2ad" rel="nofollow">https://gist.github.com/11597e33a30351a2e2ad</a></p>
+<p>Could your second proposal work without explicit naming injections?  Maybe Joel could implicitly name repeated types ordinally.  Thus your Command would be like:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/gist.github.com/310118');"  href="http://gist.github.com/310118" rel="nofollow">http://gist.github.com/310118</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-399">
+        <div id="dsq-comment-header-399" class="dsq-comment-header">
+            <cite id="dsq-cite-399">
+                <span id="dsq-author-user-399">Will</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-399" class="dsq-comment-body">
+            <div id="dsq-comment-message-399" class="dsq-comment-message"><p>Should signals be used when a mediator simply needs to respond to a change in the model? I assume in order to do this the signal will need to be registered as a singleton using injector.mapSingleton(MySignal) as a Command is not needed in this use case.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-402">
+        <div id="dsq-comment-header-402" class="dsq-comment-header">
+            <cite id="dsq-cite-402">
+                <span id="dsq-author-user-402">sjhewitt</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-402" class="dsq-comment-body">
+            <div id="dsq-comment-message-402" class="dsq-comment-message"><p>I thought about using a reflector, but i would still run into the problem of not being able to inject to interfaces. Personally, i think the contract created using Signal.valueClasses should be honoured when it is set, otherwise falling back to the usual method.</p>
+<p>Implicitly named injectors could be used, but does add quite a bit more complexity to the signal routing. It could also be possible to create an IInjectedSignal interface that extends ISignal and adds a command something like:<br />mapValues(injector, valueObjects)  and unmapValues(injector, valueObjects)<br />Then the routeSignalToCommand works like this:<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/gist.github.com/310237');"  href="http://gist.github.com/310237" rel="nofollow">http://gist.github.com/310237</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-552">
+        <div id="dsq-comment-header-552" class="dsq-comment-header">
+            <cite id="dsq-cite-552">
+                <span id="dsq-author-user-552">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-552" class="dsq-comment-body">
+            <div id="dsq-comment-message-552" class="dsq-comment-message"><p>Best RL eg YET <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-553">
+        <div id="dsq-comment-header-553" class="dsq-comment-header">
+            <cite id="dsq-cite-553">
+                <span id="dsq-author-user-553">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-553" class="dsq-comment-body">
+            <div id="dsq-comment-message-553" class="dsq-comment-message"><p>Hi again, if I run this with flex 4 I get this when I try and add a food item <img src='http://joelhooks.com/wp-includes/images/smilies/icon_sad.gif' alt=':(' class='wp-smiley' /> </p>
+<p>Error: Injector is missing a rule to handle injection into target [object FoodItemSelectedCommand]. Target dependency: org.robotlegs.examples.signalcommands.model.vo::FoodItem</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-554">
+        <div id="dsq-comment-header-554" class="dsq-comment-header">
+            <cite id="dsq-cite-554">
+http://joelhooks.com                <span id="dsq-author-user-554">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-554" class="dsq-comment-body">
+            <div id="dsq-comment-message-554" class="dsq-comment-message"><p>Hi Nikos, I am traveling currently and can&#39;t trouble shoot your issue. Be sure to check your versions. It is likely  some weird combination of older RL or SwiftSuspenders compiled into the utility.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-557">
+        <div id="dsq-comment-header-557" class="dsq-comment-header">
+            <cite id="dsq-cite-557">
+                <span id="dsq-author-user-557">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-557" class="dsq-comment-body">
+            <div id="dsq-comment-message-557" class="dsq-comment-message"><p>No probs, I don&#39;t think you publish a swc for your own RL singal adabpter code?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-559">
+        <div id="dsq-comment-header-559" class="dsq-comment-header">
+            <cite id="dsq-cite-559">
+                <span id="dsq-author-user-559">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-559" class="dsq-comment-body">
+            <div id="dsq-comment-message-559" class="dsq-comment-message"><p>Im using <br />robotlegs-framework-v1.1.2.swc</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-560">
+        <div id="dsq-comment-header-560" class="dsq-comment-header">
+            <cite id="dsq-cite-560">
+                <span id="dsq-author-user-560">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-560" class="dsq-comment-body">
+            <div id="dsq-comment-message-560" class="dsq-comment-message"><p>with SwiftSuspenders-v1.5.1.swc</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-558">
+        <div id="dsq-comment-header-558" class="dsq-comment-header">
+            <cite id="dsq-cite-558">
+                <span id="dsq-author-user-558">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-558" class="dsq-comment-body">
+            <div id="dsq-comment-message-558" class="dsq-comment-message"><p>fixed:<br />had to add<br />injector.mapSingleton(FoodItem);<br />to context</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-562">
+        <div id="dsq-comment-header-562" class="dsq-comment-header">
+            <cite id="dsq-cite-562">
+http://joelhooks.com                <span id="dsq-author-user-562">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-562" class="dsq-comment-body">
+            <div id="dsq-comment-message-562" class="dsq-comment-message"><p>That isn&#39;t proper, something is wrong with the versions. If I had to<br />guess I would say the signal command map sec has RL classes compiled<br />into it that are older</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-601">
+        <div id="dsq-comment-header-601" class="dsq-comment-header">
+            <cite id="dsq-cite-601">
+                <span id="dsq-author-user-601">Willdady</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-601" class="dsq-comment-body">
+            <div id="dsq-comment-message-601" class="dsq-comment-message"><p>Joel. Do you have any plans on updating the SignalCommapMap to include detain and release like the current RL 1.3 CommandMap? Would be greate to bring it inline with the current release.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-604">
+        <div id="dsq-comment-header-604" class="dsq-comment-header">
+            <cite id="dsq-cite-604">
+http://joelhooks.com                <span id="dsq-author-user-604">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-604" class="dsq-comment-body">
+            <div id="dsq-comment-message-604" class="dsq-comment-message"><p>I actually don&#39;t have any plans to. Stray&#39;s advice on Twitter is pretty good. I hate to be lazy about it, but need to be right now. I do need to do a round of maintenance soon, so if you wanted to update the API I could get it in there.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-611">
+        <div id="dsq-comment-header-611" class="dsq-comment-header">
+            <cite id="dsq-cite-611">
+                <span id="dsq-author-user-611">Tobur</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-611" class="dsq-comment-body">
+            <div id="dsq-comment-message-611" class="dsq-comment-message"><p>It whould be great if you update Signas API.<br />Thx</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-616">
+        <div id="dsq-comment-header-616" class="dsq-comment-header">
+            <cite id="dsq-cite-616">
+http://twitter.com/flexcomponent                <span id="dsq-author-user-616">Bryan, Choi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-616" class="dsq-comment-body">
+            <div id="dsq-comment-message-616" class="dsq-comment-message"><p>Hum&#8230;. I want to get this with modular&#8230;.okay&#8230; Thanks a lot.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-628">
+        <div id="dsq-comment-header-628" class="dsq-comment-header">
+            <cite id="dsq-cite-628">
+http://www.boatseatpedestal.net/                <span id="dsq-author-user-628">Boat seat pedestal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-628" class="dsq-comment-body">
+            <div id="dsq-comment-message-628" class="dsq-comment-message"><p>Coming home from very lonely places, all of us go a little mad: whether from great personal success, or just an all-night drive, we are the sole survivors of a world no one else has ever seen.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-649">
+        <div id="dsq-comment-header-649" class="dsq-comment-header">
+            <cite id="dsq-cite-649">
+                <span id="dsq-author-user-649">Nikos</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-649" class="dsq-comment-body">
+            <div id="dsq-comment-message-649" class="dsq-comment-message"><p>how do you get the mediator to listen to a signal from somethings not injected into the mediator. I want to get a mediator to do something from a command</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-650">
+        <div id="dsq-comment-header-650" class="dsq-comment-header">
+            <cite id="dsq-cite-650">
+http://joelhooks.com                <span id="dsq-author-user-650">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-650" class="dsq-comment-body">
+            <div id="dsq-comment-message-650" class="dsq-comment-message"><p>The simplest solution is to map the signal class for injection as a<br />
+<br />singleton. Then you can inject it wherever you need it.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-658">
+        <div id="dsq-comment-header-658" class="dsq-comment-header">
+            <cite id="dsq-cite-658">
+                <span id="dsq-author-user-658">zeflasher</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-658" class="dsq-comment-body">
+            <div id="dsq-comment-message-658" class="dsq-comment-message"><p>Just wondering will this work with NativeSignal?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-675">
+        <div id="dsq-comment-header-675" class="dsq-comment-header">
+            <cite id="dsq-cite-675">
+                <span id="dsq-author-user-675">Gordon</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-675" class="dsq-comment-body">
+            <div id="dsq-comment-message-675" class="dsq-comment-message"><p>hi,I add injector.mapSingleton(FoodItem); to the context, the food item can be added to list, but can not remove it, did you fix this bug</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-676">
+        <div id="dsq-comment-header-676" class="dsq-comment-header">
+            <cite id="dsq-cite-676">
+                <span id="dsq-author-user-676">Gordon</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-676" class="dsq-comment-body">
+            <div id="dsq-comment-message-676" class="dsq-comment-message"><p>I use the SwiftSuspenders-v1.6.0.swc, robotlegs 1.40, as3-signals 0.8</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-680">
+        <div id="dsq-comment-header-680" class="dsq-comment-header">
+            <cite id="dsq-cite-680">
+                <span id="dsq-author-user-680">Jmerrill_2001</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-680" class="dsq-comment-body">
+            <div id="dsq-comment-message-680" class="dsq-comment-message"><p>Very cool &#8211; after some pain, I got this working (pain because I am still a RL newbie).  Your example files helped, I have this working now.  Curious, why isn&#39;t this part of the standard Robotlegs download? Is it because Signals is optional in RL?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-685">
+        <div id="dsq-comment-header-685" class="dsq-comment-header">
+            <cite id="dsq-cite-685">
+http://twitter.com/stunberg                <span id="dsq-author-user-685">Scott Langeberg</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-685" class="dsq-comment-body">
+            <div id="dsq-comment-message-685" class="dsq-comment-message"><p>When do I decide to use mapSignal() vs. mapSignalClass()? I would assume the use of mapSignal() by default, as it expects type ISignal, versus mapSignalClass(), which uses Class?</p>
+<p>Looks great. Thanks for the work!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-684">
+        <div id="dsq-comment-header-684" class="dsq-comment-header">
+            <cite id="dsq-cite-684">
+http://twitter.com/stunberg                <span id="dsq-author-user-684">Scott Langeberg</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-684" class="dsq-comment-body">
+            <div id="dsq-comment-message-684" class="dsq-comment-message"><p>When do I decide to use mapSignal() vs. mapSignalClass()? I would assume the use of mapSignal() by default, as it expects type ISignal, versus mapSignalClass(), which uses Class?</p>
+<p>Looks great. Thanks for the work!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-686">
+        <div id="dsq-comment-header-686" class="dsq-comment-header">
+            <cite id="dsq-cite-686">
+http://joelhooks.com                <span id="dsq-author-user-686">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-686" class="dsq-comment-body">
+            <div id="dsq-comment-message-686" class="dsq-comment-message"><p>mapSignalClass creates the actual instance and maps it for injection in other classes based on the type (class) you feed it.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-689">
+        <div id="dsq-comment-header-689" class="dsq-comment-header">
+            <cite id="dsq-cite-689">
+                <span id="dsq-author-user-689">Dave Marr</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-689" class="dsq-comment-body">
+            <div id="dsq-comment-message-689" class="dsq-comment-message"><p>bump. I was having trouble triggering a command off a flex app&#39;s &#8220;applicationComplete&#8221; event.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-734">
+        <div id="dsq-comment-header-734" class="dsq-comment-header">
+            <cite id="dsq-cite-734">
+                <span id="dsq-author-user-734">Owen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-734" class="dsq-comment-body">
+            <div id="dsq-comment-message-734" class="dsq-comment-message"><p>Hi,</p>
+<p>I&#39;m not sure if I&#39;m using the latest version of the code &#8211; it&#39;s the same one as Stray has on her gitub though, but I think I&#39;ve found a bug. If you use unmapSignalClass, the reference to the signal in signalClassMap is retained. If you then remap the signal class the old reference is used, rather than a new one being created. This in turn means that the command does not get fired when the signal is sent.</p>
+<p>I think fixed it by adding: delete signalClassMap[signalClass]; into the unmapSignalClass method, but it might be that I&#39;m using it wrong!</p>
+<p>Cheers,</p>
+<p>Owen</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-736">
+        <div id="dsq-comment-header-736" class="dsq-comment-header">
+            <cite id="dsq-cite-736">
+http://profiles.google.com/dadmyshitsays                <span id="dsq-author-user-736">Sam Rivello</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-736" class="dsq-comment-body">
+            <div id="dsq-comment-message-736" class="dsq-comment-message"><p>Download a free AS3-Signals Presentation PDF and AS3-Only project here!</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.blog.rivellomultimediaconsulting.com/posts/as3-signals-introduction-presentation');"  href="http://www.blog.rivellomultimediaconsulting.com/posts/as3-signals-introduction-presentation" rel="nofollow">http://www.blog.rivellomultime&#8230;</a></p>
+<p>-Samuel Asher Rivello<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.RivelloMultimediaConsulting.com');"  href="http://www.RivelloMultimediaConsulting.com" rel="nofollow">http://www.RivelloMultimediaCo&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-748">
+        <div id="dsq-comment-header-748" class="dsq-comment-header">
+            <cite id="dsq-cite-748">
+                <span id="dsq-author-user-748">Masuland</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-748" class="dsq-comment-body">
+            <div id="dsq-comment-message-748" class="dsq-comment-message"><p>Hey Joel,</p>
+<p>I&#39;d like to create a Login Example with Robotlegs 1.4 &amp; AS3-Signals 0.8, but, for now it only works with Robotlegs 1.0 &amp; AS3-Signals 0.6 &#8230; see:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/code.google.com/p/masuland/wiki/LoginExample');"  href="http://code.google.com/p/masuland/wiki/LoginExample" rel="nofollow">http://code.google.com/p/masul&#8230;</a> or<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/code.google.com/p/masuland/wiki/LoginExample#Flex_4_(Halo)_with_MVCbCmd');"  href="http://code.google.com/p/masuland/wiki/LoginExample#Flex_4_(Halo)_with_MVCbCmd" rel="nofollow">http://code.google.com/p/masul&#8230;</a></p>
+<p>Is AS3-Signal &#8230; see:<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robertpenner/as3-signals');"  href="https://github.com/robertpenner/as3-signals" rel="nofollow">https://github.com/robertpenne&#8230;</a><br />&#8230; and the Signals-extension for Robotlegs &#8230; see:<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robotlegs/signals-extensions-CommandSignal');"  href="https://github.com/robotlegs/signals-extensions-CommandSignal" rel="nofollow">https://github.com/robotlegs/s&#8230;</a><br />&#8230; still supported from the Robotlegs &#8211; Community?</p>
+<p>Thanks,<br />masu</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-759">
+        <div id="dsq-comment-header-759" class="dsq-comment-header">
+            <cite id="dsq-cite-759">
+                <span id="dsq-author-user-759">Sebastian</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-759" class="dsq-comment-body">
+            <div id="dsq-comment-message-759" class="dsq-comment-message"><p>Hi Joel, would you say that this example has the latest robotlegs/signals release? Or is there another link/example?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-760">
+        <div id="dsq-comment-header-760" class="dsq-comment-header">
+            <cite id="dsq-cite-760">
+http://joelhooks.com                <span id="dsq-author-user-760">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-760" class="dsq-comment-body">
+            <div id="dsq-comment-message-760" class="dsq-comment-message"><p>I&#39;d say this example might use a previous release and you should definitely acquire the latest versions of the libraries for your projects. The example itself is still valid.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+            <div class="navigation">
+                <div class="nav-previous"></div>
+                <div class="nav-next"><a href="http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/#comments" >Newer Comments <span class="meta-nav">&rarr;</span></a></div>
+            </div><!-- .navigation -->
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/';
+    var disqus_identifier = '432 http://joelhooks.com/?p=432';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Robotlegs, AS3-Signals and the SignalCommandMap Example";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=432');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2010\/02\/14\/robotlegs-as3-signals-and-the-signalcommandmap-example\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.347 seconds. Made 4 queries to database and 15 cached queries. Memory used - 16.41MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

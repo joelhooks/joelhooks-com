@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Robotlegs AS3: A Dependency Injection Driven MVCS Framework for Flash/Flex – Inspired by PureMVCjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Unit Testing: IoC/DI, Robotlegs and FlexUnit 4' href='http://joelhooks.com/2009/07/21/unit-testing-with-inversion-of-control-ioc-and-dependency-injection-di-with-the-robotlegs-framework-and-flexunit-4/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=259' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,756] -->
+<link rel="canonical" href="http://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-%e2%80%93-inspired-by-puremvc/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_RobotlegsFlickrGallery_1100729845","10.0.0");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-259 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-259" class="post-259 post type-post status-publish format-standard hentry category-actionscript category-design-patterns category-flex category-robotlegs category-software-architecture">
+					<h1>Robotlegs AS3: A Dependency Injection Driven MVCS Framework for Flash/Flex – Inspired by PureMVC</h1>
+		
+					<div class="entry-content">
+						<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.robotlegs.org');"  href="http://www.robotlegs.org">robotlegs.org</a></p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/wiki.github.com/robotlegs/robotlegs-framework/best-practices');"  href="http://wiki.github.com/robotlegs/robotlegs-framework/best-practices">robotlegs best practices </a></p>
+<p>The quest for a Dependency Injection container continues. The most recent stop on this exploration of the available options has been Robotlegs. Robotlegs AS3 is a DI driven MVCS framework for Flash/Flex inspired by PureMVC. Being a huge fan of PureMVC, this caught my attention immediately. Robotlegs professes to be a framework like PureMVC, but without all the Singeltons, Service Locators, casting and boiler plate we have all come to love. Better yet, it delivers on these claims.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegsdemos/tree/master');"  href="http://github.com/joelhooks/robotlegsdemos/tree/master">Source for this demo available on github&#8230; </a></p>
+<div>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_RobotlegsFlickrGallery_1100729845"
+			class="flashmovie"
+			width="520"
+			height="675">
+	<param name="movie" value="http://joelhooks.com/examples/robotlegsGallery/RobotlegsFlickrGallery.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="http://joelhooks.com/examples/robotlegsGallery/RobotlegsFlickrGallery.swf"
+			name="fm_RobotlegsFlickrGallery_1100729845"
+			width="520"
+			height="675">
+	<!--<![endif]-->
+		
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object></div>
+<p><span id="more-259"></span></p>
+<h2>Brief Code Walkthrough</h2>
+<p>I&#8217;m using the same gallery example I used for Parsley, with some enhancements. The basic structure is like a typical PureMVC application. We&#8217;ve divided our packages up into model, view, controller, and events. Instead of extending Facade to bootstrap our application we need to instantiate a Context in our Applications main mxml/as file:</p>
+
+<div class="wp_codebox"><table><tr id="p2591"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code" id="p259code1"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">import</span> com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">robotlegs</span>.<span style="color: #006600;">demos</span>.<span style="color: #006600;">imagegallery</span>.<span style="color: #006600;">ImageGalleryContext</span>;
+<span style="color: #0066CC;">import</span> mx.<span style="color: #006600;">events</span>.<span style="color: #006600;">FlexEvent</span>;
+&nbsp;
+<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> galleryContext:ImageGalleryContext;
+&nbsp;
+protected <span style="color: #000000; font-weight: bold;">function</span> creationCompleteHandler<span style="color: #66cc66;">&#40;</span>event:FlexEvent<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">this</span>.<span style="color: #006600;">galleryContext</span> = <span style="color: #000000; font-weight: bold;">new</span> ImageGalleryContext<span style="color: #66cc66;">&#40;</span> <span style="color: #0066CC;">this</span> <span style="color: #66cc66;">&#41;</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The Context defines which IoC adapter to use (currently SmartyPants-IoC is the only available adapter, but a SpringAS adapter is in the works). It also fires its startup method which registers a series of commands and dispatches a Startup event.</p>
+<p>The Context for the application defines a series of Commands to fire in sequence to get the application</p>
+
+<div class="wp_codebox"><table><tr id="p2592"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code" id="p259code2"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> ImageGalleryContext <span style="color: #0066CC;">extends</span> Context
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> ImageGalleryContext<span style="color: #66cc66;">&#40;</span>contextView:DisplayObjectContainer<span style="color: #66cc66;">&#41;</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #0066CC;">super</span><span style="color: #66cc66;">&#40;</span> contextView, <span style="color: #000000; font-weight: bold;">new</span> SmartyPantsInjector<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #000000; font-weight: bold;">new</span> SmartyPantsReflector<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #808080; font-style: italic;">// Keep SmartyPants quiet</span>
+		NoSmartyPantsLogging;
+	<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #808080; font-style: italic;">// Map our startup commands</span>
+		commandFactory.<span style="color: #006600;">mapCommand</span><span style="color: #66cc66;">&#40;</span> ContextEvent.<span style="color: #006600;">STARTUP</span>, PrepModelCommand, <span style="color: #000000; font-weight: bold;">true</span> <span style="color: #66cc66;">&#41;</span>;
+		commandFactory.<span style="color: #006600;">mapCommand</span><span style="color: #66cc66;">&#40;</span> ContextEvent.<span style="color: #006600;">STARTUP</span>, PrepServicesCommand, <span style="color: #000000; font-weight: bold;">true</span> <span style="color: #66cc66;">&#41;</span>;
+		commandFactory.<span style="color: #006600;">mapCommand</span><span style="color: #66cc66;">&#40;</span> ContextEvent.<span style="color: #006600;">STARTUP</span>, PrepViewCommand, <span style="color: #000000; font-weight: bold;">true</span> <span style="color: #66cc66;">&#41;</span>;
+		commandFactory.<span style="color: #006600;">mapCommand</span><span style="color: #66cc66;">&#40;</span> ContextEvent.<span style="color: #006600;">STARTUP</span>, StartupCommand, <span style="color: #000000; font-weight: bold;">true</span> <span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #808080; font-style: italic;">// And away we go!</span>
+		eventBroadcaster.<span style="color: #006600;">dispatchEvent</span><span style="color: #66cc66;">&#40;</span> <span style="color: #000000; font-weight: bold;">new</span> ContextEvent<span style="color: #66cc66;">&#40;</span> ContextEvent.<span style="color: #006600;">STARTUP</span> <span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>These Commands are very similar to PureMVC commands. The Startup commands are used to define the initial injected classes and relationships between view components and their mediators.</p>
+<p>Mediation is particularly sweet with Robotlegs. Once a view component has been associated with a mediator, it will be registered automatically:</p>
+
+<div class="wp_codebox"><table><tr id="p2593"><td class="line_numbers"><pre>1
+</pre></td><td class="code" id="p259code3"><pre class="actionscript" style="font-family:monospace;">mediatorFactory.<span style="color: #006600;">mapMediator</span><span style="color: #66cc66;">&#40;</span> GalleryView, GalleryViewMediator <span style="color: #66cc66;">&#41;</span>;</pre></td></tr></table></div>
+
+<p>avoiding the need for facade.registerMediator&#8230; as well as skipping around the deferred instantiation/lifecycle issues that plague Flex applications. because we are injecting into our mediators, there is no need to have the mediator ask for its dependencies. We tell it what it needs and it does its work with what it is provided:</p>
+
+<div class="wp_codebox"><table><tr id="p2594"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code" id="p259code4"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> GalleryViewMediator <span style="color: #0066CC;">extends</span> Mediator
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> galleryView:GalleryView;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> galleryProxy:GalleryProxy;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> imageService:IGalleryImageServiceDelegate;</pre></td></tr></table></div>
+
+<p>Mediating view components is hands down my favorite aspect of PureMVC, and Robotlegs enhances that pattern by removing the egregious boiler plate. It allows my view components to be completely isolated and ignorant of the surrounding framework. I don&#8217;t want to inject data directly into the components or bind them to the Model. They need to display information to and collect input from the user.</p>
+<p>Robotlegs has eliminated the Notifications of PureMVC, using AS3 events instead. Most of the current crop of IoC containers for Actionscript do this also, but Robotlegs has avoided using the Display List as the Event Bus or requiring a central Event Map. This is huge. There are no confusing issues with bubbling, or the need to pass around a reference to THE view component.</p>
+<p>from the GalleryViewMediator.as:</p>
+
+<div class="wp_codebox"><table><tr id="p2595"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code" id="p259code5"><pre class="actionscript" style="font-family:monospace;">override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegisterComplete<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+	addEventListenerTo<span style="color: #66cc66;">&#40;</span> galleryView, GalleryImageEvent.<span style="color: #006600;">SELECT_GALLERY_IMAGE</span>, onImageSelected <span style="color: #66cc66;">&#41;</span>
+	addEventListenerTo<span style="color: #66cc66;">&#40;</span> eventDispatcher, GalleryEvent.<span style="color: #006600;">GALLERY_LOADED</span>, onGalleryLoaded <span style="color: #66cc66;">&#41;</span>
+	<span style="color: #0066CC;">this</span>.<span style="color: #006600;">imageService</span>.<span style="color: #006600;">loadGallery</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The core Robotlegs classes have an eventDispatcher that is the central event management aperatus. You then dispatch events using the dispatch() method on Proxy, Mediator, and Command classes and any interested party will respond.</p>
+<h2>ANOTHER micro-architecture framework?!</h2>
+<p>Well, yes. Shaun makes <a onclick="javascript:pageTracker._trackPageview('/outgoing/shaun.boyblack.co.za/blog/2009/04/29/another-architectural-framework-but-why/');"  href="http://shaun.boyblack.co.za/blog/2009/04/29/another-architectural-framework-but-why/">several compelling arguments</a> for pursuing another framework. I personally like options. A full toolbox. The landscape of AS3/Flex frameworks is looking mighty fine, with players to suit almost any style and approach. Instead of griping about the deficits in the available architectural frameworks, he&#8217;s made an attempt to bring the good parts of the available frameworks together while eliminating the various anti-patterns that caused him grief.</p>
+<p>I haven&#8217;t made much of an effort to conceal the fact that <a href="http://joelhooks.com/2008/03/15/5-reasons-puremvc-kicks-ass/">I am very much a PureMVC fan boy</a>. I like the structure, I like mediating my views as a mechanism for separation of responsibilities, and cliff Hall is one helluva guy. This isn&#8217;t to say that PureMVC doesn&#8217;t have its faults. The 4 Singletons that comprise the heart of the System, namely Facade, Model, View and Controller make for some difficult testing. The boiler plate is tedious, though at this point I just blindly type it, use a generator,  or use <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.smileonmymac.com/TextExpander/');"  href="http://www.smileonmymac.com/TextExpander/">TextExpander</a>. None of these have been deal breakers for me, and I have worked on half a dozen large scale production projects with PureMVC. All of them have been succesful, scaled well, and were easy to manage from a development perspective.</p>
+<p>That said, given the opportunity to eliminate the drawbacks of PureMVC, while still retaining the scalability and general workflow, I am all over it.</p>
+<h2>Sounds great, what&#8217;s the catch?</h2>
+<p>Robotlegs actively defines a PureMVC style MVC structure to your application.  You are extending framework classes with your actors instead of using plain-old-actionscript objects. Other frameworks avoid this, but at the cost of convenience in a lot of cases. If you like the PureMVC structure, this isn&#8217;t going to be a big deal. If you hate it, you might hate Robotlegs (but should give it a try anyway). Robotlegs has done a great job of reducing the pain involved by addressing the major complaints that I&#8217;ve seen publicly in various critiques of PureMVC.</p>
+<div class="note-block">Be sure to check out <a href="#comment-12885020">Shaun&#8217;s response</a> to these items in the comments below.</div>
+<p>Robotlegs is still very young and hasn&#8217;t been thoroughly peer reviewed. My guess is that you will start to hear more about this framework soon. It is already kickass, even at this early stage. Certainly one to keep your eye on.</p>
+<div class="note-block">As of now Robotlegs has been receiving a lot of peer review and input. At the .9 release it is approaching razor sharpness</div>
+<p><img class="aligncenter size-full wp-image-262" title="robotlegssketchsmall" src="http://69.164.207.135/wp-content/uploads/2009/07/robotlegssketchsmall.gif" alt="robotlegssketchsmall" width="221" height="260" /></p>
+<p>Resources:<br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/groups.google.com/group/robotlegs');"  href="http://groups.google.com/group/robotlegs">Robolegs Google Group</a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/shaun.boyblack.co.za/blog/2009/06/17/robotlegs-as3-introductory-screencast/');"  href="http://shaun.boyblack.co.za/blog/2009/06/17/robotlegs-as3-introductory-screencast/">Robolegs Screencasts</a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/darscan/robotlegs/tree/master');"  href="http://github.com/darscan/robotlegs/tree/master">Robolegs Source</a></p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-%e2%80%93-inspired-by-puremvc/">Robotlegs AS3: A Dependency Injection Driven MVCS Framework for Flash/Flex – Inspired by PureMVC</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-277">
+        <div id="dsq-comment-header-277" class="dsq-comment-header">
+            <cite id="dsq-cite-277">
+http://shaun.boyblack.co.za/blog/                <span id="dsq-author-user-277">darscan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-277" class="dsq-comment-body">
+            <div id="dsq-comment-message-277" class="dsq-comment-message"><p>Glad you&#39;re checking it out <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' />  To briefly touch on &#8220;the catch&#8221; though:</p>
+<p>&#8220;Robotlegs actively defines a PureMVC style MVC structure to your application.&#8221;</p>
+<p>Not exclusively. The example mvcs.* implementation does, but the idea is that you can create other architectures (contexts), as long as they promise to satisfy dependencies, and then run them along side each other in one instance of the AVM (with no unintentional cross-talk). So, while the current mvcs implementation is PureMVC-style, future architectures need not be.</p>
+<p>&#8220;You are extending framework classes with your actors instead of using plain-old-actionscript objects.&#8221;</p>
+<p>Only if you want to. For the most part, the mvcs implementations just provide some oft-needed dependencies (references to the context&#39;s injector, event dispatcher etc), and some convenience methods (though I am skeptical of these): you could skip the inheritance and just add the dependencies to plain old objects by hand, as and when you need them. Well,.. that&#39;s the idea anyway &#8211; how reasonable/useful that is I&#39;m not sure yet.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-451">
+        <div id="dsq-comment-header-451" class="dsq-comment-header">
+            <cite id="dsq-cite-451">
+http://shaun.boyblack.co.za/blog/                <span id="dsq-author-user-451">shaun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-451" class="dsq-comment-body">
+            <div id="dsq-comment-message-451" class="dsq-comment-message"><p>Glad you&#39;re checking it out <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' />  To briefly touch on &#8220;the catch&#8221; though:</p>
+<p>&#8220;Robotlegs actively defines a PureMVC style MVC structure to your application.&#8221;</p>
+<p>Not exclusively. The example mvcs.* implementation does, but the idea is that you can create other architectures (contexts), as long as they promise to satisfy dependencies, and then run them along side each other in one instance of the AVM (with no unintentional cross-talk). So, while the current mvcs implementation is PureMVC-style, future architectures need not be.</p>
+<p>&#8220;You are extending framework classes with your actors instead of using plain-old-actionscript objects.&#8221;</p>
+<p>Only if you want to. For the most part, the mvcs implementations just provide some oft-needed dependencies (references to the context&#39;s injector, event dispatcher etc), and some convenience methods (though I am skeptical of these): you could skip the inheritance and just add the dependencies to plain old objects by hand, as and when you need them. Well,.. that&#39;s the idea anyway &#8211; how reasonable/useful that is I&#39;m not sure yet.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-278">
+        <div id="dsq-comment-header-278" class="dsq-comment-header">
+            <cite id="dsq-cite-278">
+http://joelhooks.com                <span id="dsq-author-user-278">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-278" class="dsq-comment-body">
+            <div id="dsq-comment-message-278" class="dsq-comment-message"><p>Thanks for the clarification Shaun, and that makes sense. I really like the PureMVC paradigm, but it is cool to not be limited to that structure.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-452">
+        <div id="dsq-comment-header-452" class="dsq-comment-header">
+            <cite id="dsq-cite-452">
+http://joelhooks.com                <span id="dsq-author-user-452">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-452" class="dsq-comment-body">
+            <div id="dsq-comment-message-452" class="dsq-comment-message"><p>Thanks for the clarification Shaun, and that makes sense. I really like the PureMVC paradigm, but it is cool to not be limited to that structure.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-279">
+        <div id="dsq-comment-header-279" class="dsq-comment-header">
+            <cite id="dsq-cite-279">
+http://www.jadbox.com                <span id="dsq-author-user-279">Jonathan :: JADBOX.com</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-279" class="dsq-comment-body">
+            <div id="dsq-comment-message-279" class="dsq-comment-message"><p>Robotlegs seems to be exactly where I started with my library last year. That project finally evolved into FlashMVC. <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.flashmvc.com');"  href="http://www.flashmvc.com" rel="nofollow">http://www.flashmvc.com</a></p>
+<p>It differs from Robotlegs in that there is less leg work (pun) in setting up the command roster. Commands automatically register themselves to their parents, and their Events also acts as their mediators/models. This reduces redundant code significantly.</p>
+<p>As a fellow framework developer, I would like to get your feedback as well.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-573">
+        <div id="dsq-comment-header-573" class="dsq-comment-header">
+            <cite id="dsq-cite-573">
+                <span id="dsq-author-user-573">Nikos </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-573" class="dsq-comment-body">
+            <div id="dsq-comment-message-573" class="dsq-comment-message"><p>shame so many jobs in london are still looking for pureMVC, still im gonna stick learning RL until I can find a job</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-%e2%80%93-inspired-by-puremvc/';
+    var disqus_identifier = '259 http://joelhooks.com/?p=259';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Robotlegs AS3: A Dependency Injection Driven MVCS Framework for Flash\/Flex – Inspired by PureMVC";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=259');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2009\/07\/17\/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-%e2%80%93-inspired-by-puremvc\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.311 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.17MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

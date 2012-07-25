@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>I had an epiphany as to what polymorphism is last night.joelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Continuous scrolling image thumbnail component for Flex.' href='http://joelhooks.com/2008/04/21/continuous-scrolling-image-thumbnail-component-for-flex/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=37' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,714] -->
+<link rel="canonical" href="http://joelhooks.com/2008/03/23/i-had-an-epiphany-as-to-what-polymorphism-is-last-night/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-37 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-37" class="post-37 post type-post status-publish format-standard hentry category-actionscript category-object-oriented-concepts category-software-architecture">
+					<h1>I had an epiphany as to what polymorphism is last night.</h1>
+		
+					<div class="entry-content">
+						<p>Yes, I know I am late to the party. I can&#8217;t even estimate how many times I&#8217;ve read a definition of an <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.zedia.net/2008/how-to-use-interface-in-actionscript-3/');"  href="http://www.zedia.net/2008/how-to-use-interface-in-actionscript-3/">Interface</a> over the last year. It has been a concept that totally baffled me for a long time, then I sorta understood, and last night I actually implemented an<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.zedia.net/2008/how-to-use-interface-in-actionscript-3/');"  href="http://www.zedia.net/2008/how-to-use-interface-in-actionscript-3/"></a> <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.mikechambers.com/blog/2008/02/29/actionscript-3-class-interface-implementations/');"  href="http://www.mikechambers.com/blog/2008/02/29/actionscript-3-class-interface-implementations/">Interface</a> intentionally and correctly. The same is true for the term <a onclick="javascript:pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Polymorphism_in_object-oriented_programming');"  href="http://en.wikipedia.org/wiki/Polymorphism_in_object-oriented_programming">polymorphism</a>. I can read definitions until my eyes hurt, but until I actually use it, the words are just abstractions. These two concepts are synonymous, as Interfaces in Actionscript 3 are a convenience for type-checking polymorphism in APIs.</p>
+<p><strong>&#8216;Ah-ha!&#8217; </strong></p>
+<p>In this case, I had a Flex container that I wanted to pass to a method. I didn&#8217;t know what the container would be, but I knew that it would be a container. IContainer? Yup. Now the method couldn&#8217;t care less what class is being passed its way, as long as it has the appropriate methods that match the IContainer signature.</p>
+<p>Now it makes sense. This is the reason I keep reading that I need to use implicit getters and setters with private class properties instead of public properties. Public properties are not allowed in an interface, so you aren&#8217;t able to abstract these properties with an interface. Getters and setters ARE allowed in an interface, so now you can expose these properties and ensure that methods expecting the interface get what they are looking for. As it turns out, people weren&#8217;t recommending this simply to get me to write extra lines of code <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+<p>The pieces are starting to come together. Abstract classes, design patterns, polymorphism, interfaces&#8230; <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.puremvc.org/');"  href="http://www.puremvc.org/">PureMVC</a> has been a help. The framework pushes me towards proper OOP and the use of design patterns. Stacking knowledge, one block at a time.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2008/03/23/i-had-an-epiphany-as-to-what-polymorphism-is-last-night/">I had an epiphany as to what polymorphism is last night.</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-51">
+        <div id="dsq-comment-header-51" class="dsq-comment-header">
+            <cite id="dsq-cite-51">
+http://www.thingsiknowabout.com/wordpress/                <span id="dsq-author-user-51">Keith Wilson</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-51" class="dsq-comment-body">
+            <div id="dsq-comment-message-51" class="dsq-comment-message"><p>Don&#8217;t feel bad your not the only one that is or been there.  I too am a self taught software engineer and I could say a happy getting paid one at that.  Not bragging, just saying.  I been in your shoes, but once you understand all the design methods you mentioned are implemented in larger scoped applications to simplify the organization and coding process.  You can also use interfaces to serve as a bridge or protocol to process event objects and pass them to other classes that implement the interface.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-52">
+        <div id="dsq-comment-header-52" class="dsq-comment-header">
+            <cite id="dsq-cite-52">
+http://joelhooks.com                <span id="dsq-author-user-52">Joel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-52" class="dsq-comment-body">
+            <div id="dsq-comment-message-52" class="dsq-comment-message"><p>On the contrary, I live for the &#8216;A-HA&#8217; moment. Like you, when I hit a problem, I am incensed with the desire to solve it, forgoing sleep, food (well&#8230;), and normal human conversations until the problem is solved. Tools like this in the trusty mental toolbox let me push the envelope a little bit more.</p>
+<p>PureMVC utilizes interfaces in the manner you describe, and I love it. Makes for a very efficient system that is easily conformed to new use cases.</p>
+<p>Cheers Kieth, thanks for the comment.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2008/03/23/i-had-an-epiphany-as-to-what-polymorphism-is-last-night/';
+    var disqus_identifier = '37 http://joelhooks.com/2008/03/23/i-had-an-epiphany-as-to-what-polymorphism-is-last-night/';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "I had an epiphany as to what polymorphism is last night.";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=37');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2008\/03\/23\/i-had-an-epiphany-as-to-what-polymorphism-is-last-night\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.211 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.08MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

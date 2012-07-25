@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Robotlegs, AS3-Signals and the SignalCommandMap Examplejoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='IntelliJ Idea Flex and Actionscript 3 Workflow: [Part 1] Creating a Flex Project' href='http://joelhooks.com/2010/03/21/intellij-idea-flex-and-actionscript-3-workflow-part-1-creating-a-flex-project/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=432' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,713] -->
+<link rel="canonical" href="http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_index_1915574819","10.0.0","http://joelhooks.com/wp-content/plugins/kimili-flash-embed/lib/expressInstall.swf");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-432 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-432" class="post-432 post type-post status-publish format-standard hentry category-actionscript category-design-patterns category-flex category-object-oriented-concepts category-robotlegs category-software-architecture">
+					<h1>Robotlegs, AS3-Signals and the SignalCommandMap Example</h1>
+		
+					<div class="entry-content">
+						<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/robotlegs.org');"  href="http://robotlegs.org">Robotlegs</a> and <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robertpenner/as3-signals');"  href="http://github.com/robertpenner/as3-signals">AS3-Signals</a> play really well together. Both apply solid object-oriented principles to accomplish their respective goals. Signals is extremely well suited for automated Dependency Injection. By combining Signals and Robotlegs you are able to eliminate the use of Flash Events in the framework layer of your application. Eliminating Events means eliminating the ambiguity that can accompany Events and their String registry based approach to the <a onclick="javascript:pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Observer_pattern');"  href="http://en.wikipedia.org/wiki/Observer_pattern">Observer pattern</a>. Signals provides a strongly-typed object-oriented approach to this same pattern.</p>
+<p>With the standard <a onclick="javascript:pageTracker._trackPageview('/outgoing/wiki.github.com/robotlegs/robotlegs-framework/best-practices');"  href="http://wiki.github.com/robotlegs/robotlegs-framework/best-practices">Robotlegs MVCS implementation</a> you leverage the events provided by Actionscript 3 to communicate amongst the various actors of an application. From models and services dispatching notifications of their actions to triggering commands, events are a core piece of the implementation. To facilitate the use of Signals within MVCS it was necessary to create an extension to allow for Signals to be registered as Command triggers. This need spawned the <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/signals-extensions-CommandSignal');"  href="http://github.com/joelhooks/signals-extensions-CommandSignal">SignalCommandMap utility</a>.</p>
+<p>The SignalCommandMap extends the normal MVCS context and creates a SignalContext. The SignalContext instantiates and provides access to the SignalCommandMap alongside the other maps that are standard to Robotlegs. The SignalCommandMap allows you to map Signal classes and instances to commands that will be executed when the Signal dispatch() method is called. The value objects that are passed in the dispatch are then injected into the command alongside any other mapped injections you have created.</p>
+<p>Let&#8217;s take a look at a simple example that makes use of the SignalCommandMap and discuss some of the underlying code to see how it works:</p>
+<div align="center">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_index_1915574819"
+			class="flashmovie"
+			width="320"
+			height="550">
+	<param name="movie" value="http://joelhooks.com/examples/robotlegsSignalsCafe/index.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="http://joelhooks.com/examples/robotlegsSignalsCafe/index.swf"
+			name="fm_index_1915574819"
+			width="320"
+			height="550">
+	<!--<![endif]-->
+		
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object></div>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-RobotlegsSignalsCafe');"  href="http://github.com/joelhooks/robotlegs-examples-RobotlegsSignalsCafe">Source available on Github</a> (<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-RobotlegsSignalsCafe/zipball/v0.2.4212342');"  href="http://github.com/joelhooks/robotlegs-examples-RobotlegsSignalsCafe/zipball/v0.2.4212342">zip</a>)<br />
+<span id="more-432"></span><br />
+The example is a menu that allows you to add food which is displayed in a list. The total cost of your selected items is displayed and you can remove items from your order. First let&#8217;s get started by taking a look at the context of the Application, which extends SignalContext:</p>
+<h6>SignalCafeContext.as Bootstraps the Application</h6>
+
+<div class="wp_codebox"><table><tr id="p4321"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code" id="p432code1"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> SignalCafeContext <span style="color: #0066CC;">extends</span> SignalContext
+<span style="color: #66cc66;">&#123;</span>
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+      injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>FoodOrderModel<span style="color: #66cc66;">&#41;</span>;
+      injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>FoodOrderUpdated<span style="color: #66cc66;">&#41;</span>;
+      injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>FoodItemAddedToOrder<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+      signalCommandMap.<span style="color: #006600;">mapSignalClass</span><span style="color: #66cc66;">&#40;</span>AddFoodItemToOrder, AddFoodItemToOrderCommand<span style="color: #66cc66;">&#41;</span>;
+      signalCommandMap.<span style="color: #006600;">mapSignalClass</span><span style="color: #66cc66;">&#40;</span>FoodItemSelected, FoodItemSelectedCommand<span style="color: #66cc66;">&#41;</span>;
+      signalCommandMap.<span style="color: #006600;">mapSignalClass</span><span style="color: #66cc66;">&#40;</span>RemoveAllOfSelectedItem, RemoveAllSelectedItemCommand<span style="color: #66cc66;">&#41;</span>;
+      signalCommandMap.<span style="color: #006600;">mapSignalClass</span><span style="color: #66cc66;">&#40;</span>NoFoodItemSelected, NoFoodItemSelectedCommand<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+      mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>FoodSelectionView, FoodSelectionViewMediator<span style="color: #66cc66;">&#41;</span>;
+      mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>CurrentOrderView, CurrentOrderViewMediator<span style="color: #66cc66;">&#41;</span>;
+      mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>FoodOrderSummaryView, FoodOrderSummaryViewMediator<span style="color: #66cc66;">&#41;</span>;
+      mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>FoodItemRemovalView, FoodItemRemovalViewMediator<span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>A SignalContext is structured exactly the same as a standard Robotlegs MVCS Context class. You override the startup() method and bootstrap your application. The major difference here is that you are mapping signals to commands instead of mapping events to commands. With the SignalCommandMap you are not restricted to just using Signals for triggering commands. You could mix events and Signals liberally as your needs or requirements dictated. As a warning, this could quickly became confusing and choosing one or the other might be a saner choice.</p>
+<p>SignalCafeContext is mapping 4 Signals to 4 commands. The Signals are typed extensions of the base Signal class. This is necessary to provide Robotlegs (and more specifically in this case SwiftSuspenders) object types to differentiate for the purposes of injection. You could use named injections, but this would rapidly riddle your application with strings that would need to be laboriously checked for accuracy. Avoiding strings in favor of compiler-checked object types is always a good choice.</p>
+<p>The strongly typed Signals are relatively simple. They contain a constructor and no additional methods or properties are added to the Signal. You can of course add properties and methods to the extended Signals,, but it wasn&#8217;t necessary for this example. The SignalCommandMap will accept any class that implements the ISignal interface. Let&#8217;s take a look at one of the commands triggered by a Signal mapped in the SignalCafeContext:</p>
+<h6>AddFoodItemToOrder.as triggers the AddFoodItemToOrderCommand</h6>
+
+<div class="wp_codebox"><table><tr id="p4322"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code" id="p432code2"><pre class="actionscirpt" style="font-family:monospace;">public class AddFoodItemToOrder extends Signal
+{
+	public function AddFoodItemToOrder()
+	{
+		super(FoodType);
+	}
+}</pre></td></tr></table></div>
+
+<p>That is the whole of the extended Signal. As mentioned, it is not very complex at all. You will notice that super(FoodType) is being called. Signals take constructor arguments consisting of classes or interfaces that will be used as the value objects transmitted via the dispatch() method. In this case we are using FoodType as this value to ensure that our Signal will carry the payload that the mapped command is expecting.</p>
+<p>Command signals are named a bit differently than standard reaction Signals. A Signal that is triggering a command is &#8220;requesting action&#8221; or specifying an action that needs to occur. Standard signals are typically past tense, or informative, describing an action that has occurred. By using this standard it is much easier to differentiate quickly what each Signal&#8217;s purpose is. This can help with overall clarity within your application.</p>
+<p>The AddFoodItemToOrder signal is dispatched by the FoodSelectionViewMediator which is mediating the DropDownList of FoodTypes and the &#8220;Add Some Food&#8221; button:</p>
+<h6>FoodSelectionViewMediator.as mediates a view and dispatches a Signal when the user has clicked the &#8220;Add Some Food&#8221; button</h6>
+
+<div class="wp_codebox"><table><tr id="p4323"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code" id="p432code3"><pre class="actionscript" style="font-family:monospace;">	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> FoodSelectionViewMediator <span style="color: #0066CC;">extends</span> Mediator
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:FoodSelectionView;
+&nbsp;
+		<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> addItem:AddFoodItemToOrder;
+&nbsp;
+		override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			view.<span style="color: #006600;">itemTypeAdded</span>.<span style="color: #0066CC;">add</span><span style="color: #66cc66;">&#40;</span>handleItemTypeAdded<span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+		protected <span style="color: #000000; font-weight: bold;">function</span> handleItemTypeAdded<span style="color: #66cc66;">&#40;</span>itemType:FoodType<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+		<span style="color: #66cc66;">&#123;</span>
+			addItem.<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span>itemType<span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>When the AddFoodItemToOrder Signal&#8217;s dispatch(aFoodTypeInstance) is called the AddFoodItemToOrderCommand is triggered:</p>
+<h6>AddFoodItemToOrderCommand.as is executed in response to AddFoodItemToOrder Signal dispatch</h6>
+
+<div class="wp_codebox"><table><tr id="p4324"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code" id="p432code4"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> AddFoodItemToOrderCommand <span style="color: #0066CC;">extends</span> SignalCommand
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> itemType:FoodType;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> model:FoodOrderModel;
+&nbsp;
+	override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> execute<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		model.<span style="color: #006600;">addItemToOrder</span><span style="color: #66cc66;">&#40;</span>itemType<span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>AddFoodItemToOrderCommand has two public properties that are marked for injection. The itemType property is a FoodType object. As you will recall, FoodType is the parameter that was passed to the AddFoodItemToOrder Signal super constructor. The AddFoodItemToOrder Signal dispatch() included an instance of a FoodType object which will be injected into the AddFoodItemToOrderCommand alongside any other injections that have been mapped and specified. In this case we are also injecting the FoodOrderModel instance that was mapped as a singleton in the SignalCafeContext.</p>
+<div class="note-block">It is important to note that the parameters passed via the Signals dispatch() method will be instantly mapped and unmapped when the command is executed. If you&#8217;ve previously mapped a class that is being delivered via a Signal command mapping, that mapping will be overwritten and removed. To avoid this, favor using typed value objects as Signal parameters.</div>
+<p>The AddFoodItemToOrderCommand has a simple job. It accesses the FoodOrderModel instance and calls its addItemToOrder method adding the FoodType parameter that was dispatched with the Signal to trigger the command.</p>
+<p>That covers the basics of using the SignalCommandMap within a Robotlegs application. There are options that this example doesn&#8217;t cover. I would recommend looking through the SignalCommandMap unit test suite for a thorough review of its capabilities. There are several more commands and Signals in the example for you to look over as well. Additionally the example uses Signals within views and the model to dispatch notifications. Outside of binding and UI events, no events are being passed within the application.</p>
+<p>Hopefully this will give you the basic understanding of using the SignalCommandMap in a Robotlegs application. Let me know if you have any criticisms, comments, suggestions, or ideas regarding the utility&#8217;s implementation at <a onclick="javascript:pageTracker._trackPageview('/outgoing/knowledge.robotlegs.org');"  href="http://knowledge.robotlegs.org">http://knowledge.robotlegs.org</a></p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/">Robotlegs, AS3-Signals and the SignalCommandMap Example</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+            <div class="navigation">
+                <div class="nav-previous"><a href="http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/comment-page-1/#comments" ><span class="meta-nav">&larr;</span> Older Comments</a></div>
+                <div class="nav-next"></div>
+            </div> <!-- .navigation -->
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-805">
+        <div id="dsq-comment-header-805" class="dsq-comment-header">
+            <cite id="dsq-cite-805">
+                <span id="dsq-author-user-805">Samac</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-805" class="dsq-comment-body">
+            <div id="dsq-comment-message-805" class="dsq-comment-message"><p>Maybe it is just me (most likely), I&#8217;m working to understand this and I&#8217;m using RobotLegs 1.4 &amp; as3Signals 0.8 and when I try to compile the piece, I receive the following error:</p>
+<p>ReferenceError: Error #1065: Variable org.robotlegs.base:ContextBase::injector is not defined.</p>
+<p>Now if I load the Robotlegs that was originally with your piece, the error is gone.  I noticed that the version of Robotlegs are different.  Is there something I should do to correct for this.  I would like to use the latest of all SWCs.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-907">
+        <div id="dsq-comment-header-907" class="dsq-comment-header">
+            <cite id="dsq-cite-907">
+                <span id="dsq-author-user-907">jmp909</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-907" class="dsq-comment-body">
+            <div id="dsq-comment-message-907" class="dsq-comment-message"><p>i&#8217;ve managed to get this sort of working with: <br />
+as3-signals-v0.8.swcrobotlegs-framework-v1.5.2.swcsignals-extension-SignalsCommandMap.swcSwiftSuspenders-v1.5.1.swchowever note the following..</p>
+<p>I had to add a constructor function to the FoodItemSelected signal</p>
+<p>	public class FoodItemSelected extends Signal	{		public function FoodItemSelected()		{				super(FoodItem);		}	}</p>
+<p>this removes the following error that was occurring with other versions:</p>
+<p>[Fault] exception, information=Error: Injector is missing a rule to handle injection into property &#8220;item&#8221; of object &#8220;[object FoodItemSelectedCommand]&#8220;. Target dependency: &#8220;org.robotlegs.examples.signalcommands.model.vo::FoodItem&#8221;, named &#8220;&#8221;</p>
+<p>but there&#8217;s a warning on the Injector&#8230;</p>
+<p>AddFoodItemToOrder::FoodSelectionView::addFoodItem_clickHandlerFoodSelectionViewMediator::handleItemTypeAddedAddFoodItemToOrderCommand::executeFoodOrderModel::addItemToOrderCurrentOrderViewMediator::updateOnItemAddedFoodItemSelectedCommand::executeCurrentOrderViewMediator::updateOnOrderUpdatedFoodSelectionView::addFoodItem_clickHandlerFoodSelectionViewMediator::handleItemTypeAddedWarning: Injector already has a rule for type &#8220;org.robotlegs.examples.signalcommands.model.enums::FoodType&#8221;, named &#8220;&#8221;. If you have overwritten this mapping intentionally you can use &#8220;injector.unmap()&#8221; prior to your replacement mapping in order to avoid seeing this message.</p>
+<p>I&#8217;m not sure what&#8217;s happening there then. The application works now, but there&#8217;s obviously still an issue</p>
+<p>j</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-908">
+        <div id="dsq-comment-header-908" class="dsq-comment-header">
+            <cite id="dsq-cite-908">
+                <span id="dsq-author-user-908">jmp909</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-908" class="dsq-comment-body">
+            <div id="dsq-comment-message-908" class="dsq-comment-message"><p>sorry about that.. line breaks not showing.. those other parts are my trace outputs to follow the function signal flow.. the warning is:   </p>
+<p>Warning: Injector already has a rule for type &#8220;org.robotlegs.examples.signalcommands.model.enums::FoodType&#8221;, named &#8220;&#8221;. If you have overwritten this mapping intentionally you can use &#8220;injector.unmap()&#8221; prior to your replacement mapping in order to avoid seeing this message. </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-909">
+        <div id="dsq-comment-header-909" class="dsq-comment-header">
+            <cite id="dsq-cite-909">
+                <span id="dsq-author-user-909">jmp909</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-909" class="dsq-comment-body">
+            <div id="dsq-comment-message-909" class="dsq-comment-message"><p>Ok i updated my SignalsCommandMap swc to the v0.4 version and along with my constructor fix in FoodItemSelected everything works without warnings now</p>
+<p>SWCs used: <br />
+as3-signals-v0.8.swc, robotlegs-framework-v1.5.2.swc, <br />
+signals-extension-SignalsCommandMap-v0.4.swc, <br />
+SwiftSuspenders-v1.5.1.swcHope this is useful to people</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-922">
+        <div id="dsq-comment-header-922" class="dsq-comment-header">
+            <cite id="dsq-cite-922">
+                <span id="dsq-author-user-922">mike</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-922" class="dsq-comment-body">
+            <div id="dsq-comment-message-922" class="dsq-comment-message"><p>Is this a flex only sample? I&#8217;ve tried to work this into a pure as3 example but extending SignalContext says super() accepts 0 parameters. If thats the case how do u pass in a context view? Great article btw <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-923">
+        <div id="dsq-comment-header-923" class="dsq-comment-header">
+            <cite id="dsq-cite-923">
+                <span id="dsq-author-user-923">mike</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-923" class="dsq-comment-body">
+            <div id="dsq-comment-message-923" class="dsq-comment-message"><p>this is an old post but just in case ppl are still reading &#8211; did you find a solution for this? I have the same problem trying to build a pure as3, robotlegs-signals example. cheers</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+            <div class="navigation">
+                <div class="nav-previous"><a href="http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/comment-page-1/#comments" ><span class="meta-nav">&larr;</span> Older Comments</a></div>
+                <div class="nav-next"></div>
+            </div><!-- .navigation -->
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/';
+    var disqus_identifier = '432 http://joelhooks.com/?p=432';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Robotlegs, AS3-Signals and the SignalCommandMap Example";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=432');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2010\/02\/14\/robotlegs-as3-signals-and-the-signalcommandmap-example\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.291 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.38MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

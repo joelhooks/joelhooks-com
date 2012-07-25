@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Perfecting OO&#039;s Small Classes and Short Methodsjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Enumerating data types in Actionscript 3 (AS3)' href='http://joelhooks.com/2008/04/28/enumerating-data-types-in-actionscript-3-as3/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=44' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,710] -->
+<link rel="canonical" href="http://joelhooks.com/2008/04/24/perfecting-oos-small-classes-and-short-methods/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-44 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-44" class="post-44 post type-post status-publish format-standard hentry category-object-oriented-concepts category-todo">
+					<h1>Perfecting OO&#039;s Small Classes and Short Methods</h1>
+		
+					<div class="entry-content">
+						<p>This is here as sort of a TODO for myself this year. I want to <a onclick="javascript:pageTracker._trackPageview('/outgoing/binstock.blogspot.com/2008/04/perfecting-oos-small-classes-and-short.html');"  href="http://binstock.blogspot.com/2008/04/perfecting-oos-small-classes-and-short.html">try this experiment</a>. I really like the concept of breaking down OO projects into this extra fine granularity.</p>
+<blockquote><p>He suggests writing a 1000-line program with the constraints listed below. These constraints are intended to be excessively restrictive, so as to force developers out of the procedural groove. I guarantee if you apply this technique, their code will move markedly towards object orientation. The restrictions (which should be mercilessly enforced in this exercise) are:</p>
+<p>1. Use only one level of indentation per method. If you need more than one level, you need to create a second method and call it from the first. This is one of the most important constraints in the exercise.</p>
+<p>2. Don’t use the ‘else’ keyword. Test for a condition with an if-statement and exit the routine if it’s not met. This prevents if-else chaining; and every routine does just one thing. You’re getting the idea.</p>
+<p>3. Wrap all primitives and strings. This directly addresses “primitive obsession.” If you want to use an integer, you first have to create a class (even an inner class) to identify it’s true role. So zip codes are an object not an integer, for example. This makes for far clearer and more testable code.</p>
+<p>4. Use only one dot per line. This step prevents you from reaching deeply into other objects to get at fields or methods, and thereby conceptually breaking encapsulation.</p>
+<p>5. Don’t abbreviate names. This constraint avoids the procedural verbosity that is created by certain forms of redundancy—if you have to type the full name of a method or variable, you’re likely to spend more time thinking about its name. And you’ll avoid having objects called Order with methods entitled shipOrder(). Instead, your code will have more calls such as Order.ship().</p>
+<p>6. Keep entities small. This means no more than 50 lines per class and no more than 10 classes per package. The 50 lines per class constraint is crucial. Not only does it force concision and keep classes focused, but it means most classes can fit on a single screen in any editor/IDE.</p>
+<p>7. Don’t use any classes with more than two instance variables. This is perhaps the hardest constraint. Bay’s point is that with more than two instance variables, there is almost certainly a reason to subgroup some variables into a separate class.</p>
+<p>8. Use first-class collections. In other words, any class that contains a collection should contain no other member variables. The idea is an extension of primitive obsession. If you need a class that’s a subsumes the collection, then write it that way.</p>
+<p>9. Don’t use setters, getters, or properties. This is a radical approach to enforcing encapsulation. It also requires implementation of dependency injection approaches and adherence to the maxim “tell, don’t ask.”</p></blockquote>
+<p>I went ahead and ordered the <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/ThoughtWorks-Anthology-Technology-Innovation-Programmers/dp/193435614X');"  href="http://www.amazon.com/ThoughtWorks-Anthology-Technology-Innovation-Programmers/dp/193435614X">ThoughtWorks book </a>too. I&#8217;ve used their <a onclick="javascript:pageTracker._trackPageview('/outgoing/studios.thoughtworks.com/mingle-project-intelligence');"  href="http://studios.thoughtworks.com/mingle-project-intelligence">Mingle product</a>, which I find very compelling, so I am looking forward to their essays.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2008/04/24/perfecting-oos-small-classes-and-short-methods/">Perfecting OO&#039;s Small Classes and Short Methods</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2008/04/24/perfecting-oos-small-classes-and-short-methods/';
+    var disqus_identifier = '44 http://joelhooks.com/2008/04/24/perfecting-oos-small-classes-and-short-methods/';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Perfecting OO&#039;s Small Classes and Short Methods";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=44');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2008\/04\/24\/perfecting-oos-small-classes-and-short-methods\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.204 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.07MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

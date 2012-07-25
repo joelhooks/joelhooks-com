@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>An Introduction to Robotlegs AS3 Part 2: Modelsjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='An Introduction to Robotlegs AS3 Part 3: Services' href='http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-3-services/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=597' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,705] -->
+<link rel="canonical" href="http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-2-models/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-597 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-597" class="post-597 post type-post status-publish format-standard hentry category-actionscript category-robotlegs">
+					<h1>An Introduction to Robotlegs AS3 Part 2: Models</h1>
+		
+					<div class="entry-content">
+						<p>This is the second part in the introductory series covering Robotlegs AS3 here on InsideRIA. In the first part in the series we learned what <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.robotlegs.org');"  href="http://www.robotlegs.org">Robotlegs AS3</a> is and had a brief <a href="http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-1-context-and-mediators/">&#8220;HelloWorld&#8221; introduction to the Robotlegs Context and Mediator</a> classes. This article is going to expand on those concepts and introduce Models.</p>
+<p><span class="mt-enclosure mt-enclosure-image" style="display: inline;"><img alt="robotlegs.jpg" src="http://www.developria.com/2010/06/03/robotlegs.jpg" width="157" height="164" class="mt-image-right" style="float: right; margin: 0 0 20px 20px;" /></span> </p>
+<p>If you missed it, here is <a href="http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-1-context-and-mediators/">Part One: Context and Mediators</a></p>
+<h2>What is a Model?</h2>
+<p>Model classes encapsulate your application&#8217;s data and provide an API to access and manipulate that data. The other classes in your application will make requests of models via this API. When data on the model is updated, the model dispatches events that the other classes within your application can react to. Models are appropriate for capturing the domain logic, such as performing calculations or other manipulations. An example of this might be a shopping cart. When an item is added to the shopping cart model, the new total for all of the items in the cart will be calculated. The new total will then be stored on the model for access by other classes within the application. By placing this logic within your models, you ensure that it isn&#8217;t scattered across the entire application and know exactly where to look to see how and when your data is being manipulated.</p>
+<p>In addition to controlling access to data, models maintain the state of your application. State, in the sense of the data model, is not the same concept as a Flex State, which relates to controlling the appearance of your application. They are certainly related, but with a model, consider a list of objects. You want to keep track of which of these objects is selected, so the data model has a selected property which is updated with the currently selected item. Other areas of your application can now access this property to discover which item is selected and react accordingly.</p>
+<p>Models can be written to be portable. Along with Services this is something to keep in mind when you develop your models. There are many common sets of data that can easily transport between one application and the next. Think of, as an example, a UserLoginModel or a ShoppingCartModel. Portability takes a bit more thought and energy, but no more than writing the same code over again for each project does.</p>
+<p>The model deserves a lot of attention. It is the core of your application. The visual components get all the ooos and aaahs, but as a developer you know that data is the man behind the curtain. It is our jobs, as developers, to curate the data and deliver it to those beautiful interface items accurately. This is why isolating domain logic in the model is so important. By isolating it you have made it easier to locate, update, and maintain. With the basic definition of the model in hand, let&#8217;s look at a small example application. </p>
+<h2>On to the code!</h2>
+<p><span id="more-597"></span></p>
+<p>This pure AS3 application is making use of <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.minimalcomps.com/');"  href="http://www.minimalcomps.com/">Keith Peters&#8217;s awesome Minimal Comps library</a>. Don&#8217;t worry, if you love Flex (and how could you not?) the next example will be a Flex app, but Minimal Comps makes it so easy to make quick examples with AS3, and Robotlegs is just as easy to use with a straight Actionscript application as it is with Flex. So let&#8217;s take a look at the application and take it apart to examine its pieces.</p>
+<p>
+<div align=center><iframe src="http://joelhooks.com/examples/simpleList/" width="305" height="101"></iframe></div>
+</p>
+<p>
+<div align=center><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.developria.com/upload/2010/06/SimpleListExample.zip');"  href="http://www.developria.com/upload/2010/06/SimpleListExample.zip">SimpleListExample.zip</a></div>
+</p>
+<p>Above is the application we will be examining. It is a simple list of authors with a quote displayed for the author that is selected in the list. Here is <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.developria.com/upload/2010/06/SimpleListExample.zip');"  href="http://www.developria.com/upload/2010/06/SimpleListExample.zip">the archived Flash Builder project (zip 168k)</a>, which includes the Robotlegs 1.1 and MinimalComps SWC files as well.</p>
+<h3>SimpleListExample.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5971"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code" id="p597code1"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> SimpleListExample <span style="color: #0066CC;">extends</span> Sprite
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> SimpleListExample<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">stage</span>.<span style="color: #0066CC;">align</span> = StageAlign.<span style="color: #006600;">TOP_LEFT</span>;
+    <span style="color: #0066CC;">stage</span>.<span style="color: #0066CC;">scaleMode</span> = StageScaleMode.<span style="color: #006600;">NO_SCALE</span>;
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>This is the main file of the application, the entry point. It is a simple Sprite. This is a Robotlegs application, so the first thing we need to do is create a Context:</p>
+<h3>SimpleListExampleContext.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5972"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code" id="p597code2"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> SimpleListExampleContext <span style="color: #0066CC;">extends</span> Context
+<span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> SimpleListExampleContext<span style="color: #66cc66;">&#40;</span>contextView:DisplayObjectContainer<span style="color: #66cc66;">&#41;</span>
+    <span style="color: #66cc66;">&#123;</span>
+        <span style="color: #0066CC;">super</span><span style="color: #66cc66;">&#40;</span>contextView<span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+        injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>AuthorModel<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+        mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>ListView, ListViewMediator<span style="color: #66cc66;">&#41;</span>;
+        mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>QuoteTextArea, QuoteTextAreaMediator<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+        mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>SimpleListExample, ApplicationMediator<span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>It is common in Flex applications to leave out the constructor completely as the contextView is set inside the MXML declaration. In an Actionscript application you want to pass the contextView into the constructor so that it can be set immediately. Now lets create an instance of the SimpleListExampleContext in the main application view:</p>
+<h3>SimpleListExample.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5973"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code" id="p597code3"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> SimpleListExample <span style="color: #0066CC;">extends</span> Sprite
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> context:SimpleListExampleContext;
+&nbsp;
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> SimpleListExample<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">stage</span>.<span style="color: #0066CC;">align</span> = StageAlign.<span style="color: #006600;">TOP_LEFT</span>;
+    <span style="color: #0066CC;">stage</span>.<span style="color: #0066CC;">scaleMode</span> = StageScaleMode.<span style="color: #006600;">NO_SCALE</span>;
+    context = <span style="color: #000000; font-weight: bold;">new</span> SimpleListExampleContext<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">this</span><span style="color: #66cc66;">&#41;</span>;
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>You should notice the context variable. It is important to have a reference to your context held in memory. If you were to simply create a new instance of SimpleListExampleContext in the constructor without placing it into a variable, it would be garbage collected at the Flash Players whim. This can cause some seriously confusing hours of trouble shooting! With Flex, you simply declare the context in MXML which holds onto the reference without needing the variable, unless you create the context in the Script tag. It will require a reference there just like the above Actionscript example.</p>
+<p>This application will have two views. A list of names that can be selected and a text area that will display a quote from the selected item in the list. Those two views are called:</p>
+<ul>
+<li>ListView</li>
+<li>QuoteTextArea</li>
+</ul>
+<p>No sense being too creative with the naming scheme. Both of these views are simple sub-classes of base Minimal Comps classes. Here they are:</p>
+<h3>ListView.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5974"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code" id="p597code4"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> ListView <span style="color: #0066CC;">extends</span> <span style="color: #0066CC;">List</span>
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> ListView<span style="color: #66cc66;">&#40;</span>parent:DisplayObjectContainer<span style="color: #66cc66;">&#41;</span>
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">super</span><span style="color: #66cc66;">&#40;</span>parent<span style="color: #66cc66;">&#41;</span>;
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<h3>QuoteTextArea.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5975"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code" id="p597code5"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> QuoteTextArea <span style="color: #0066CC;">extends</span> TextArea
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> QuoteTextArea<span style="color: #66cc66;">&#40;</span>parent:DisplayObjectContainer<span style="color: #66cc66;">&#41;</span>
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">super</span><span style="color: #66cc66;">&#40;</span>parent<span style="color: #66cc66;">&#41;</span>;
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>This application only has one of each of these. It would be fully functional if we simply used the base List and TextArea classes. Why bother with the sub-classes at all? This is a habit, and a good one when dealing with dependency injection. If we know that we are going to mediate a view class, we sub-class it and give it a name that represents its purpose. When we do it this way it can be easily isolated for mediation.</p>
+<p>Now we need to do is get these two views onto the stage as children of the main application. My preferred approach to this in Actionscript applications is to place a createChildren method on the main view and call it from a mediator. Here is the main view with the createChildren() method.</p>
+<h3>SimpleListExample.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5976"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="code" id="p597code6"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> SimpleListExample <span style="color: #0066CC;">extends</span> Sprite
+<span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> hbox:HBox;
+    <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> <span style="color: #0066CC;">list</span>:ListView;
+    <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> quoteText:QuoteTextArea;
+&nbsp;
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> context:SimpleListExampleContext;
+&nbsp;
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> SimpleListExample<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+    <span style="color: #66cc66;">&#123;</span>
+        <span style="color: #0066CC;">stage</span>.<span style="color: #0066CC;">align</span> = StageAlign.<span style="color: #006600;">TOP_LEFT</span>;
+        <span style="color: #0066CC;">stage</span>.<span style="color: #0066CC;">scaleMode</span> = StageScaleMode.<span style="color: #006600;">NO_SCALE</span>;
+        context = <span style="color: #000000; font-weight: bold;">new</span> SimpleListExampleContext<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">this</span><span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+    <span style="color: #808080; font-style: italic;">/**
+     * Called from ApplicationMediator's onRegister()
+     */</span>
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> createChildren<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+        hbox = <span style="color: #000000; font-weight: bold;">new</span> HBox<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">this</span>,<span style="color: #cc66cc;">0</span>,<span style="color: #cc66cc;">0</span><span style="color: #66cc66;">&#41;</span>;
+        addChild<span style="color: #66cc66;">&#40;</span>hbox<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+        <span style="color: #0066CC;">list</span> = <span style="color: #000000; font-weight: bold;">new</span> ListView<span style="color: #66cc66;">&#40;</span>hbox<span style="color: #66cc66;">&#41;</span>;
+        <span style="color: #0066CC;">list</span>.<span style="color: #006600;">alternateRows</span> = <span style="color: #000000; font-weight: bold;">true</span>;
+&nbsp;
+        quoteText = <span style="color: #000000; font-weight: bold;">new</span> QuoteTextArea<span style="color: #66cc66;">&#40;</span>hbox<span style="color: #66cc66;">&#41;</span>;
+        quoteText.<span style="color: #006600;">editable</span> = <span style="color: #000000; font-weight: bold;">false</span>;
+        quoteText.<span style="color: #0066CC;">selectable</span> = <span style="color: #000000; font-weight: bold;">false</span>;
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>You might be wondering why not just add the views in the constructor? I prefer to let Robotlegs get started before adding the children. By calling createChildren() from the ApplicationMediator, we are 100% certain all of the primary application bootstrapping is done and we are good to go. Here is the ApplicationMediator:</p>
+<h3>ApplicationMediator.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5977"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code" id="p597code7"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> ApplicationMediator <span style="color: #0066CC;">extends</span> Mediator
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:SimpleListExample;
+&nbsp;
+  override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+  <span style="color: #66cc66;">&#123;</span>
+    view.<span style="color: #006600;">createChildren</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<div class="note-block">Note that if you find that injections are not working the likely cause is that you need to add the <b>keep-as3-metadata+=Inject, PostConstruct</b> argument to your compiler options. Check <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robotlegs/robotlegs-framework/wiki/common-problems#no-injection');"  href="https://github.com/robotlegs/robotlegs-framework/wiki/common-problems#no-injection">here</a> for more details.</div>
+<p>The mediator doesn&#8217;t have any more than the one responsibility in this simple example, but in your apps, mediating the view that is the contextView is a handy mechanism. After the mediator has been created, it needs to be mapped. This is an easy step to forget, but one to think back on when you hit debug and your mediator just doesn&#8217;t respond. The odds are it isn&#8217;t mapped, or its view component has never been ADDED_TO_STAGE. The startup method in your context will now look like this:</p>
+<h3>SimpleListExampleContext.as</h3>
+<div class="acode" style="overflow: auto; padding: 10px;" >
+<div style="overflow-x: visible;">
+<pre class='brush: as3'>
+override public function startup():void
+{
+    mediatorMap.mapView(SimpleListExample, ApplicationMediator);
+}
+</pre>
+</div>
+</div>
+<p>When you run the application now, you should see an empty list and text area. Now we need to get the views some data. We are going to put some static data in a Model class that our view component&#8217;s mediators will be able to access. Here is the basic model:</p>
+<h3>AuthorModel.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5978"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code" id="p597code8"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> AuthorModel <span style="color: #0066CC;">extends</span> Actor
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> _list:<span style="color: #0066CC;">Array</span>;
+&nbsp;
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> <span style="color: #0066CC;">list</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">Array</span>
+  <span style="color: #66cc66;">&#123;</span>
+      <span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">!</span>_list<span style="color: #66cc66;">&#41;</span>
+          initializeList<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+      <span style="color: #b1b100;">return</span> _list;
+  <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+  protected <span style="color: #000000; font-weight: bold;">function</span> initializeList<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #000000; font-weight: bold;">var</span> twain:Author = <span style="color: #000000; font-weight: bold;">new</span> Author<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Twain&quot;</span><span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #000000; font-weight: bold;">var</span> poe:Author = <span style="color: #000000; font-weight: bold;">new</span> Author<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Poe&quot;</span><span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #000000; font-weight: bold;">var</span> plato:Author = <span style="color: #000000; font-weight: bold;">new</span> Author<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Plato&quot;</span><span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #000000; font-weight: bold;">var</span> fowler:Author = <span style="color: #000000; font-weight: bold;">new</span> Author<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Fowler&quot;</span><span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+    twain.<span style="color: #006600;">quote</span> = <span style="color: #ff0000;">&quot;Why, I have known clergymen, good men, kind-hearted, liberal, sincere&quot;</span> +
+            <span style="color: #ff0000;">&quot;, and all that, who did not know the meaning of a 'flush.' It is enough &quot;</span> +
+            <span style="color: #ff0000;">&quot;to make one ashamed of one's species.&quot;</span>;
+    fowler.<span style="color: #006600;">quote</span> = <span style="color: #ff0000;">&quot;Any fool can write code that a computer can understand. &quot;</span> +
+            <span style="color: #ff0000;">&quot;Good programmers write code that humans can understand.&quot;</span>;
+    poe.<span style="color: #006600;">quote</span> = <span style="color: #ff0000;">&quot;Deep into that darkness peering, long I stood there, wondering, &quot;</span> +
+            <span style="color: #ff0000;">&quot;fearing, doubting, dreaming dreams no mortal ever dared to dream before.&quot;</span>;
+    plato.<span style="color: #006600;">quote</span> = <span style="color: #ff0000;">&quot;All things will be produced in superior quantity and quality, and with greater ease, &quot;</span> +
+            <span style="color: #ff0000;">&quot;when each man works at a single occupation, in accordance with his natural gifts, &quot;</span> +
+            <span style="color: #ff0000;">&quot;and at the right moment, without meddling with anything else. &quot;</span>;
+&nbsp;
+    _list = <span style="color: #66cc66;">&#91;</span>twain,fowler,poe,plato<span style="color: #66cc66;">&#93;</span>;
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>Right away you notice that the AuthorModel extends Actor. Actor is a convenience class provided with MVCS. It provides the appropriate code for injecting the IEventDispatcher used to communicate in the context as well as a dispatch() method to send events through that dispatcher. It is not strictly necessary to extend Actor, but you will need to provide the IEventDispatcher injection point yourself if you do not. The Model in Robotlegs MVC+S is purely conceptual. There is no Model class to extend, and the naming convention is simply to express the intent of the class.</p>
+<p>The model currently supplies a list of Authors that I admire, with a quote from each of them. The Author class is a simple value object to hold these properties as you can see below:</p>
+<h3>Author.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5979"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code" id="p597code9"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> Author
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> <span style="color: #0066CC;">name</span>:<span style="color: #0066CC;">String</span>;
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> quote:<span style="color: #0066CC;">String</span>;
+&nbsp;
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> Author<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">name</span>:<span style="color: #0066CC;">String</span><span style="color: #66cc66;">&#41;</span>
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">this</span>.<span style="color: #0066CC;">name</span> = <span style="color: #0066CC;">name</span>;
+  <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	<span style="color: #808080; font-style: italic;">/**
+	 * Minimal comps took issue with toString(); 
+	 * @return 
+	 * 
+	 */</span>	
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> label<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">String</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #b1b100;">return</span> <span style="color: #0066CC;">name</span>;
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>With a model stuffed full of data, we need to deliver that data to our list for display. The first step is to map the model for injection. The second step is to mediate the ListView and transfer the data from our model to the list. Your context&#8217;s startup() method will look like this after mapping the model:</p>
+<h3>SimpleListExampleContext.as</h3>
+
+<div class="wp_codebox"><table><tr id="p59710"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code" id="p597code10"><pre class="actionscript" style="font-family:monospace;">override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+  injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>AuthorModel<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+  mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>SimpleListExample, ApplicationMediator<span style="color: #66cc66;">&#41;</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>To map the model, or any other class that you would like to inject, you will use the context&#8217;s injector. The injector has several methods for mapping classes and values for injection. The mapSingleton() method is very common for mapping a simple class for injection. It should be noted that the term &#8220;singleton&#8221; in this context is not referring to a Singleton in the strict sense of the design pattern. In this case, mapSingleton() means that the injector will create and supply one single instance of the AuthorModel whenever it is asked to do so. You can have as many instances of AuthorModel as you want, but the injector will only create and inject the one you asked for with the above mapping. There are several other methods for mapping with the injector, and I highly recommend reading <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/tschneidereit/SwiftSuspenders#readme');"  href="http://github.com/tschneidereit/SwiftSuspenders#readme">Till Schneideriet&#8217;s documentation</a> for the SwiftSuspenders Injector. By default this is what Robotlegs uses. The <a onclick="javascript:pageTracker._trackPageview('/outgoing/wiki.github.com/robotlegs/robotlegs-framework/best-practices#mappingwithinjector');"  href="http://wiki.github.com/robotlegs/robotlegs-framework/best-practices#mappingwithinjector">Robotlegs Best Practices documentation</a> also discusses using the Injector. In addition to the documentation, we will be discussing the other injection mapping options in future articles.</p>
+<p>With the model mapped for injection, we are one step closer to getting the Authors into their list. To do that, we will mediate the ListView and inject the AuthorModel into the mediator. here is the mediator for ListView:</p>
+<h3>ListViewMediator.as</h3>
+
+<div class="wp_codebox"><table><tr id="p59711"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code" id="p597code11"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> ListViewMediator <span style="color: #0066CC;">extends</span> Mediator
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:ListView;
+&nbsp;
+  <span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> authorModel:AuthorModel;
+&nbsp;
+  override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+  <span style="color: #66cc66;">&#123;</span>
+    view.<span style="color: #006600;">items</span> = authorModel.<span style="color: #0066CC;">list</span>;
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>Outside of the [Inject] tag for the mediated view components we haven&#8217;t looked at the use of the [Inject] tag or discussed how Robotlegs provides access to dependency injection for your classes. In the ListViewMediator you will see the view being injected. In addition to the view there is a public property called authorModel of the type AuthorModel marked with the [Inject] tag as well. When you place the [Inject] tag over a public property, when the class is created by Robotlegs it will &#8220;inject&#8221; that property based on the rules you have mapped. Note, that if you haven&#8217;t supplied a rule for the injection you will receive a runtime error directing you to the problem. If this occurs, be sure to check your mapping. In this case, we have already used mapSingleton() to prepare AuthorModel for injection. </p>
+<p>In the onRegister() method of the mediator that is run when the mediator has been fully constructed and provided injection we are accessing the model and assigning the list property to the items property of the view. Nice! We should see the items in the list now.</p>
+<p>&#8230;well&#8230;</p>
+<p>&#8230;oh ya!&#8230;</p>
+<p>First we need to map the mediator:</p>
+<h3>SimpleListExampleContext.as</h3>
+
+<div class="wp_codebox"><table><tr id="p59712"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code" id="p597code12"><pre class="actionscript" style="font-family:monospace;">override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+  injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>AuthorModel<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+  mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>ListView, ListViewMediator<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+  mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>SimpleListExample, ApplicationMediator<span style="color: #66cc66;">&#41;</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>There we go. The ListView is mediated. Take note of the order of the mappings. The ListView mediator mapping is ABOVE the SimpleListExample (main view) mapping. The SimpleListExample is the main view, as well as the contextView. The contextView is treated a bit differently when its class is mapped. Instead of listening for the ADDED_TO_STAGE event to occur, the contextView is immediately mediated. Since the contextView is generally already on the stage, we can&#8217;t reliably listen for an event that might never occur. Since we want ListView to be mediated when it is added to stage we make sure that it is mapped before the ApplicationMediators onRegister() ever has a chance to be called. If you recall, the ApplicationMediator&#8217;s onRegister() is where we tell the main view to add its children, including the ListView.</p>
+<p><span class="mt-enclosure mt-enclosure-image" style="display: inline;"><img alt="view-requests-from-model.png" src="http://www.developria.com/2010/06/10/view-requests-from-model.png" width="290" height="186" class="mt-image-center" style="text-align: center; display: block; margin: 0 auto 20px;" /></span> </p>
+<p>So with the ListView being populated with data, you can now select from the list of Authors in the list. Pretty exciting, no? Try to contain yourself for a bit. There is still a ways to go. Now we want to fill the QuoteTextArea with some text. Preferably a quote from the selected Author. To do that, we will be making additions to the AuthorModel so that it will keep track of the selected Author. When an Author is selected in the ListView the ListViewMediator will update the AuthorModel. The AuthorModel will then send an event to notify anybody that might be listening that an Author was selected. We will need to also create a mediator for the QuoteTextArea so that it can listen for that event and update with the quote from the selected Author. We know we will need the event, so lets make that first:</p>
+<h3>SelectedAuthorEvent.as</h3>
+
+<div class="wp_codebox"><table><tr id="p59713"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code" id="p597code13"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> SelectedAuthorEvent <span style="color: #0066CC;">extends</span> Event
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #0066CC;">static</span> const SELECTED:<span style="color: #0066CC;">String</span> = <span style="color: #ff0000;">&quot;authorSelected&quot;</span>;
+&nbsp;
+  <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> _author:Author;
+&nbsp;
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> author<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:Author
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #b1b100;">return</span> _author;
+  <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> SelectedAuthorEvent<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">type</span>:<span style="color: #0066CC;">String</span>, author:Author = <span style="color: #000000; font-weight: bold;">null</span>, bubbles:<span style="color: #0066CC;">Boolean</span> = <span style="color: #000000; font-weight: bold;">false</span>, cancelable:<span style="color: #0066CC;">Boolean</span> = <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span>
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">super</span><span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">type</span>, bubbles, cancelable<span style="color: #66cc66;">&#41;</span>;
+    _author = author;
+  <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+  override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> clone<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:Event
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #b1b100;">return</span> <span style="color: #000000; font-weight: bold;">new</span> SelectedAuthorEvent<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">type</span>, author, bubbles, cancelable<span style="color: #66cc66;">&#41;</span>
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The event is rather unremarkable. It is a typical custom event with a single constant, SELECTED, for a type and an optional author parameter. Now that we have the event, we need to updated the AuthorModel to keep track of the selected Author and notify the application when the it has changed:</p>
+<h3>AuthorModel.as</h3>
+
+<div class="wp_codebox"><table><tr id="p59714"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code" id="p597code14"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> _selected:Author;
+<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> selected<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:Author
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #b1b100;">return</span> _selected;
+<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">set</span> selected<span style="color: #66cc66;">&#40;</span>value:Author<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+  _selected = value;
+  dispatch<span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> SelectedAuthorEvent<span style="color: #66cc66;">&#40;</span>SelectedAuthorEvent.<span style="color: #006600;">SELECTED</span>, selected<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>With the above code added to the AuthorModel we are effectively able to track the currently selected Author. To set this property on the model we will update the ListViewMediator to listen for a selection event from the ListView and update the model when it occurs:</p>
+<h3>ListViewMediator.as</h3>
+
+<div class="wp_codebox"><table><tr id="p59715"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code" id="p597code15"><pre class="actionscript" style="font-family:monospace;">override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+  view.<span style="color: #006600;">items</span> = authorModel.<span style="color: #0066CC;">list</span>;
+&nbsp;
+  addViewListener<span style="color: #66cc66;">&#40;</span>Event.<span style="color: #006600;">SELECT</span>, handleSelected<span style="color: #66cc66;">&#41;</span>
+<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">function</span> handleSelected<span style="color: #66cc66;">&#40;</span>event:Event<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+  authorModel.<span style="color: #006600;">selected</span> = view.<span style="color: #006600;">selectedItem</span> as Author;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>Inside of the ListViewMediator&#8217;s onRegister() we will use the addViewListener() method to add an event listener on the view for Event.SELECT to be handled by the handleSelected method. Now, when an item in the list is selected, the event handler method will access the selected property of the authorModel and updated it with the item that was selected. That value will be set, and the AuthorModel will dispatch the event notifying the rest of the application that this has occurred.</p>
+<p>&#8220;Why not just dispatch the selected event here and be done with it?&#8221;</p>
+<p>You very well could, and if your application is this simple it is probably the appropriate way to go. There aren&#8217;t many apps this simple in my life, and this is an example of how to use a Model, so that is the reason we are taking the seemingly long way here. And now that we have traveled down that path, we still need to get that text into the QuoteTextArea, so lets get it mediated:</p>
+<h3>QuoteTextAreaMediator.as</h3>
+
+<div class="wp_codebox"><table><tr id="p59716"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code" id="p597code16"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> QuoteTextAreaMediator <span style="color: #0066CC;">extends</span> Mediator
+<span style="color: #66cc66;">&#123;</span>
+  <span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+  <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:QuoteTextArea;
+&nbsp;
+  override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+  <span style="color: #66cc66;">&#123;</span>
+    addContextListener<span style="color: #66cc66;">&#40;</span>SelectedAuthorEvent.<span style="color: #006600;">SELECTED</span>, handleSelectedAuthorChanged<span style="color: #66cc66;">&#41;</span>
+  <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+  <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">function</span> handleSelectedAuthorChanged<span style="color: #66cc66;">&#40;</span>event:SelectedAuthorEvent<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+  <span style="color: #66cc66;">&#123;</span>
+    <span style="color: #000000; font-weight: bold;">var</span> author:Author = event.<span style="color: #006600;">author</span>;
+    view.<span style="color: #0066CC;">text</span> = author.<span style="color: #006600;">quote</span>;
+  <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>So there it is. The QuoteTextArea now has a connection to the rest of the application. In its onRegister we will use the addContextListener() to listen for the SelectedAuthorEvent.SELECTED and handle it with handleSelectedAuthorChanged.</p>
+<p><span class="mt-enclosure mt-enclosure-image" style="display: inline;"><img alt="view-to-model-to-view.png" src="http://www.developria.com/2010/06/10/view-to-model-to-view.png" width="455" height="186" class="mt-image-center" style="text-align: center; display: block; margin: 0 auto 20px;" /></span> </p>
+<p>The handleSelectedAuthorChanged method takes the information from that event and updates the view&#8217;s text property with the quote from the selected Author. After we get that mediator mapped, we will have achieved the extent of this example&#8217;s functionality:</p>
+<h3>SimpleListExampleContext.as</h3>
+
+<div class="wp_codebox"><table><tr id="p59717"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code" id="p597code17"><pre class="actionscript" style="font-family:monospace;">override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+    injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>AuthorModel<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+    mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>ListView, ListViewMediator<span style="color: #66cc66;">&#41;</span>;
+    mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>QuoteTextArea, QuoteTextAreaMediator<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+    mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>SimpleListExample, ApplicationMediator<span style="color: #66cc66;">&#41;</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>With that you have an example that covers the basics of using Models in a Robotlegs application. The guardians of your data, Models play an extremely important part in your applications. By utilizing models as the access point for your data, you isolate where the data is stored an manipulated. When you sit down to solve a problem, you know where to look for issues regarding data and its subsequent representation of the state of your application. If your data is scattered in junks all across your application it becomes a murky stew making it difficult to quickly isolate trouble spots or add functionality to the application.</p>
+<p>A few pages in a blog post is a very brief introduction to models. I highly recommend diving into some research on the M in MVC. In the next example will take a look at Services, and see how they are used within a Robotlegs application. After Services we will have a look at Commands to complete the Robotlegs MVC+S implementation before moving on to some more advanced topics.</p>
+<p>If you can&#8217;t wait, there are articles <a href="http://joelhooks.com">on my blog</a> (and lots of others across the internets) dealing with various Robotlegs topics including <a href="http://joelhooks.com/2009/11/11/a-walkthrough-of-an-air-twitter-client-using-robotlegs-mvcs/">this 25 minute screencast</a>. John Lindquist has a <a onclick="javascript:pageTracker._trackPageview('/outgoing/johnlindquist.com/2009/11/18/robotlegs-hello-world-video-tutorial/');"  href="http://johnlindquist.com/2009/11/18/robotlegs-hello-world-video-tutorial/">Hello World screencast</a> on his blog. Additionally there is a <a onclick="javascript:pageTracker._trackPageview('/outgoing/wiki.github.com/robotlegs/robotlegs-framework/best-practices');"  href="http://wiki.github.com/robotlegs/robotlegs-framework/best-practices">Best Practices document</a> that has proven helpful for many. You can always hit the <a onclick="javascript:pageTracker._trackPageview('/outgoing/knowledge.robotlegs.org/');"  href="http://knowledge.robotlegs.org/">Robotlegs Knowledge Base</a> for help and support. It has an active group of community volunteers, including myself, that diligently answer questions regarding all things Robotlegs. Additionally I participated in writing the forthcoming Flex 4 in Action book, which has 22 pages of Robotlegs material.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-2-models/">An Introduction to Robotlegs AS3 Part 2: Models</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-709">
+        <div id="dsq-comment-header-709" class="dsq-comment-header">
+            <cite id="dsq-cite-709">
+                <span id="dsq-author-user-709">crusy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-709" class="dsq-comment-body">
+            <div id="dsq-comment-message-709" class="dsq-comment-message"><p>Hi, why (and how??) do you inject the views into their mediators? This does not work here. But: There is a variable viewComponent in MediatorBase which seems to be the actual view&#8230;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-710">
+        <div id="dsq-comment-header-710" class="dsq-comment-header">
+            <cite id="dsq-cite-710">
+http://joelhooks.com                <span id="dsq-author-user-710">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-710" class="dsq-comment-body">
+            <div id="dsq-comment-message-710" class="dsq-comment-message"><p>Mediators serve as a view controller and access the API of the view. There is some more detail <a href="http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-1-context-and-mediators/" rel="nofollow">here</a>. By default the view is injected by type. Above, the ApplicationMediator is injected with the following :</p>
+<pre>  [Inject]  public var view:SimpleListExample;</pre>
+<p>As you noticed the viewComponent property is also a reference to your view. You&#39;d just need to cast it to the appropriate type to make use of it. Injecting the view by type is just a convenience.</p>
+<p>What exactly doesn&#39;t work?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-711">
+        <div id="dsq-comment-header-711" class="dsq-comment-header">
+            <cite id="dsq-cite-711">
+                <span id="dsq-author-user-711">crusy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-711" class="dsq-comment-body">
+            <div id="dsq-comment-message-711" class="dsq-comment-message"><p>Well, it does not get injected <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':-)' class='wp-smiley' />  &#8220;view&#8221; is null in onRegister while viewComponent isn&#39;t. So I use</p>
+<p>private function get _view():SimpleListExample<br />{<br />  return viewComponent as SimpleListExample;<br />}</p>
+<p>for convenience</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-712">
+        <div id="dsq-comment-header-712" class="dsq-comment-header">
+            <cite id="dsq-cite-712">
+                <span id="dsq-author-user-712">crusy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-712" class="dsq-comment-body">
+            <div id="dsq-comment-message-712" class="dsq-comment-message"><p>OK, I have it: The compiler removes the &#8220;[Inject]&#8220;s. One has to specify the compiler option</p>
+<p>-keep-as3-metadata=Inject,PostConstruct</p>
+<p>to make your example work <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':-)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-714">
+        <div id="dsq-comment-header-714" class="dsq-comment-header">
+            <cite id="dsq-cite-714">
+http://joelhooks.com                <span id="dsq-author-user-714">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-714" class="dsq-comment-body">
+            <div id="dsq-comment-message-714" class="dsq-comment-message"><p>Ah ya, good catch, I will add it to the text.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-713">
+        <div id="dsq-comment-header-713" class="dsq-comment-header">
+            <cite id="dsq-cite-713">
+http://joelhooks.com                <span id="dsq-author-user-713">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-713" class="dsq-comment-body">
+            <div id="dsq-comment-message-713" class="dsq-comment-message"><p>Are you using Robotlegs from source or a SWC? With a SWC this shouldn&#39;t be needed&#8230;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-716">
+        <div id="dsq-comment-header-716" class="dsq-comment-header">
+            <cite id="dsq-cite-716">
+http://twitter.com/ruprict                <span id="dsq-author-user-716">Ruprict</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-716" class="dsq-comment-body">
+            <div id="dsq-comment-message-716" class="dsq-comment-message"><p>So, in this example you don&#39;t use data binding at all.  In fact, the view really doesn&#39;t know anything about the model (which, I am guessing, is intentional)  In other frameworks (CG3), the view knows about it&#39;s Presentation Model (which is injected) and binds to attributes on that model (or something like that, doing this from memory)  Since Adobe will bore one to tears extolling the virtues of its Data Binding capabilities, what is the RL take on data binding?  Does this question even make sense?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-717">
+        <div id="dsq-comment-header-717" class="dsq-comment-header">
+            <cite id="dsq-cite-717">
+http://joelhooks.com                <span id="dsq-author-user-717">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-717" class="dsq-comment-body">
+            <div id="dsq-comment-message-717" class="dsq-comment-message"><p>This particular example is AS3 and doesn&#39;t have access to Flex&#39;s data binding solution. I personally bind to values from my models in views when I am using Flex. I lean towards using presentation models in these cases, but not the framework managed type you&#39;d use with Parsley or Swiz, but rather PMs to wrap value objects. Prior to that I&#39;d just add presentation values to my VOs, but that makes these dirty VOs that don&#39;t match the data from the server. Does this answer even make sense? <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-718">
+        <div id="dsq-comment-header-718" class="dsq-comment-header">
+            <cite id="dsq-cite-718">
+http://twitter.com/ruprict                <span id="dsq-author-user-718">Ruprict</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-718" class="dsq-comment-body">
+            <div id="dsq-comment-message-718" class="dsq-comment-message"><p>Fair point, I forgot this wasn&#39;t flex (duh) Maybe an example in an upcoming posts (these are great, btw)</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-719">
+        <div id="dsq-comment-header-719" class="dsq-comment-header">
+            <cite id="dsq-cite-719">
+http://joelhooks.com                <span id="dsq-author-user-719">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-719" class="dsq-comment-body">
+            <div id="dsq-comment-message-719" class="dsq-comment-message"><p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegsdemos/blob/master/FlickrImageGallery/src/org/robotlegs/demos/imagegallery/views/components/GalleryLabel.mxml');"  href="https://github.com/joelhooks/robotlegsdemos/blob/master/FlickrImageGallery/src/org/robotlegs/demos/imagegallery/views/components/GalleryLabel.mxml" rel="nofollow">https://github.com/joelhooks/r&#8230;</a></p>
+<p>The FlickrImageGallery example is Flex and I use data binding. It is still one of my favorites.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-AddressBook');"  href="https://github.com/joelhooks/robotlegs-examples-AddressBook" rel="nofollow">https://github.com/joelhooks/r&#8230;</a></p>
+<p>The address book is probably my favorite. I built it for a workshop and cover it in <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/1935182420/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/1935182420/joehoobuiblo-20/ref=nosim/" rel="nofollow">Flex 4 in Action Chapter 19</a>. The F4IA version differs a bit, but it is the same conceptually. The book contents are a bit like this series, but have had the benefit of editing by the publisher :&gt;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-740">
+        <div id="dsq-comment-header-740" class="dsq-comment-header">
+            <cite id="dsq-cite-740">
+                <span id="dsq-author-user-740">Tim</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-740" class="dsq-comment-body">
+            <div id="dsq-comment-message-740" class="dsq-comment-message"><p>Thanks for these series! Don&#39;t stop <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-755">
+        <div id="dsq-comment-header-755" class="dsq-comment-header">
+            <cite id="dsq-cite-755">
+                <span id="dsq-author-user-755">Worksk</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-755" class="dsq-comment-body">
+            <div id="dsq-comment-message-755" class="dsq-comment-message"><p>very cool, thank you&#8230;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-2-models/';
+    var disqus_identifier = '597 http://joelhooks.com/?p=597';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "An Introduction to Robotlegs AS3 Part 2: Models";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=597');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2011\/03\/12\/an-introduction-to-robotlegs-as3-part-2-models\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.557 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.27MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>An Introduction to Robotlegs AS3 Part 1: Context and Mediatorsjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='An Introduction to Robotlegs AS3 Part 2: Models' href='http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-2-models/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=589' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,720] -->
+<link rel="canonical" href="http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-1-context-and-mediators/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-589 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-589" class="post-589 post type-post status-publish format-standard hentry category-actionscript category-flex category-robotlegs">
+					<h1>An Introduction to Robotlegs AS3 Part 1: Context and Mediators</h1>
+		
+					<div class="entry-content">
+						<p>We are presented with lots of choices these days when it comes to frameworks for Actionscript 3 development. This is a good sign. The open source community is alive and vibrant, and tools that make development easier are a good thing. Over the course of the last year <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.robotlegs.org');"  href="http://www.robotlegs.org">Robotlegs AS3</a> has seen rapid growth in adoption. It is being leveraged by major media corporations, independent game developers, startups, and enterprises of all sizes.</p>
+<p><span class="mt-enclosure mt-enclosure-image" style="display: inline;"><img alt="robotlegs.jpg" src="http://www.developria.com/2010/06/03/robotlegs.jpg" width="157" height="164" class="mt-image-right" style="float: right; margin: 0 0 20px 20px;" /></span> </p>
+<p>This is the first in a series of Robotlegs articles that will appear here on InsideRIA. In the coming weeks, more articles in the series will detail core Robotlegs concepts and work through some more advanced concepts involving third party utilities and libraries built to interact with them.</p>
+<p>This article uses Flex. Don&#8217;t worry straight AS3 developers, the second part uses an example that is pure AS3.</p>
+<h2>What is Robotlegs?</h2>
+<p>Simply put, Robotlegs is a mechanism for wiring your objects together. ObjectA needs to talk to ObjectB. ObjectA doesn&#8217;t want, or need, to know that ObjectB even exists. How can they communicate? The simple answer is through Events. With Flash, we have a native event system that is used to facilitate this sort of communication. Likely you use Events on a daily basis. Objects on the display list communicate via events, and event bubbling allows distant objects to receive messages from other display objects. What about objects that aren&#8217;t on the display list? This is where a framework such as Robotlegs can really make life easier for you.</p>
+<p>At its core, Robotlegs is a set of modular utilities and interfaces that provide tools to ease these communication tasks, reduce repetitive coding tasks, and manage <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.developria.com/2009/09/as3-dependency-injection-demys.html');"  href="http://www.developria.com/2009/09/as3-dependency-injection-demys.html">dependency injection</a> within your application. In addition to this core set of tools, Robotlegs provides a lightly prescriptive MVC+S (<a onclick="javascript:pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller');"  href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">Model, View, Controller</a>, and Service) implementation to get you started. If you have any experience with PureMVC you will quickly recognize the use of Mediators and Commands within the Robotlegs MVC+S implementation. If not, don&#8217;t worry, we will be looking at these classes in more depth soon.</p>
+<p>This article is going to give an overview of Robotlegs through a simple &#8220;Hello World&#8221; example. You will probably look at the example and say, &#8220;Eh? I could have done this in a single MXML file without all the hassle!&#8221; While probably true with a trivial example, keep in mind that on a large project this structure quickly becomes invaluable. That is the benefit of development with a framework in general. It allows us to effectively communicate concepts and understand a code base much quicker than a slapped together application with no patterns and practices.</p>
+<p>This is not going an exhaustive dissection of Robotlegs, but hopefully it is enough to spark your interest. I&#8217;ve posted resources at the end of the article for further investigation. That said, let&#8217;s look at some code!</p>
+<p><span id="more-589"></span></p>
+<h2>Basic Structure of a Robotlegs MVC+S Application</h2>
+<p><b>A typical Robotlegs MVC+S application is composed of several parts:</b> </p>
+<ul>
+<li>Context &#8211; the Context is the bootstrapping mechanism that initializes dependency injection and the various core utilities that Robotlegs uses.</li>
+<li>Mediators &#8211; Mediators manage communication between your application&#8217;s view components and other objects within your application.</li>
+<li>Commands &#8211; Commands represent individual actions that your application can perform. These are typically in response to user activity, but are not limited to that use case.</li>
+<li>Models &#8211;  Models store data and represent the current state of your application.</li>
+<li>Services &#8211; Services are your application&#8217;s gateway to the outside world.</li>
+</ul>
+<p>Let&#8217;s take a look at the Context and Mediators in more depth, starting with the Context.</p>
+<p>The Context is at the heart of your application. It provides the central event bus that your other application objects will utilize to communicate with one another. Beyond the initial loading and bootstrapping of your application, you won&#8217;t deal with the Context during regular development. It comes to life, does its job, and then quietly gets out of your way while you develop your heart out. The Context is not a Singleton. Your application can have any number of Contexts, which makes Robotlegs well suited for modular applications. We aren&#8217;t going to explore modular applications here, but it will be the subject of a future article as it is an extremely powerful tool. To start off, let&#8217;s look at the most basic Context.<br />
+<h3>HelloWorldContext.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5891"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code" id="p589code1"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">import</span> org.<span style="color: #006600;">robotlegs</span>.<span style="color: #006600;">mvcs</span>.<span style="color: #006600;">Context</span>
+&nbsp;
+<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> HelloWorldContext <span style="color: #0066CC;">extends</span> Context
+<span style="color: #66cc66;">&#123;</span>
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+        <span style="color: #808080; font-style: italic;">//bootstrap here</span>
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>Inside of your Context you override the startup method. The startup() method is called when the Context has been fully initialized. Behind the scenes, prior to calling startup(), the Context is creating instances of all the core Robotlegs utilities, preparing to receive dependency injection mappings, and creating the event dispatcher that will be used to communicate amongst your application&#8217;s objects.</p>
+<p>Once your Context class has been created, your application needs a reference to it. In a Flex 4 Spark Application, this is generally done in the main MXML file that extends Application as seen below.</p>
+<h3>HelloWorld.mxml</h3>
+
+<div class="wp_codebox"><table><tr id="p5892"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code" id="p589code2"><pre class="actionscript" style="font-family:monospace;"><span style="color: #66cc66;">&lt;</span>?<span style="color: #0066CC;">xml</span> <span style="color: #0066CC;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span>?<span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;</span>s:Application
+        xmlns:fx=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span>
+        xmlns:s=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span>
+        xmlns:mx=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/mx&quot;</span> 
+        xmlns:local=<span style="color: #ff0000;">&quot;*&quot;</span><span style="color: #66cc66;">&gt;</span>
+    <span style="color: #66cc66;">&lt;</span>fx:Declarations<span style="color: #66cc66;">&gt;</span>
+        <span style="color: #66cc66;">&lt;</span>local:HelloWorldContext contextView=<span style="color: #ff0000;">&quot;{this}&quot;</span><span style="color: #66cc66;">/&gt;</span>
+    <span style="color: #66cc66;">&lt;/</span>fx:Declarations<span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;/</span>s:Application<span style="color: #66cc66;">&gt;</span></pre></td></tr></table></div>
+
+<p>Because the Context is a non-visual class, it must be placed in the Declarations tag. You should also note the contextView property bound to the application itself. The context view is the root view of the Context, and is used to provide automated assistance with view component mediation. We will look at that shortly when we discuss the relationships between views and mediators.</p>
+<p>That is it for the Context. As mentioned, it has a very brief, but critical, role in the lifecycle of your application. With your Context ready, we can now add a few view components and get them speaking to one another via Robotlegs. Let&#8217;s take a look at Mediators and their relationship to your application&#8217;s view components now.</p>
+<p>Mediators sit between your view components and the rest of the application. Put simply, Mediators listen for events. Your view components dispatch events when the user interacts with them or they are updated in some other way. These events need to be captured and delivered to the rest of the application. Perhaps the user has clicked a save button and some information needs to get sent to a server. The mediator listens for this event to occur, and when it does, the mediator gathers the appropriate information and sends an event that the rest of the application can utilize to perform some unit of work on the data. Likewise, a Mediator also listens to events from the rest of the application. If some data has been received from the server, parsed, and an event dispatched from a service class, the Mediator is the place where you will listen for that event and update its view component with the new data. Here is a view that will receive a Mediator.</p>
+<h3>MessageView.mxml</h3>
+
+<div class="wp_codebox"><table><tr id="p5893"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code" id="p589code3"><pre class="actionscript" style="font-family:monospace;"><span style="color: #66cc66;">&lt;</span>?<span style="color: #0066CC;">xml</span> <span style="color: #0066CC;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span>?<span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;</span>s:TextArea
+        xmlns:fx=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span>
+        xmlns:s=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span>
+        xmlns:mx=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/mx&quot;</span><span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;/</span>s:TextArea<span style="color: #66cc66;">&gt;</span></pre></td></tr></table></div>
+
+<p>This class is short. It is nothing more than a simple extension of a TextArea. Why not just use a TextArea? Dependency injection works better with unambiguous classes. What this means is that by extending TextArea into our new MessageView class, we are creating a specific view component for the dependency injection to act upon. This is important if our application were to have several TextAreas that served different purposes. By dividing up our classes in this way, we are clearly defining the intent of the class and allowing for the dependency injection tools to do their jobs effectively. With the MessageView, we might also add some additional functionality in the future. For this example, it will remain a simple TextArea, but you get the idea. Now we&#8217;ll look at the mediator for the MessageView component.</p>
+<h3>MessageViewMediator.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5894"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code" id="p589code4"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">import</span> org.<span style="color: #006600;">robotlegs</span>.<span style="color: #006600;">mvcs</span>.<span style="color: #006600;">Mediator</span>;
+&nbsp;
+<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> MessageViewMediator <span style="color: #0066CC;">extends</span> Mediator
+<span style="color: #66cc66;">&#123;</span>
+    <span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:MessageView;
+&nbsp;
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+         <span style="color: #0066CC;">trace</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;I am registered!&quot;</span><span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The MessageViewMediator has two interesting features at this point. Right away, you will notice the first use of the [Inject] metadata tag. This tag is used by Robotlegs to identify properties and methods that it needs to perform injection on. With a mediator, the mediated view is always available for injection when the mediator is created. You don&#8217;t need to make any special consideration for mapping the view for injection. That is taken care of for you when you map the view to its mediator. We will look at that in a moment, but first let&#8217;s take a look at the second interesting feature of the basic mediator which is the onRegister() method.</p>
+<p>The onRegister() method is the hook provided to you when the mediator has been fully initialized. The injections have occurred, the view is ready, and it is where you typically add your event listeners for both the view component and the application. You will typically override this method in every Robotlegs mediator you create.</p>
+<p>Now that you have a view component and a mediator, they need to be registered, or mapped, with the Context. This is achieved through the MediatorMap. As the name suggests, the MediatorMap is a utility for mapping mediators to view components within the Context. In addition the MediatorMap by default listens to the contextView for ADDED_TO_STAGE and REMOVED_FROM_STAGE events to automatically create and destroy mediators as their corresponding view components are added and removed from the display list. It is worth noting that in graphics intensive applications with many display objects (1000s), this automatic mediation can be a performance issue. In a typical application it is very convenient and rarely causes performance issues. Here is how we map the MessageView to its MessageViewMediator within the HelloWorldContext.</p>
+
+<div class="wp_codebox"><table><tr id="p5895"><td class="line_numbers"><pre>1
+2
+3
+4
+</pre></td><td class="code" id="p589code5"><pre class="actionscript" style="font-family:monospace;">override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+    mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>MessageView, MessageViewMediator<span style="color: #66cc66;">&#41;</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>With that done, all that is left is to add the MessageView to the HelloWorld.mxml.</p>
+<h3>HelloWorld.mxml</h3>
+
+<div class="wp_codebox"><table><tr id="p5896"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code" id="p589code6"><pre class="actionscript" style="font-family:monospace;"><span style="color: #66cc66;">&lt;</span>?<span style="color: #0066CC;">xml</span> <span style="color: #0066CC;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span>?<span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;</span>s:Application
+        xmlns:fx=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span>
+        xmlns:s=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span>
+        xmlns:mx=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/mx&quot;</span>
+        xmlns:local=<span style="color: #ff0000;">&quot;*&quot;</span><span style="color: #66cc66;">&gt;</span>
+    <span style="color: #66cc66;">&lt;</span>fx:Declarations<span style="color: #66cc66;">&gt;</span>
+        <span style="color: #66cc66;">&lt;</span>local:HelloWorldContext contextView=<span style="color: #ff0000;">&quot;{this}&quot;</span><span style="color: #66cc66;">/&gt;</span>
+    <span style="color: #66cc66;">&lt;/</span>fx:Declarations<span style="color: #66cc66;">&gt;</span>
+    <span style="color: #66cc66;">&lt;</span>local:MessageView top=<span style="color: #ff0000;">&quot;40&quot;</span> <span style="color: #0066CC;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span> <span style="color: #0066CC;">height</span>=<span style="color: #ff0000;">&quot;100%&quot;</span><span style="color: #66cc66;">/&gt;</span>
+<span style="color: #66cc66;">&lt;/</span>s:Application<span style="color: #66cc66;">&gt;</span></pre></td></tr></table></div>
+
+<p>Now, when you run your application in the debugger, you will see &#8220;I am registered!&#8221; printed to the console. Congratulations, you have a fully functional Robotlegs application. Granted, that functionality is limited to almost nothing right now, but we can change that. To give our application something to do besides just bootstrap, we will add a button called HelloButton that simply extends the Spark Button class, as well as a mediator for HelloButton called&#8230; HelloButtonMediator. </p>
+<h3>HelloButton.mxml</h3>
+
+<div class="wp_codebox"><table><tr id="p5897"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code" id="p589code7"><pre class="actionscript" style="font-family:monospace;"><span style="color: #66cc66;">&lt;</span>?<span style="color: #0066CC;">xml</span> <span style="color: #0066CC;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span>?<span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;</span>s:<span style="color: #0066CC;">Button</span>
+        xmlns:fx=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span>
+        xmlns:s=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span>
+        xmlns:mx=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/mx&quot;</span><span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;/</span>s:Button<span style="color: #66cc66;">&gt;</span></pre></td></tr></table></div>
+
+<h3>HelloButtonMediator.as</h3>
+
+<div class="wp_codebox"><table><tr id="p5898"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code" id="p589code8"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">import</span> flash.<span style="color: #006600;">events</span>.<span style="color: #006600;">MouseEvent</span>;
+&nbsp;
+<span style="color: #0066CC;">import</span> org.<span style="color: #006600;">robotlegs</span>.<span style="color: #006600;">mvcs</span>.<span style="color: #006600;">Mediator</span>;
+&nbsp;
+<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> HelloButtonMediator <span style="color: #0066CC;">extends</span> Mediator
+<span style="color: #66cc66;">&#123;</span>
+    <span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:HelloButton;
+&nbsp;
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+&nbsp;
+    <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>Right now the HelloButtonMediator looks exactly like the MessageViewMediator above, except the classes are different. Your Context startup method will look like this once you have added the mapping for the HelloButton and its mediator.</p>
+
+<div class="wp_codebox"><table><tr id="p5899"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code" id="p589code9"><pre class="actionscript" style="font-family:monospace;">override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+    mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>MessageView, MessageViewMediator<span style="color: #66cc66;">&#41;</span>;
+    mediatorMap.<span style="color: #006600;">mapView</span><span style="color: #66cc66;">&#40;</span>HelloButton, HelloButtonMediator<span style="color: #66cc66;">&#41;</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>You will also add the button to HelloWorld.mxml so that it will be added to the display list. You will probably want to add something wittier to the HelloButton&#8217;s label property, but I will leave that up to you. </p>
+<h3>HelloWorld.mxml</h3>
+
+<div class="wp_codebox"><table><tr id="p58910"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code" id="p589code10"><pre class="actionscript" style="font-family:monospace;"><span style="color: #66cc66;">&lt;</span>?<span style="color: #0066CC;">xml</span> <span style="color: #0066CC;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span>?<span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;</span>s:Application
+        xmlns:fx=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span>
+        xmlns:s=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span>
+        xmlns:mx=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/mx&quot;</span>
+        xmlns:local=<span style="color: #ff0000;">&quot;*&quot;</span><span style="color: #66cc66;">&gt;</span>
+    <span style="color: #66cc66;">&lt;</span>fx:Declarations<span style="color: #66cc66;">&gt;</span>
+        <span style="color: #66cc66;">&lt;</span>local:HelloWorldContext contextView=<span style="color: #ff0000;">&quot;{this}&quot;</span><span style="color: #66cc66;">/&gt;</span>
+    <span style="color: #66cc66;">&lt;/</span>fx:Declarations<span style="color: #66cc66;">&gt;</span>
+    <span style="color: #66cc66;">&lt;</span>local:HelloButton label=<span style="color: #ff0000;">&quot;Say Hello&quot;</span><span style="color: #66cc66;">/&gt;</span>
+    <span style="color: #66cc66;">&lt;</span>local:MessageView top=<span style="color: #ff0000;">&quot;40&quot;</span> <span style="color: #0066CC;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span> <span style="color: #0066CC;">height</span>=<span style="color: #ff0000;">&quot;100%&quot;</span><span style="color: #66cc66;">/&gt;</span>
+<span style="color: #66cc66;">&lt;/</span>s:Application<span style="color: #66cc66;">&gt;</span></pre></td></tr></table></div>
+
+<p>At this point we have two fully mediated view components that are just dying to talk. I&#8217;m not one to deny my objects their desires, so lets do just that; starting with the custom event they will use to communicate.</p>
+<h3>HelloWorldMessageEvent.as</h3>
+
+<div class="wp_codebox"><table><tr id="p58911"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code" id="p589code11"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> HelloWorldMessageEvent <span style="color: #0066CC;">extends</span> Event
+<span style="color: #66cc66;">&#123;</span>
+    <span style="color: #0066CC;">static</span> const MESSAGE_DISPATCHED:<span style="color: #0066CC;">String</span> = <span style="color: #ff0000;">&quot;messageDispatched&quot;</span>;
+&nbsp;
+    <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> _message:<span style="color: #0066CC;">String</span>;
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> <span style="color: #0066CC;">message</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">String</span>
+    <span style="color: #66cc66;">&#123;</span>
+        <span style="color: #b1b100;">return</span> _message;
+    <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> HelloWorldMessageEvent<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">type</span>:<span style="color: #0066CC;">String</span>, <span style="color: #0066CC;">message</span>:<span style="color: #0066CC;">String</span>, bubbles:<span style="color: #0066CC;">Boolean</span> = <span style="color: #000000; font-weight: bold;">false</span>, cancelable:<span style="color: #0066CC;">Boolean</span> = <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span>
+    <span style="color: #66cc66;">&#123;</span>
+        <span style="color: #0066CC;">super</span><span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">type</span>, bubbles, cancelable<span style="color: #66cc66;">&#41;</span>;
+        _message = <span style="color: #0066CC;">message</span>;
+    <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> clone<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:Event
+    <span style="color: #66cc66;">&#123;</span>
+        <span style="color: #b1b100;">return</span> <span style="color: #000000; font-weight: bold;">new</span> HelloWorldMessageEvent<span style="color: #66cc66;">&#40;</span><span style="color: #0066CC;">type</span>, <span style="color: #0066CC;">message</span>, bubbles, cancelable<span style="color: #66cc66;">&#41;</span>
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>This is a simple custom event. Be sure to override the clone() method in your custom events. Events cannot be redispatched, relayed, or bubbled without this method. I make it a habit to always override clone() in all my custom events. After being burned with a couple hours of head scratching debugging, you will too.</p>
+<p>What we want to do is update the MessageView when the user clicks the HelloButton. The HelloButtonMediator needs to listen for the MouseEvent.CLICK on the HelloButton and then dispatch the HelloWorldMessageEvent to the application. It doesn&#8217;t know who will respond to this event. It doesn&#8217;t care who responds to the event. The HelloButtonMediator has done its job.</p>
+<h3>HelloButtonMediator.as</h3>
+
+<div class="wp_codebox"><table><tr id="p58912"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code" id="p589code12"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> HelloButtonMediator <span style="color: #0066CC;">extends</span> Mediator
+<span style="color: #66cc66;">&#123;</span>
+    <span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:HelloButton;
+&nbsp;
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+        addViewListener<span style="color: #66cc66;">&#40;</span>MouseEvent.<span style="color: #006600;">CLICK</span>, handleMouseClick<span style="color: #66cc66;">&#41;</span>
+    <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+    <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">function</span> handleMouseClick<span style="color: #66cc66;">&#40;</span>event:MouseEvent<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+        dispatch<span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> HelloWorldMessageEvent<span style="color: #66cc66;">&#40;</span>HelloWorldMessageEvent.<span style="color: #006600;">MESSAGE_DISPATCHED</span>, <span style="color: #ff0000;">&quot;Hello World&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>With the view listener added to the HelloButtonMediator, we are now dispatching an event to the application. The next step is to do something with that event. The MessageViewMediator seems like the logical choice.</p>
+<h3>MessageViewMediator.as</h3>
+
+<div class="wp_codebox"><table><tr id="p58913"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code" id="p589code13"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> MessageViewMediator <span style="color: #0066CC;">extends</span> Mediator
+<span style="color: #66cc66;">&#123;</span>
+    <span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+    <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> view:MessageView;
+&nbsp;
+    override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> onRegister<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+        addContextListener<span style="color: #66cc66;">&#40;</span>HelloWorldMessageEvent.<span style="color: #006600;">MESSAGE_DISPATCHED</span>, handleMessage<span style="color: #66cc66;">&#41;</span>
+    <span style="color: #66cc66;">&#125;</span>
+&nbsp;
+    <span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">function</span> handleMessage<span style="color: #66cc66;">&#40;</span>event:HelloWorldMessageEvent<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+    <span style="color: #66cc66;">&#123;</span>
+        view.<span style="color: #0066CC;">text</span> = event.<span style="color: #0066CC;">message</span>;
+    <span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>&#8230;and with that, we have a Hello World! Seems like the long way to get there, but it will pay off in your non-trivial applications. In the next part in this series we will explore models and commands followed by an article on services. In addition to the core of Robotlegs, we will look in detail at some of the utilities that are currently available to make use of tools such as <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robertpenner/as3-signals');"  href="http://github.com/robertpenner/as3-signals">AS3-Signals</a> and modular application development. It is an exciting time to be developing with Robotlegs and I look forward to sharing some of my enthusiasm here on InsideRIA over the coming weeks.</p>
+<p>If you can&#8217;t wait, there are articles <a href="http://joelhooks.com">on my blog</a> (and lots of others across the internets) dealing with various Robotlegs topics. John Lindquist has a <a onclick="javascript:pageTracker._trackPageview('/outgoing/johnlindquist.com/2009/11/18/robotlegs-hello-world-video-tutorial/');"  href="http://johnlindquist.com/2009/11/18/robotlegs-hello-world-video-tutorial/">Hello World screencast</a> on his blog (watching him use FDT is interesting in and of itself). Additionally there is a <a onclick="javascript:pageTracker._trackPageview('/outgoing/wiki.github.com/robotlegs/robotlegs-framework/best-practices');"  href="http://wiki.github.com/robotlegs/robotlegs-framework/best-practices">Best Practices document</a> that has proven helpful for many. You can always hit the <a onclick="javascript:pageTracker._trackPageview('/outgoing/knowledge.robotlegs.org/');"  href="http://knowledge.robotlegs.org/">Robotlegs Knowledge Base</a> for help and support. It has an active group of community volunteers, including myself, that diligently answer questions regarding all things Robotlegs. Additionally I participated in writing the forthcoming Flex 4 in Action book, which has 22 pages of Robotlegs material.</p>
+<p><a href="http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-2-models/">Part 2: Models can be found here.</a></p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-1-context-and-mediators/">An Introduction to Robotlegs AS3 Part 1: Context and Mediators</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-722">
+        <div id="dsq-comment-header-722" class="dsq-comment-header">
+            <cite id="dsq-cite-722">
+                <span id="dsq-author-user-722">Thomas Burleson</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-722" class="dsq-comment-body">
+            <div id="dsq-comment-message-722" class="dsq-comment-message"><p>@Joel,</p>
+<p>I think an additional feature to simplify <a onclick="javascript:pageTracker._trackPageview('/outgoing/MessageViewMediator.as');"  href="http://MessageViewMediator.as" rel="nofollow">MessageViewMediator.as</a> would be the use of another metadata tag (similar to that found in Swiz):</p>
+<p>[Inject]<br />public var view : MessageView;</p>
+<p>[EventHandler(event="HelloWorldMessageEvent.MESSAGE_DISPATCHED",properties="message")]<br />public function handleMessage(message:String):void {<br />    if (view != null) view.text = message;<br />}</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-723">
+        <div id="dsq-comment-header-723" class="dsq-comment-header">
+            <cite id="dsq-cite-723">
+http://joelhooks.com                <span id="dsq-author-user-723">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-723" class="dsq-comment-body">
+            <div id="dsq-comment-message-723" class="dsq-comment-message"><p>I appreciate why people enjoy the convenience of metadata, but I must say I am not a fan of it. That may seem to contradict my love of Robotlegs, but if you look at examples I&#39;ve written you will quickly notice that all that is ever used is [Inject] with no properties. </p>
+<p><a href="http://joelhooks.com/2010/06/16/do-you-need-metadata-as3-robotlegs/" rel="nofollow">Here are some thoughts</a> on metadata that I&#39;ve posted previously.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-737">
+        <div id="dsq-comment-header-737" class="dsq-comment-header">
+            <cite id="dsq-cite-737">
+                <span id="dsq-author-user-737">Tim</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-737" class="dsq-comment-body">
+            <div id="dsq-comment-message-737" class="dsq-comment-message"><p>I&#39;m new to this framework and i&#39;m trying this one out. To bad i&#39;m getting an error that my view is null:</p>
+<p>TypeError: Error #1009: Cannot access a property or method of a null object reference.<br />	at org.example.helloworld.mediator::MessageViewMediator/handleMessage()[C:UsersTimAdobe Flash Builder Burrito PreviewHelloRobotLegssrcorgexamplehelloworldmediator<a onclick="javascript:pageTracker._trackPageview('/outgoing/MessageViewMediator.as');"  href="http://MessageViewMediator.as" rel="nofollow">MessageViewMediator.as</a>:20]<br />	at org.robotlegs.base::EventMap/routeEventToListener()[/Development/Projects/Robotlegs/robotlegs-framework/src/org/robotlegs/base/<a onclick="javascript:pageTracker._trackPageview('/outgoing/EventMap.as');"  href="http://EventMap.as" rel="nofollow">EventMap.as</a>:181]<br />	at Function/&lt;anonymous&gt;()[/Development/Projects/Robotlegs/robotlegs-framework/src/org/robotlegs/base/<a onclick="javascript:pageTracker._trackPageview('/outgoing/EventMap.as');"  href="http://EventMap.as" rel="nofollow">EventMap.as</a>:107]<br />	at flash.events::EventDispatcher/dispatchEventFunction()<br />	at flash.events::EventDispatcher/dispatchEvent()<br />	at org.robotlegs.mvcs::Mediator/dispatch()[/Development/Projects/Robotlegs/robotlegs-framework/src/org/robotlegs/mvcs/<a onclick="javascript:pageTracker._trackPageview('/outgoing/Mediator.as');"  href="http://Mediator.as" rel="nofollow">Mediator.as</a>:89]<br />	at org.example.helloworld.mediator::HelloButtonMediator/handleMouseClick()[C:UsersTimAdobe Flash Builder Burrito PreviewHelloRobotLegssrcorgexamplehelloworldmediator<a onclick="javascript:pageTracker._trackPageview('/outgoing/HelloButtonMediator.as');"  href="http://HelloButtonMediator.as" rel="nofollow">HelloButtonMediator.as</a>:18]<br />	at org.robotlegs.base::EventMap/routeEventToListener()[/Development/Projects/Robotlegs/robotlegs-framework/src/org/robotlegs/base/<a onclick="javascript:pageTracker._trackPageview('/outgoing/EventMap.as');"  href="http://EventMap.as" rel="nofollow">EventMap.as</a>:181]<br />	at Function/&lt;anonymous&gt;()[/Development/Projects/Robotlegs/robotlegs-framework/src/org/robotlegs/base/<a onclick="javascript:pageTracker._trackPageview('/outgoing/EventMap.as');"  href="http://EventMap.as" rel="nofollow">EventMap.as</a>:107]</p>
+<p>How can I fix this? If I throw an alert I see that my view is null :/? I think I have missed something&#8230;</p>
+<p>p.s. I can run the examples from the <a onclick="javascript:pageTracker._trackPageview('/outgoing/robotlegs.org');"  href="http://robotlegs.org" rel="nofollow">robotlegs.org</a> site.&lt;/anonymous&gt;&lt;/anonymous&gt;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-738">
+        <div id="dsq-comment-header-738" class="dsq-comment-header">
+            <cite id="dsq-cite-738">
+http://joelhooks.com                <span id="dsq-author-user-738">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-738" class="dsq-comment-body">
+            <div id="dsq-comment-message-738" class="dsq-comment-message"><p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robotlegs/robotlegs-framework/wiki/Common-Problems#no-injection');"  href="https://github.com/robotlegs/robotlegs-framework/wiki/Common-Problems#no-injection" rel="nofollow">https://github.com/robotlegs/r&#8230;</a></p>
+<p>Can you check here and see if the injection issues might be solved via the suggestions? It might be that the metadata is being stripped on compile.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-739">
+        <div id="dsq-comment-header-739" class="dsq-comment-header">
+            <cite id="dsq-cite-739">
+                <span id="dsq-author-user-739">Tim</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-739" class="dsq-comment-body">
+            <div id="dsq-comment-message-739" class="dsq-comment-message"><p>Joel thanks for the FAQ &gt;_&lt;, it was a typo! Long working days and doing this on the side isn&#39;t the way to develop!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-756">
+        <div id="dsq-comment-header-756" class="dsq-comment-header">
+            <cite id="dsq-cite-756">
+                <span id="dsq-author-user-756">Ronak</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-756" class="dsq-comment-body">
+            <div id="dsq-comment-message-756" class="dsq-comment-message"><p>Its really encouaging effort form you man&#8230;Thanks. <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-765">
+        <div id="dsq-comment-header-765" class="dsq-comment-header">
+            <cite id="dsq-cite-765">
+                <span id="dsq-author-user-765">Johnyflex</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-765" class="dsq-comment-body">
+            <div id="dsq-comment-message-765" class="dsq-comment-message"><p>Hi Joel,</p>
+<p>First, i would like to say thanks for this tutorial, it is very useful!</p>
+<p>I have a problem, with mediators, when i would like to mediatorMap for a view, which addChild to context at runtime.<br />So, i have a DummyView and DummyMediator. I mediatorMap this in the context:<br />mediatorMap.mapView(DummyView , DummyMediator;</p>
+<p>I add this view to a context at runtime:<br />var myContext:SkinnableContainer = contextView as SkinnableContainer;</p>
+<p>var newTitleWindow:NewProblemPanel = PopUpManager.createPopUp(myContext, DummyView , true) as DummyView ;<br />PopUpManager.centerPopUp(newTitleWindow);The problem:The konstructor and an override public function onRegister():void method not called in DummyMediator. What am i doing wrong?Thanks,Johny//Flex 4, 4.5 SDK</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-766">
+        <div id="dsq-comment-header-766" class="dsq-comment-header">
+            <cite id="dsq-cite-766">
+                <span id="dsq-author-user-766">Johnyflex</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-766" class="dsq-comment-body">
+            <div id="dsq-comment-message-766" class="dsq-comment-message"><p>OK, i have fixed this problem with manually mediate:<br />mediatorMap.createMediator( newTitleWindow );</p>
+<p>The new problem is that newTitleWindow  has a couple of view components with seperate mediator and the onRegister() method never call in theese mediators.</p>
+<p>I read about this issue with RobotLegs:<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/knowledge.robotlegs.org/discussions/questions/302-inject-components-in-a-popup');"  href="http://knowledge.robotlegs.org/discussions/questions/302-inject-components-in-a-popup" rel="nofollow">http://knowledge.robotlegs.org&#8230;</a></p>
+<p>But i dont understand, what should i do with Flex System Manager.  Can you some help me?</p>
+<p>Thanks,<br />Johny</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-802">
+        <div id="dsq-comment-header-802" class="dsq-comment-header">
+            <cite id="dsq-cite-802">
+                <span id="dsq-author-user-802">amar shukla</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-802" class="dsq-comment-body">
+            <div id="dsq-comment-message-802" class="dsq-comment-message"><p>Hi Joel,</p>
+<p>Just started exploring your framework and got a very small confusion. In my simple app I am having a view containing a Login Form with two TextInputs and 1 button. Everything is fine but problem lies here.<br />
+                [Inject]		public var loginView:LoginView;		override public function onRegister():void		{			loginView.mySubmitButton.addEventListener(MouseEvent.CLICK, doLogin);		}<br />
+How could I use addViewListener(MouseEvent.CLICK, doLogin) in this scenario ?<br />
+&amp; whats the difference if instead of using addViewListener I use addEventListener like I have used ? Please explain a bit so that I can have a better idea about the framework <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+<p>Thanks &amp; Regards!<br />
+Amar Shukla</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-804">
+        <div id="dsq-comment-header-804" class="dsq-comment-header">
+            <cite id="dsq-cite-804">
+http://joelhooks.com                <span id="dsq-author-user-804">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-804" class="dsq-comment-body">
+            <div id="dsq-comment-message-804" class="dsq-comment-message"><p>you will want to use the eventMap &#8211; <a onclick="javascript:pageTracker._trackPageview('/outgoing/api.robotlegs.org/org/robotlegs/base/EventMap.html');"  href="http://api.robotlegs.org/org/robotlegs/base/EventMap.html" rel="nofollow">http://api.robotlegs.org/org/robotlegs/base/EventMap.html</a></p>
+<p>In this particular scenario however I would have the loginView dispatch an event such as LoginSubmitEvent.SUBMIT that you can listen for with addViewListener. My general rule with mediators is NOT to dig into the mediated component. Don&#8217;t try to listen for sub component events. Either mediate those components separately or have the mediated view handle their event and dispatch an event for the Mediator to respond to.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-806">
+        <div id="dsq-comment-header-806" class="dsq-comment-header">
+            <cite id="dsq-cite-806">
+                <span id="dsq-author-user-806">amar shukla</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-806" class="dsq-comment-body">
+            <div id="dsq-comment-message-806" class="dsq-comment-message"><p>Thanks for quick reply Joel <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+<p>I think having mediator for every single component is not a good idea so in such cases dispatching events from views would be better.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-807">
+        <div id="dsq-comment-header-807" class="dsq-comment-header">
+            <cite id="dsq-cite-807">
+                <span id="dsq-author-user-807">Johnyflashflex</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-807" class="dsq-comment-body">
+            <div id="dsq-comment-message-807" class="dsq-comment-message"><p>Joel, can you help me a bit, please?</p>
+<p>Thanks &amp; Regards!<br />
+JohnyFlex</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-808">
+        <div id="dsq-comment-header-808" class="dsq-comment-header">
+            <cite id="dsq-cite-808">
+http://joelhooks.com                <span id="dsq-author-user-808">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-808" class="dsq-comment-body">
+            <div id="dsq-comment-message-808" class="dsq-comment-message"><p>Yoyou might look into the popup contents having its own context (modular)</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-809">
+        <div id="dsq-comment-header-809" class="dsq-comment-header">
+            <cite id="dsq-cite-809">
+http://joelhooks.com                <span id="dsq-author-user-809">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-809" class="dsq-comment-body">
+            <div id="dsq-comment-message-809" class="dsq-comment-message"><p>Yoyou might look into the popup contents having its own context (modular)</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-810">
+        <div id="dsq-comment-header-810" class="dsq-comment-header">
+            <cite id="dsq-cite-810">
+                <span id="dsq-author-user-810">Johnyflashflex</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-810" class="dsq-comment-body">
+            <div id="dsq-comment-message-810" class="dsq-comment-message"><p>Thanks!</p>
+<p>So, i should create a context for the newTitleWindow (newTitleWindowContext)?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-811">
+        <div id="dsq-comment-header-811" class="dsq-comment-header">
+            <cite id="dsq-cite-811">
+http://joelhooks.com                <span id="dsq-author-user-811">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-811" class="dsq-comment-body">
+            <div id="dsq-comment-message-811" class="dsq-comment-message"><p>I&#8217;d probably make something more specific to your content, but essentially yes.</p>
+<p><a href="http://joelhooks.com/2010/05/02/modular-robotlegs/" rel="nofollow">http://joelhooks.com/2010/05/02/modular-robotlegs/</a></p>
+<p>That will give you an overview of the general approach. In this case, I don&#8217;t know that you&#8217;d need the weight of the utility, but you&#8217;d need to get the new context a child of your main injector.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-812">
+        <div id="dsq-comment-header-812" class="dsq-comment-header">
+            <cite id="dsq-cite-812">
+                <span id="dsq-author-user-812">Johnyflashflex</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-812" class="dsq-comment-body">
+            <div id="dsq-comment-message-812" class="dsq-comment-message"><p>Ok, thanks a lot Joel!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-925">
+        <div id="dsq-comment-header-925" class="dsq-comment-header">
+            <cite id="dsq-cite-925">
+                <span id="dsq-author-user-925">Anna</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-925" class="dsq-comment-body">
+            <div id="dsq-comment-message-925" class="dsq-comment-message"><p>You always inject a view as a public var, why not private? Is there a difference?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-926">
+        <div id="dsq-comment-header-926" class="dsq-comment-header">
+            <cite id="dsq-cite-926">
+http://joelhooks.com                <span id="dsq-author-user-926">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-926" class="dsq-comment-body">
+            <div id="dsq-comment-message-926" class="dsq-comment-message"><p>Injections occur externally. The Injector has no access to private member variables. I know some folks that have done interesting byte code manipulations to make it possible, but with RL, that isn&#8217;t the case.<br />
+&#8211;<br />
+Joel<br />
+817.675.6031 m<br />
+@jhooks (<a onclick="javascript:pageTracker._trackPageview('/outgoing/twitter.com/#!/jhooks');"  href="https://twitter.com/#!/jhooks" rel="nofollow">https://twitter.com/#!/jhooks</a>)<br />
+<a href="http://joelhooks.com" rel="nofollow">http://joelhooks.com</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-928">
+        <div id="dsq-comment-header-928" class="dsq-comment-header">
+            <cite id="dsq-cite-928">
+                <span id="dsq-author-user-928">Anna</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-928" class="dsq-comment-body">
+            <div id="dsq-comment-message-928" class="dsq-comment-message"><p> I don&#8217;t know if I understand correctly, but this is what I want: if I want to inject the MessageView in my mediator like this: [Injector]private var myMessageView:MessageView; .</p>
+<p>I see it is possible like that, but are their some drawbacks??</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-1-context-and-mediators/';
+    var disqus_identifier = '589 http://joelhooks.com/?p=589';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "An Introduction to Robotlegs AS3 Part 1: Context and Mediators";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=589');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2011\/03\/12\/an-introduction-to-robotlegs-as3-part-1-context-and-mediators\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.493 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.28MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

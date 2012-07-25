@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Flex Date and Time (datetime) Picker Controljoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='ImageSwap (crossfade) Flex Component' href='http://joelhooks.com/2008/12/06/imageswap-crossfade-flex-component/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=94' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,702] -->
+<link rel="canonical" href="http://joelhooks.com/2008/10/11/flex-date-and-time-datetime-picker-control/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_TestDateTime_821668211","8.0.0");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-94 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-94" class="post-94 post type-post status-publish format-standard hentry category-air category-components category-flex">
+					<h1>Flex Date and Time (datetime) Picker Control</h1>
+		
+					<div class="entry-content">
+						<p>I saw one of these at some point, but couldn&#8217;t find it when I needed it again. Pretty simple, the control has a property called selectedDate that returns a date object represented by the selected date and time. You can also feed it a Date and it will adjust to that. It is on a 12 hour clock. It dispatches a change event (Event.CHANGE) as a new date/time is selected.</p>
+<p>There is an Inspectable property called minuteIncrement to adjust the increment on the minute stepper. I couldn&#8217;t figure out how to have double digits on the 0-9 minutes. If anybody knows how I might achieve that, please let me know.</p>
+<p><a href="/examples/datetime/srcview">Here&#8217;s the Source</a></p>
+
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_TestDateTime_821668211"
+			class="flashmovie"
+			width="500"
+			height="300">
+	<param name="movie" value="/examples/datetime/TestDateTime.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="/examples/datetime/TestDateTime.swf"
+			name="fm_TestDateTime_821668211"
+			width="500"
+			height="300">
+	<!--<![endif]-->
+		
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2008/10/11/flex-date-and-time-datetime-picker-control/">Flex Date and Time (datetime) Picker Control</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.postsaver.org/tags/datetime');"  href='http://www.postsaver.org/tags/datetime' rel='external nofollow' class='url'>Websites tagged "datetime" on Postsaver</a></p>
+    </li>
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-204">
+        <div id="dsq-comment-header-204" class="dsq-comment-header">
+            <cite id="dsq-cite-204">
+                <span id="dsq-author-user-204">Evan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-204" class="dsq-comment-body">
+            <div id="dsq-comment-message-204" class="dsq-comment-message"><p>Thanks!<br />
+Do you know if there&#8217;s any way I might be able to determine when a user has finished editing BOTH the date and time (without explicitly putting a &#8220;done&#8221; button on there)??<br />
+I&#8217;m thinking of something like a &#8220;focusout&#8221; that applies to the entire control.</p>
+<p>Also, check out:<br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/blog.flexexamples.com/2008/11/17/wrapping-values-on-an-fxnumericstepper-control-in-flex-gumbo/');"  href="http://blog.flexexamples.com/2008/11/17/wrapping-values-on-an-fxnumericstepper-control-in-flex-gumbo/" rel="nofollow">http://blog.flexexamples.com/2008/11/17/wrapping-values-on-an-fxnumericstepper-control-in-flex-gumbo/</a><br />
+Which would be neat for a control like this, once it&#8217;s fully baked.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="post pingback">
+        <p>Pingback: <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.flex-tutorial.fr/2008/12/26/composant-flex-selection-de-la-date-et-de-lheure-datetime/');"  href='http://www.flex-tutorial.fr/2008/12/26/composant-flex-selection-de-la-date-et-de-lheure-datetime/' rel='external nofollow' class='url'>Composant Flex - Sélection de la Date et de l&#39;Heure (DateTime) - Adobe Flex Tutorial - Tutoriaux Flex Builder, MXML, ActionScript, AS3</a></p>
+    </li>
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-206">
+        <div id="dsq-comment-header-206" class="dsq-comment-header">
+            <cite id="dsq-cite-206">
+                <span id="dsq-author-user-206">andresmaro</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-206" class="dsq-comment-body">
+            <div id="dsq-comment-message-206" class="dsq-comment-message"><p>Evan, you can use the mouseDownOutside event, it works like the DateChooser DateSelect Popup. But you have to make the date selection a Popup component.</p>
+<p>Joel thanks in advance for this component I haven&#8217;t use it yet but it seems to fit my needs.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-207">
+        <div id="dsq-comment-header-207" class="dsq-comment-header">
+            <cite id="dsq-cite-207">
+http://www.stepsmarketing.com                <span id="dsq-author-user-207">Chris</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-207" class="dsq-comment-body">
+            <div id="dsq-comment-message-207" class="dsq-comment-message"><p>I haven&#8217;t tried it yet, but while looking at your source code it appears your setter function doesn&#8217;t handle midnight. In this situation getHours() will return 0, but you&#8217;ll want to do hours.value = 12. (But correct me if I&#8217;m wrong).</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-208">
+        <div id="dsq-comment-header-208" class="dsq-comment-header">
+            <cite id="dsq-cite-208">
+                <span id="dsq-author-user-208">Joel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-208" class="dsq-comment-body">
+            <div id="dsq-comment-message-208" class="dsq-comment-message"><p>You are 100% correct Chris, and I&#8217;ve actually fixed this in the version I am using but haven&#8217;t updated it yet. I will do so now.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-209">
+        <div id="dsq-comment-header-209" class="dsq-comment-header">
+            <cite id="dsq-cite-209">
+                <span id="dsq-author-user-209">Joel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-209" class="dsq-comment-body">
+            <div id="dsq-comment-message-209" class="dsq-comment-message"><p>There we go, thanks Chris. I noticed this a week or so ago when I was using it in a project, fixed it, and forgot to update. It is a little jacked with the validateNow() calls and could probably use some more work, but it displays the time properly :&gt;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-210">
+        <div id="dsq-comment-header-210" class="dsq-comment-header">
+            <cite id="dsq-cite-210">
+                <span id="dsq-author-user-210">feby</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-210" class="dsq-comment-body">
+            <div id="dsq-comment-message-210" class="dsq-comment-message"><p>Cool ! <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':-)' class='wp-smiley' /> </p>
+<p>Thanks.</p>
+<p>Feby</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-211">
+        <div id="dsq-comment-header-211" class="dsq-comment-header">
+            <cite id="dsq-cite-211">
+                <span id="dsq-author-user-211">wayne lee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-211" class="dsq-comment-body">
+            <div id="dsq-comment-message-211" class="dsq-comment-message"><p>nice control, just what I was after! <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-212">
+        <div id="dsq-comment-header-212" class="dsq-comment-header">
+            <cite id="dsq-cite-212">
+                <span id="dsq-author-user-212">Adam</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-212" class="dsq-comment-body">
+            <div id="dsq-comment-message-212" class="dsq-comment-message"><p>I&#8217;ve noticed that when handling the change event, if I click the up button for hours, I actually get the change event 3 times.  Since I&#8217;m creating a post processing activity that occurs after this change, I&#8217;d really prefer this to only happen once.  Are you aware of a work around?</p>
+<p>Thanks</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-213">
+        <div id="dsq-comment-header-213" class="dsq-comment-header">
+            <cite id="dsq-cite-213">
+http://krishengreenwell.com/                <span id="dsq-author-user-213">Krishen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-213" class="dsq-comment-body">
+            <div id="dsq-comment-message-213" class="dsq-comment-message"><p>Nice, thanks!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-390">
+        <div id="dsq-comment-header-390" class="dsq-comment-header">
+            <cite id="dsq-cite-390">
+http://krishengreenwell.com/                <span id="dsq-author-user-390">Krishen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-390" class="dsq-comment-body">
+            <div id="dsq-comment-message-390" class="dsq-comment-message"><p>Nice, thanks!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-214">
+        <div id="dsq-comment-header-214" class="dsq-comment-header">
+            <cite id="dsq-cite-214">
+                <span id="dsq-author-user-214">Joe Murphy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-214" class="dsq-comment-body">
+            <div id="dsq-comment-message-214" class="dsq-comment-message"><p>This will put the prefix 0 on the front of single digits</p>
+<p>if (hours.mx_internal::inputField.text.length == 1) {<br />hours.mx_internal::inputField.text = &#39;0&#39; + hours.mx_internal::inputField.text;<br />}</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-389">
+        <div id="dsq-comment-header-389" class="dsq-comment-header">
+            <cite id="dsq-cite-389">
+                <span id="dsq-author-user-389">Joe Murphy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-389" class="dsq-comment-body">
+            <div id="dsq-comment-message-389" class="dsq-comment-message"><p>This will put the prefix 0 on the front of single digits</p>
+<p>if (hours.mx_internal::inputField.text.length == 1) {<br />hours.mx_internal::inputField.text = &#39;0&#39; + hours.mx_internal::inputField.text;<br />}</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-215">
+        <div id="dsq-comment-header-215" class="dsq-comment-header">
+            <cite id="dsq-cite-215">
+                <span id="dsq-author-user-215">johnnyfree</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-215" class="dsq-comment-body">
+            <div id="dsq-comment-message-215" class="dsq-comment-message"><p>I am having a problem when returning the date back from a webservice that the timepicker is already loaded and cannot get it to show the date/time I want from my database. Do you have any idea how to work around that?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-388">
+        <div id="dsq-comment-header-388" class="dsq-comment-header">
+            <cite id="dsq-cite-388">
+                <span id="dsq-author-user-388">johnnyfree</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-388" class="dsq-comment-body">
+            <div id="dsq-comment-message-388" class="dsq-comment-message"><p>I am having a problem when returning the date back from a webservice that the timepicker is already loaded and cannot get it to show the date/time I want from my database. Do you have any idea how to work around that?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-567">
+        <div id="dsq-comment-header-567" class="dsq-comment-header">
+            <cite id="dsq-cite-567">
+http://www.jonathan-dumaine.com                <span id="dsq-author-user-567">Jonathan Dumaine</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-567" class="dsq-comment-body">
+            <div id="dsq-comment-message-567" class="dsq-comment-message"><p>Just as a small improvement, you can add this line in the handleChange() function to make the numeric stepper show as &#8220;00&#8243; instead of just &#8220;0&#8243;</p>
+<p>if(minutes.value &lt; 10) minutes.mx_internal::inputField.text = &#8220;0&#8243; + minutes.value;</p>
+<p>you&#39;ll also need to import mx.core.mx_internal;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-589">
+        <div id="dsq-comment-header-589" class="dsq-comment-header">
+            <cite id="dsq-cite-589">
+                <span id="dsq-author-user-589">neurowave</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-589" class="dsq-comment-body">
+            <div id="dsq-comment-message-589" class="dsq-comment-message"><p>Thanks man &#8230; THis is wat i was looking for <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-598">
+        <div id="dsq-comment-header-598" class="dsq-comment-header">
+            <cite id="dsq-cite-598">
+                <span id="dsq-author-user-598">Fabbbrrr!!!</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-598" class="dsq-comment-body">
+            <div id="dsq-comment-message-598" class="dsq-comment-message"><p>thanks a lot from Mendoza, Argentina! <img src='http://joelhooks.com/wp-includes/images/smilies/icon_biggrin.gif' alt=':D' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-600">
+        <div id="dsq-comment-header-600" class="dsq-comment-header">
+            <cite id="dsq-cite-600">
+                <span id="dsq-author-user-600">Mikolaj Kepa</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-600" class="dsq-comment-body">
+            <div id="dsq-comment-message-600" class="dsq-comment-message"><p>Very nice thx <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-747">
+        <div id="dsq-comment-header-747" class="dsq-comment-header">
+            <cite id="dsq-cite-747">
+                <span id="dsq-author-user-747">Julius_bugs</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-747" class="dsq-comment-body">
+            <div id="dsq-comment-message-747" class="dsq-comment-message"><p>you r awesome!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-751">
+        <div id="dsq-comment-header-751" class="dsq-comment-header">
+            <cite id="dsq-cite-751">
+                <span id="dsq-author-user-751">Sa</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-751" class="dsq-comment-body">
+            <div id="dsq-comment-message-751" class="dsq-comment-message"><p>Not a tricky one.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-941">
+        <div id="dsq-comment-header-941" class="dsq-comment-header">
+            <cite id="dsq-cite-941">
+                <span id="dsq-author-user-941">Gennadynikolaev</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-941" class="dsq-comment-body">
+            <div id="dsq-comment-message-941" class="dsq-comment-message"><p>Thanks!!!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-951">
+        <div id="dsq-comment-header-951" class="dsq-comment-header">
+            <cite id="dsq-cite-951">
+                <span id="dsq-author-user-951">Israel Marsilli</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-951" class="dsq-comment-body">
+            <div id="dsq-comment-message-951" class="dsq-comment-message"><p>Ey Joel Hooks, I&#8217;m sure that you&#8217;re not good, you are the best!!!! Jajajaja Greetings and Thanks&#8230;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2008/10/11/flex-date-and-time-datetime-picker-control/';
+    var disqus_identifier = '94 http://joelhooks.com/?p=94';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Flex Date and Time (datetime) Picker Control";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=94');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+            {
+                'author_name':    "Websites tagged \"datetime\" on Postsaver",
+                'author_url':    "http:\/\/www.postsaver.org\/tags\/datetime",
+                'date':            "11\/09\/2008 06:48 AM",
+                'excerpt':        "[...] - flex date and time (datetime) picker control saved by pilon6662008-10-30 - Precisa comentar? Então comente! saved by starforce19852008-10-29 ...",
+                'type':            "pingback"            }
+,            {
+                'author_name':    "Composant Flex - Sélection de la Date et de l&#39;Heure (DateTime) - Adobe Flex Tutorial - Tutoriaux Flex Builder, MXML, ActionScript, AS3",
+                'author_url':    "http:\/\/www.flex-tutorial.fr\/2008\/12\/26\/composant-flex-selection-de-la-date-et-de-lheure-datetime\/",
+                'date':            "12\/26\/2008 03:04 PM",
+                'excerpt':        "[...] Hooks propose un composant bien fait appelé DateTimePicker, qui permet de regrouper ces pickers. Ce composant est Open Source, ...",
+                'type':            "pingback"            }
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2008\/10\/11\/flex-date-and-time-datetime-picker-control\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.242 seconds. Made 5 queries to database and 14 cached queries. Memory used - 16.19MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

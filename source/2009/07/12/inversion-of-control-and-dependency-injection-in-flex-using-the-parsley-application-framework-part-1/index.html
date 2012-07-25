@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Inversion of Control and Dependency Injection in Flex using the Parsley Application Framework &#8211; Part 1joelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2' href='http://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=194' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,766] -->
+<link rel="canonical" href="http://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-194 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-194" class="post-194 post type-post status-publish format-standard hentry category-design-patterns category-object-oriented-concepts category-software-architecture">
+					<h1>Inversion of Control and Dependency Injection in Flex using the Parsley Application Framework &#8211; Part 1</h1>
+		
+					<div class="entry-content">
+						<p>The Inversion of Control (IoC) design principle and the related Dependency Injection (DI) design pattern have been around for several years. In the Java world, popular frameworks such as Spring make heavy use of these concepts. With the introduction of Actionscript 3 in 2006, the opportunities for framework development increased greatly. As the community matures, we are starting to see robust tools appear on the development landscape. It is a good time to be a Flash geek!</p>
+<p>Through this series of articles, we will delve into the <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.spicefactory.org/parsley/');"  href="http://www.spicefactory.org/parsley/">Parsley application framework</a> and look at how it implements IoC and DI in the context of a photo slideshow. Through this example we will look at bootstrapping the container, connecting to services, and populating our components with the results. In this first part, we will get an overview of IoC and DI and talk about some of the benefits and drawbacks of using these concepts in our applications.<br />
+<span id="more-194"></span></p>
+<h3>What is Inversion of Control?</h3>
+<blockquote><p>One important characteristic of a framework is that the methods defined by the user to tailor the framework will often be called from within the framework itself, rather than from the user&#8217;s application code. The framework often plays the role of the main program in coordinating and sequencing application activity. This inversion of control gives frameworks the power to serve as extensible skeletons. The methods supplied by the user tailor the generic algorithms defined in the framework for a particular application. &#8211;Ralph Johnson and Brian Foote [<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.laputan.org/drc/drc.html');"  href="http://www.laputan.org/drc/drc.html">1</a>]</p></blockquote>
+<p>If you are using an Actionscript framework in your development, odds are you’re making use of IoC. This includes <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.adobe.com/products/flex/');"  href="http://www.adobe.com/products/flex/">Flex</a> itself, <a onclick="javascript:pageTracker._trackPageview('/outgoing/puremvc.org/');"  href="http://puremvc.org/">PureMVC</a>, <a onclick="javascript:pageTracker._trackPageview('/outgoing/mate.asfusion.com/');"  href="http://mate.asfusion.com/">Mate</a>, <a onclick="javascript:pageTracker._trackPageview('/outgoing/code.google.com/p/swizframework/');"  href="http://code.google.com/p/swizframework/">SWiZ</a>, Parsley, and other similar frameworks. The framework is providing an abstracted skeleton to which the developer can code against. Communication between the actors in the system are coordinated by the framework within a predefined architecture. In other words, some level of control is inverted from the individual components of an application to the underlying framework.</p>
+<p>This inversion can be approached from many different directions. In frameworks such as PureMVC and <a onclick="javascript:pageTracker._trackPageview('/outgoing/opensource.adobe.com/wiki/display/cairngorm/Cairngorm');"  href="http://opensource.adobe.com/wiki/display/cairngorm/Cairngorm">Cairngorm</a>, this inversion of control is handled by extension of framework classes. By extending these objects, the framework is provided with the appropriate interface to access and manipulate the application specific objects. Frameworks such as Parsley and SWiZ provide metadata annotation as the mechanism for wiring into the framework.</p>
+<h3>What is Dependency Injection?</h3>
+<p>DI is a design pattern canonized by Martin Fowler [<a onclick="javascript:pageTracker._trackPageview('/outgoing/martinfowler.com/articles/injection.html');"  href="http://martinfowler.com/articles/injection.html">2</a>]. Essentially, your application’s objects do not configure themselves. They rely on an external mechanism for configuration that ‘injects’ the object’s dependencies by populating its instance variables. Fowler felt that Inversion of Control was too generic of a description (as all frameworks tend to invert control), and decided on the name Dependency Injection for the pattern.</p>
+<blockquote><p>Dependency Injection means giving an object its instance variables [<a onclick="javascript:pageTracker._trackPageview('/outgoing/jamesshore.com/Blog/Dependency-Injection-Demystified.html');"  href="http://jamesshore.com/Blog/Dependency-Injection-Demystified.html">3</a>]</p></blockquote>
+<p>Say what? Given this simple definition of DI, this is something we are all making use of on a constant basis. Unless you are writing strictly procedural AS3 (which is certainly possible), DI is likely being used in your applications. Yes, the concept can quickly become more complex &#8211; abstracting simple concepts tends to have that effect.</p>
+<p>The pattern describes three primary methods for injecting our dependencies:</p>
+<div>
+<p>
+<strong>Constructor Injection:</strong></p>
+
+<div class="wp_codebox"><table><tr id="p1941"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code" id="p194code1"><pre class="actionscript" style="font-family:monospace;">package
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> MyObject
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> dependsOn:IDependency;
+&nbsp;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> MyObject<span style="color: #66cc66;">&#40;</span>dependsOn:IDependency<span style="color: #66cc66;">&#41;</span>
+		<span style="color: #66cc66;">&#123;</span>
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">dependsOn</span> = dependsOn;
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>usage:</p>
+
+<div class="wp_codebox"><table><tr id="p1942"><td class="line_numbers"><pre>1
+</pre></td><td class="code" id="p194code2"><pre class="actionscript" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">var</span> myObject:MyObject = <span style="color: #000000; font-weight: bold;">new</span> MyObject<span style="color: #66cc66;">&#40;</span>aDependencyImplementation<span style="color: #66cc66;">&#41;</span>;</pre></td></tr></table></div>
+
+</p>
+</div>
+<div>
+<p>
+<strong>Setter Injection:</strong></p>
+
+<div class="wp_codebox"><table><tr id="p1943"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code" id="p194code3"><pre class="actionscript" style="font-family:monospace;">package
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> MyObject
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> dependsOn:IDependency;
+&nbsp;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> MyObject<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+		<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> setDependsOn<span style="color: #66cc66;">&#40;</span>value:IDependency<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span><span style="color: #66cc66;">&#123;</span>
+			<span style="color: #0066CC;">this</span>.<span style="color: #006600;">dependsOn</span> = value;
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>usage:</p>
+
+<div class="wp_codebox"><table><tr id="p1944"><td class="line_numbers"><pre>1
+2
+</pre></td><td class="code" id="p194code4"><pre class="actionscript" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">var</span> myObject:MyObject = <span style="color: #000000; font-weight: bold;">new</span> MyObject<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+myObject.<span style="color: #006600;">setDependsOn</span><span style="color: #66cc66;">&#40;</span>aDependencyImplementation<span style="color: #66cc66;">&#41;</span>;</pre></td></tr></table></div>
+
+</p>
+</div>
+<div>
+<p>
+<strong>Property Injection:</strong></p>
+
+<div class="wp_codebox"><table><tr id="p1945"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code" id="p194code5"><pre class="actionscript" style="font-family:monospace;">package
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> MyObject
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> dependsOn:IDependency;
+&nbsp;
+		<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> MyObject<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+		<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>usage:</p>
+
+<div class="wp_codebox"><table><tr id="p1946"><td class="line_numbers"><pre>1
+2
+</pre></td><td class="code" id="p194code6"><pre class="actionscript" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">var</span> myObject:MyObject = <span style="color: #000000; font-weight: bold;">new</span> MyObject<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+myObject.<span style="color: #006600;">dependsOn</span> =  aDependencyImplementation;</pre></td></tr></table></div>
+
+</p>
+</div>
+<p>Setter and property injection are both very similar, and are useful for optional dependencies. Constructor injection is useful for required dependencies that an object must have to function.</p>
+<h3>Benefits of Dependency Injection</h3>
+<p>One of the primary benefits of DI is related to unit testing your application. DI allows you to create loosely couple objects that can be easily replaced with mock or stub objects for testing. Unit testing needs to test your objects in isolation, without regard for how the object interacts with its various dependencies.</p>
+<blockquote><p>A unit test is a user of the object it tests. An object must exist for a reason, so there must be other objects that also use it. Even when only one application object uses it, the fact that the unit test is also a user means it has at least two users, and therefore the object must be reusable by design. Test-driven development (TDD), in which unit tests are written before the objects they test, is gaining as a development best practice. One beneficial consequence of TDD is that objects are designed with testability in mind, and therefore, an object and its dependencies must be loosely coupled and reusable. Dependency injection is a popular pattern to design loosely coupled—and therefore robust, reusable, and testable—objects. [<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.ddj.com/development-tools/185300375');"  href="http://www.ddj.com/development-tools/185300375">4</a>]</p></blockquote>
+<p>DI can also encourage component reuse in much the same way. Since the object’s dependencies are not hard-coded, it is open for reuse. The injectable objects are more adaptable allowing developers to see clearly where to start adding features. The loose coupling can create a more maintainable code-base allowing developers to more easily track down bugs.</p>
+<h3>Drawbacks of Dependency Injection</h3>
+<blockquote><p>No Silver Bullets. [<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.virtualschool.edu/mon/SoftwareEngineering/BrooksNoSilverBullet.html');"  href="http://www.virtualschool.edu/mon/SoftwareEngineering/BrooksNoSilverBullet.html">5</a>]</p></blockquote>
+<p>DI can potentially obfuscate an application. To understand the application a developer has to understand both the code and the configuration defining the dependency injections. In many situations, an IDE will not be able to read and give feedback on the configuration.</p>
+<h3>Inversion of Control Containers</h3>
+<p>You don’t need an IoC Container (framework) to benefit from DI. As we have seen, you are probably already using DI in your code, irrespective of your preferred framework. IoC Containers provide out of the box methods for instantiating and configuring your application’s objects. The use of an IoC container is dependent on your (and your application’s) needs. For smaller projects, it might not be appropriate.</p>
+<p>In <a href="http://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/">the second part of this series</a>, we will look into the Parsley application framework and its implementation of an IoC container and DI.</p>
+<p>[1] <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.laputan.org/drc/drc.html');"  href="http://www.laputan.org/drc/drc.html">http://www.laputan.org/drc/drc.html</a><br />
+[2] <a onclick="javascript:pageTracker._trackPageview('/outgoing/martinfowler.com/articles/injection.html');"  href="http://martinfowler.com/articles/injection.html">http://martinfowler.com/articles/injection.html</a><br />
+[3] <a onclick="javascript:pageTracker._trackPageview('/outgoing/jamesshore.com/Blog/Dependency-Injection-Demystified.html');"  href="http://jamesshore.com/Blog/Dependency-Injection-Demystified.html">http://jamesshore.com/Blog/Dependency-Injection-Demystified.html</a><br />
+[4] <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.ddj.com/development-tools/185300375');"  href="http://www.ddj.com/development-tools/185300375">http://www.ddj.com/development-tools/185300375</a><br />
+[5] <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.virtualschool.edu/mon/SoftwareEngineering/BrooksNoSilverBullet.html');"  href="http://www.virtualschool.edu/mon/SoftwareEngineering/BrooksNoSilverBullet.html">http://www.virtualschool.edu/mon/SoftwareEngineering/BrooksNoSilverBullet.html</a></p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/">Inversion of Control and Dependency Injection in Flex using the Parsley Application Framework &#8211; Part 1</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-272">
+        <div id="dsq-comment-header-272" class="dsq-comment-header">
+            <cite id="dsq-cite-272">
+http://blog.vivisectingmedia.com                <span id="dsq-author-user-272">James</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-272" class="dsq-comment-body">
+            <div id="dsq-comment-message-272" class="dsq-comment-message"><p>Thanks for taking the time to write up the IoC/DI intro, this is a nice clear and simple explanation.  Looking forward to the future parts!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-459">
+        <div id="dsq-comment-header-459" class="dsq-comment-header">
+            <cite id="dsq-cite-459">
+http://blog.vivisectingmedia.com                <span id="dsq-author-user-459">James</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-459" class="dsq-comment-body">
+            <div id="dsq-comment-message-459" class="dsq-comment-message"><p>Thanks for taking the time to write up the IoC/DI intro, this is a nice clear and simple explanation.  Looking forward to the future parts!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/';
+    var disqus_identifier = '194 http://joelhooks.com/?p=194';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Inversion of Control and Dependency Injection in Flex using the Parsley Application Framework &#8211; Part 1";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=194');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2009\/07\/12\/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.321 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.14MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>
