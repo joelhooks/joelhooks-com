@@ -119,7 +119,7 @@ module Jekyll
 
       @last_modified_post_date = fill_posts(site, urlset)
       fill_pages(site, urlset)
-
+      fill_legacy(urlset)
       sitemap.add_element(urlset)
 
       # File I/O: create sitemap.xml file and write out pretty-printed XML
@@ -135,7 +135,17 @@ module Jekyll
       # Keep the sitemap.xml file from being cleaned by Jekyll
       site.static_files << Jekyll::SitemapFile.new(site, site.dest, "/", SITEMAP_FILE_NAME)
     end
-
+    
+    #this is a hack addition to push in my legacy content
+    def fill_legacy(urlset)
+      file = File.new("/Volumes/Gonzales/Users/joel/Code/octopress/plugins/sitemapx.xml")
+      doc = REXML::Document.new(file)
+      root = doc.root
+      root.elements.each do |post|
+        urlset.add_element(post)
+      end
+    end
+    
     # Create url elements for all the posts and find the date of the latest one
     #
     # Returns last_modified_date of latest post
@@ -309,4 +319,3 @@ module Jekyll
     end
   end
 end
-
