@@ -6,19 +6,21 @@ article{
 	@media screen and (max-width: 800px){
 		padding-bottom: 15px;
 	}
-	@media screen and (max-width: 600px){
-		padding: 15px 0;
-	}
+	
 	h1.title{
-		font-weight: 300;
-		line-height: 35px;
+		font-weight: 500;
+		width: 100%;
+		display: -moz-inline-stack; 
+		display: inline-block;
+		position: relative;
+
 		margin-bottom: 20px;
 		a{
 			color: $color-gray01;
 		}
 	}
 	.entry-content{
-		line-height: 2;
+		line-height: 1.7;
 		text-align: justify;
 		a{
 			&:hover{
@@ -80,6 +82,8 @@ article{
 			& > p:first-of-type{
 				margin-top: 0;
 			}
+
+
 		}
 		iframe{
 			border: none;
@@ -137,4 +141,11 @@ article{
 .share{
 	padding: 15px 0;
 	@include border-shadow();
+}
+//adds a little responsive width to twitter embeds
+.twitter-tweet-rendered {
+	@media screen and (max-width: 550px){
+		min-width: 100% !important;
+	}
+
 }

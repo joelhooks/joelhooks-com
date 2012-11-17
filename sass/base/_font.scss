@@ -1,8 +1,14 @@
-$font-default: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-default: "Amethysta", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-mono: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
+$font-headline: 'League', sans-serif;
 
 $font-icon: FontAwesome;
 $font-icon-path: "/font/fontawesome-webfont";
+
+@font-face {
+  font-family: "League";
+  src: url('/font/LeagueGothic.otf');
+}  
 
 @font-face {
 	font-family: 'FontAwesome';

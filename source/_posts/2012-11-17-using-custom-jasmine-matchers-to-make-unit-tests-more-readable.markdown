@@ -11,7 +11,7 @@ categories: [Jasmine, unit testing, clean code]
 
 I'm a stickler for the "single assertion per test" guideline. One of the pillars of good unit tests is readability. Multiple asserts undermine this principle and make tests that are more difficult to read, understand, and maintain. A clean solution to this problem is to use custom Jasmine matchers in place of multiple assertions.
 
-### Keep it DRY, Even (Especially?) in Tests
+## Keep it DRY, Even (Especially?) in Tests
 
 Consider the following:
 
@@ -25,7 +25,7 @@ This seems straight forward enough, but as it turns out we need to go the other 
 
 This is bothersome. We have two stacks of `expect` calls that are very similar, but different enough to require a bit more than a helper method. We definitely want to verify all of the properties of the results, but do we really need to do this individually? The short answer is 'no.' 
 
-### Enter the Custom Matcher
+## Enter the Custom Matcher
 
 {% gist 4097691 CustomeMatchers.js %} 
 
@@ -41,13 +41,13 @@ Finally the `toEqualDate` function will return true or false based on the values
 
 At the top of the `beforeEach` we also have two utility methods to clean up our custom matcher.
 
-### Keeping it Clean and DRY
+## Keeping it Clean and DRY
 
 {% gist 4097691 CleanTests.js %} 
 
 I don't know about you, but these tests look a **lot** better to me. While the overall lines of code may have increased, we've created a reusable solution that can be used over and over again while not repeating ourselves. Our tests now have a single `expect` that is easy to understand and clearly expresses the intent of the test in an easy to read way.
 
-### Additional Reading
+## Additional Reading
 
 [Official Documentation on Jasmine Matcher](https://github.com/pivotal/jasmine/wiki/Matchers)
 
