@@ -47,6 +47,6 @@ It isn't pretty, but it got all of my post page links wedged into the sitemap. H
 
 Another cool tool that works well with Octopress is [Pow](http://pow.cx/). Octopress is a rack app, and once to point Pow at your Octopress folder, it serves the page up locally at ```http://foldername.dev```. Then it's just a matter of running ```rake watch``` and going to town.
 
-###Conclusion
+##Conclusion
 
 I'm stoked about making progress on my blogspace. It has been on the todo list for some time. It falls well into the [breakable toy](http://redsquirrel.com/dave/work/a2j/patterns/BreakableToys.html) category of things, and that is something I can use right now as I learn new tools. I'm looking forward to improving this space with quality content about modern standards-based web development with open source tools.

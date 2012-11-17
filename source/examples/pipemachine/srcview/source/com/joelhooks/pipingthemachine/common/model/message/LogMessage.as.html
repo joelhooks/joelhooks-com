@@ -1,0 +1,65 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>LogMessage.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">common</span>.<span class="ActionScriptDefault_Text">model</span>.<span class="ActionScriptDefault_Text">message</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">messages</span>.<span class="ActionScriptDefault_Text">Message</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">LogMessage</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Message</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">DEBUG</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>    <span class="ActionScriptOperator">=</span> 5;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">INFO</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>    <span class="ActionScriptOperator">=</span> 4;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">WARN</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>    <span class="ActionScriptOperator">=</span> 3;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ERROR</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>    <span class="ActionScriptOperator">=</span> 2;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FATAL</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>    <span class="ActionScriptOperator">=</span> 1; 
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">NONE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>    <span class="ActionScriptOperator">=</span> 0; 
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">CHANGE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>    <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1; 
+
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">LEVELS</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptString">&apos;NONE&apos;</span>, <span class="ActionScriptString">&apos;FATAL&apos;</span>, <span class="ActionScriptString">&apos;ERROR&apos;</span>, <span class="ActionScriptString">&apos;WARN&apos;</span>, <span class="ActionScriptString">&apos;INFO&apos;</span>, <span class="ActionScriptString">&apos;DEBUG&apos;</span> <span class="ActionScriptBracket/Brace">]</span>;
+         
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">SEND_TO_LOG</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Message</span>.<span class="ActionScriptDefault_Text">BASE</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&apos;LoggerModule/sendToLog&apos;</span>;
+
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">STDLOG</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;standardLog&apos;</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">LogMessage</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">logLevel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">sender</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>  <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">time</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">toTimeString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headers</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">logLevel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">logLevel</span>, <span class="ActionScriptDefault_Text">sender</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">sender</span>, <span class="ActionScriptDefault_Text">time</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">time</span><span class="ActionScriptBracket/Brace">}</span>;
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">Message</span>.<span class="ActionScriptDefault_Text">NORMAL</span>, <span class="ActionScriptDefault_Text">headers</span>, <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">logLevel</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">logLevel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">logLevel</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">logLevel</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">logLevel</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">logLevel</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">int</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">sender</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">sender</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">String</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">time</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">time</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">String</span>;            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">body</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">String</span>;            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

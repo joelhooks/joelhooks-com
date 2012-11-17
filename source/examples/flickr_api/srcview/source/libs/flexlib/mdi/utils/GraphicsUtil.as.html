@@ -1,0 +1,131 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>GraphicsUtil.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">mdi</span>.<span class="ActionScriptDefault_Text">utils</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">graphics</span>.<span class="ActionScriptDefault_Text">IStroke</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">Graphics</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">GraphicsUtil</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">_drawDashedLine</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Graphics</span>,<span class="ActionScriptDefault_Text">stroke</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IStroke</span>,<span class="ActionScriptDefault_Text">pattern</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>,
+                                                <span class="ActionScriptDefault_Text">drawingState</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DashStruct</span>,
+                                                <span class="ActionScriptDefault_Text">x0</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,<span class="ActionScriptDefault_Text">y0</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,<span class="ActionScriptDefault_Text">x1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,<span class="ActionScriptDefault_Text">y1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">x1</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">x0</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">y1</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">y0</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">len</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">sqrt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dX</span><span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">dX</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">dY</span><span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">dY</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">dX</span> <span class="ActionScriptOperator">/=</span> <span class="ActionScriptDefault_Text">len</span>;
+            <span class="ActionScriptDefault_Text">dY</span> <span class="ActionScriptOperator">/=</span> <span class="ActionScriptDefault_Text">len</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tMax</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">len</span>;
+            
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span><span class="ActionScriptDefault_Text">drawingState</span>.<span class="ActionScriptDefault_Text">offset</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bDrawing</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">drawingState</span>.<span class="ActionScriptDefault_Text">drawing</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">patternIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">drawingState</span>.<span class="ActionScriptDefault_Text">patternIndex</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">styleInited</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">drawingState</span>.<span class="ActionScriptDefault_Text">styleInited</span>;
+            <span class="ActionScriptReserved">while</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">tMax</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">pattern</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">patternIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 5;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&gt;=</span> <span class="ActionScriptDefault_Text">tMax</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">drawingState</span>.<span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">pattern</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">patternIndex</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">tMax</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">drawingState</span>.<span class="ActionScriptDefault_Text">patternIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">patternIndex</span>;
+                    <span class="ActionScriptDefault_Text">drawingState</span>.<span class="ActionScriptDefault_Text">drawing</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bDrawing</span>;
+                    <span class="ActionScriptDefault_Text">drawingState</span>.<span class="ActionScriptDefault_Text">styleInited</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                    <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tMax</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleInited</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bDrawing</span><span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptDefault_Text">stroke</span>.<span class="ActionScriptDefault_Text">apply</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">else</span>
+                        <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">lineStyle</span><span class="ActionScriptBracket/Brace">(</span>0,0,0<span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">styleInited</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                    
+                <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">lineTo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x0</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">dX</span>,<span class="ActionScriptDefault_Text">y0</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">dY</span><span class="ActionScriptBracket/Brace">)</span>;
+
+                <span class="ActionScriptDefault_Text">bDrawing</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">bDrawing</span>;
+                <span class="ActionScriptDefault_Text">patternIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">patternIndex</span> <span class="ActionScriptOperator">+</span> 1<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">%</span> <span class="ActionScriptDefault_Text">pattern</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+                
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">drawDashedLine</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Graphics</span>,<span class="ActionScriptDefault_Text">stroke</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IStroke</span>,<span class="ActionScriptDefault_Text">pattern</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>,<span class="ActionScriptDefault_Text">x0</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,<span class="ActionScriptDefault_Text">y0</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,<span class="ActionScriptDefault_Text">x1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,<span class="ActionScriptDefault_Text">y1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">moveTo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x0</span>,<span class="ActionScriptDefault_Text">y0</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">struct</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DashStruct</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">DashStruct</span><span class="ActionScriptBracket/Brace">()</span>;                            
+            <span class="ActionScriptDefault_Text">_drawDashedLine</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span>,<span class="ActionScriptDefault_Text">stroke</span>,<span class="ActionScriptDefault_Text">pattern</span>,<span class="ActionScriptDefault_Text">struct</span>,<span class="ActionScriptDefault_Text">x0</span>,<span class="ActionScriptDefault_Text">y0</span>,<span class="ActionScriptDefault_Text">x1</span>,<span class="ActionScriptDefault_Text">y1</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">drawDashedPolyLine</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Graphics</span>,<span class="ActionScriptDefault_Text">stroke</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IStroke</span>,<span class="ActionScriptDefault_Text">pattern</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>,<span class="ActionScriptDefault_Text">points</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">points</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">return</span>;
+                
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">prev</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">points</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span>;
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">struct</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DashStruct</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">DashStruct</span><span class="ActionScriptBracket/Brace">()</span>;                            
+            <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">moveTo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">prev</span>.<span class="ActionScriptDefault_Text">x</span>,<span class="ActionScriptDefault_Text">prev</span>.<span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 1;<span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">points</span>.<span class="ActionScriptDefault_Text">length</span>;<span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">current</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">points</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptDefault_Text">_drawDashedLine</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span>,<span class="ActionScriptDefault_Text">stroke</span>,<span class="ActionScriptDefault_Text">pattern</span>,<span class="ActionScriptDefault_Text">struct</span>,<span class="ActionScriptDefault_Text">prev</span>.<span class="ActionScriptDefault_Text">x</span>,<span class="ActionScriptDefault_Text">prev</span>.<span class="ActionScriptDefault_Text">y</span>,<span class="ActionScriptDefault_Text">current</span>.<span class="ActionScriptDefault_Text">x</span>,<span class="ActionScriptDefault_Text">current</span>.<span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">prev</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">current</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">DashStruct</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">init</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">drawing</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptDefault_Text">patternIndex</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> 0;
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">drawing</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">patternIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">styleInited</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

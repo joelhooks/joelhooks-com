@@ -1,0 +1,297 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ScrollableMenu.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">DisplayObjectContainer</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Point</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Menu</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">listClasses</span>.<span class="ActionScriptDefault_Text">IListItemRenderer</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">menuClasses</span>.<span class="ActionScriptDefault_Text">IMenuItemRenderer</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">Application</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">ScrollPolicy</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">mx_internal</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">managers</span>.<span class="ActionScriptDefault_Text">PopUpManager</span>;
+    
+    <span class="ActionScriptReserved">use</span> <span class="ActionScriptReserved">namespace</span> <span class="ActionScriptDefault_Text">mx_internal</span>;
+
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">IconFile</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;ScrollableMenu.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * An extension of mx.controls.Menu that allows the control to scroll vertically.
+     * 
+     * &lt;p&gt;Overrides a few methods and properties so we can re-enable scrolling. The 
+     * Menu control in the Flex framework intentionally disables vertical scrolling.
+     * This class simply undoes alot of that. We reinstitute normal &lt;code&gt;verticalScrollPolicy&lt;/code&gt;
+     * functionality.&lt;/p&gt;
+     * 
+     * @see mx.controls.Menu
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ScrollableMenu</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Menu</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Constructor
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ScrollableMenu</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * We have to override the static function createMenu so that we create a 
+         * ScrollableMenu instead of a normal Menu.
+         */</span> 
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createMenu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">parent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObjectContainer</span>, <span class="ActionScriptDefault_Text">mdp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>, <span class="ActionScriptDefault_Text">showRoot</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ScrollableMenu</span>
+        <span class="ActionScriptBracket/Brace">{</span>    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ScrollableMenu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ScrollableMenu</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">tabEnabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">owner</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">DisplayObjectContainer</span><span class="ActionScriptBracket/Brace">(A</span><span class="ActionScriptDefault_Text">pplication</span>.<span class="ActionScriptDefault_Text">application</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">showRoot</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">showRoot</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menu</span>, <span class="ActionScriptDefault_Text">parent</span>, <span class="ActionScriptDefault_Text">mdp</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">menu</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+      
+        
+        <span class="ActionScriptASDoc">/** 
+         * Override the verticalScrollPolicy so we can re-instate scrolling functionality.
+         * 
+         * &lt;p&gt;The mx.controls.Menu class overrides setting and getting the verticalScrollPolicy
+         * Basically setting the verticalScrollPolicy did nothing, and getting it always 
+         * returned ScrollPolicy.OFF. So that&apos;s not going to work if we want the menu to scroll.
+         * Here we reinstate the verticalScrollPolicy setter, and keep a local copy of the value
+         * in a private variable _verticalScrollPolicy.&lt;/p&gt;
+         * 
+         */</span> 
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">verticalScrollPolicy</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_verticalScrollPolicy</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * 
+         * &lt;p&gt;This setter is basically a copy of what ScrollControlBase and ListBase do.&lt;/p&gt;
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">verticalScrollPolicy</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newPolicy</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">toLowerCase</span><span class="ActionScriptBracket/Brace">()</span>;
+
+            <span class="ActionScriptDefault_Text">itemsSizeChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_verticalScrollPolicy</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">newPolicy</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_verticalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">newPolicy</span>;
+                <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;verticalScrollPolicyChanged&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/** 
+         * Overridden to reinstate proper scrolling functionality.
+         * 
+         * &lt;p&gt;The Menu class overrode configureScrollBars() and made the function 
+         * do nothing. That means the scrollbars don&apos;t know how to draw themselves,
+         * so here we reinstate configureScrollBars. This is basically a copy of the 
+         * same method from the mx.controls.List class. It would have been nice if
+         * we could have called this method from down in a subclass of Menu, but AS
+         * doesn&apos;t let us do something like super.super, so instead we have to recreate
+         * the class here.&lt;/p&gt;
+         * */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">configureScrollBars</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rowCount</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">listItems</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptReserved">return</span>;
+    
+            <span class="ActionScriptComment">// if there is more than one row and it is a partial row we dont count it
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">&gt;</span> 1 <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">rowInfo</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">-</span> 1<span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">rowInfo</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">rowCount</span><span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">listContent</span>.<span class="ActionScriptDefault_Text">height</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">rowCount</span><span class="ActionScriptOperator">--</span>;
+    
+            <span class="ActionScriptComment">// offset, when added to rowCount, is the index of the dataProvider
+</span>            <span class="ActionScriptComment">// item for that row.  IOW, row 10 in listItems is showing dataProvider
+</span>            <span class="ActionScriptComment">// item 10 + verticalScrollPosition - lockedRowCount - 1;
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">verticalScrollPosition</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">lockedRowCount</span> <span class="ActionScriptOperator">-</span> 1;
+            <span class="ActionScriptComment">// don&apos;t count filler rows at the bottom either.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fillerRows</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptComment">// don&apos;t count filler rows at the bottom either.
+</span>            <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">listItems</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">-</span> 1<span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">collection</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">&gt;=</span> <span class="ActionScriptDefault_Text">collection</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">rowCount</span><span class="ActionScriptOperator">--</span>;
+                    <span class="ActionScriptOperator">++</span><span class="ActionScriptDefault_Text">fillerRows</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptComment">/* 
+             This part needs further functions from mx.controls.List that we don&apos;t have 
+             access to. What to do? Whatever, I&apos;ll just comment it out and cross my fingers
+             */</span>            
+            <span class="ActionScriptComment">// we have to scroll up.  We can&apos;t have filler rows unless the scrollPosition is 0
+</span>            <span class="ActionScriptComment">/*
+            if (verticalScrollPosition &gt; 0 &amp;&amp; fillerRows &gt; 0)
+            {
+                if (adjustVerticalScrollPositionDownward(Math.max(rowCount, 1)))
+                    return;
+            }*/</span>
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">colCount</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">listItems</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldHorizontalScrollBar</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">horizontalScrollBar</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldVerticalScrollBar</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">verticalScrollBar</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">roundedWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">round</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">length</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">collection</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">collection</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">lockedRowCount</span><span class="ActionScriptOperator">:</span> 0;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">numRows</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">lockedRowCount</span>;
+            
+            <span class="ActionScriptComment">/* This call is slightly modified from mx.controls.List, but not by much */</span>
+            <span class="ActionScriptDefault_Text">setScrollBarProperties</span><span class="ActionScriptBracket/Brace">(</span>
+                                <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">round</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">listContent</span>.<span class="ActionScriptDefault_Text">width</span><span class="ActionScriptBracket/Brace">)</span> ,
+                                <span class="ActionScriptDefault_Text">roundedWidth</span>, <span class="ActionScriptDefault_Text">length</span>, <span class="ActionScriptDefault_Text">numRows</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">maxVerticalScrollPosition</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">numRows</span>, 0<span class="ActionScriptBracket/Brace">)</span>;
+    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Overridden to reinstate proper scrolling functionality.
+        * 
+        * &lt;p&gt;We need to override openSubMenu as well, so that any subMenus opened by this Menu controls
+        * will also be ScrollableMenus and will have the same maxHeight set.&lt;/p&gt;
+        */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">openSubMenu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">row</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IListItemRenderer</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">supposedToLoseFocus</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getRootMenu</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span>;
+    
+            <span class="ActionScriptComment">// check to see if the menu exists, if not create it
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">IMenuItemRenderer</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">row</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">createSubMenu</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">maxHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">maxHeight</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">variableRowHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">variableRowHeight</span>;
+                
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">parentMenu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">owner</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">showRoot</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">showRoot</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">dataDescriptor</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">dataDescriptor</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">styleName</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">labelField</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">labelFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">labelFunction</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">iconField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">iconField</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">iconFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">iconFunction</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">itemRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">itemRenderer</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">rowHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">rowHeight</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">scaleY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">scaleY</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">scaleX</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">scaleX</span>;
+    
+                <span class="ActionScriptComment">// if there&apos;s data and it has children then add the items
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">row</span>.<span class="ActionScriptDefault_Text">data</span> <span class="ActionScriptOperator">&amp;&amp;</span> 
+                    <span class="ActionScriptDefault_Text">_dataDescriptor</span>.<span class="ActionScriptDefault_Text">isBranch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">row</span>.<span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span>
+                    <span class="ActionScriptDefault_Text">_dataDescriptor</span>.<span class="ActionScriptDefault_Text">hasChildren</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">row</span>.<span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">))</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_dataDescriptor</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">row</span>.<span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">sourceMenuBar</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">sourceMenuBar</span>;
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">sourceMenuBarItem</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">sourceMenuBarItem</span>;
+    
+                <span class="ActionScriptDefault_Text">IMenuItemRenderer</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">row</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menu</span>;
+                <span class="ActionScriptDefault_Text">PopUpManager</span>.<span class="ActionScriptDefault_Text">addPopUp</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menu</span>, <span class="ActionScriptDefault_Text">r</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">openSubMenu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">row</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createSubMenu</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ScrollableMenu</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xShow</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptOperator">=</span>0;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">yShow</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptOperator">=</span>0;
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">show</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xShow</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">yShow</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">xShow</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">xShow</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">yShow</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">yShow</span>;
+            
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">show</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xShow</span>, <span class="ActionScriptDefault_Text">yShow</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * We overide the &lt;code&gt;measure()&lt;/code&gt; method because we need to check if the menu is going off
+        * the stage. If it&apos;s going to be too high, then we make it smaller to keep it from
+        * going off. I also stuck in a buffer of 10 pixels from the bottom of the stage.
+        * 
+        * We also check if we&apos;re showing the vertical scrollbar, and if so we adjust the 
+        * width to account for that.
+        */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span>;
+
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">maxHeight</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">maxHeight</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">verticalScrollPolicy</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ScrollPolicy</span>.<span class="ActionScriptDefault_Text">ON</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">verticalScrollPolicy</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ScrollPolicy</span>.<span class="ActionScriptDefault_Text">AUTO</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">verticalScrollBar</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">measuredMinWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">verticalScrollBar</span>.<span class="ActionScriptDefault_Text">minWidth</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xPos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">xShow</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xShow</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> 0;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">yPos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">yShow</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">yShow</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> 0;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">pt</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Point</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Point</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xPos</span>, <span class="ActionScriptDefault_Text">yPos</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">pt</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">localToGlobal</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pt</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">stageHeightAvailable</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">screen</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">screen</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">-</span> 10;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">stageHeightAvailable</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">measuredHeight</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">stageHeightAvailable</span>;
+                <span class="ActionScriptDefault_Text">invalidateSize</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>     
+            
+            <span class="ActionScriptDefault_Text">commitProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">invalidateSize</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+  
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,554 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ConvertibleTreeList.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">XMLListCollection</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">Canvas</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">ViewStack</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">List</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Tree</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">listClasses</span>.<span class="ActionScriptDefault_Text">ListBase</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">ScrollPolicy</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">UIComponent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Dissolve</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">WipeDown</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">ListEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ObjectUtil</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *  Dispatched when the &lt;code&gt;selectedIndex&lt;/code&gt; or &lt;code&gt;selectedItem&lt;/code&gt; property
+     *  changes as a result of user interaction.
+     *
+     *  @eventType mx.events.ListEvent.CHANGE
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;change&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;mx.events.ListEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * A control that combines the functionality of the Tree component and the List component.
+     * 
+     * &lt;p&gt;The ConvertibleTreeList allows you to use one control and have it display the dataProvider either
+     * as a Tree or as a List. You only have to set the dataProvider once. You can set the &lt;code&gt;mode&lt;/code&gt; 
+     * at any time to change the display mode.&lt;/p&gt;
+     * 
+     * @see mx.controls.List
+     * @see mx.controls.Tree
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ConvertibleTreeList</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Canvas</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Our internal Tree component
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_tree</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Tree</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Our internal List component
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_list</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">List</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Our internal ViewStack that holds the Tree and the List
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">viewstack</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ViewStack</span>;
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Bindable dataprovider for the Tree control, this is the main dataProvider, the
+         * listDataProvider is created by flattening the heirarchy of this DP.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_treeDataProvider</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Bindable dataProvider that is used to populate the List control. This is a flattened
+         * version of the Tree&apos;s dataProvider.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_listDataProvider</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TREE</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * The display mode for the ConvertibleTreeList control. 
+         * &lt;p&gt;Must be one of the static variables of ConvertibleTreeList,
+         * either TREE, FULL_LIST, TEXT_LIST, or ICON_LIST.&lt;/p&gt;
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">mode</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_mode</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">mode</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_mode</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        
+            <span class="ActionScriptComment">// If we&apos;re setting the mode after we&apos;ve created the children
+</span>            <span class="ActionScriptComment">// then we should make sure we actually do the work
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">viewstack</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">tree</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">list</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">modeChanged</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">modeChanged</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// We&apos;re either displaying the Tree or the List, so here we
+</span>            <span class="ActionScriptComment">// figure out which one, and we have to set the selectedChild to
+</span>            <span class="ActionScriptComment">// the parent of either tree or list, because that&apos;s the Canvas
+</span>            <span class="ActionScriptComment">// container that we added to the ViewStack
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">FULL_LIST</span> <span class="ActionScriptOperator">||</span>
+                 <span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">ICON_LIST</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptString">&apos;&apos;</span> <span class="ActionScriptOperator">+</span> 
+                         <span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TEXT_LIST</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">viewstack</span>.<span class="ActionScriptDefault_Text">selectedChild</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">parent</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Canvas</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TREE</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">viewstack</span>.<span class="ActionScriptDefault_Text">selectedChild</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">parent</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Canvas</span>;    
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// If we&apos;re showing one of the list controls then we&apos;re aither showing it
+</span>            <span class="ActionScriptComment">// with or without the labels.
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">FULL_LIST</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TEXT_LIST</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span> 
+                <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_labelField</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">undefined</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// Same here, either we&apos;re showing the icons or not
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">FULL_LIST</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">_mode</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">ICON_LIST</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span> 
+                <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">iconField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_iconField</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">iconField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">undefined</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * If mode is set to TREE then the Tree control is used for
+         * display.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TREE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;tree&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * If mode is set to FULL_LIST then the List control is used for
+         * display and both icons and labels are shown.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FULL_LIST</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;list&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * If mode is set to ICON_LIST then the List control is used for
+         * display and only icons are shown.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ICON_LIST</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;icon&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * If mode is set to TEXT_LIST then the List control is used for
+         * display and only labels are shown.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TEXT_LIST</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;text&quot;</span>;
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Internal var used to simulate the same showRoot functionality of the 
+         * Tree control.
+         */</span> 
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_showRoot</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Internal var to pass on the functionality of the iconField of
+         * the list based controls.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_iconField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         *  The name of the field in the data provider object that determines what to 
+         *  display as the icon. By default, the list class does not try to display 
+         *  icons with the text in the rows.  However, by specifying an icon 
+         *  field, you can specify a graphic that is created and displayed as an 
+         *  icon in the row.  This property is ignored by DataGrid.
+         *
+         *  &lt;p&gt;The renderers will look in the data provider object for a property of 
+         *  the name supplied as the iconField.  If the value of the property is a 
+         *  Class, it will instantiate that class and expect it to be an instance 
+         *  of an IFlexDisplayObject.  If the value of the property is a String, 
+         *  it will look to see if a Class exists with that name in the application, 
+         *  and if it can&apos;t find one, it will also look for a property on the 
+         *  document with that name and expect that property to map to a Class.&lt;/p&gt;
+         *
+         *  @default null
+         *  @see mx.controls.listClasses.ListBase
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">iconField</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_iconField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">iconField</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_iconField</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_labelField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         *  The name of the field in the data provider items to display as the label. 
+         *  By default the list looks for a property named &lt;code&gt;label&lt;/code&gt; 
+         *  on each item and displays it.
+         *  However, if the data objects do not contain a &lt;code&gt;label&lt;/code&gt; 
+         *  property, you can set the &lt;code&gt;labelField&lt;/code&gt; property to
+         *  use a different property in the data object. An example would be 
+         *  &quot;FullName&quot; when viewing a set of people names fetched from a database.
+         *
+         *  @default &quot;label&quot;
+         *  @see mx.controls.listClasses.ListBase
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">labelField</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">labelField</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_labelField</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_listField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;showInList&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * The name of the attribute that is used to check if an item in the dataProdiver 
+         * should be included in the List control. The XML entry in the dataProvider should
+         * be something like: &lt;code&gt;&amp;lt;entry showInList=&apos;true&apos; label=&apos;Item&apos; /&gt;&lt;/code&gt;, where 
+         * you could set showInList to be false if you wanted the item to show up when this 
+         * component is in Tree mode, but not in List mode. 
+         * 
+         * @default &quot;showInList&quot;
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">listField</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_listField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">listField</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_listField</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ConvertibleTreeList</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">_tree</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Tree</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">_list</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">List</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            
+            <span class="ActionScriptDefault_Text">viewstack</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ViewStack</span><span class="ActionScriptBracket/Brace">()</span>;
+        
+            <span class="ActionScriptDefault_Text">viewstack</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;borderStyle&quot;</span>, <span class="ActionScriptString">&quot;none&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;borderStyle&quot;</span>, <span class="ActionScriptString">&quot;none&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;borderStyle&quot;</span>, <span class="ActionScriptString">&quot;none&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">canvas1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Canvas</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Canvas</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">canvas1</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_tree</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">percentHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">percentWidth</span> <span class="ActionScriptOperator">=</span> 100;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">canvas2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Canvas</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Canvas</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">canvas2</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_list</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptDefault_Text">canvas1</span>.<span class="ActionScriptDefault_Text">horizontalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">canvas2</span>.<span class="ActionScriptDefault_Text">horizontalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ScrollPolicy</span>.<span class="ActionScriptDefault_Text">OFF</span>;
+            
+            <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">percentHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">percentWidth</span> <span class="ActionScriptOperator">=</span> 100;
+            
+            
+                    
+            <span class="ActionScriptDefault_Text">canvas1</span>.<span class="ActionScriptDefault_Text">percentHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">canvas1</span>.<span class="ActionScriptDefault_Text">percentWidth</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">canvas2</span>.<span class="ActionScriptDefault_Text">percentHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">canvas2</span>.<span class="ActionScriptDefault_Text">percentWidth</span> <span class="ActionScriptOperator">=</span> 100;
+            
+            <span class="ActionScriptDefault_Text">viewstack</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">canvas2</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">viewstack</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">canvas1</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+            
+            <span class="ActionScriptDefault_Text">addListEventListeners</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_tree</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addListEventListeners</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_list</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            
+            <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_treeDataProvider</span>;
+            <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_listDataProvider</span>;
+            
+            <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">iconField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">iconField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_iconField</span>;
+            <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_labelField</span>;
+            <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">showRoot</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_showRoot</span>;
+            
+            <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">allowMultipleSelection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">allowMultipleSelection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_allowMultipleSelection</span>;
+            
+            <span class="ActionScriptDefault_Text">modeChanged</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">viewstack</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * 
+         * Function that adds some of the List-based control listeners to the passed in 
+         * component. This is used so we can add the item events to both the List and Tree 
+         * child components.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addListEventListeners</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ListEvent</span>.<span class="ActionScriptDefault_Text">CHANGE</span>, <span class="ActionScriptDefault_Text">changeListener</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ListEvent</span>.<span class="ActionScriptDefault_Text">ITEM_CLICK</span>, <span class="ActionScriptDefault_Text">redispatchEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ListEvent</span>.<span class="ActionScriptDefault_Text">ITEM_DOUBLE_CLICK</span>, <span class="ActionScriptDefault_Text">redispatchEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ListEvent</span>.<span class="ActionScriptDefault_Text">ITEM_FOCUS_IN</span>, <span class="ActionScriptDefault_Text">redispatchEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ListEvent</span>.<span class="ActionScriptDefault_Text">ITEM_FOCUS_OUT</span>, <span class="ActionScriptDefault_Text">redispatchEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ListEvent</span>.<span class="ActionScriptDefault_Text">ITEM_ROLL_OUT</span>, <span class="ActionScriptDefault_Text">redispatchEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ListEvent</span>.<span class="ActionScriptDefault_Text">ITEM_ROLL_OVER</span>, <span class="ActionScriptDefault_Text">redispatchEvent</span><span class="ActionScriptBracket/Brace">)</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * 
+         * We make sure to select the appropriate item in the other control, so the same
+         * item (if it exists) is selected in both the Tree and the List.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">changeListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ListEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">_list</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">selectedItems</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">selectedItems</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">tree</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_list</span>.<span class="ActionScriptDefault_Text">selectedItems</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_tree</span>.<span class="ActionScriptDefault_Text">selectedItems</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">redispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Simply redispatch the event.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">redispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ListEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_treeDataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">listDP</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLListCollection</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_showRoot</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">listDP</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">flattenXMLList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">XMLList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">children</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">XMLList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">children</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptDefault_Text">listDP</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">flattenXMLList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">XMLList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">children</span><span class="ActionScriptBracket/Brace">())</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_listDataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">listDP</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_list</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_listDataProvider</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_tree</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">tree</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_treeDataProvider</span>;
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_treeDataProvider</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * This takes a heirarchical data provider for a Tree control and flattens it out
+         * so we can use it in a List control. It takes an XMLList and checks each item 
+         * for the attribute that is defined by listField. If that is set to true then
+         * the item is included in the flat data provider. This allows us to exclude certiain
+         * items from the List control that are in the Tree control (folders come to mind).
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">flattenXMLList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">input</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLList</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLListCollection</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">flat</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLListCollection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">XMLListCollection</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">input</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptOperator">=</span>0; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">n</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">input</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>;
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">children</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">((</span><span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">attribute</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_listField</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;true&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">loneItem</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">copy</span><span class="ActionScriptBracket/Brace">()</span>;
+                        <span class="ActionScriptDefault_Text">loneItem</span>.<span class="ActionScriptDefault_Text">setChildren</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">undefined</span><span class="ActionScriptBracket/Brace">)</span>;
+                        
+                        <span class="ActionScriptDefault_Text">flat</span>.<span class="ActionScriptDefault_Text">addItem</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">loneItem</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">others</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XMLListCollection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">flattenXMLList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">children</span><span class="ActionScriptBracket/Brace">())</span>;
+                    <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">j</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptOperator">=</span>0; <span class="ActionScriptDefault_Text">j</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">others</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">j</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">((</span><span class="ActionScriptDefault_Text">others</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">j</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">attribute</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_listField</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;true&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptDefault_Text">flat</span>.<span class="ActionScriptDefault_Text">addItem</span><span class="ActionScriptBracket/Brace">((</span><span class="ActionScriptDefault_Text">others</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">j</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">copy</span><span class="ActionScriptBracket/Brace">())</span>;
+                        <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">flat</span>.<span class="ActionScriptDefault_Text">addItem</span><span class="ActionScriptBracket/Brace">((</span><span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">copy</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">flat</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * The Tree control that is displayed when the &lt;code&gt;mode&lt;/code&gt; is set to &lt;code&gt;ConvertibleTreeList.TREE&lt;/code&gt;
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">tree</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Tree</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_tree</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * The List control that is displayed when the &lt;code&gt;mode&lt;/code&gt; is set to &lt;code&gt;FULL_LIST&lt;/code&gt;, 
+         * &lt;code&gt;TEXT_LIST&lt;/code&gt;, or &lt;code&gt;ICON_LIST&lt;/code&gt;.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">list</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">List</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_list</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">selectedItem</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_mode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TREE</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">tree</span>.<span class="ActionScriptDefault_Text">selectedItem</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">selectedItem</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">selectedItem</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_mode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TREE</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">tree</span>.<span class="ActionScriptDefault_Text">selectedItem</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">selectedItem</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">selectedItems</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_mode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TREE</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">tree</span>.<span class="ActionScriptDefault_Text">selectedItems</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">selectedItems</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">selectedItems</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_mode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TREE</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">tree</span>.<span class="ActionScriptDefault_Text">selectedItems</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">selectedItems</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_mode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ConvertibleTreeList</span>.<span class="ActionScriptDefault_Text">TREE</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">tree</span>.<span class="ActionScriptDefault_Text">selectedIndex</span>;<span class="ActionScriptDefault_Text">tree</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">selectedIndex</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_allowMultipleSelection</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">allowMultipleSelection</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_allowMultipleSelection</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">allowMultipleSelection</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_allowMultipleSelection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">list</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">list</span>.<span class="ActionScriptDefault_Text">allowMultipleSelection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tree</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">tree</span>.<span class="ActionScriptDefault_Text">allowMultipleSelection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">showRoot</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">different</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_showRoot</span>;
+            
+            <span class="ActionScriptDefault_Text">_showRoot</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">different</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_treeDataProvider</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">showRoot</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_showRoot</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">viewstack</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

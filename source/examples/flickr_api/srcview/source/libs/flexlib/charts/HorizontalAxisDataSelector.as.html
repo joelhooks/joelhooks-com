@@ -1,0 +1,329 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>HorizontalAxisDataSelector.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">charts</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">Graphics</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MouseEvent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Point</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">charts</span>.<span class="ActionScriptDefault_Text">chartClasses</span>.<span class="ActionScriptDefault_Text">CartesianChart</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">charts</span>.<span class="ActionScriptDefault_Text">chartClasses</span>.<span class="ActionScriptDefault_Text">ChartElement</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">charts</span>.<span class="ActionScriptDefault_Text">chartClasses</span>.<span class="ActionScriptDefault_Text">Series</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">EventPriority</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">CSSStyleDeclaration</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">StyleManager</span>;
+
+
+<span class="ActionScriptComment">// =================================================
+</span><span class="ActionScriptComment">//  E V E N T S
+</span><span class="ActionScriptComment">// =================================================
+</span>    
+<span class="ActionScriptASDoc">/**
+ * Dispatched when the selected data on the horizontal axis changes.  
+ *
+ * @eventType flash.events.Event.CHANGE
+ */</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;change&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;flash.events.Event&quot;</span> <span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptComment">// =================================================
+</span><span class="ActionScriptComment">//  S T Y L E S
+</span><span class="ActionScriptComment">// =================================================
+</span>
+<span class="ActionScriptASDoc">/**
+ * Color of the vertical line that appears for the selected x value
+ * The default value is &lt;code&gt;0xFF0000&lt;/code&gt;.
+ * 
+ * @default 0xFF0000
+ */</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectorColor&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;uint&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Color&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span> <span class="ActionScriptBracket/Brace">)]</span>
+
+
+<span class="ActionScriptASDoc">/**
+ * Allows for the selection of a specific data value on the horizontal
+ * axis.
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">HorizontalAxisDataSelector</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">ChartElement</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptASDoc">/** Flag for initializing the styles */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">classConstructed</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">classConstruct</span><span class="ActionScriptBracket/Brace">()</span>;
+
+    <span class="ActionScriptASDoc">/** Initialize styles to default values */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">classConstruct</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;HorizontalAxisDataSelector&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// If HorizontalAxisDataSelector has no CSS definition, 
+</span>            <span class="ActionScriptComment">// create one and set the default value.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newStyleDeclaration</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">CSSStyleDeclaration</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">CSSStyleDeclaration</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;selectorColor&quot;</span>, 0<span class="ActionScriptDefault_Text">xFF0000</span> <span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">setStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;HorizontalAxisDataSelector&quot;</span>, <span class="ActionScriptDefault_Text">newStyleDeclaration</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/** 
+     * Flag to determine if the mouse is pressed and we should update selected
+     * data index on mouse move.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">mouseIsDown</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+<span class="ActionScriptComment">//    /**
+</span><span class="ActionScriptComment">//     * When &lt;code&gt;true&lt;/code&gt;, instructs the selector to snap to the nearest data point.
+</span><span class="ActionScriptComment">//     * When &lt;code&gt;false&lt;/code&gt;, the selector will interpolate values based on mouse positions.
+</span><span class="ActionScriptComment">//     * 
+</span><span class="ActionScriptComment">//     * @default true
+</span><span class="ActionScriptComment">//     */
+</span><span class="ActionScriptComment">//    public var snap:Boolean = true;
+</span>    
+    <span class="ActionScriptASDoc">/**
+     * The last x location of the mouse.  Used when snapping is disabled to determine at which
+     * point values should be interpolated.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+    
+    <span class="ActionScriptASDoc">/** The selected index in the data provider for the chart.  Used when snapping is enabled. */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">selectedDataIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+    
+    
+    <span class="ActionScriptASDoc">/**
+     * Constructor.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">HorizontalAxisDataSelector</span><span class="ActionScriptBracket/Brace">()</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        
+        <span class="ActionScriptComment">// Register for mouse events to handle data selection
+</span>        <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">MOUSE_DOWN</span>, <span class="ActionScriptDefault_Text">handleMouseDown</span>, <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">EventPriority</span>.<span class="ActionScriptDefault_Text">DEFAULT</span>, <span class="ActionScriptReserved">false</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">MOUSE_MOVE</span>, <span class="ActionScriptDefault_Text">handleMouseMove</span>, <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">EventPriority</span>.<span class="ActionScriptDefault_Text">DEFAULT</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptComment">// Wait for us to be added to the stage before adding the mouse up handler
+</span>        <span class="ActionScriptComment">// otherwise we get null reference errors when accessing stage
+</span>        <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">ADDED_TO_STAGE</span>, <span class="ActionScriptDefault_Text">onAddedToStage</span>, <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">EventPriority</span>.<span class="ActionScriptDefault_Text">DEFAULT</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Event handler; Invoked when we&apos;re added to the stage.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onAddedToStage</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">// Listen on the stage for mouse up so we detect mouse up anywhere
+</span>        <span class="ActionScriptDefault_Text">stage</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">MOUSE_UP</span>, <span class="ActionScriptDefault_Text">handleMouseUp</span>, <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">EventPriority</span>.<span class="ActionScriptDefault_Text">DEFAULT</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">ADDED_TO_STAGE</span>, <span class="ActionScriptDefault_Text">onAddedToStage</span> <span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Draws the vertical selection line overlay.
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,
+                                                   <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">g</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Graphics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">graphics</span>;
+        <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">clear</span><span class="ActionScriptBracket/Brace">()</span>;
+        
+        <span class="ActionScriptComment">// Draw a big transparent square over the entire chart area
+</span>        <span class="ActionScriptComment">// so Flash Player sees us for mouse events
+</span>        <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">moveTo</span><span class="ActionScriptBracket/Brace">(</span> 0, 0 <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">lineStyle</span><span class="ActionScriptBracket/Brace">(</span> 0, 0, 0 <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">beginFill</span><span class="ActionScriptBracket/Brace">(</span> 0, 0 <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">drawRect</span><span class="ActionScriptBracket/Brace">(</span> 0, 0, <span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">endFill</span><span class="ActionScriptBracket/Brace">()</span>;
+        
+        <span class="ActionScriptComment">// Only draw the overlay if there is a selection
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">selectedDataIndex</span> <span class="ActionScriptOperator">&gt;=</span> 0 <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">values</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataValues</span>;
+            <span class="ActionScriptComment">// Get the location of where the selection line should be drawn
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">location</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Point</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">dataToLocal</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">values</span><span class="ActionScriptBracket/Brace">[</span> 0 <span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">values</span><span class="ActionScriptBracket/Brace">[</span> 1 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// KLUDGE: We seem to off here by the width of the vertical axis.  Strange, not
+</span>            <span class="ActionScriptComment">// quite what I expected.  Fix it by subtracting the different coordinate systems
+</span>            <span class="ActionScriptComment">// from the x location.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">diff</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">mouseX</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">mouseX</span>;
+            <span class="ActionScriptDefault_Text">location</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">diff</span>;
+            
+            <span class="ActionScriptComment">// TODO: Add style for selectorThickness
+</span>            <span class="ActionScriptComment">// TODO: Add style for selectorThickness alpha
+</span>            <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">lineStyle</span><span class="ActionScriptBracket/Brace">(</span> 1.5, <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;selectorColor&quot;</span> <span class="ActionScriptBracket/Brace">)</span>, .8 <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Draw a vertical line at the point&apos;s x location across the entire height of the area
+</span>            <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">moveTo</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">location</span>.<span class="ActionScriptDefault_Text">x</span>, 0 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">lineTo</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">location</span>.<span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Gets a list of data values for the currently selected data item on the horizontal
+     * axis.  The x field value is always the first element in the array.  Then, for each 
+     * series, the y value is added to a values array in the same order that the series
+     * are defined. 
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">dataValues</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">// Create a new array time so that someone gettnig the data values cannot
+</span>        <span class="ActionScriptComment">// change them by hanging on to the reference
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">values</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">series</span><span class="ActionScriptBracket/Brace">[</span> 0 <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">xField</span>;
+        
+        <span class="ActionScriptComment">// Save the x field value first
+</span>        <span class="ActionScriptDefault_Text">values</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">getItemAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">selectedDataIndex</span> <span class="ActionScriptBracket/Brace">)[</span> <span class="ActionScriptDefault_Text">xField</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptComment">// Loop over all the series and get the y information from each series
+</span>        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">series</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">currentSeries</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">series</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptComment">// Add the y field values for the values array
+</span>            <span class="ActionScriptDefault_Text">values</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">getItemAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">selectedDataIndex</span> <span class="ActionScriptBracket/Brace">)[</span> <span class="ActionScriptDefault_Text">currentSeries</span>.<span class="ActionScriptDefault_Text">yField</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">values</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Event handler; invoked when the mouse is pressed.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleMouseDown</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">mouseIsDown</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        <span class="ActionScriptDefault_Text">setSelectedDataIndex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Event handler; invoked when the mouse is moved.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleMouseMove</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">// Change the value as the user drags the mouse
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">mouseIsDown</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">setSelectedDataIndex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Event handler; invoked when the mouse is released.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleMouseUp</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">mouseIsDown</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/** 
+     * Helper function to set the selected data index based on mouse coordinates.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setSelectedDataIndex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">// Keep track of the old value to determine if it actually changes
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldSelectedDataIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">selectedDataIndex</span>;
+        
+        <span class="ActionScriptComment">// Get the coordinates of the mouse relative to the chart
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">point</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Point</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Point</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">mouseX</span>, <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">mouseY</span> <span class="ActionScriptBracket/Brace">)</span>;
+                
+        <span class="ActionScriptComment">// Get the data values that the point represents
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dataValues</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">localToData</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">point</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptComment">// The first value in the dataValues in the target x field value
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">targetXFieldValue</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataValues</span><span class="ActionScriptBracket/Brace">[</span> 0 <span class="ActionScriptBracket/Brace">]</span>;
+        
+        <span class="ActionScriptComment">// Get the xField value to know what to look for in the
+</span>        <span class="ActionScriptComment">// chart data provider
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">series</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">series</span><span class="ActionScriptBracket/Brace">[</span> 0 <span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">series</span>.<span class="ActionScriptDefault_Text">xField</span>;
+        
+        <span class="ActionScriptComment">// Covert the point&apos;s x value to the nearest x value
+</span>        <span class="ActionScriptComment">// from the horizontal axis.  Loop over the data provider
+</span>        <span class="ActionScriptComment">// and find the xField value closest to the target value.
+</span>        <span class="ActionScriptComment">// TODO: This would be better as a binary search!
+</span>        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">getItemAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">try</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">nextItem</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">getItemAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">+</span> 1 <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">xField</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">&lt;=</span> <span class="ActionScriptDefault_Text">targetXFieldValue</span> 
+                    <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">nextItem</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">xField</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">targetXFieldValue</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// Find out which of the two valus is closer
+</span>                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">diff1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">abs</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">targetXFieldValue</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">xField</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">diff2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">abs</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">targetXFieldValue</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">nextItem</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">xField</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">diff1</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">diff2</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptComment">// closer to item
+</span>                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">selectedDataIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">i</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span> <span class="ActionScriptComment">// closer to nextItem
+</span>                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">selectedDataIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">+</span> 1;    
+                    <span class="ActionScriptBracket/Brace">}</span>
+                
+                    <span class="ActionScriptReserved">break</span>;    
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">catch</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">re</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">RangeError</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// Reached the last item, which means the value to be used is
+</span>                <span class="ActionScriptComment">// chart.dataProvider.length - 1
+</span>                <span class="ActionScriptDefault_Text">selectedDataIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">-</span> 1;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptComment">// Special case, check for click before the first item
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">chart</span>.<span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">getItemAt</span><span class="ActionScriptBracket/Brace">(</span> 0 <span class="ActionScriptBracket/Brace">)[</span> <span class="ActionScriptDefault_Text">xField</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">targetXFieldValue</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">selectedDataIndex</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptComment">// Determine if the selected data index changed or not
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">selectedDataIndex</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">oldSelectedDataIndex</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Since the value changed, the display list needs updating
+</span>            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+
+            <span class="ActionScriptComment">// Send out the event letting the everyone know the value changed.  When
+</span>            <span class="ActionScriptComment">// the change event is picked up, examine the dataValues property of the
+</span>            <span class="ActionScriptComment">// selector to get a list of the selected values.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">changeEvent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CHANGE</span>, <span class="ActionScriptReserved">true</span>, <span class="ActionScriptReserved">false</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">changeEvent</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+<span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">// end class
+</span><span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptComment">// end package</span></pre></body>
+</html>

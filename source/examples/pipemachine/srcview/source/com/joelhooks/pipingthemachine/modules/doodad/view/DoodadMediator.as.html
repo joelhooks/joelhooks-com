@@ -1,0 +1,61 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>DoodadMediator.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">modules</span>.<span class="ActionScriptDefault_Text">doodad</span>.<span class="ActionScriptDefault_Text">view</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">modules</span>.<span class="ActionScriptDefault_Text">doodad</span>.<span class="ActionScriptDefault_Text">DoodadModuleFacade</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">pipingthemachine</span>.<span class="ActionScriptDefault_Text">modules</span>.<span class="ActionScriptDefault_Text">doodad</span>.<span class="ActionScriptDefault_Text">view</span>.<span class="ActionScriptDefault_Text">components</span>.<span class="ActionScriptDefault_Text">Doodad</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">IMediator</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">INotification</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">patterns</span>.<span class="ActionScriptDefault_Text">mediator</span>.<span class="ActionScriptDefault_Text">Mediator</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">DoodadMediator</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Mediator</span> <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">IMediator</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">NAME</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;DoodadMediator&quot;</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">DoodadMediator</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">viewComponent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Doodad</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">NAME</span>, <span class="ActionScriptDefault_Text">viewComponent</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onRegister</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">view</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(D</span><span class="ActionScriptDefault_Text">oodad</span>.<span class="ActionScriptDefault_Text">REMOVE_DOODAD</span>, <span class="ActionScriptDefault_Text">handleRemove</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">listNotificationInterests</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">[]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleNotification</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">notification</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">INotification</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">view</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Doodad</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">viewComponent</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Doodad</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleRemove</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">view</span>.<span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(D</span><span class="ActionScriptDefault_Text">oodad</span>.<span class="ActionScriptDefault_Text">REMOVE_DOODAD</span>, <span class="ActionScriptDefault_Text">handleRemove</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">sendNotification</span><span class="ActionScriptBracket/Brace">(D</span><span class="ActionScriptDefault_Text">oodadModuleFacade</span>.<span class="ActionScriptDefault_Text">DESTROY_MODULE</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">view</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">facade</span>.<span class="ActionScriptDefault_Text">removeMediator</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getMediatorName</span><span class="ActionScriptBracket/Brace">())</span>;
+            <span class="ActionScriptDefault_Text">view</span>.<span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">view</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">viewComponent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,368 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Schedule.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>
+<span class="ActionScriptBracket/Brace">{</span>
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">ScheduleViewer</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">AbstractEntryLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">BackgroundLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">BestFitLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">HorizontalLinesLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">IBackgroundLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">IEntryLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">IHorizontalLinesLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">IVerticalLinesLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">LayoutUpdateEvent</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">VerticalLinesLayout</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">renderers</span>.<span class="ActionScriptDefault_Text">IScheduleEntryRenderer</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">viewers</span>.<span class="ActionScriptDefault_Text">BackgroundViewer</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">viewers</span>.<span class="ActionScriptDefault_Text">EntryViewer</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">viewers</span>.<span class="ActionScriptDefault_Text">HorizontalLinesViewer</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">viewers</span>.<span class="ActionScriptDefault_Text">IHorizontalLinesViewer</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">viewers</span>.<span class="ActionScriptDefault_Text">IVerticalLinesViewer</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">viewers</span>.<span class="ActionScriptDefault_Text">VerticalLinesViewer</span>;
+   
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">ArrayCollection</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">IList</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">ClassFactory</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IFactory</span>;
+   <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">UIComponent</span>;
+     
+   <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Schedule</span>
+   <span class="ActionScriptBracket/Brace">{</span>      
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">isViewlayersInitialized</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>;
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">navigator</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ScheduleNavigator</span>;
+      
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IBackgroundLayout</span>;
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">horizontalLinesLayoutImpl</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IHorizontalLinesLayout</span>;
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IVerticalLinesLayout</span>;
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IHorizontalLinesViewer</span>;
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IVerticalLinesViewer</span>;
+      
+          <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">entryViewer</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">EntryViewer</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">backgroundViewer</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">BackgroundViewer</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">content</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">UIComponent</span>;
+            
+      <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">owner</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ScheduleViewer</span>;         
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_entryLayoutImpl</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IEntryLayout</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_entryLayout</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span>;        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_backgroundLayout</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span>;        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_horizontalLinesLayout</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span>;        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_verticalLinesLayout</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span>;     
+            
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_horizontalLinesViewer</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span>;        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_verticalLinesViewer</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span>;             
+      
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Schedule</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">owner</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ScheduleViewer</span> <span class="ActionScriptBracket/Brace">)</span>
+      <span class="ActionScriptBracket/Brace">{</span>
+         <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">owner</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>;
+      <span class="ActionScriptBracket/Brace">}</span>
+      
+      <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initialize</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+      <span class="ActionScriptBracket/Brace">{</span>
+         <span class="ActionScriptDefault_Text">isViewlayersInitialized</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+         <span class="ActionScriptDefault_Text">createEntryLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+         <span class="ActionScriptDefault_Text">createEntryViewer</span><span class="ActionScriptBracket/Brace">()</span>;
+         <span class="ActionScriptDefault_Text">createBackgroundLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+         <span class="ActionScriptDefault_Text">createHorizontalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+         <span class="ActionScriptDefault_Text">createHorizontalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span>;
+         <span class="ActionScriptDefault_Text">createVerticalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+         <span class="ActionScriptDefault_Text">createVerticalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span>;
+      <span class="ActionScriptBracket/Brace">}</span>
+      
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeCompileTimeViewLayers</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">backgroundViewer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">BackgroundViewer</span><span class="ActionScriptBracket/Brace">()</span>;            
+            <span class="ActionScriptDefault_Text">createEntryViewer</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeRuntimeViewLayers</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">createEntryLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">createBackgroundLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">createHorizontalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">createHorizontalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">createVerticalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">createVerticalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LayoutUpdateEvent</span>.<span class="ActionScriptDefault_Text">UPDATE</span>, <span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">update</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LayoutUpdateEvent</span>.<span class="ActionScriptDefault_Text">UPDATE</span>, <span class="ActionScriptDefault_Text">backgroundViewer</span>.<span class="ActionScriptDefault_Text">update</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">horizontalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LayoutUpdateEvent</span>.<span class="ActionScriptDefault_Text">UPDATE</span>, <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">update</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LayoutUpdateEvent</span>.<span class="ActionScriptDefault_Text">UPDATE</span>, <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">update</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LayoutUpdateEvent</span>.<span class="ActionScriptDefault_Text">UPDATE</span>, <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">update</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LayoutUpdateEvent</span>.<span class="ActionScriptDefault_Text">UPDATE</span>, <span class="ActionScriptDefault_Text">horizontalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">update</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LayoutUpdateEvent</span>.<span class="ActionScriptDefault_Text">UPDATE</span>, <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">update</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptDefault_Text">initializeViewLayerProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">entryLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_entryLayout</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">entryLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_entryLayout</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_entryLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;                
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">entryRenderer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">entryRenderer</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">entryRenderer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">entryRenderer</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">entryRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;    
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">backgroundLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_backgroundLayout</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">backgroundLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_backgroundLayout</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_backgroundLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;                
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">horizontalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_horizontalLinesLayout</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">horizontalLinesLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_horizontalLinesLayout</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_horizontalLinesLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;                
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">horizontalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_horizontalLinesViewer</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">horizontalLinesViewer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_horizontalLinesViewer</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_horizontalLinesViewer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;                
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">verticalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_verticalLinesLayout</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">verticalLinesLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_verticalLinesLayout</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_verticalLinesLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;                
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">verticalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_verticalLinesViewer</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">verticalLinesViewer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_verticalLinesViewer</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_verticalLinesViewer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;                
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">entryLayoutImpl</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IEntryLayout</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_entryLayoutImpl</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">entryLayoutImpl</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IEntryLayout</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">_entryLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+                
+        
+        
+        
+                
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createEntryLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_entryLayout</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">entryLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ClassFactory</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">BestFitLayout</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">entryLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IEntryLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_entryLayout</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">contentWidth</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentHeight</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">contentHeight</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">startDate</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">startDate</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endDate</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">endDate</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rowHeight</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">rowHeight</span>;
+                
+                <span class="ActionScriptDefault_Text">entryLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IEntryLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_entryLayout</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">contentWidth</span>;
+                <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">contentHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">contentHeight</span>;
+                <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">startDate</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">startDate</span>;
+                <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">endDate</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">endDate</span>;
+                <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">rowHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">rowHeight</span>;                
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createEntryViewer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entryViewer</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">entryViewer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">EntryViewer</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>        
+                
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createBackgroundLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_horizontalLinesLayout</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">backgroundLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ClassFactory</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">BackgroundLayout</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IBackgroundLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_backgroundLayout</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">backgroundItems</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">backgroundItems</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timeRanges</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">timeRanges</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span>;
+                
+                <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IBackgroundLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_backgroundLayout</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">backgroundItems</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">backgroundItems</span>;
+                <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">timeRanges</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeRanges</span>;
+                <span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+                        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createHorizontalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_horizontalLinesLayout</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">horizontalLinesLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ClassFactory</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">HorizontalLinesLayout</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">horizontalLinesLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IHorizontalLinesLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_horizontalLinesLayout</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">horizontalLinesLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IHorizontalLinesLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_horizontalLinesLayout</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createHorizontalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_horizontalLinesViewer</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">horizontalLinesViewer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ClassFactory</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">HorizontalLinesViewer</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IHorizontalLinesViewer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_horizontalLinesViewer</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IHorizontalLinesViewer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_horizontalLinesViewer</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createVerticalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_verticalLinesLayout</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">verticalLinesLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ClassFactory</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">VerticalLinesLayout</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IVerticalLinesLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_verticalLinesLayout</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timeRanges</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">timeRanges</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span>;
+                
+                <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IVerticalLinesLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_verticalLinesLayout</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">timeRanges</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeRanges</span>;
+                <span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createVerticalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_verticalLinesViewer</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">verticalLinesViewer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ClassFactory</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">VerticalLinesViewer</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IVerticalLinesViewer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_verticalLinesViewer</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IVerticalLinesViewer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_verticalLinesViewer</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>        
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeViewLayerProperties</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entryRenderer</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">entryRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">entryRenderer</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">entryRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">entryRenderer</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">dottedGridLines</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;dottedGridLines&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">horizontalGridLineThickness</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGridLineThickness&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">horizontalGridLineColor</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGridLineColor&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">horizontalGridLineAlpha</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGridLineAlpha&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">dottedGridLines</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;dottedGridLines&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">verticalGridLineThickness</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGridLineThickness&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">verticalGridLineColor</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGridLineColor&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span>.<span class="ActionScriptDefault_Text">verticalGridLineAlpha</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGridLineAlpha&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">entryViewerIndex</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">getChildIndex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entryViewer</span> <span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">addChildAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">UIComponent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span> <span class="ActionScriptBracket/Brace">)</span>, <span class="ActionScriptDefault_Text">entryViewerIndex</span> <span class="ActionScriptBracket/Brace">)</span>;    
+            <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">addChildAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">UIComponent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span> <span class="ActionScriptBracket/Brace">)</span>, <span class="ActionScriptDefault_Text">entryViewerIndex</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeEntryLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IList</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">owner</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+   <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

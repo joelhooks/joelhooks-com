@@ -1,0 +1,390 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Image.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">//  ADOBE SYSTEMS INCORPORATED
+</span><span class="ActionScriptComment">//  Copyright 2003-2007 Adobe Systems Incorporated
+</span><span class="ActionScriptComment">//  All Rights Reserved.
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">//  NOTICE: Adobe permits you to use, modify, and distribute this file
+</span><span class="ActionScriptComment">//  in accordance with the terms of the license agreement accompanying it.
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">controls</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">visualempathy</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">slideshow</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">view</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">components</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">Spinner</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">display</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">DisplayObject</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">events</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">Event</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">controls</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">listClasses</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">BaseListData</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">controls</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">listClasses</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">IDropInListItemRenderer</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">controls</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">listClasses</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">IListItemRenderer</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">core</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">IDataRenderer</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">core</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">mx_internal</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">events</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">FlexEvent</span>;
+
+<span class="ActionScriptReserved">use</span> <span class="ActionScriptReserved">namespace</span> <span class="ActionScriptDefault_Text">mx_internal</span>;<span class="ActionScriptBracket/Brace"></span>
+
+<span class="ActionScriptComment">//--------------------------------------
+</span><span class="ActionScriptComment">//  Events
+</span><span class="ActionScriptComment">//--------------------------------------
+</span>
+<span class="ActionScriptASDoc">/**
+ *  Dispatched when the &lt;code&gt;data&lt;/code&gt; property changes.
+ *
+ *  &lt;p&gt;When you use a component as an item renderer,
+ *  the &lt;code&gt;data&lt;/code&gt; property contains the data to display.
+ *  You can listen for this event and update the component
+ *  when the &lt;code&gt;data&lt;/code&gt; property changes.&lt;/p&gt;
+ * 
+ *  @eventType mx.events.FlexEvent.DATA_CHANGE
+ */</span>
+<span class="ActionScriptMetadata">Event</span><span class="ActionScriptString">"dataChange"</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">"mx.events.FlexEvent"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+
+<span class="ActionScriptComment">//--------------------------------------
+</span><span class="ActionScriptComment">//  Other metadata
+</span><span class="ActionScriptComment">//--------------------------------------
+</span>
+<span class="ActionScriptMetadata">DefaultBindingProperty</span><span class="ActionScriptString">"progress"</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">destination</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">"source"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+
+<span class="ActionScriptMetadata">DefaultTriggerEvent</span><span class="ActionScriptString">"complete"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+
+<span class="ActionScriptMetadata">IconFile</span><span class="ActionScriptString">"Image.png"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+
+<span class="ActionScriptASDoc">/**
+ *  The Image control lets you import JPEG, PNG, GIF, and SWF files 
+ *  at runtime. You can also embed any of these files and SVG files at compile time
+ *  by using &lt;code&gt;&amp;#64;Embed(source='filename')&lt;/code&gt;.
+ *
+ *  &lt;p&gt;&lt;strong&gt;Note: &lt;/strong&gt;Flex also includes the SWFLoader control for loading Flex applications. 
+ *  You typically use the Image control for loading static graphic files and SWF files, 
+ *  and use the SWFLoader control for loading Flex applications. The Image control 
+ *  is also designed to be used in custom item renderers and item editors. &lt;/p&gt;
+ *
+ *  &lt;p&gt;Embedded images load immediately, because they are already part of the 
+ *  Flex SWF file. However, they add to the size of your application and slow down 
+ *  the application initialization process. Embedded images also require you to 
+ *  recompile your applications whenever your image files change.&lt;/p&gt; 
+ *  
+ *  &lt;p&gt;The alternative to embedding a resource is to load the resource at runtime. 
+ *  You can load a resource from the local file system in which the SWF file runs, 
+ *  or you can access a remote resource, typically though an HTTP request over a network. 
+ *  These images are independent of your Flex application, so you can change them without 
+ *  causing a recompile operation as long as the names of the modified images remain the same. 
+ *  The referenced images add no additional overhead to an application's initial loading time. 
+ *  However, you might experience a delay when you use the images and load them 
+ *  into Flash Player or AIR. &lt;/p&gt;
+ *  
+ *  &lt;p&gt;A SWF file can access one type of external resource only, either local or over a network; 
+ *  it cannot access both types. You determine the type of access allowed by the SWF file 
+ *  using the &lt;code&gt;use-network&lt;/code&gt; flag when you compile your application. 
+ *  When the &lt;code&gt;use-network&lt;/code&gt; flag is set to &lt;code&gt;false&lt;/code&gt;, you can access 
+ *  resources in the local file system, but not over the network. 
+ *  The default value is &lt;code&gt;true&lt;/code&gt;, which allows you to access resources 
+ *  over the network, but not in the local file system. &lt;/p&gt;
+ *  
+ *  &lt;p&gt;When you load images at runtime, you should be aware of the security restrictions
+ *  of Flash Player or AIR. 
+ *  For example, in Flash Player you can load an image from any domain by using a URL, 
+ *  but the default security settings won't allow your code to access the bitmap data
+ *  of the image unless it came from the same domain as the application. 
+ *  To access bitmap data from images on other servers, you must use a crossdomain.xml file. &lt;/p&gt;
+ *
+ *  &lt;p&gt;The PNG and GIF formats also support the use of an alpha channel
+ *  for creating transparent images.&lt;/p&gt;
+ *
+ *  &lt;p&gt;When you use the Image control as a drop-in item renderer in a List control, 
+ *  either set an explicit row height of the List control, by
+ *  using the &lt;code&gt;rowHeight&lt;/code&gt; property, 
+ *  or set the &lt;code&gt;variableRowHeight&lt;/code&gt; property of the List control 
+ *  to &lt;code&gt;true&lt;/code&gt; to size the row correctly.&lt;/p&gt;
+ * 
+ *  &lt;p&gt;If you find memory problems related to Images objects, try explicitly  
+ *  setting the &lt;code&gt;source&lt;/code&gt; property to null when you are done using 
+ *  the Image object in your application.&lt;/p&gt;
+ *  
+ *  @mxml
+ *  
+ *  &lt;p&gt;The &lt;code&gt;&amp;lt;mx:Image&amp;gt;&lt;/code&gt; tag inherits the tag attributes of its superclass,  
+ *  and adds the following tag attribute:&lt;/p&gt;
+ *
+ *  &lt;pre&gt;
+ *  &amp;lt;mx:Image
+ *    &lt;strong&gt;Events&lt;/strong&gt;
+ *    dataChange="No default"
+ *  /&amp;gt
+ *  &lt;/pre&gt;
+ *  
+ *  @see mx.controls.SWFLoader
+ *
+ *  @includeExample examples/SimpleImage.mxml
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Image</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">SWFLoader</span>
+                   <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">IDataRenderer</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">IDropInListItemRenderer</span><span class="ActionScriptOperator">,</span>
+                   <span class="ActionScriptDefault_Text">IListItemRenderer</span>
+<span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptBracket/Brace"></span>
+    <span class="ActionScriptComment">//include "../core/Version.as";
+</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">spinner</span>:<span class="ActionScriptDefault_Text">Spinner</span>;
+    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Constructor
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  Constructor.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Image</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;<span class="ActionScriptBracket/Brace"></span>
+
+        <span class="ActionScriptComment">// images are generally not interactive
+</span>        <span class="ActionScriptDefault_Text">tabChildren</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptDefault_Text">tabEnabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        <span class="ActionScriptDefault_Text">showInAutomationHierarchy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;     
+        <span class="ActionScriptDefault_Text">spinner</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Spinner</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+          
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">spinner</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">spinner</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">scaleX</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">scaleX</span> <span class="ActionScriptOperator">&lt;=</span> 1 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> 2 <span class="ActionScriptOperator">-</span> <span class="ActionScriptReserved">this</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">scaleX</span> : <span class="ActionScriptDefault_Text">scaleX</span>;
+            <span class="ActionScriptDefault_Text">spinner</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">scaleY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">scaleY</span> <span class="ActionScriptOperator">&lt;=</span> 1 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> 2 <span class="ActionScriptOperator">-</span>  <span class="ActionScriptReserved">this</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">scaleY</span> : <span class="ActionScriptDefault_Text">scaleY</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">spinner</span> <span class="ActionScriptBracket/Brace">)</span>;           
+        <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Variables
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">makeContentVisible</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Flag that will block default data/listData behavior
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">sourceSet</span>:<span class="ActionScriptDefault_Text">Boolean</span>;
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Flag that will block invalidation when a renderer
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">settingBrokenImage</span>:<span class="ActionScriptDefault_Text">Boolean</span>;
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden properties
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  source
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+
+    <span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptString">"sourceChanged"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+    <span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptString">"General"</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">defaultValue</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">""</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">"File"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">source</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>:<span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">settingBrokenImage</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptString">"brokenImageSkin"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">sourceSet</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">settingBrokenImage</span>;
+        
+        <span class="ActionScriptComment">//adds the spinner to the view
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">source</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">contains</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">spinner</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptBracket/Brace"></span>
+            <span class="ActionScriptComment">//trace("$$$ setting source to : "  + value );
+</span>            <span class="ActionScriptComment">//trace("$$$$ : " + this.scaleX + " : " + this.scaleY );
+</span>            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">spinner</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptComment">// TO DO: check this code in here
+</span>            <span class="ActionScriptDefault_Text">spinner</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">scaleX</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">scaleX</span> <span class="ActionScriptOperator">&lt;=</span> 1 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> 2 <span class="ActionScriptOperator">-</span> <span class="ActionScriptReserved">this</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">scaleX</span> : <span class="ActionScriptDefault_Text">scaleX</span>;
+            <span class="ActionScriptDefault_Text">spinner</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">scaleY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">scaleY</span> <span class="ActionScriptOperator">&lt;=</span> 1 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> 2 <span class="ActionScriptOperator">-</span>  <span class="ActionScriptReserved">this</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">scaleY</span> : <span class="ActionScriptDefault_Text">scaleY</span>;
+             
+            <span class="ActionScriptDefault_Text">spinner</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">source</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+    <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Properties
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  data
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for the data property.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_data</span>:<span class="ActionScriptDefault_Text">Object</span>;
+
+    <span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptString">"dataChange"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+    <span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptString">"none"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  The &lt;code&gt;data&lt;/code&gt; property lets you pass a value to the component
+     *  when you use it in an item renderer or item editor. 
+     *  You typically use data binding to bind a field of the &lt;code&gt;data&lt;/code&gt; 
+     *  property to a property of this component.
+     *
+     *  &lt;p&gt;When you use the control as a drop-in item renderer, Flex 
+     *  will use the &lt;code&gt;listData.label&lt;/code&gt; property, if it exists,
+     *  as the value of the &lt;code&gt;source&lt;/code&gt; property of this control, or
+     *  use the &lt;code&gt;data&lt;/code&gt; property as the &lt;code&gt;source&lt;/code&gt; property.&lt;/p&gt;
+     *
+     *  @default null
+     *  @see mx.core.IDataRenderer
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_data</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>:<span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_data</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">sourceSet</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">source</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">listData</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">listData</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">label</span> : <span class="ActionScriptDefault_Text">data</span>;
+            <span class="ActionScriptDefault_Text">sourceSet</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlexEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FlexEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">DATA_CHANGE</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  listData
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for the listData property.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_listData</span>:<span class="ActionScriptDefault_Text">BaseListData</span>;
+
+    <span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptString">"dataChange"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+    <span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptString">"none"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  When a component is used as a drop-in item renderer or drop-in
+     *  item editor, Flex initializes the &lt;code&gt;listData&lt;/code&gt; property
+     *  of the component with the appropriate data from the List control.
+     *  The component can then use the &lt;code&gt;listData&lt;/code&gt; property
+     *  to initialize the other properties of the drop-in
+     *  item renderer
+     *
+     *  &lt;p&gt;You do not set this property in MXML or ActionScript;
+     *  Flex sets it when the component is used as a drop-in item renderer
+     *  or drop-in item editor.&lt;/p&gt;
+     *
+     *  @default null
+     *  @see mx.controls.listClasses.IDropInListItemRenderer
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">listData</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">BaseListData</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_listData</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">listData</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>:<span class="ActionScriptDefault_Text">BaseListData</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_listData</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Inherited methods: UIComponent
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">invalidateSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">data</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">settingBrokenImage</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span>
+            <span class="ActionScriptComment">// don't invalidate otherwise we'll reload and loop forever
+</span>            <span class="ActionScriptReserved">return</span>;
+        <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">invalidateSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>:<span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">,</span>
+                                                  <span class="ActionScriptDefault_Text">unscaledHeight</span>:<span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">makeContentVisible</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">contentHolder</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">contentHolder</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">makeContentVisible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Inherited event handlers: SWFLoader
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">contentLoaderInfo_completeEventHandler</span><span class="ActionScriptBracket/Brace">(</span>
+                                        <span class="ActionScriptDefault_Text">event</span>:<span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">obj</span>:<span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">DisplayObject</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">loader</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">contentLoaderInfo_completeEventHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;<span class="ActionScriptBracket/Brace"></span>
+        
+        <span class="ActionScriptComment">// Hide the object until draw
+</span>        <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptDefault_Text">makeContentVisible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptDefault_Text">spinner</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">stop</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">contains</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">spinner</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">spinner</span> <span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

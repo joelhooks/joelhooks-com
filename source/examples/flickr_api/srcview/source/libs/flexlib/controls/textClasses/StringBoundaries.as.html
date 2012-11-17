@@ -1,0 +1,275 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>StringBoundaries.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">textClasses</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Rectangle</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">TextField</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">StringBoundaries</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+        * The TextField the string is in.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">textField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * The first line of text the string inhabits.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">startLine</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * The last line of text the string inhabits.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endLine</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * The index of the first character in the string.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">startIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * The index of the last character in the string.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * The horizontal offset to apply to the bounding rectangle.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * The vertical offset to apply to the bounding rectangle.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">yOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * TextField.getCharBoundaries seems to be consistently innaccurate by this amount in the x-axis.
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">X_CORRECTION</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 1;
+        
+        <span class="ActionScriptASDoc">/**
+        * TextField.getCharBoundaries seems to be consistently innaccurate by this amount in the y-axis.
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">Y_CORRECTION</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 2;
+        
+        <span class="ActionScriptASDoc">/**
+        * Finds the bounding rectangle of a character range within a TextField object.  If the character range spans multiple lines, bounding rectangles are calculated for each line.
+        * 
+        * @param textField The TextField the string is in.
+        * @param startIndex The start index of the character range.
+        * @param endIndex The end index of the character range.
+        * @param xOffset The horizontal offset to apply to the boundary rectangle.
+        * @param yOffset The vertical offset to apply to the bounding rectangle.
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">StringBoundaries</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">textField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>,<span class="ActionScriptDefault_Text">startIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>,<span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>,<span class="ActionScriptDefault_Text">xOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span>0,<span class="ActionScriptDefault_Text">yOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span>0<span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">textField</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">startLine</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineIndexOfChar</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">endLine</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineIndexOfChar</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">startIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">startIndex</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">endIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">endIndex</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">xOffset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">xOffset</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">yOffset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">yOffset</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Returns the bounding rectangles of the current character range.
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">rectangles</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rects</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>;
+
+            <span class="ActionScriptComment">// Only return rects in the visible area of the TextField
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">firstVisibleIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">scrollV</span><span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastVisibleIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getLineEndOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">bottomScrollV</span><span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// If the visible area of the TextField is larger than the actual character range, only return rects within the character range instead.
+</span>            <span class="ActionScriptDefault_Text">firstVisibleIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">firstVisibleIndex</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">startIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">lastVisibleIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">min</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lastVisibleIndex</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// If the character range spans multiple lines, get bounding rects for each line.
+</span>            <span class="ActionScriptComment">// Otherwise, just get one bounding rect for the whole character range.
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">isMultiline</span><span class="ActionScriptBracket/Brace">){</span>
+                <span class="ActionScriptDefault_Text">rects</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getLineRects</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">firstVisibleIndex</span>, <span class="ActionScriptDefault_Text">lastVisibleIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptReserved">else</span><span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">rects</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">stringRect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">firstVisibleIndex</span>, <span class="ActionScriptDefault_Text">lastVisibleIndex</span><span class="ActionScriptBracket/Brace">)]</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">rects</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Indicates whether or not the character range spans multiple lines.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">isMultiline</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">endLine</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">startLine</span><span class="ActionScriptBracket/Brace">){</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Indicates whether or not the character range has visible characters.
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">isVisible</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">firstVisibleChar</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">scrollV</span><span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastVisibleChar</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getLineEndOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">bottomScrollV</span><span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">endIndex</span> <span class="ActionScriptOperator">&gt;=</span> <span class="ActionScriptDefault_Text">firstVisibleChar</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">startIndex</span> <span class="ActionScriptOperator">&lt;=</span> <span class="ActionScriptDefault_Text">lastVisibleChar</span><span class="ActionScriptBracket/Brace">){</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**     
+        * Returns an array of Rectangles representing the boundaries of a multiline character range.
+        * 
+        * @param startIndex The start index of the character range
+        * @param endIndex The end index of the character range
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getLineRects</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">startLn</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineIndexOfChar</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endLn</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineIndexOfChar</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">numLines</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">endLn</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">startLn</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">startLineEndOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getLineEndOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startLn</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">stringRect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span>,<span class="ActionScriptDefault_Text">startLineEndOffset</span><span class="ActionScriptBracket/Brace">))</span>;
+            
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptOperator">=</span>1; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">numLines</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">){</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">line</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">startLn</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">i</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ind1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">line</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ind2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getLineEndOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">line</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">stringRect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ind1</span>,<span class="ActionScriptDefault_Text">ind2</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endLineOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endLn</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">stringRect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endLineOffset</span>,<span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptBracket/Brace">))</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">r</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**    
+        * Returns a Rectangle representing the boundaries of a singleline character range.
+        * 
+        * @param startIndex The start index of the character range
+        * @param endIndex The end index of the character range
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">stringRect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">{</span>
+            
+            <span class="ActionScriptComment">// If this is a single character, simply return the character boundaries
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">endIndex</span><span class="ActionScriptBracket/Brace">){</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rect</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getAdjustedCharBoundaries</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span>,<span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">rect</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// Use lineHeight instead of Rectangle.height so that multi-line 
+</span>            <span class="ActionScriptComment">// highlights don&apos;t have spaces between lines
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">thisLine</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineIndexOfChar</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lineHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineMetrics</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thisLine</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">height</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rect1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getAdjustedCharBoundaries</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startIndex</span>,<span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rect2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getAdjustedCharBoundaries</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endIndex</span>,<span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rect1</span>.<span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">rect1</span>.<span class="ActionScriptDefault_Text">y</span>, <span class="ActionScriptDefault_Text">rect2</span>.<span class="ActionScriptDefault_Text">right</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">rect1</span>.<span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">lineHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">r</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Returns the index of the last character in a line of text 
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getLineEndOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lineIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lineIndex</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineLength</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lineIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptComment">//return textField.getLineOffset(lineIndex+1) - 1;
+</span>        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Returns the Y position of a character&apos;s bounding rect in consideration of the vertical scroll position of the TextField.
+        * &lt;p&gt;Because getCharBoundaries returns the same bounding rect regardless of the TextField&apos;s scroll position, it is necessary to adjust for it.&lt;/p&gt; 
+        * &lt;p&gt;adjustedCharY = the Y position of the character - the Y position of the first visible line of text.&lt;/p&gt;
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">adjustedCharY</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">{</span>
+            
+            <span class="ActionScriptComment">/*
+                Get the rect of the first visible character
+            */</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lineIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">scrollV</span><span class="ActionScriptOperator">-</span>1;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ind</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lineIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rect</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getCharBoundaries</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ind</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">/*
+                For some characters (such as carriage returns), getCharBoundaries returns null.
+                In those situations, we find the next character that does not return null,
+                sum the line heights up to that point, and subtract that sum from the y
+                position of the character.
+            */</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lineHeights</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptReserved">while</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rect</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">){</span>
+                <span class="ActionScriptDefault_Text">lineHeights</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineMetrics</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lineIndex</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">height</span>;
+                <span class="ActionScriptDefault_Text">lineIndex</span><span class="ActionScriptOperator">++</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lineIndex</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">maxScrollV</span><span class="ActionScriptOperator">+</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">bottomScrollV</span><span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)){</span>
+                    <span class="ActionScriptDefault_Text">rect</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span>0,0,0,0<span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptDefault_Text">rect</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getCharBoundaries</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getLineOffset</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lineIndex</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">rect</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">lineHeights</span>;
+
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">rect</span>.<span class="ActionScriptDefault_Text">y</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Returns the bounding rectangle of a character in consideration of the vertical scroll position of the TextField and other manual offsets.  Also, prevents TextField.getCharBoundaries from returning null and causing an error.
+        *
+        * @param index The index of the character to get boundaries for.
+        * @param applyScrollVOffset Controls whether or not to adjust for the TextField&apos;s vertical scroll position.  Since calls to get adjustedCharY can be expensive, we only call it when necessary.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getAdjustedCharBoundaries</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">index</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">applyScrollVOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rect</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textField</span>.<span class="ActionScriptDefault_Text">getCharBoundaries</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">index</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rect</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">){</span>
+                <span class="ActionScriptDefault_Text">rect</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span>0,0,0,0<span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptReserved">else</span><span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">scrollVOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">applyScrollVOffset</span><span class="ActionScriptBracket/Brace">){</span>
+                    <span class="ActionScriptDefault_Text">scrollVOffset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">adjustedCharY</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptDefault_Text">rect</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">X_CORRECTION</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">xOffset</span>;
+                <span class="ActionScriptDefault_Text">rect</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">Y_CORRECTION</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">yOffset</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">scrollVOffset</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">rect</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,316 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>CanvasButtonAccordionHeader.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">//  Copyright (C) 2003-2006 Adobe Macromedia Software LLC and its licensors.
+</span><span class="ActionScriptComment">//  All Rights Reserved. The following is Source Code and is subject to all
+</span><span class="ActionScriptComment">//  restrictions on such code as contained in the End User License Agreement
+</span><span class="ActionScriptComment">//  accompanying this product.
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">accordionClasses</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">DisplayObject</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MouseEvent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">Accordion</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Button</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">Container</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">EdgeMetrics</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IDataRenderer</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IFlexDisplayObject</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">mx_internal</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">CSSStyleDeclaration</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">ISimpleStyleClient</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">StyleManager</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">CanvasButton</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+
+<span class="ActionScriptReserved">use</span> <span class="ActionScriptReserved">namespace</span> <span class="ActionScriptDefault_Text">mx_internal</span>;
+
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">AccessibilityClass</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">implementation</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;mx.accessibility.AccordionHeaderAccImpl&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptASDoc">/**
+ * The &lt;code&gt;CanvasButtonAccordionHeader&lt;/code&gt; class allows you to easily use a &lt;code&gt;CanvasButton&lt;/code&gt; control as the header
+ * renderer of an &lt;code&gt;Accordion&lt;/code&gt;.
+ * 
+ * This class is a copy of the AccordionHeader class, but instead of subclassing &lt;code&gt;Button&lt;/code&gt;, it subclasses
+ * &lt;code&gt;CanvasButton&lt;/code&gt;.
+ *
+ * @see flexlib.controls.CanvasButton
+ * @see mx.containers.Accordion
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">CanvasButtonAccordionHeader</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">CanvasButton</span> <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">IDataRenderer</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Class mixins
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Placeholder for mixin by AccordionHeaderAccImpl.
+     */</span>
+    <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">createAccessibilityImplementation</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Constructor
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  Constructor.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">CanvasButtonAccordionHeader</span><span class="ActionScriptBracket/Brace">()</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+
+        <span class="ActionScriptComment">// Since we play games with allowing selected to be set without
+</span>        <span class="ActionScriptComment">// toggle being set, we need to clear the default toggleChanged
+</span>        <span class="ActionScriptComment">// flag here otherwise the initially selected header isn&apos;t
+</span>        <span class="ActionScriptComment">// drawn in a selected state.
+</span>        <span class="ActionScriptDefault_Text">toggleChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptDefault_Text">mouseFocusEnabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptDefault_Text">tabEnabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Variables
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">focusObj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>;
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">focusSkin</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IFlexDisplayObject</span>;
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden properties
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  data
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for the _data property.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_data</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+
+    <span class="ActionScriptASDoc">/**
+     *  Stores a reference to the content associated with the header.
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_data</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_data</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  selected
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">selected</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_selected</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+
+        <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeStyles</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">selector</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">CSSStyleDeclaration</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;CanvasButtonAccordionHeader&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">selector</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">selector</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">CSSStyleDeclaration</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptDefault_Text">selector</span>.<span class="ActionScriptDefault_Text">defaultFactory</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptfunction">function</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">fontSize</span> <span class="ActionScriptOperator">=</span> 10;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">fontWeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;bold&quot;</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">disabledSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">downSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">horizontalGap</span> <span class="ActionScriptOperator">=</span> 2;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">overSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">paddingLeft</span> <span class="ActionScriptOperator">=</span> 5;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">paddingRight</span> <span class="ActionScriptOperator">=</span> 5;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">selectedDisabledSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">selectedDownSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">selectedOverSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">selectedUpSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">skin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">textAlign</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;left&quot;</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">upSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">AccordionHeaderSkin</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">setStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;CanvasButtonAccordionHeader&quot;</span>, <span class="ActionScriptDefault_Text">selector</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptDefault_Text">initializeStyles</span><span class="ActionScriptBracket/Brace">()</span>;
+
+
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden methods: UIComponent
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeAccessibility</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(C</span><span class="ActionScriptDefault_Text">anvasButtonAccordionHeader</span>.<span class="ActionScriptDefault_Text">createAccessibilityImplementation</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">CanvasButtonAccordionHeader</span>.<span class="ActionScriptDefault_Text">createAccessibilityImplementation</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+        
+        <span class="ActionScriptComment">// AccordionHeader has a bit of a conflict here. Our styleName points to
+</span>        <span class="ActionScriptComment">// our parent Accordion, which has padding values defined. We also have
+</span>        <span class="ActionScriptComment">// padding values defined on our type selector, but since class selectors
+</span>        <span class="ActionScriptComment">// take precedence over type selectors, the type selector padding values
+</span>        <span class="ActionScriptComment">// are ignored. Force them in here.
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">styleDecl</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">CSSStyleDeclaration</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">className</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleDecl</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">styleDecl</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingLeft&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">))</span>
+                <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingLeft&quot;</span>, <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">styleDecl</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingRight&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">))</span>
+                <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingRight&quot;</span>, <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">drawFocus</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">isFocused</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">// Accordion header focus is drawn inside the control.
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">isFocused</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">isEffectStarted</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">focusObj</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">focusClass</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;focusSkin&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+
+                <span class="ActionScriptDefault_Text">focusObj</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">focusClass</span><span class="ActionScriptBracket/Brace">()</span>;
+
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">focusStyleable</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ISimpleStyleClient</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">focusObj</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">ISimpleStyleClient</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">focusStyleable</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptDefault_Text">focusStyleable</span>.<span class="ActionScriptDefault_Text">styleName</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>;
+
+                <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">focusObj</span><span class="ActionScriptBracket/Brace">)</span>;
+
+                <span class="ActionScriptComment">// Call the draw method if it has one
+</span>                <span class="ActionScriptDefault_Text">focusSkin</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">focusObj</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">IFlexDisplayObject</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">focusSkin</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">focusSkin</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span>0, 0<span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">focusSkin</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">focusObj</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;focusDraw&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">focusObj</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">focusObj</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden methods: Button
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">layoutContents</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,
+                                                 <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,
+                                                 <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">layoutContents</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span>, <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptComment">// Move the focus object to front.
+</span>        <span class="ActionScriptComment">// AccordionHeader needs special treatment because it doesn&apos;t
+</span>        <span class="ActionScriptComment">// show focus by having the standard focus ring display outside.
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">focusObj</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">setChildIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">focusObj</span>, <span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptOperator">-</span> 1<span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden event handlers: Button
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">rollOverHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">rollOverHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptComment">// The halo design specifies that accordion headers overlap
+</span>        <span class="ActionScriptComment">// by a pixel when layed out. In order for the border to be
+</span>        <span class="ActionScriptComment">// completely drawn on rollover, we need to set our index
+</span>        <span class="ActionScriptComment">// here to bring this header to the front.
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">accordion</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Container</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">parent</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">accordion</span>.<span class="ActionScriptDefault_Text">enabled</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">accordion</span>.<span class="ActionScriptDefault_Text">rawChildren</span>.<span class="ActionScriptDefault_Text">setChildIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>,
+                <span class="ActionScriptDefault_Text">accordion</span>.<span class="ActionScriptDefault_Text">rawChildren</span>.<span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptOperator">-</span> 1<span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

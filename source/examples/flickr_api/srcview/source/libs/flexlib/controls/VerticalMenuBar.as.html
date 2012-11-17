@@ -1,0 +1,354 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>VerticalMenuBar.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">menuClasses</span>.<span class="ActionScriptDefault_Text">VerticalMenuItemRenderer</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">DisplayObject</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Point</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Rectangle</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">ApplicationControlBar</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Menu</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">MenuBar</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">menuClasses</span>.<span class="ActionScriptDefault_Text">IMenuBarItemRenderer</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">menuClasses</span>.<span class="ActionScriptDefault_Text">MenuItemRenderer</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">ClassFactory</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IFlexDisplayObject</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MenuEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">managers</span>.<span class="ActionScriptDefault_Text">ISystemManager</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">ISimpleStyleClient</span>;
+
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">IconFile</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;VerticalMenuBar.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptASDoc">/**
+     *  A VerticalMenuBar control defines a vertical, top-level menu bar that contains
+     *  one or menu items, just like the horizontal MenuBar control.
+     * 
+     *  &lt;p&gt;For information and an example on the attributes that you can use 
+     *  in the data provider for the VerticalMenuBar control, see the Menu control.&lt;/p&gt;
+     *
+     *  @mxml
+     *  &lt;p&gt;
+     *  The &lt;code&gt;&amp;lt;flexlib:VerticalMenuBar&amp;gt&lt;/code&gt; tag inherits all of the tag attributes of its superclass, and
+     *  adds the following tag attributes:
+     *  &lt;/p&gt;
+     *  
+     *  &lt;pre&gt;
+     *  &amp;lt;flexlib:VerticalMenuBar
+     *    &lt;b&gt;Properties&lt;/b&gt;
+     *    direction=&quot;left|right&quot;
+     *  
+     *  /&amp;gt;
+     *  &lt;/pre&gt;
+     *  &lt;/p&gt;
+     *
+     *  @see mx.controls.MenuBar
+     *
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">VerticalMenuBar</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">MenuBar</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+           <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">MARGIN_HEIGHT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;        
+        
+        <span class="ActionScriptASDoc">/**
+        * There are two possiblities for direction: left or right. Here we define
+        * these two constants that you should use in your AS code to change the
+        * direction of the VerticalMenuBar. So to change the direction the code would
+        * be something like: 
+        * menubar.direction = VerticalMenuBar.LEFT;
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">LEFT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;left&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * There are two possiblities for direction: left or right. Here we define
+        * these two constants that you should use in your AS code to change the
+        * direction of the VerticalMenuBar.
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">RIGHT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;right&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * @private
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_direction</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">VerticalMenuBar</span>.<span class="ActionScriptDefault_Text">RIGHT</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * Specifies which direction, either left or right, the menu opens. 
+        * 
+        * &lt;p&gt;This can be set via MXML or Actionscript. The direction will take 
+        * effect the next time a menu item is clicked.&lt;/p&gt;
+        * 
+        * @default &quot;right&quot;
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">direction</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_direction</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">direction</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_direction</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_direction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptBracket/Brace">}</span>        
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Constructor
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">VerticalMenuBar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         *  Changed to calculate based on vertical layout. Pretty much
+         *  the same code as in MenuBar, but instad of using the X and width
+         *  properties, now we&apos;re using Y and height.
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,
+                                                  <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastH</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">len</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menuBarItems</span>.<span class="ActionScriptDefault_Text">length</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">clipContent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hideItems</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span> <span class="ActionScriptOperator">==</span> 0 <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">unscaledHeight</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">len</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IMenuBarItemRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menuBarItems</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>;
+    
+                <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">hideItems</span>;
+    
+                <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span>0, <span class="ActionScriptDefault_Text">lastY</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">lastH</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptDefault_Text">lastY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">lastY</span><span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">lastH</span>;
+                <span class="ActionScriptDefault_Text">lastH</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">height</span>;
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">hideItems</span> <span class="ActionScriptOperator">&amp;&amp;</span>
+                    <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">unscaledWidth</span> <span class="ActionScriptOperator">||</span>
+                     <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lastY</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">lastH</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">))</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">clipContent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">/* Here we are omitting setting the size of the background.
+             * I&apos;m not sure when the background comes into play, since without
+             * this part of the code everything seems to look OK to me.
+             * So I&apos;m just leaving it out. Otherwise we would have to duplicate
+             * a local reference to background and reproduce a lot of code
+             * that is private in MenuBar. So screw that.
+             */</span>
+            <span class="ActionScriptComment">/*
+            if (background)
+            {
+                background.setActualSize(unscaledWidth, unscaledHeight);
+                background.visible = !hideItems;
+            }
+            */</span>
+            
+            <span class="ActionScriptComment">// Set a scroll rect to handle clipping.
+</span>            <span class="ActionScriptDefault_Text">scrollRect</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">clipContent</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span>0, 0,
+                    <span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        
+        <span class="ActionScriptASDoc">/**
+         *  Changed to calculate based on vertical layout. Pretty much
+         *  the same code as in MenuBar, but instad of using the X and width
+         *  properties, now we&apos;re using Y and height.
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">len</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menuBarItems</span>.<span class="ActionScriptDefault_Text">length</span>;
+    
+            <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> 0;
+    
+            <span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">DEFAULT_MEASURED_MIN_WIDTH</span>; 
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">len</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">menuBarItems</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span>
+                        <span class="ActionScriptDefault_Text">measuredWidth</span>, <span class="ActionScriptDefault_Text">menuBarItems</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">())</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">len</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">+=</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">MARGIN_HEIGHT</span>;
+            <span class="ActionScriptReserved">else</span> 
+                <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">DEFAULT_MEASURED_MIN_HEIGHT</span>; 
+    
+            <span class="ActionScriptDefault_Text">measuredMinWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">measuredWidth</span>;
+            <span class="ActionScriptDefault_Text">measuredMinHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">measuredHeight</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+       
+        <span class="ActionScriptASDoc">/**
+         * Overridden to allow us to display the Menus to the left or right of the MenuItems.
+         * 
+         * &lt;p&gt;We&apos;re overriding getMenuAt for two reasons. First, we set a custom itemRenderer for 
+         * the menu if we&apos;re supposed to be facing left. Second, we add a listener that gets 
+         * executed when the menu is shown. The secret to what we&apos;re doing is we&apos;re repositiong
+         * the menu only after it has been positioned originally by the mx.controls.MenuBar class.
+         * This allows us to not have to override a ton of private methods of the MenuBar class.
+         * The fundamental problem with extending MenuBar for our purposes is that the showMenu 
+         * method is private. If showMenu was protected we might be able to just override that
+         * and specify our own coordinates for where to place the menu. But instead, we do it
+         * a sneaky way and try to move the Menu the instant it gets shown.&lt;/p&gt;
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getMenuAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">index</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menus</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">index</span><span class="ActionScriptBracket/Brace">]</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">wasNull</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menu</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getMenuAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">index</span><span class="ActionScriptBracket/Brace">)</span>;
+               
+           
+               <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">direction</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">VerticalMenuBar</span>.<span class="ActionScriptDefault_Text">LEFT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">itemRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ClassFactory</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">VerticalMenuItemRenderer</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">itemRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ClassFactory</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MenuItemRenderer</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptComment">/* Now here&apos;s a sneaky part. First, we elminate the openDuration
+             * because that screws the whole thing up. If openDuration is not 1, then
+             * menu shows the opening tween prior to shifting the menu to the
+             * left or right, so we see the menu visibly jump. That&apos;s no good.
+             * And if we set the openDuration to 0 I&apos;ve noticed unexplained behavior
+             * that messes up showing an Alert box. I have no idea why.
+             */</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">wasNull</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;openDuration&quot;</span>, 1<span class="ActionScriptBracket/Brace">)</span>;
+                   
+                   <span class="ActionScriptComment">/* This is the listener that gets executed when the menu is shown.
+                    * Basically we&apos;re going to wait until the menu is shown, and then
+                    * quickly move it over to the right or left.
+                    */</span>
+                   <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;menuShow&quot;</span>, <span class="ActionScriptDefault_Text">moveMenuOnShow</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">menu</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">moveMenuOnShow</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MenuEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">menu</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">menuBar</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MenuBar</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">menuBar</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">parentMenu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">parentMenu</span>;
+
+            <span class="ActionScriptComment">/* OK, cool, we&apos;re going to shift the Menu. But we need to use callLater
+             * because we need to first update the Menu&apos;s x and y position so we can
+             * use that to shift the menu over 
+             */</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">parentMenu</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IMenuBarItemRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menuBar</span>.<span class="ActionScriptDefault_Text">menuBarItems</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">menuBar</span>.<span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+    
+                <span class="ActionScriptDefault_Text">callLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">shiftRootMenu</span>, <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">menu</span>, <span class="ActionScriptDefault_Text">menuBar</span>, <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">])</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">callLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">shiftSubMenu</span>, <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">menu</span>, <span class="ActionScriptDefault_Text">parentMenu</span><span class="ActionScriptBracket/Brace">])</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/** 
+         * If we&apos;re showing the menu to the left, then we need to shift the submenus
+         * to the left as well. Normal functionality is to show the submenu
+         * to the right of the parent menu. So if we&apos;re facing right then
+         * we don&apos;t need to shift the submenu at all.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">shiftSubMenu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span>, <span class="ActionScriptDefault_Text">parentMenu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>        
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_direction</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">VerticalMenuBar</span>.<span class="ActionScriptDefault_Text">LEFT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">parentMenu</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">width</span>, <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/** 
+         * @private
+         * 
+         * The root menus always need to be shifted, either to the right or to the left.
+         * The default Menu functionality is to show the menu directly below the MenuItem.
+         * So we just shift the Menu from where the default places it, and move it to the
+         * right or the left. We also move it up higher, to be at the same y position as 
+         * the MenuItem.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">shiftRootMenu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span>, <span class="ActionScriptDefault_Text">menuBar</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MenuBar</span>, <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IMenuBarItemRenderer</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>        
+            
+            <span class="ActionScriptComment">/* Here&apos;s some code taken from the MenuBar class from the showMenu method
+             * that&apos;s used to calculcate the position that we need to place the menu.
+             * It&apos;s only been modified to adjust the menu to the right or the left of 
+             * the current item.
+             */</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">pt</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Point</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Point</span><span class="ActionScriptBracket/Brace">(</span>0, 0<span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">pt</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">DisplayObject</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">localToGlobal</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pt</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_direction</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">VerticalMenuBar</span>.<span class="ActionScriptDefault_Text">LEFT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">width</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">width</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">height</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">sm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ISystemManager</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">systemManager</span>;
+            
+            <span class="ActionScriptComment">// check to see if we&apos;ll go offscreen
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">+</span> 1 <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">screen</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">screen</span>.<span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">+</span> 1;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">screen</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">screen</span>.<span class="ActionScriptDefault_Text">x</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">screen</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">screen</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">pt</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">DisplayObject</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">sm</span>.<span class="ActionScriptDefault_Text">topLevelSystemManager</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">globalToLocal</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pt</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">pt</span>.<span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

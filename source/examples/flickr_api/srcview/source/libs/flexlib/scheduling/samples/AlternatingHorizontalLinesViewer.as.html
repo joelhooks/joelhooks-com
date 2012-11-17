@@ -1,0 +1,35 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>AlternatingHorizontalLinesViewer.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">samples</span>
+<span class="ActionScriptBracket/Brace">{</span>    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">HorizontalLinesLayoutItem</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">IHorizontalLinesLayout</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">lineRenderer</span>.<span class="ActionScriptDefault_Text">ILineRenderer</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">viewers</span>.<span class="ActionScriptDefault_Text">HorizontalLinesViewer</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">AlternatingHorizontalLinesViewer</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">HorizontalLinesViewer</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">render</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">layout</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IHorizontalLinesLayout</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lineRenderer</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ILineRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getLineRendererForStyling</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">items</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">HorizontalLinesLayoutItem</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">items</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">currentRow</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">floor</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">item</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">rowHeight</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">lineRenderer</span>.<span class="ActionScriptDefault_Text">weight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">currentRow</span> <span class="ActionScriptOperator">%</span> 2 <span class="ActionScriptOperator">?</span> 0 <span class="ActionScriptOperator">:</span> 2;
+                
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">drawLineForItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">item</span>, <span class="ActionScriptDefault_Text">lineRenderer</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

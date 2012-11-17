@@ -1,0 +1,208 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>RFC2817Socket.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">proxies</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">IOErrorEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">ProgressEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">Socket</span>;
+
+    <span class="ActionScriptASDoc">/**
+     * This class allows TCP socket connections through HTTP proxies in accordance with
+     * RFC 2817:
+     * 
+     * ftp://ftp.rfc-editor.org/in-notes/rfc2817.txt
+     * 
+     * It can also be used to make direct connections to a destination, as well. If you
+     * pass the host and port into the constructor, no proxy will be used. You can also
+     * call connect, passing in the host and the port, and if you didn&apos;t set the proxy
+     * info, a direct connection will be made. A proxy is only used after you have called
+     * the setProxyInfo function.
+     * 
+     * The connection to and negotiation with the proxy is completely hidden. All the
+     * same events are thrown whether you are using a proxy or not, and the data you
+     * receive from the target server will look exact as it would if you were connected
+     * to it directly rather than through a proxy.
+     * 
+     * @author Christian Cantrell
+     * 
+     **/</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">RFC2817Socket</span>
+        <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Socket</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">proxyHost</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">host</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">proxyPort</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">port</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">deferredEventHandlers</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">buffer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">()</span>;
+
+        <span class="ActionScriptASDoc">/**
+         * Construct a new RFC2817Socket object. If you pass in the host and the port,
+         * no proxy will be used. If you want to use a proxy, instantiate with no
+         * arguments, call setProxyInfo, then call connect.
+         **/</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">RFC2817Socket</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">host</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">port</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">host</span>, <span class="ActionScriptDefault_Text">port</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Set the proxy host and port number. Your connection will only proxied if
+         * this function has been called.
+         **/</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setProxyInfo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">host</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">port</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">proxyHost</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">host</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">proxyPort</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">port</span>;
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">deferredSocketDataHandler</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">deferredEventHandlers</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">ProgressEvent</span>.<span class="ActionScriptDefault_Text">SOCKET_DATA</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">deferredConnectHandler</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">deferredEventHandlers</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span>.<span class="ActionScriptDefault_Text">CONNECT</span><span class="ActionScriptBracket/Brace">]</span>;
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">deferredSocketDataHandler</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ProgressEvent</span>.<span class="ActionScriptDefault_Text">SOCKET_DATA</span>, <span class="ActionScriptDefault_Text">deferredSocketDataHandler</span>.<span class="ActionScriptDefault_Text">listener</span>, <span class="ActionScriptDefault_Text">deferredSocketDataHandler</span>.<span class="ActionScriptDefault_Text">useCapture</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">deferredConnectHandler</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CONNECT</span>, <span class="ActionScriptDefault_Text">deferredConnectHandler</span>.<span class="ActionScriptDefault_Text">listener</span>, <span class="ActionScriptDefault_Text">deferredConnectHandler</span>.<span class="ActionScriptDefault_Text">useCapture</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Connect to the specified host over the specified port. If you want your
+         * connection proxied, call the setProxyInfo function first.
+         **/</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">override</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">connect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">host</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">port</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">proxyHost</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">redirectConnectEvent</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">redirectSocketDataEvent</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">connect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">host</span>, <span class="ActionScriptDefault_Text">port</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">host</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">host</span>;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">port</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">port</span>;
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CONNECT</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">onConnect</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ProgressEvent</span>.<span class="ActionScriptDefault_Text">SOCKET_DATA</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">onSocketData</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">connect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">proxyHost</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">proxyPort</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onConnect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">writeUTFBytes</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;CONNECT &quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">host</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;:&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">port</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot; HTTP/1.1\n\n&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">flush</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">redirectConnectEvent</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onSocketData</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ProgressEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">bytesAvailable</span> <span class="ActionScriptOperator">!=</span> 0<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">buffer</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">readUTFBytes</span><span class="ActionScriptBracket/Brace">(</span>1<span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">buffer</span>.<span class="ActionScriptDefault_Text">search</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">/\r?\n\r?\n$/</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">checkResponse</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">checkResponse</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ProgressEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">responseCode</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">buffer</span>.<span class="ActionScriptDefault_Text">substr</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">buffer</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot; &quot;</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">+</span>1, 3<span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">responseCode</span>.<span class="ActionScriptDefault_Text">search</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">/^2/</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ioError</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IOErrorEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">IOErrorEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">IOErrorEvent</span>.<span class="ActionScriptDefault_Text">IO_ERROR</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">ioError</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Error connecting to the proxy [&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">proxyHost</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;] on port [&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">proxyPort</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;]: &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">buffer</span>;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ioError</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">redirectSocketDataEvent</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CONNECT</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">bytesAvailable</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">buffer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">redirectConnectEvent</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CONNECT</span>, <span class="ActionScriptDefault_Text">onConnect</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">deferredEventHandler</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">deferredEventHandlers</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span>.<span class="ActionScriptDefault_Text">CONNECT</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">deferredEventHandler</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CONNECT</span>, <span class="ActionScriptDefault_Text">deferredEventHandler</span>.<span class="ActionScriptDefault_Text">listener</span>, <span class="ActionScriptDefault_Text">deferredEventHandler</span>.<span class="ActionScriptDefault_Text">useCapture</span>, <span class="ActionScriptDefault_Text">deferredEventHandler</span>.<span class="ActionScriptDefault_Text">priority</span>, <span class="ActionScriptDefault_Text">deferredEventHandler</span>.<span class="ActionScriptDefault_Text">useWeakReference</span><span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">redirectSocketDataEvent</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ProgressEvent</span>.<span class="ActionScriptDefault_Text">SOCKET_DATA</span>, <span class="ActionScriptDefault_Text">onSocketData</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">deferredEventHandler</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">deferredEventHandlers</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">ProgressEvent</span>.<span class="ActionScriptDefault_Text">SOCKET_DATA</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">deferredEventHandler</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ProgressEvent</span>.<span class="ActionScriptDefault_Text">SOCKET_DATA</span>, <span class="ActionScriptDefault_Text">deferredEventHandler</span>.<span class="ActionScriptDefault_Text">listener</span>, <span class="ActionScriptDefault_Text">deferredEventHandler</span>.<span class="ActionScriptDefault_Text">useCapture</span>, <span class="ActionScriptDefault_Text">deferredEventHandler</span>.<span class="ActionScriptDefault_Text">priority</span>, <span class="ActionScriptDefault_Text">deferredEventHandler</span>.<span class="ActionScriptDefault_Text">useWeakReference</span><span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">override</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>, <span class="ActionScriptDefault_Text">useCapture</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">priority</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptOperator">=</span>0.0, <span class="ActionScriptDefault_Text">useWeakReference</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CONNECT</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ProgressEvent</span>.<span class="ActionScriptDefault_Text">SOCKET_DATA</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">deferredEventHandlers</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">type</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">listener</span>,<span class="ActionScriptDefault_Text">useCapture</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">useCapture</span>, <span class="ActionScriptDefault_Text">priority</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">priority</span>, <span class="ActionScriptDefault_Text">useWeakReference</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">useWeakReference</span><span class="ActionScriptBracket/Brace">}</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">type</span>, <span class="ActionScriptDefault_Text">listener</span>, <span class="ActionScriptDefault_Text">useCapture</span>, <span class="ActionScriptDefault_Text">priority</span>, <span class="ActionScriptDefault_Text">useWeakReference</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

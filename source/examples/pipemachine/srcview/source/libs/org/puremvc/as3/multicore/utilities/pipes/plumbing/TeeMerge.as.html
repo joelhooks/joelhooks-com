@@ -1,0 +1,60 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>TeeMerge.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ PureMVC AS3/MultiCore Utility – Pipes
+ Copyright (c) 2008 Cliff Hall&lt;cliff.hall@puremvc.org&gt;
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">plumbing</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">IPipeFitting</span>;
+    
+    <span class="ActionScriptASDoc">/** 
+     * Merging Pipe Tee.
+     * &lt;P&gt;
+     * Writes the messages from multiple input pipelines into
+     * a single output pipe fitting.&lt;/P&gt;
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">TeeMerge</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Pipe</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Constructor.
+         * &lt;P&gt;
+         * Create the TeeMerge and the two optional constructor inputs.
+         * This is the most common configuration, though you can connect
+         * as many inputs as necessary by calling &lt;code&gt;connectInput&lt;/code&gt;
+         * repeatedly.&lt;/P&gt;
+         * &lt;P&gt;
+         * Connect the single output fitting normally by calling the 
+         * &lt;code&gt;connect&lt;/code&gt; method, as you would with any other IPipeFitting.&lt;/P&gt;
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">TeeMerge</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">input1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">input2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">input1</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">connectInput</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">input1</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">input2</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">connectInput</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">input2</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/** 
+         * Connect an input IPipeFitting.
+         * &lt;P&gt;
+         * NOTE: You can connect as many inputs as you want
+         * by calling this method repeatedly.&lt;/P&gt;
+         * 
+         * @param input the IPipeFitting to connect for input.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">connectInput</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">input</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">input</span>.<span class="ActionScriptDefault_Text">connect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

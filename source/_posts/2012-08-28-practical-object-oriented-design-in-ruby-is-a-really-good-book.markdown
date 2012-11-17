@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "Practical Object Oriented Design in Ruby is a Really Good Book"
+title: "Practical Object Oriented Design is Excellent"
 date: 2012-08-28 16:35
 comments: true
 categories: [books, ood, oop, object-oriented]
 ---
 ![Practical Object-Oriented Design in Ruby](/images/pood.jpeg)
 
-I've been reading the Rough Cut of [Practical Object Oriented Design](http://www.amazon.com/exec/obidos/ASIN/0321721330/joehoobuiblo-20/ref=nosim/), and I have been absolutely enjoying every page. It isn't very often that a new technical book comes along that really strikes me as a "new classic," but this one qualifies. [Sandi Metz](https://twitter.com/sandimetz) has compiled a concise review of [SOLID design principles](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod) in clear approachable language.
+I've been reading the Rough Cut of [Practical Object Oriented Design](http://www.amazon.com/exec/obidos/ASIN/0321721330/joehoobuiblo-20/ref=nosim/), and I have been absolutely enjoying every page. It isn't very often that a technical book comes along that really strikes me as a "new classic," but this one qualifies. [Sandi Metz](https://twitter.com/sandimetz) has compiled a concise review of [SOLID design principles](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod) in clear approachable language.
 
-Don't be put off by the "in Ruby" portion of the title. If you can read code and understand the basics of design patters, this book shouldn't pose any technical hurdles regarding the language the author uses. 
+Don't be put off by the "in Ruby" portion of the title. If you can read code and understand the basics of design patterns, this book shouldn't pose any technical hurdles regarding the language the author uses. 
 
 One of my favorite features of this book was the way she guides us through the anti-patterns that we typically see in our code. We then step through a series of refactorings before arriving at a simple, maintainable, nicely packaged object-oriented design. 
 
