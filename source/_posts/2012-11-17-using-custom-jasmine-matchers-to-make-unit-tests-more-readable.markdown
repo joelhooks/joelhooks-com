@@ -27,7 +27,7 @@ This is bothersome. We have two stacks of `expect` calls that are very similar, 
 
 ## Enter the Custom Matcher
 
-{% gist 4097691 CustomeMatchers.js %} 
+{% gist 4097691 CustomMatchers.js %} 
 
 A custom matcher is nestled in a `beforeEach` function. This will cause Jasmine to load the matcher prior to EVERY `describe` and `it` in your test suite.
 

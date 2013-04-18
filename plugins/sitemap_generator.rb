@@ -138,7 +138,7 @@ module Jekyll
     
     #this is a hack addition to push in my legacy content
     def fill_legacy(urlset)
-      file = File.new("/Volumes/Gonzales/Users/joel/Code/octopress/plugins/sitemapx.xml")
+      file = File.new("/Users/joel/Code/octopress/plugins/sitemapx.xml")
       doc = REXML::Document.new(file)
       root = doc.root
       root.elements.each do |post|
