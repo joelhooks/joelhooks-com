@@ -1,0 +1,235 @@
+
+<!DOCTYPE HTML>
+<html itemscope itemtype="http://schema.org/Article">
+<head>
+	<meta charset="utf-8">
+	<title>Getting to Know VIM - </title>
+	<meta name="author" content="Your Name">
+
+	
+	<meta name="description" content="It&rsquo;s like coming full circle. When I was first introduced to computers, they very much resembled what I see in
+Terminal today. I&rsquo;ve &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+
+
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+
+	<script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<meta property="og:description" content="" />
+<meta property="og:image" content="/images/head.png" />
+<meta property="og:title" value="Getting to Know VIM - My Octopress Blog" />
+<meta property="og:url" value="http://yoursite.com/blog/2013/04/09/getting-to-know-vim/" />                    
+<meta property="og:type" content="website" />                                    
+ 
+
+<script type="text/javascript" src="//use.typekit.net/wbq6rdy.js"></script>
+<script type="text/javascript">try {
+    Typekit.load();
+} catch (e) {
+}</script>
+
+<!-- Start Visual Website Optimizer Asynchronous Code -->
+<script type='text/javascript'>
+var _vwo_code=(function(){
+var account_id=48528,
+settings_tolerance=2000,
+library_tolerance=2500,
+use_existing_jquery=false,
+// DO NOT EDIT BELOW THIS LINE
+f=false,d=document;return{use_existing_jquery:function(){return use_existing_jquery;},library_tolerance:function(){return library_tolerance;},finish:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);}},finished:function(){return f;},load:function(a){var b=d.createElement('script');b.src=a;b.type='text/javascript';b.innerText;b.onerror=function(){_vwo_code.finish();};d.getElementsByTagName('head')[0].appendChild(b);},init:function(){settings_timer=setTimeout('_vwo_code.finish()',settings_tolerance);this.load('//dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&r='+Math.random());var a=d.createElement('style'),b='body{opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;}',h=d.getElementsByTagName('head')[0];a.setAttribute('id','_vis_opt_path_hides');a.setAttribute('type','text/css');if(a.styleSheet)a.styleSheet.cssText=b;else a.appendChild(d.createTextNode(b));h.appendChild(a);return settings_timer;}};}());_vwo_settings_timer=_vwo_code.init();
+</script>
+<!-- End Visual Website Optimizer Asynchronous Code -->
+
+<script type="text/javascript">
+    if(typeof(_vis_opt_top_initialize) == "function") {
+    // Code for Custom Goal: Goal #4
+     _vis_opt_goal_conversion(200);
+    // uncomment the following line to introduce a half second pause to ensure goal always registers with the server
+    _vis_opt_pause(500);
+    }
+</script>
+
+
+
+
+</head>
+
+
+<body>
+	<div class="topbar">
+		<div class="inner">
+			<div class="form">				
+				<form name="header_signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+					<div class="text"><strong>Weekly AngularJS Content Sent Right to Your Inbox:</strong></div>
+					<div class="button-container">
+			        <input class="input" type="email" name="EMAIL" placeholder="hey@you.com"> 
+			        
+			        <a class="button"  onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } document.header_signup.submit();" href="#">Keep me Updated!</a>
+			        </div>
+			        <div class="text">(1~2 emails a week. No spam.)</div>
+		      	</form>	    
+			</div>
+
+		</div>
+
+	</div>
+	<header id="header" class="inner">
+<a href="/"><div class="myface">
+
+</div></a>
+
+
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+
+</nav>
+
+</header>
+	<div id="content" class="inner"><article class="post">
+
+	<h1 itemprop="name" class="title article-title">Getting to Know VIM</h1>
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-09T14:04:00-05:00" pubdate data-updated="true">Apr 9<span>th</span>, 2013</time></div>
+
+	<div class="entry-content">
+		
+		<h2>It&rsquo;s like coming full circle.</h2>
+
+<p>When I was first introduced to computers, they very much resembled what I see in
+Terminal today. I&rsquo;ve always had a distinct fondness for the command line
+interface. That said, when I started using computers professionally most of my
+time has been spent in fancy GUIs. Perhaps because of the roots of my obsession
+I still have an affinity for these text based interfaces.</p>
+
+<p>For the past several years, I&rsquo;ve been constantly poking at vim. I&rsquo;ve gone from
+struggling to remember the <code>:wq</code> sequence to trying my damndest to use
+<code>hjkl</code> instead of my arrow keys. I&rsquo;ve used vim movement cheatsheets as
+desktop backgrounds, and stopped using &lsquo;crutches&rsquo; like nano when I&rsquo;m working on
+a server via ssh.</p>
+
+<p>This year, I&rsquo;ve decided to go full bore with vim. When I&rsquo;m editing text, I want
+to default to vim instead of the many other GUI options I tend to enjoy day to
+day.</p>
+
+<p>And I&rsquo;m having some success!</p>
+
+<p>The excellent <a href="http://pragprog.com/book/dnvim/practical-vim">Practical Vim</a> has
+been extremely helpful. The single most important thing I&rsquo;ve done this go-around
+is to completely remove <em>all</em> of the dotfiles I&rsquo;ve accumulated over the
+years. Some custom bits with <a href="https://github.com/carlhuda/janus">Janus</a>
+installed on top of that. Janus is awesome, but I also had <em>absolutely no idea</em> what was going on. It
+installs all of the &lsquo;essential&rsquo; plugins, but it is too much. I was generally
+left hunting and pecking and doing things poorly.</p>
+
+<p>So I stripped it down, and have been in the process of building up <em>my own
+dotfiles</em> line by line.</p>
+
+<p>It now feels like a tipping point has been reached. I have some core
+understanding of my editor, how it works, and what options are available. I plan
+on documenting this process, including which tools have been useful so far.
+Ultimately my interest in vim lies with using it in conjunction with tmux (rad
+terminal multiplexer) to create a truly unixy command line development
+environment.</p>
+
+	</div>
+
+	<div class="contact">Want to chat about this post? I'd love to hear from you. <br>You can find me on twitter <a href="http://twitter.com/jhooks">@jhooks</a> or via email <a href="mailto:joelhooks@gmail.com?Subject=Hello%20,%20email%20from%20joelhooks.com">joelhooks@gmail.com</a></div>
+
+	
+	<div class="cta">
+		<div class="signup">
+		    <p class="message">
+		      <a id="signup-for-updates"></a>
+              Get weekly AngularJS content and curated links. Keep up to date with the latest, <strong>sign up below</strong>:
+		    </p>
+
+		    <div>
+		      <form name="signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+		        <input class="input" type="email" name="EMAIL" placeholder="Email Address"> 
+		        <div class="button_container"><a class="button" onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } setTimeout(function(){document.signup.submit();},500);" href="#">Send Me Updates!</a></div>
+		        <div class="arrow"></div>
+		      </form>
+		    </div>
+		    <p class="small">I will <strong>never</strong> spam you. Unsubscribe at anytime.</p>
+
+	    </div>
+    </div>
+    
+
+
+</article>
+
+</div>
+	<footer id="footer" class="inner"><p>
+you can learn more about me <a href="/about"> here.</a>
+</p>
+<p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+
+</footer>
+	<script type="text/javascript" src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+    <script type="text/javascript" src="https://gumroad.com/js/gumroad.js"></script>
+
+    <script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '51ddb932613f5d3030000126');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+</script>
+</body>
+</html>

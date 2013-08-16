@@ -1,0 +1,384 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>IcoParser.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">iconLoaderClasses</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">BitmapData</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">Endian</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">Dictionary</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Rectangle</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * A parser for the Windows .ico icon file.
+     * Currently supports only Windows XP style icons, where an 8 bit alpha mask is included
+     * with each image bitmap.
+     */</span>
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">IcoParser</span> <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">IIconParser</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * @inheritDoc
+         */</span>
+         
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">validIcon</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_validIcon</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_validIcon</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @inheritDoc
+         */</span>
+         
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">sizes</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_sizes</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_sizes</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @inheritDoc
+         */</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_data</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">val</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_data</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">val</span>;
+            <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">endian</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Endian</span>.<span class="ActionScriptDefault_Text">LITTLE_ENDIAN</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_data</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constructor
+         */</span>
+         
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">IcoParser</span><span class="ActionScriptBracket/Brace">()</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @inheritDoc
+         */</span>
+         
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parse</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>            
+            <span class="ActionScriptDefault_Text">_validIcon</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parseHeader</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_validIcon</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_validIcon</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parseIconDirs</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_validIcon</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_validIcon</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parseIconImages</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @inheritDoc
+         */</span>
+         
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getIconForSize</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">BitmapData</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_sizes</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldS</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">s</span>;
+                
+                <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span>  <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">_sizes</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">oldS</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">break</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">BitmapData</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">BitmapData</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span>, <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">icon</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IconImage</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_iconImages</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">IconImage</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ba</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">processImage</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">icon</span>.<span class="ActionScriptDefault_Text">icXOR</span> <span class="ActionScriptBracket/Brace">)</span>;
+                        
+            <span class="ActionScriptDefault_Text">ba</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;            
+            <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">setPixels</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span> 0, 0, <span class="ActionScriptDefault_Text">s</span>, <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">)</span>, <span class="ActionScriptDefault_Text">ba</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">mirrorBitmap</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">result</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Parses header information from the icon data
+         */</span>
+         
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseHeader</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">idReserved</span>     <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedShort</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">idType</span>         <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedShort</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">idReserved</span> <span class="ActionScriptOperator">!=</span> 0 <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">idType</span> <span class="ActionScriptOperator">!=</span> 1 <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;    
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">_numIcons</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedShort</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Reads the directory information for each icon in the icon data
+         */</span>
+         
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseIconDirs</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">_numIcons</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">iconDirEntry</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IconDirEntry</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">IconDirEntry</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptDefault_Text">iconDirEntry</span>.<span class="ActionScriptDefault_Text">bWidth</span> <span class="ActionScriptOperator">=</span>             <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">iconDirEntry</span>.<span class="ActionScriptDefault_Text">bHeight</span> <span class="ActionScriptOperator">=</span>             <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">iconDirEntry</span>.<span class="ActionScriptDefault_Text">bColorCount</span> <span class="ActionScriptOperator">=</span>         <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">iconDirEntry</span>.<span class="ActionScriptDefault_Text">bReserved</span> <span class="ActionScriptOperator">=</span>         <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">iconDirEntry</span>.<span class="ActionScriptDefault_Text">wPlanes</span> <span class="ActionScriptOperator">=</span>             <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedShort</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">iconDirEntry</span>.<span class="ActionScriptDefault_Text">wBitCount</span> <span class="ActionScriptOperator">=</span>         <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedShort</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">iconDirEntry</span>.<span class="ActionScriptDefault_Text">dwBytesInRes</span> <span class="ActionScriptOperator">=</span>     <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">iconDirEntry</span>.<span class="ActionScriptDefault_Text">dwImageOffset</span> <span class="ActionScriptOperator">=</span>     <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptDefault_Text">_iconDirEntries</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">iconDirEntry</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Reads icon information and bitmap data for each icon directory in the icon data
+         */</span>
+         
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseIconImages</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dir</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IconDirEntry</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">_iconDirEntries</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dir</span>.<span class="ActionScriptDefault_Text">dwImageOffset</span>;
+                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">header</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">BitmapInfoHeader</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">BitmapInfoHeader</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biSize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biPlanes</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedShort</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biBitCount</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedShort</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biCompression</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biSizeImage</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biXPelsPerMeter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biYPelsPerMeter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biClrUsed</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biClrImportant</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">readUnsignedInt</span><span class="ActionScriptBracket/Brace">()</span>;
+                                
+                <span class="ActionScriptComment">//--    No support yet for bpp &lt; 24
+</span>                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biBitCount</span> <span class="ActionScriptOperator">&lt;</span> 24 <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dir</span>.<span class="ActionScriptDefault_Text">dwImageOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">dir</span>.<span class="ActionScriptDefault_Text">dwBytesInRes</span>;
+                    <span class="ActionScriptReserved">continue</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">iconImage</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IconImage</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">IconImage</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptDefault_Text">iconImage</span>.<span class="ActionScriptDefault_Text">icHeader</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">header</span>;
+                <span class="ActionScriptDefault_Text">iconImage</span>.<span class="ActionScriptDefault_Text">icAND</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ByteArray</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">iconImage</span>.<span class="ActionScriptDefault_Text">icXOR</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ByteArray</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptComment">//--    Skip the color table
+</span>                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">colorTableLen</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biBitCount</span> <span class="ActionScriptOperator">==</span> 32 <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biCompression</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">BI_BITFIELDS</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">colorTableLen</span> <span class="ActionScriptOperator">=</span> 12;    <span class="ActionScriptComment">// 3 DWORDS
+</span>                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">colorTableLen</span>;
+                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">imageLen</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biHeight</span> <span class="ActionScriptOperator">/</span> 2 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">biWidth</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">*</span> 4;
+                <span class="ActionScriptDefault_Text">iconImage</span>.<span class="ActionScriptDefault_Text">icXOR</span>.<span class="ActionScriptDefault_Text">writeBytes</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_data</span>, <span class="ActionScriptDefault_Text">_data</span>.<span class="ActionScriptDefault_Text">position</span>, <span class="ActionScriptDefault_Text">imageLen</span> <span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptComment">//--    Don&apos;t bother reading the AND data -- we&apos;re not going to use it.
+</span>                
+                <span class="ActionScriptDefault_Text">_iconImages</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">dir</span>.<span class="ActionScriptDefault_Text">bWidth</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">iconImage</span>;
+                <span class="ActionScriptDefault_Text">_sizes</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">dir</span>.<span class="ActionScriptDefault_Text">bWidth</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">_sizes</span>.<span class="ActionScriptDefault_Text">sort</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">Array</span>.<span class="ActionScriptDefault_Text">NUMERIC</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptDefault_Text">Array</span>.<span class="ActionScriptDefault_Text">DESCENDING</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Converts each byte in the icon&apos;s XOR data from BGRA to ARGB.
+         */</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">processImage</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">bm</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ByteArray</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">endian</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Endian</span>.<span class="ActionScriptDefault_Text">LITTLE_ENDIAN</span>;
+            
+            <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;
+            
+            <span class="ActionScriptReserved">while</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">bytesAvailable</span> <span class="ActionScriptOperator">&gt;=</span> 4 <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">b</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">g</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">r</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">color</span>   <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptOperator">&lt;&lt;</span> 24 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">r</span> <span class="ActionScriptOperator">&lt;&lt;</span> 16 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">g</span> <span class="ActionScriptOperator">&lt;&lt;</span> 8 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptDefault_Text">b</span>;    
+                
+                <span class="ActionScriptDefault_Text">result</span>.<span class="ActionScriptDefault_Text">writeUnsignedInt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">color</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">result</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Flips the icon about the horizontal axis
+         */</span>
+         
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">mirrorBitmap</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">bmd</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">BitmapData</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>        
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">/</span> 2; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">r1</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span> 0, <span class="ActionScriptDefault_Text">i</span>, <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">width</span>, 1 <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">line1</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">getPixels</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">r1</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">r2</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Rectangle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span> 0, <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">-</span> 1, <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">width</span>, 1 <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">line2</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">getPixels</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">r2</span> <span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptDefault_Text">line1</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;
+                <span class="ActionScriptDefault_Text">line2</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;
+                
+                <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">setPixels</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">r1</span>, <span class="ActionScriptDefault_Text">line2</span> <span class="ActionScriptBracket/Brace">)</span>;    
+                <span class="ActionScriptDefault_Text">bmd</span>.<span class="ActionScriptDefault_Text">setPixels</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">r2</span>, <span class="ActionScriptDefault_Text">line1</span> <span class="ActionScriptBracket/Brace">)</span>;    
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Storage for the number of icons in the icon daa.
+         */</span>
+         
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_numIcons</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Storage for the icon directories
+         */</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_iconDirEntries</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Storage for the icon images
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_iconImages</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Dictionary</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">()</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * Constants defined in Wingdi.h
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">BI_RGB</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">BI_RLE8</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 1;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">BI_RLE4</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 2;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">BI_BITFIELDS</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 3;
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;    
+
+<span class="ActionScriptASDoc">/**
+ * @private
+ * ICONDIRENTRY struct from Windows headers
+ */</span>
+<span class="ActionScriptReserved">internal</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">IconDirEntry</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bWidth</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;    <span class="ActionScriptComment">// Width, in pixels, of the image
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bHeight</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;    <span class="ActionScriptComment">// Height, in pixels, of the image
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bColorCount</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;    <span class="ActionScriptComment">// Number of colors in image (0 if &gt;=8bpp)
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bReserved</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;    <span class="ActionScriptComment">// Reserved ( must be 0)
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">wPlanes</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;    <span class="ActionScriptComment">// Color Planes
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">wBitCount</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;    <span class="ActionScriptComment">// Bits per pixel
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dwBytesInRes</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;    <span class="ActionScriptComment">// How many bytes in this resource?
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dwImageOffset</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;    <span class="ActionScriptComment">// Where in the file is this image?
+</span><span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptASDoc">/**
+ * @private
+ * ICONIMAGE struct from Windows headers
+ */</span>
+ 
+<span class="ActionScriptReserved">internal</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">IconImage</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">icHeader</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">BitmapInfoHeader</span>;        <span class="ActionScriptComment">// DIB header
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">icColors</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span>;            <span class="ActionScriptComment">// Color table
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">icXOR</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span>;            <span class="ActionScriptComment">// DIB bits for XOR mask
+</span>    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">icAND</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ByteArray</span>;               <span class="ActionScriptComment">// DIB bits for AND mask
+</span><span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptASDoc">/**
+ * @private
+ * BITMAPINFOHEADER from Windows headers
+ */</span>
+
+<span class="ActionScriptReserved">internal</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">BitmapInfoHeader</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biSize</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biWidth</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biHeight</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biPlanes</span>            <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biBitCount</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biCompression</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biSizeImage</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biXPelsPerMeter</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biYPelsPerMeter</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biClrUsed</span>        <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">biClrImportant</span>    <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>;
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

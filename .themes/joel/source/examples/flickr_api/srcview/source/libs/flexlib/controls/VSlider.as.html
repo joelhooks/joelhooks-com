@@ -1,0 +1,105 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>VSlider.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">//  Copyright (C) 2003-2006 Adobe Macromedia Software LLC and its licensors.
+</span><span class="ActionScriptComment">//  All Rights Reserved. The following is Source Code and is subject to all
+</span><span class="ActionScriptComment">//  restrictions on such code as contained in the End User License Agreement
+</span><span class="ActionScriptComment">//  accompanying this product.
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">sliderClasses</span>.<span class="ActionScriptDefault_Text">ExtendedSlider</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">sliderClasses</span>.<span class="ActionScriptDefault_Text">SliderDirection</span>;
+
+<span class="ActionScriptComment">//--------------------------------------
+</span><span class="ActionScriptComment">//  Styles
+</span><span class="ActionScriptComment">//--------------------------------------
+</span>
+<span class="ActionScriptASDoc">/**
+ *  The location of the data tip relative to the thumb.
+ *  Possible values are &lt;code&gt;&quot;left&quot;&lt;/code&gt;, &lt;code&gt;&quot;right&quot;&lt;/code&gt;,
+ *  &lt;code&gt;&quot;top&quot;&lt;/code&gt;, and &lt;code&gt;&quot;bottom&quot;&lt;/code&gt;.
+ *  
+ *  @default &quot;left&quot;
+ */</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;dataTipPlacement&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;String&quot;</span>, <span class="ActionScriptDefault_Text">enumeration</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;left, top, right, bottom&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptComment">//--------------------------------------
+</span><span class="ActionScriptComment">//  Excluded APIs
+</span><span class="ActionScriptComment">//--------------------------------------
+</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;direction&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;property&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptComment">//--------------------------------------
+</span><span class="ActionScriptComment">//  Other metadata
+</span><span class="ActionScriptComment">//--------------------------------------
+</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">DefaultBindingProperty</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;value&quot;</span>, <span class="ActionScriptDefault_Text">destination</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;labels&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">DefaultTriggerEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;change&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">IconFile</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;VSlider.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptASDoc">/**    
+ *  An alternative to the VSlider control included in the Flex framework. This 
+ *  version of the VSlider allows you to drag the region between the thumbs, if
+ *  the slider has mutliple thumbs. If there is more than one thumb then the region
+ *  between the topmost thumb and the bottommost thumb is draggable.
+ * 
+ *  &lt;p&gt;To use this control an enable the draggable regions between the thumbs you
+ *  need to set the &lt;code&gt;thumbCount&lt;/code&gt; to something greater than 1, otherwise
+ *  this control will work exactly like the original VSlider.
+ *   
+ *  @mxml
+ *  
+ *  &lt;p&gt;The &lt;code&gt;&amp;lt;flexlib:VSlider&amp;gt;&lt;/code&gt; tag inherits all of the tag attributes
+ *  of its superclass, and adds the following tag attribute:&lt;/p&gt;
+ * 
+ *  &lt;pre&gt;
+ *  &amp;lt;flexlib:VSlider
+ *    &lt;strong&gt;Styles&lt;/strong&gt;
+ *    dataTipPlacement=&quot;top&quot;
+ *  /&amp;gt;
+ *  &lt;/pre&gt;
+ *  &lt;/p&gt;
+ *      
+ *  @see mx.controls.VSlider
+ *  @see flexlib.controls.HSlider
+ *  @see flexlib.baseClasses.SliderBase
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">VSlider</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">ExtendedSlider</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//include &quot;../core/Version.as&quot;;
+</span>    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Constructor
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  Constructor.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">VSlider</span><span class="ActionScriptBracket/Brace">()</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+
+        <span class="ActionScriptDefault_Text">direction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderDirection</span>.<span class="ActionScriptDefault_Text">VERTICAL</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

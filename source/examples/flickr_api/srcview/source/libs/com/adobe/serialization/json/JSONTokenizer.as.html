@@ -1,0 +1,663 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>JSONTokenizer.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">serialization</span>.<span class="ActionScriptDefault_Text">json</span> <span class="ActionScriptBracket/Brace">{</span>
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">JSONTokenizer</span> <span class="ActionScriptBracket/Brace">{</span>
+        
+        <span class="ActionScriptASDoc">/** 
+         * Flag indicating if the tokenizer should only recognize
+         * standard JSON tokens.  Setting to &lt;code&gt;false&lt;/code&gt; allows
+         * tokens such as NaN and allows numbers to be formatted as
+         * hex, etc.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">strict</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+    
+        <span class="ActionScriptASDoc">/** The object that will get parsed from the JSON string */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+        
+        <span class="ActionScriptASDoc">/** The JSON string to be parsed */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">jsonString</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptASDoc">/** The current parsing location in the JSON string */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">loc</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        
+        <span class="ActionScriptASDoc">/** The current character in the JSON string during parsing */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ch</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constructs a new JSONDecoder to parse a JSON string 
+         * into a native object.
+         *
+         * @param s The JSON string to be converted
+         *        into a native object
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">JSONTokenizer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">strict</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">jsonString</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">s</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">strict</span>;
+            <span class="ActionScriptDefault_Text">loc</span> <span class="ActionScriptOperator">=</span> 0;
+            
+            <span class="ActionScriptComment">// prime the pump by getting the first character
+</span>            <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Gets the next token in the input sting and advances
+        * the character to the next character after the token
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getNextToken</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONToken</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">token</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONToken</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">JSONToken</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">// skip any whitespace / comments since the last 
+</span>            <span class="ActionScriptComment">// token was read
+</span>            <span class="ActionScriptDefault_Text">skipIgnored</span><span class="ActionScriptBracket/Brace">()</span>;
+                        
+            <span class="ActionScriptComment">// examine the new character and see what we have...
+</span>            <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;{&apos;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">LEFT_BRACE</span>;
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;{&apos;</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">break</span>
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;}&apos;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACE</span>;
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;}&apos;</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">break</span>
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;[&apos;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">LEFT_BRACKET</span>;
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;[&apos;</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">break</span>
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;]&apos;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACKET</span>;
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;]&apos;</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">break</span>
+                
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;,&apos;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">COMMA</span>;
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;,&apos;</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">break</span>
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;:&apos;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">COLON</span>;
+                    <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;:&apos;</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;t&apos;</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptComment">// attempt to read true
+</span>                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">possibleTrue</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;t&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">possibleTrue</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;true&quot;</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">TRUE</span>;
+                        <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                        <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting &apos;true&apos; but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">possibleTrue</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptReserved">break</span>;
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;f&apos;</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptComment">// attempt to read false
+</span>                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">possibleFalse</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;f&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">possibleFalse</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;false&quot;</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">FALSE</span>;
+                        <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                        <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting &apos;false&apos; but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">possibleFalse</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptReserved">break</span>;
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;n&apos;</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptComment">// attempt to read null
+</span>                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">possibleNull</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;n&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">possibleNull</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;null&quot;</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">NULL</span>;
+                        <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+                        <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting &apos;null&apos; but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">possibleNull</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptReserved">break</span>;
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;N&apos;</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptComment">// attempt to read NaN
+</span>                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">possibleNaN</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;N&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">possibleNaN</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;NaN&quot;</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">NAN</span>;
+                        <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">NaN</span>;
+                        <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting &apos;NaN&apos; but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">possibleNaN</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptReserved">break</span>;
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;&quot;&apos;</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptComment">// the start of a string
+</span>                    <span class="ActionScriptDefault_Text">token</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">readString</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                    
+                <span class="ActionScriptReserved">default</span><span class="ActionScriptOperator">:</span> 
+                    <span class="ActionScriptComment">// see if we can read a number
+</span>                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;-&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">token</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">readNumber</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptComment">// check for reading past the end of the string
+</span>                        <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>                        
+                        <span class="ActionScriptComment">// not sure what was in the input string - it&apos;s not
+</span>                        <span class="ActionScriptComment">// anything we expected
+</span>                        <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Unexpected &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot; encountered&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">token</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Attempts to read a string from the input string.  Places
+         * the character location at the first character after the
+         * string.  It is assumed that ch is &quot; before this method is called.
+         *
+         * @return the JSONToken with the string value if a string could
+         *        be read.  Throws an error otherwise.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">readString</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONToken</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// the string to store the string we&apos;ll try to read
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">string</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+            
+            <span class="ActionScriptComment">// advance past the first &quot;
+</span>            <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptString">&apos;&quot;&apos;</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptString">&apos;&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>                    
+                <span class="ActionScriptComment">// unescape the escape sequences in the string
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;\\&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>    
+                    <span class="ActionScriptComment">// get the next character so we know what
+</span>                    <span class="ActionScriptComment">// to unescape
+</span>                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                    <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>    
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;&quot;&apos;</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptComment">// quotation mark
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;&quot;&apos;</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;/&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// solidus
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;/&quot;</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                            
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;\\&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// reverse solidus
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;\\&apos;</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                            
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;b&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// bell
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;\b&apos;</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                            
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;f&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// form feed
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;\f&apos;</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                            
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;n&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// newline
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;\n&apos;</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                            
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;r&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// carriage return
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;\r&apos;</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                            
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;t&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// horizontal tab
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;\t&apos;</span>
+                            <span class="ActionScriptReserved">break</span>;
+                        
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;u&apos;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptComment">// convert a unicode escape sequence
+</span>                            <span class="ActionScriptComment">// to it&apos;s character value - expecting
+</span>                            <span class="ActionScriptComment">// 4 hex digits
+</span>                            
+                            <span class="ActionScriptComment">// save the characters as a string we&apos;ll convert to an int
+</span>                            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hexValue</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+                            
+                            <span class="ActionScriptComment">// try to find 4 hex characters
+</span>                            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> 4; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptBracket/Brace">{</span>
+                                <span class="ActionScriptComment">// get the next character and determine
+</span>                                <span class="ActionScriptComment">// if it&apos;s a valid hex digit or not
+</span>                                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">isHexDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                                <span class="ActionScriptBracket/Brace">{</span>
+                                    <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot; Excepted a hex digit, but found: &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span>;
+                                <span class="ActionScriptBracket/Brace">}</span>
+                                <span class="ActionScriptComment">// valid, add it to the value
+</span>                                <span class="ActionScriptDefault_Text">hexValue</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                            <span class="ActionScriptBracket/Brace">}</span>
+                            
+                            <span class="ActionScriptComment">// convert hexValue to an integer, and use that
+</span>                            <span class="ActionScriptComment">// integrer value to create a character to add
+</span>                            <span class="ActionScriptComment">// to our string.
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">String</span>.<span class="ActionScriptDefault_Text">fromCharCode</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">parseInt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">hexValue</span>, 16 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+                            
+                            <span class="ActionScriptReserved">break</span>;
+                    
+                        <span class="ActionScriptReserved">default</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptComment">// couldn&apos;t unescape the sequence, so just
+</span>                            <span class="ActionScriptComment">// pass it through
+</span>                            <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;\\&apos;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">ch</span>;
+                        
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// didn&apos;t have to unescape, so add the character to the string
+</span>                    <span class="ActionScriptDefault_Text">string</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                    
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptComment">// move to the next character
+</span>                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// we read past the end of the string without closing it, which
+</span>            <span class="ActionScriptComment">// is a parse error
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Unterminated string literal&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// move past the closing &quot; in the input string
+</span>            <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">// the token for the string we&apos;ve just read
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">token</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONToken</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">JSONToken</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">STRING</span>;
+            <span class="ActionScriptComment">// attach to the string to the token so we can return it
+</span>            <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">string</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">token</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Attempts to read a number from the input string.  Places
+         * the character location at the first character after the
+         * number.
+         * 
+         * @return The JSONToken with the number value if a number could
+         *         be read.  Throws an error otherwise.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">readNumber</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONToken</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// the string to accumulate the number characters
+</span>            <span class="ActionScriptComment">// into that we&apos;ll convert to a number at the end
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">input</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+            
+            <span class="ActionScriptComment">// check for a negative number
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;-&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;-&apos;</span>;
+                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// the number must start with a digit
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting a digit&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// 0 can only be the first digit if it
+</span>            <span class="ActionScriptComment">// is followed by a decimal point
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;0&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptComment">// make sure no other digits come after 0
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;A digit cannot immediately follow 0&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptComment">// unless we have 0x which starts a hex number, but this
+</span>                <span class="ActionScriptComment">// doesn&apos;t match JSON spec so check for not strict mode.
+</span>                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;x&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// include the x in the input
+</span>                    <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                    <span class="ActionScriptComment">// need at least one hex digit after 0x to
+</span>                    <span class="ActionScriptComment">// be valid
+</span>                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isHexDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                        <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Number in hex format require at least one hex digit after \&quot;0x\&quot;&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;    
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptComment">// consume all of the hex values
+</span>                    <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isHexDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                        <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// read numbers while we can
+</span>                <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// check for a decimal value
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;.&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&apos;.&apos;</span>;
+                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptComment">// after the decimal there has to be a digit
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting a digit&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptComment">// read more numbers to get the decimal value
+</span>                <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// check for scientific notation
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;e&apos;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;E&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;e&quot;</span>
+                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptComment">// check for sign
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;+&apos;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;-&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptComment">// require at least one number for the exponent
+</span>                <span class="ActionScriptComment">// in this case
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Scientific notation number needs exponent value&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                            
+                <span class="ActionScriptComment">// read in the exponent
+</span>                <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// convert the string to a number value
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">num</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">input</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isFinite</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">num</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">num</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// the token for the number that we&apos;ve read
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">token</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONToken</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">JSONToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">NUMBER</span>;
+                <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">num</span>;
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">token</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Number &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">num</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot; is not valid!&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * Reads the next character in the input
+         * string and advances the character location.
+         *
+         * @return The next character in the input string, or
+         *        null if we&apos;ve read past the end.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">jsonString</span>.<span class="ActionScriptDefault_Text">charAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">loc</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Advances the character location past any
+         * sort of white space and comments
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">skipIgnored</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">originalLoc</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+            
+            <span class="ActionScriptComment">// keep trying to skip whitespace and comments as long
+</span>            <span class="ActionScriptComment">// as we keep advancing past the original location 
+</span>            <span class="ActionScriptReserved">do</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">originalLoc</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">loc</span>;
+                <span class="ActionScriptDefault_Text">skipWhite</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">skipComments</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">originalLoc</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">loc</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Skips comments in the input string, either
+         * single-line or multi-line.  Advances the character
+         * to the first position after the end of the comment.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">skipComments</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;/&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// Advance past the first / to find out what type of comment
+</span>                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;/&apos;</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptComment">// single-line comment, read through end of line
+</span>                        
+                        <span class="ActionScriptComment">// Loop over the characters until we find
+</span>                        <span class="ActionScriptComment">// a newline or until there&apos;s no more characters left
+</span>                        <span class="ActionScriptReserved">do</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                        <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptString">&apos;\n&apos;</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptString">&apos;&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+                        
+                        <span class="ActionScriptComment">// move past the \n
+</span>                        <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                        
+                        <span class="ActionScriptReserved">break</span>;
+                    
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;*&apos;</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptComment">// multi-line comment, read until closing */
+</span>
+                        <span class="ActionScriptComment">// move past the opening *
+</span>                        <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                        
+                        <span class="ActionScriptComment">// try to find a trailing */
+</span>                        <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;*&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptBracket/Brace">{</span>
+                                <span class="ActionScriptComment">// check to see if we have a closing /
+</span>                                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;/&apos;</span><span class="ActionScriptBracket/Brace">)</span>
+                                <span class="ActionScriptBracket/Brace">{</span>
+                                    <span class="ActionScriptComment">// move past the end of the closing */
+</span>                                    <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                                    <span class="ActionScriptReserved">break</span>;
+                                <span class="ActionScriptBracket/Brace">}</span>
+                            <span class="ActionScriptBracket/Brace">}</span>
+                            <span class="ActionScriptReserved">else</span>
+                            <span class="ActionScriptBracket/Brace">{</span>
+                                <span class="ActionScriptComment">// move along, looking if the next character is a *
+</span>                                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+                            <span class="ActionScriptBracket/Brace">}</span>
+                            
+                            <span class="ActionScriptComment">// when we&apos;re here we&apos;ve read past the end of 
+</span>                            <span class="ActionScriptComment">// the string without finding a closing */, so error
+</span>                            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;&apos;</span> <span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptBracket/Brace">{</span>
+                                <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Multi-line comment not closed&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptBracket/Brace">}</span>
+
+                        <span class="ActionScriptReserved">break</span>;
+                    
+                    <span class="ActionScriptComment">// Can&apos;t match a comment after a /, so it&apos;s a parsing error
+</span>                    <span class="ActionScriptReserved">default</span><span class="ActionScriptOperator">:</span>
+                        <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Unexpected &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot; encountered (expecting &apos;/&apos; or &apos;*&apos; )&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Skip any whitespace in the input string and advances
+         * the character to the first character after any possible
+         * whitespace.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">skipWhite</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>    
+            <span class="ActionScriptComment">// As long as there are spaces in the input 
+</span>            <span class="ActionScriptComment">// stream, advance the current location pointer
+</span>            <span class="ActionScriptComment">// past them
+</span>            <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isWhiteSpace</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">nextChar</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Determines if a character is whitespace or not.
+         *
+         * @return True if the character passed in is a whitespace
+         *    character
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">isWhiteSpace</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos; &apos;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;\t&apos;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;\n&apos;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&apos;\r&apos;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Determines if a character is a digit [0-9].
+         *
+         * @return True if the character passed in is a digit
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">&gt;=</span> <span class="ActionScriptString">&apos;0&apos;</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">&lt;=</span> <span class="ActionScriptString">&apos;9&apos;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Determines if a character is a digit [0-9].
+         *
+         * @return True if the character passed in is a digit
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">isHexDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// get the uppercase value of ch so we only have
+</span>            <span class="ActionScriptComment">// to compare the value between &apos;A&apos; and &apos;F&apos;
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">uc</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ch</span>.<span class="ActionScriptDefault_Text">toUpperCase</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">// a hex digit is a digit of A-F, inclusive ( using
+</span>            <span class="ActionScriptComment">// our uppercase constraint )
+</span>            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isDigit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">uc</span> <span class="ActionScriptOperator">&gt;=</span> <span class="ActionScriptString">&apos;A&apos;</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">uc</span> <span class="ActionScriptOperator">&lt;=</span> <span class="ActionScriptString">&apos;F&apos;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         * Raises a parsing error with a specified message, tacking
+         * on the error location and the original string.
+         *
+         * @param message The message indicating why the error occurred
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">throw</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">JSONParseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span>, <span class="ActionScriptDefault_Text">loc</span>, <span class="ActionScriptDefault_Text">jsonString</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

@@ -1,0 +1,57 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>QueueControlMessage.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ PureMVC AS3/MultiCore Utility – Pipes
+ Copyright (c) 2008 Cliff Hall&lt;cliff.hall@puremvc.org&gt;
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">messages</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptASDoc">/**
+     * Queue Control Message.
+     * &lt;P&gt;
+     * A special message for controlling the behavior of a Queue.&lt;/P&gt;
+     * &lt;P&gt;
+     * When written to a pipeline containing a Queue, the type
+     * of the message is interpreted and acted upon by the Queue.&lt;/P&gt;
+     * &lt;P&gt;
+     * Unlike filters, multiple serially connected queues aren&apos;t 
+     * very useful and so they do not require a name. If multiple
+     * queues are connected serially, the message will be acted 
+     * upon by the first queue only.&lt;/P&gt;
+     */</span> 
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">QueueControlMessage</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Message</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">BASE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>  <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Message</span>.<span class="ActionScriptDefault_Text">BASE</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&apos;/queue/&apos;</span>; 
+
+        <span class="ActionScriptASDoc">/**
+         * Flush the queue.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FLUSH</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>     <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">BASE</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&apos;flush&apos;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Toggle to sort-by-priority operation mode.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">SORT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>      <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">BASE</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&apos;sort&apos;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Toggle to FIFO operation mode (default behavior).
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FIFO</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>      <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">BASE</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&apos;fifo&apos;</span>;
+
+        <span class="ActionScriptComment">// Constructor
+</span>        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">QueueControlMessage</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">type</span>  <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

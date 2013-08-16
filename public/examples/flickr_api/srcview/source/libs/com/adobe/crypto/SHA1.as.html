@@ -1,0 +1,282 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>SHA1.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">crypto</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">IntUtil</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">Base64Encoder</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *  US Secure Hash Algorithm 1 (SHA1)
+     *
+     *  Implementation based on algorithm description at 
+     *  http://www.faqs.org/rfcs/rfc3174.html
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">SHA1</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">digest</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         *  Performs the SHA1 hash algorithm on a string.
+         *
+         *  @param s        The string to hash
+         *  @return            A string containing the hash value of s
+         *  @langversion    ActionScript 3.0
+         *  @playerversion    9.0
+         *  @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">hash</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">createBlocksFromString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">byteArray</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">hashBlocks</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">blocks</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         *  Performs the SHA1 hash algorithm on a ByteArray.
+         *
+         *  @param data        The ByteArray data to hash
+         *  @return            A string containing the hash value of data
+         *  @langversion    ActionScript 3.0
+         *  @playerversion    9.0
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">hashBytes</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SHA1</span>.<span class="ActionScriptDefault_Text">createBlocksFromByteArray</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">data</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">byteArray</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">hashBlocks</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">toHex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readInt</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         *  Performs the SHA1 hash algorithm on a string, then does
+         *  Base64 encoding on the result.
+         *
+         *  @param s        The string to hash
+         *  @return            The base64 encoded hash value of s
+         *  @langversion    ActionScript 3.0
+         *  @playerversion    9.0
+         *  @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">hashToBase64</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SHA1</span>.<span class="ActionScriptDefault_Text">createBlocksFromString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">byteArray</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">hashBlocks</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// ByteArray.toString() returns the contents as a UTF-8 string,
+</span>            <span class="ActionScriptComment">// which we can&apos;t use because certain byte sequences might trigger
+</span>            <span class="ActionScriptComment">// a UTF-8 conversion.  Instead, we convert the bytes to characters
+</span>            <span class="ActionScriptComment">// one by one.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">charsInByteArray</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+            <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">j</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">j</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">j</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">byte</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">readUnsignedByte</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">charsInByteArray</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">String</span>.<span class="ActionScriptDefault_Text">fromCharCode</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">byte</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">encoder</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Base64Encoder</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Base64Encoder</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">encoder</span>.<span class="ActionScriptDefault_Text">encode</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">charsInByteArray</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">encoder</span>.<span class="ActionScriptDefault_Text">flush</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">hashBlocks</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// initialize the h&apos;s
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">h0</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x67452301</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">h1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xefcdab89</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">h2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x98badcfe</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">h3</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x10325476</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">h4</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xc3d2e1f0</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">len</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">blocks</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">(</span> 80 <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// loop over all of the blocks
+</span>            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">len</span>; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">+=</span> 16 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+                <span class="ActionScriptComment">// 6.1.c
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">h0</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">b</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">h1</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">c</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">h2</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">h3</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">h4</span>;
+                
+                <span class="ActionScriptComment">// 80 steps to process each block
+</span>                <span class="ActionScriptComment">// TODO: unroll for faster execution, or 4 loops of
+</span>                <span class="ActionScriptComment">// 20 each to avoid the k and f function calls
+</span>                <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 80; <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 16 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptComment">// 6.1.a
+</span>                        <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptBracket/Brace">]</span>;
+                    <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptComment">// 6.1.b
+</span>                        <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">rol</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">-</span> 3 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">^</span> <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">-</span> 8 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">^</span> <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">-</span> 14 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">^</span> <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">-</span> 16 <span class="ActionScriptBracket/Brace">]</span>, 1 <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptComment">// 6.1.d
+</span>                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">temp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">rol</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">a</span>, 5 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">f</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span>, <span class="ActionScriptDefault_Text">b</span>, <span class="ActionScriptDefault_Text">c</span>, <span class="ActionScriptDefault_Text">d</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">k</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    
+                    <span class="ActionScriptDefault_Text">e</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>;
+                    <span class="ActionScriptDefault_Text">d</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">c</span>;
+                    <span class="ActionScriptDefault_Text">c</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IntUtil</span>.<span class="ActionScriptDefault_Text">rol</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">b</span>, 30 <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">b</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">a</span>;
+                    <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">temp</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptComment">// 6.1.e
+</span>                <span class="ActionScriptDefault_Text">h0</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">a</span>;
+                <span class="ActionScriptDefault_Text">h1</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">b</span>;
+                <span class="ActionScriptDefault_Text">h2</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">c</span>;
+                <span class="ActionScriptDefault_Text">h3</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">d</span>;
+                <span class="ActionScriptDefault_Text">h4</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">e</span>;        
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">byteArray</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ByteArray</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">writeInt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h0</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">writeInt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h1</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">writeInt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h2</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">writeInt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h3</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">writeInt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h4</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">byteArray</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;
+            
+            <span class="ActionScriptDefault_Text">digest</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ByteArray</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">digest</span>.<span class="ActionScriptDefault_Text">writeBytes</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">byteArray</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">digest</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">byteArray</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *  Performs the logical function based on t
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">f</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">b</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">c</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 20 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">b</span> <span class="ActionScriptOperator">&amp;</span> <span class="ActionScriptDefault_Text">c</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptBracket/Brace">(</span> ~<span class="ActionScriptDefault_Text">b</span> <span class="ActionScriptOperator">&amp;</span> <span class="ActionScriptDefault_Text">d</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 40 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">b</span> <span class="ActionScriptOperator">^</span> <span class="ActionScriptDefault_Text">c</span> <span class="ActionScriptOperator">^</span> <span class="ActionScriptDefault_Text">d</span>;
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 60 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">b</span> <span class="ActionScriptOperator">&amp;</span> <span class="ActionScriptDefault_Text">c</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">b</span> <span class="ActionScriptOperator">&amp;</span> <span class="ActionScriptDefault_Text">d</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">c</span> <span class="ActionScriptOperator">&amp;</span> <span class="ActionScriptDefault_Text">d</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">b</span> <span class="ActionScriptOperator">^</span> <span class="ActionScriptDefault_Text">c</span> <span class="ActionScriptOperator">^</span> <span class="ActionScriptDefault_Text">d</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         *  Determines the constant value based on t
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">k</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 20 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> 0<span class="ActionScriptDefault_Text">x5a827999</span>;
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 40 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> 0<span class="ActionScriptDefault_Text">x6ed9eba1</span>;
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">t</span> <span class="ActionScriptOperator">&lt;</span> 60 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> 0<span class="ActionScriptDefault_Text">x8f1bbcdc</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> 0<span class="ActionScriptDefault_Text">xca62c1d6</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                    
+        <span class="ActionScriptASDoc">/**
+         *  Converts a ByteArray to a sequence of 16-word blocks
+         *  that we&apos;ll do the processing on.  Appends padding
+         *  and length in the process.
+         *
+         *  @param data        The data to split into blocks
+         *  @return            An array containing the blocks into which data was split
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createBlocksFromByteArray</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldPosition</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">position</span>;
+            <span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> 0;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">len</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">*</span> 8;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">mask</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xFF</span>; <span class="ActionScriptComment">// ignore hi byte of characters &gt; 0xFF
+</span>            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">len</span>; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">+=</span> 8 <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&gt;&gt;</span> 5 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">|=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">readByte</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&amp;</span> <span class="ActionScriptDefault_Text">mask</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&lt;&lt;</span> <span class="ActionScriptBracket/Brace">(</span> 24 <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">%</span> 32 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// append padding and length
+</span>            <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">len</span> <span class="ActionScriptOperator">&gt;&gt;</span> 5 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">|=</span> 0<span class="ActionScriptDefault_Text">x80</span> <span class="ActionScriptOperator">&lt;&lt;</span> <span class="ActionScriptBracket/Brace">(</span> 24 <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">len</span> <span class="ActionScriptOperator">%</span> 32 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">len</span> <span class="ActionScriptOperator">+</span> 64 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&gt;&gt;</span> 9 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&lt;&lt;</span> 4 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> 15 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">len</span>;
+            
+            <span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">position</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">oldPosition</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">blocks</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                    
+        <span class="ActionScriptASDoc">/**
+         *  Converts a string to a sequence of 16-word blocks
+         *  that we&apos;ll do the processing on.  Appends padding
+         *  and length in the process.
+         *
+         *  @param s    The string to split into blocks
+         *  @return        An array containing the blocks that s was split into.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createBlocksFromString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">len</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">s</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">*</span> 8;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">mask</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xFF</span>; <span class="ActionScriptComment">// ignore hi byte of characters &gt; 0xFF
+</span>            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">len</span>; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">+=</span> 8 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&gt;&gt;</span> 5 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">|=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span>.<span class="ActionScriptDefault_Text">charCodeAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">/</span> 8 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;</span> <span class="ActionScriptDefault_Text">mask</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&lt;&lt;</span> <span class="ActionScriptBracket/Brace">(</span> 24 <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">%</span> 32 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// append padding and length
+</span>            <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">len</span> <span class="ActionScriptOperator">&gt;&gt;</span> 5 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">|=</span> 0<span class="ActionScriptDefault_Text">x80</span> <span class="ActionScriptOperator">&lt;&lt;</span> <span class="ActionScriptBracket/Brace">(</span> 24 <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">len</span> <span class="ActionScriptOperator">%</span> 32 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">blocks</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">len</span> <span class="ActionScriptOperator">+</span> 64 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&gt;&gt;</span> 9 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&lt;&lt;</span> 4 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> 15 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">len</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">blocks</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Robotlegs Image Gallery Example using AS3-Signals and the Presentation Modeljoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Robotlegs, AS3-Signals and the SignalCommandMap Example' href='http://joelhooks.com/2010/02/14/robotlegs-as3-signals-and-the-signalcommandmap-example/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=386' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,734] -->
+<link rel="canonical" href="http://joelhooks.com/2010/01/16/robotlegs-image-gallery-example-using-as3-signals-and-the-presentation-model/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_index_1726292858","10.0.0");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-386 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-386" class="post-386 post type-post status-publish format-standard hentry category-actionscript category-flex category-object-oriented-concepts category-robotlegs">
+					<h1>Robotlegs Image Gallery Example using AS3-Signals and the Presentation Model</h1>
+		
+					<div class="entry-content">
+						<p>Jason Crist <a onclick="javascript:pageTracker._trackPageview('/outgoing/pbking.com/blog/?p=209');"  href="http://pbking.com/blog/?p=209">posted a thought provoking request</a> for his upcoming presentation comparing <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.robotlegs.org');"  href="http://www.robotlegs.org">Robotlegs</a> and <a onclick="javascript:pageTracker._trackPageview('/outgoing/swizframework.org/');"  href="http://swizframework.org/">Swiz</a>. He&#8217;s got a clever knack for stirring the framework ant pile and getting developers eyes off their IDEs long enough to discuss their passions. In this case the developers include <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.benclinkinbeard.com/');"  href="http://www.benclinkinbeard.com/">Ben Clinkinbeard</a>, <a onclick="javascript:pageTracker._trackPageview('/outgoing/shaun.boyblack.co.za/blog/');"  href="http://shaun.boyblack.co.za/blog/">Shaun Smith</a>, <a onclick="javascript:pageTracker._trackPageview('/outgoing/jessewarden.com/');"  href="http://jessewarden.com/">Jesse Warden</a> and myself.</p>
+<p>These conversations are always good natured. While we work on (or use) &#8220;competing&#8221; frameworks there is always a sense of mutual respect. We like our tools but have obvious inclinations towards the projects that we&#8217;ve invested our hearts and souls into.</p>
+<p>Ben Clinkinbeard has pointed out (several times!) that Robotlegs is all about extending the <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robotlegs/robotlegs-framework/tree/master/src/org/robotlegs/mvcs/');"  href="http://github.com/robotlegs/robotlegs-framework/tree/master/src/org/robotlegs/mvcs/">MVCS classes</a>. My stock answer is that there is a clear separation between the framework and the concrete MVCS implementation. To paraphrase Ben, &#8220;Well show it to me then!&#8221;</p>
+<p>All of the <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.robotlegs.org/examples/');"  href="http://www.robotlegs.org/examples/">&#8220;official&#8221; Robotlegs examples</a> are making use of the MVCS implementation. Why? Because it is solid, recognizable, and fairly easy to get one&#8217;s head around. It provides a common ground for developers and a set architectural structure which is a huge advantage in any team environment. It is important to make the distinction  between the framework and the MVCS implementation. What does that even mean? At the core, Robotlegs is a modular set of tools to provide a convenient mechanism for wiring applications. Robotlegs is not doing class reflection. Robotlegs is not an automated dependency injection solution. Robotlegs is  an adapter to a dependency injection solution,by default the lightweight <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/tschneidereit/SwiftSuspenders');"  href="http://github.com/tschneidereit/SwiftSuspenders">SwiftSuspenders library</a>. Through a set of tools, namely the MediatorMap, CommandMap, ViewMap, and the injection adapter Robotlegs provides a robust starting place to begin coding your application.</p>
+<p>The MVCS implementation is a set of base classes loosely modeled on <a onclick="javascript:pageTracker._trackPageview('/outgoing/puremvc.org/');"  href="http://puremvc.org/">PureMVC</a>. At the heart of the implementation is the Context. The Context creates instances of the various mapping classes, the injection adapter, and gives the developer a centralized IEventDispatcher that can be used for messaging between application tiers.. The other three classes, Actor, Mediator, and Command, reduce boiler plate and provide convenient access to injected dependencies typically used in the the MVCS tiers.</p>
+<p>What if you hate PureMVC, don&#8217;t want to extend any framework classes, or generally just want to work in a different way outside of a prescribed MVCS architecture?</p>
+<p>No problem.</p>
+<p>Here&#8217;s the deal. Robotlegs, the framework, is a <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robotlegs/robotlegs-framework/tree/master/src/org/robotlegs/core/');"  href="http://github.com/robotlegs/robotlegs-framework/tree/master/src/org/robotlegs/core/">set of interfaces</a>. You can effectively do whatever you want with these interfaces. You can make use of the base concrete implementations of the core interfaces, use a class from the MVCS implementation, implement your own concrete classes based on the framework core, bring in other libraries or any combination you can think of. In terms of a framework, Robotlegs can be whatever you want/need it to be.</p>
+<h2>Man Joel, that was a long intro. Where&#8217;s the freaking code??!?</h2>
+<p><span id="more-386"></span><br />
+So, to that end, I sat down to rework <a href="http://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-–-inspired-by-puremvc/">my first (and still favorite) Robotlegs example application</a> and demonstrate this concept a bit.</p>
+<p>I&#8217;ve stripped the example down slightly, using just the XMLImageService and not connecting to Flickr (in an effort to keep it simple).</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-ImageGalleryPM');"  href="http://github.com/joelhooks/robotlegs-examples-ImageGalleryPM">Get the source on GitHub</a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-ImageGalleryPM/zipball/v1.0.0');"  href="http://github.com/joelhooks/robotlegs-examples-ImageGalleryPM/zipball/v1.0.0"><strong>Download the full source as a Zip</strong></a></p>
+<p><strong>This example requires:</strong><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.robotlegs.org/');"  href="http://www.robotlegs.org/">Robotlegs</a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robertpenner/as3-signals');"  href="http://github.com/robertpenner/as3-signals">AS3-Signals</a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/signals-extensions-CommandSignal');"  href="http://github.com/joelhooks/signals-extensions-CommandSignal">SignalsCommandMap library</a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4');"  href="http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4">Flex 4 SDK (a fairly recent version)</a></p>
+<div class="note-block" align="center"><strong>You neeed <a onclick="javascript:pageTracker._trackPageview('/outgoing/opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4');"  href="http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4">SDK version 4.0.0.12635 or later</a> to compile this&#8230;</strong></div>
+<div align="center">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_index_1726292858"
+			class="flashmovie"
+			width="400"
+			height="500">
+	<param name="movie" value="http://joelhooks.com/examples/robotlegsGalleryPM/index.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="http://joelhooks.com/examples/robotlegsGalleryPM/index.swf"
+			name="fm_index_1726292858"
+			width="400"
+			height="500">
+	<!--<![endif]-->
+		
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object></div>
+<p><br/><br />
+The example should be familiar if you&#8217;ve looked at the Image Gallery previously. It loads images from a service and displays them. This version is much different on the code level however. Instead of mediators and data models, the gallery is using presentation models and AS3-Signals. It still uses the Context from the MVCS implementation. it&#8217;s so f&#8217;n handy and I don&#8217;t want to manually instantiate the maps.</p>
+<h3>ImageGalleryContext</h3>
+
+<div class="wp_codebox"><table><tr id="p3861"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code" id="p386code1"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> ImageGalleryContext <span style="color: #0066CC;">extends</span> Context
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">private</span> const VIEW_PACKAGE:<span style="color: #0066CC;">String</span> = <span style="color: #ff0000;">&quot;org.robotlegs.examples.imagegallery.view.components&quot;</span>;
+	<span style="color: #0066CC;">private</span> const LOAD_GALLERY:<span style="color: #0066CC;">String</span> = <span style="color: #ff0000;">&quot;loadGallery&quot;</span>;
+&nbsp;
+	override <span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> startup<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #808080; font-style: italic;">//map the views</span>
+		viewMap.<span style="color: #006600;">mapPackage</span><span style="color: #66cc66;">&#40;</span>VIEW_PACKAGE<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+		<span style="color: #808080; font-style: italic;">//map the presentation models</span>
+		injector.<span style="color: #006600;">mapSingletonOf</span><span style="color: #66cc66;">&#40;</span> IGalleryViewPresentationModel, GalleryViewPresentationModel <span style="color: #66cc66;">&#41;</span>;
+		injector.<span style="color: #006600;">mapSingletonOf</span><span style="color: #66cc66;">&#40;</span> IGalleryThumbnailsPresentationModel, GalleryThumbnailsPresentationModel <span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+		<span style="color: #808080; font-style: italic;">//map the services and their factories</span>
+		injector.<span style="color: #006600;">mapSingletonOf</span><span style="color: #66cc66;">&#40;</span> IGalleryImageService, XMLImageService <span style="color: #66cc66;">&#41;</span>;
+		injector.<span style="color: #006600;">mapSingletonOf</span><span style="color: #66cc66;">&#40;</span> IGalleryFactory, XMLGalleryFactory <span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+		<span style="color: #808080; font-style: italic;">//map the signals</span>
+		injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>GalleryUpdatedSignal<span style="color: #66cc66;">&#41;</span>;
+		injector.<span style="color: #006600;">mapSingleton</span><span style="color: #66cc66;">&#40;</span>GalleryImageSelectedSignal<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+		<span style="color: #808080; font-style: italic;">//map the command</span>
+		commandMap.<span style="color: #006600;">mapEvent</span><span style="color: #66cc66;">&#40;</span> LOAD_GALLERY, LoadGalleryCommand <span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+		<span style="color: #808080; font-style: italic;">//go!!</span>
+		eventDispatcher.<span style="color: #006600;">dispatchEvent</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Event<span style="color: #66cc66;">&#40;</span>LOAD_GALLERY<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>As you can see here the context is performing the duty of mapping the injections the application will use.</p>
+<h3>Automated Dependency Injected View</h3>
+
+<div class="wp_codebox"><table><tr id="p3862"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+</pre></td><td class="code" id="p386code2"><pre class="actionscript" style="font-family:monospace;"><span style="color: #66cc66;">&lt;</span>s:Group xmlns:fx=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span>
+		 xmlns:s=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span>
+		 xmlns:mx=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/halo&quot;</span> <span style="color: #0066CC;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span> <span style="color: #0066CC;">height</span>=<span style="color: #ff0000;">&quot;100&quot;</span><span style="color: #66cc66;">&gt;</span>
+	<span style="color: #66cc66;">&lt;</span>fx:Script<span style="color: #66cc66;">&gt;</span>
+		<span style="color: #66cc66;">&lt;!</span><span style="color: #66cc66;">&#91;</span>CDATA<span style="color: #66cc66;">&#91;</span>
+			<span style="color: #0066CC;">import</span> org.<span style="color: #006600;">robotlegs</span>.<span style="color: #006600;">examples</span>.<span style="color: #006600;">imagegallery</span>.<span style="color: #006600;">view</span>.<span style="color: #006600;">models</span>.<span style="color: #006600;">IGalleryThumbnailsPresentationModel</span>;
+&nbsp;
+			<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> _model:IGalleryThumbnailsPresentationModel;
+&nbsp;
+			<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> model<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:IGalleryThumbnailsPresentationModel
+			<span style="color: #66cc66;">&#123;</span>
+				<span style="color: #b1b100;">return</span> _model;
+			<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+			<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+			<span style="color: #66cc66;">&#91;</span>Bindable<span style="color: #66cc66;">&#93;</span>
+			<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">set</span> model<span style="color: #66cc66;">&#40;</span>value:IGalleryThumbnailsPresentationModel<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+			<span style="color: #66cc66;">&#123;</span>
+				_model = value;
+			<span style="color: #66cc66;">&#125;</span>
+		<span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&gt;</span>
+	<span style="color: #66cc66;">&lt;/</span>fx:Script<span style="color: #66cc66;">&gt;</span>
+	<span style="color: #66cc66;">&lt;</span>s:Rect <span style="color: #0066CC;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span>
+			<span style="color: #0066CC;">height</span>=<span style="color: #ff0000;">&quot;100%&quot;</span><span style="color: #66cc66;">&gt;</span>
+		<span style="color: #66cc66;">&lt;</span>s:fill<span style="color: #66cc66;">&gt;</span>
+			<span style="color: #66cc66;">&lt;</span>s:SolidColor <span style="color: #0066CC;">color</span>=<span style="color: #ff0000;">&quot;#111111&quot;</span><span style="color: #66cc66;">/&gt;</span>
+		<span style="color: #66cc66;">&lt;/</span>s:fill<span style="color: #66cc66;">&gt;</span>
+	<span style="color: #66cc66;">&lt;/</span>s:Rect<span style="color: #66cc66;">&gt;</span>
+	<span style="color: #66cc66;">&lt;</span>s:Group <span style="color: #0066CC;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span> <span style="color: #0066CC;">height</span>=<span style="color: #ff0000;">&quot;100%&quot;</span><span style="color: #66cc66;">&gt;</span>
+		<span style="color: #66cc66;">&lt;</span>s:layout<span style="color: #66cc66;">&gt;</span>
+			<span style="color: #66cc66;">&lt;</span>s:VerticalLayout gap=<span style="color: #ff0000;">&quot;0&quot;</span><span style="color: #66cc66;">/&gt;</span>
+		<span style="color: #66cc66;">&lt;/</span>s:layout<span style="color: #66cc66;">&gt;</span>
+		<span style="color: #66cc66;">&lt;</span>s:DataGroup id=<span style="color: #ff0000;">&quot;dgThumbnails&quot;</span>
+					 clipAndEnableScrolling=<span style="color: #ff0000;">&quot;true&quot;</span>
+					 dataProvider=<span style="color: #ff0000;">&quot;{model.dataProvider}&quot;</span>
+					 <span style="color: #0066CC;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span>
+					 <span style="color: #0066CC;">height</span>=<span style="color: #ff0000;">&quot;85&quot;</span>
+					 itemRenderer=<span style="color: #ff0000;">&quot;org.robotlegs.examples.imagegallery.view.components.renderers.GalleryImageThumbnailItemRenderer&quot;</span><span style="color: #66cc66;">&gt;</span>
+			<span style="color: #66cc66;">&lt;</span>s:layout<span style="color: #66cc66;">&gt;</span>
+				<span style="color: #66cc66;">&lt;</span>s:HorizontalLayout gap=<span style="color: #ff0000;">&quot;0&quot;</span><span style="color: #66cc66;">/&gt;</span>
+			<span style="color: #66cc66;">&lt;/</span>s:layout<span style="color: #66cc66;">&gt;</span>
+		<span style="color: #66cc66;">&lt;/</span>s:DataGroup<span style="color: #66cc66;">&gt;</span>
+		<span style="color: #66cc66;">&lt;</span>s:HScrollBar id=<span style="color: #ff0000;">&quot;thumbScrollBar&quot;</span>
+					  viewport=<span style="color: #ff0000;">&quot;{dgThumbnails}&quot;</span>
+					  <span style="color: #0066CC;">width</span>=<span style="color: #ff0000;">&quot;100%&quot;</span>
+					  smoothScrolling=<span style="color: #ff0000;">&quot;true&quot;</span><span style="color: #66cc66;">/&gt;</span>
+	<span style="color: #66cc66;">&lt;/</span>s:Group<span style="color: #66cc66;">&gt;</span>
+<span style="color: #66cc66;">&lt;/</span>s:Group<span style="color: #66cc66;">&gt;</span></pre></td></tr></table></div>
+
+<p>The viewMap is set to map the entire components folder. This is a convenient way to provide automated dependency injection to a large number of views. It also maps views in any sub-package of the mapped package.</p>
+<h3>GalleryViewThumbnailsPresentationModel</h3>
+
+<div class="wp_codebox"><table><tr id="p3863"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+</pre></td><td class="code" id="p386code3"><pre class="actionscript" style="font-family:monospace;"><span style="color: #66cc66;">&#91;</span>Bindable<span style="color: #66cc66;">&#93;</span>
+<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> GalleryThumbnailsPresentationModel <span style="color: #0066CC;">implements</span> IGalleryThumbnailsPresentationModel
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> updated:GalleryUpdatedSignal;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> imageSelected:GalleryImageSelectedSignal;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>PostConstruct<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> mapSignalListeners<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		updated.<span style="color: #0066CC;">add</span><span style="color: #66cc66;">&#40;</span>galleryUpdated<span style="color: #66cc66;">&#41;</span>;
+		imageSelected.<span style="color: #0066CC;">add</span><span style="color: #66cc66;">&#40;</span>updateImageSelectionState<span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> _dataprovider:ArrayCollection;
+&nbsp;
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> dataProvider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:ArrayCollection
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #b1b100;">return</span> _dataprovider;
+	<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">set</span> dataProvider<span style="color: #66cc66;">&#40;</span>v:ArrayCollection<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		_dataprovider = v;
+	<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">function</span> galleryUpdated<span style="color: #66cc66;">&#40;</span>gallery:Gallery<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		dataProvider = gallery.<span style="color: #006600;">photos</span>;
+		<span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span>gallery.<span style="color: #006600;">photos</span><span style="color: #66cc66;">&#91;</span><span style="color: #cc66cc;">0</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>
+		<span style="color: #66cc66;">&#123;</span>
+			imageSelected.<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span>gallery.<span style="color: #006600;">photos</span><span style="color: #66cc66;">&#91;</span><span style="color: #cc66cc;">0</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">function</span> updateImageSelectionState<span style="color: #66cc66;">&#40;</span>image:GalleryImage<span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #b1b100;">for</span> <span style="color: #b1b100;">each</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">var</span> galleryImage:GalleryImage <span style="color: #b1b100;">in</span> dataProvider<span style="color: #66cc66;">&#41;</span>
+		<span style="color: #66cc66;">&#123;</span>
+			galleryImage.<span style="color: #006600;">selected</span> = galleryImage == image;
+		<span style="color: #66cc66;">&#125;</span>
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<h3>IGalleryViewThumbnailsPresentationModel</h3>
+
+<div class="wp_codebox"><table><tr id="p3864"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code" id="p386code4"><pre class="actionscript" style="font-family:monospace;"><span style="color: #808080; font-style: italic;">/**
+ * This interface is simple because the application is simple. Obviously in
+ * a large application you'd get more complex interfaces.
+ */</span>
+<span style="color: #0066CC;">public</span> <span style="color: #0066CC;">interface</span> IGalleryThumbnailsPresentationModel
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> dataProvider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:ArrayCollection;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The presentation models are provided as singletons. The application will only display one of each view that requires the model. They are also mapped as interfaces with the interfaces being injected into the views. With the presentation model, the view does not update the model directly. By using interfaces we can supply read-only contracts between the presentation models and the views they control:</p>
+<h3>XMLImageService</h3>
+
+<div class="wp_codebox"><table><tr id="p3865"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+</pre></td><td class="code" id="p386code5"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> XMLImageService <span style="color: #0066CC;">implements</span> IGalleryImageService
+<span style="color: #66cc66;">&#123;</span>
+	protected <span style="color: #0066CC;">static</span> const BASE_URL:<span style="color: #0066CC;">String</span> = <span style="color: #ff0000;">&quot;assets/gallery/&quot;</span>;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> galleryFactory:IGalleryFactory;
+&nbsp;
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> galleryUpdated:GalleryUpdatedSignal;
+&nbsp;
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> XMLImageService<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #0066CC;">super</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> loadGallery<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #000000; font-weight: bold;">var</span> service:HTTPService = <span style="color: #000000; font-weight: bold;">new</span> HTTPService<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #000000; font-weight: bold;">var</span> responder:Responder = <span style="color: #000000; font-weight: bold;">new</span> Responder<span style="color: #66cc66;">&#40;</span>handleServiceResult, handleServiceFault<span style="color: #66cc66;">&#41;</span>;
+		<span style="color: #000000; font-weight: bold;">var</span> token:AsyncToken;
+		service.<span style="color: #006600;">resultFormat</span> = <span style="color: #ff0000;">&quot;e4x&quot;</span>;
+		service.<span style="color: #0066CC;">url</span> = BASE_URL+<span style="color: #ff0000;">&quot;gallery.xml&quot;</span>;
+		token = service.<span style="color: #0066CC;">send</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+		token.<span style="color: #006600;">addResponder</span><span style="color: #66cc66;">&#40;</span>responder<span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	protected <span style="color: #000000; font-weight: bold;">function</span> handleServiceResult<span style="color: #66cc66;">&#40;</span>event:<span style="color: #0066CC;">Object</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #000000; font-weight: bold;">var</span> gallery:Gallery = galleryFactory.<span style="color: #006600;">createGallery</span><span style="color: #66cc66;">&#40;</span>event.<span style="color: #006600;">result</span>.<span style="color: #006600;">image</span>, BASE_URL<span style="color: #66cc66;">&#41;</span>;
+		galleryUpdated.<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span> gallery <span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+&nbsp;
+	protected <span style="color: #000000; font-weight: bold;">function</span> handleServiceFault<span style="color: #66cc66;">&#40;</span>event:<span style="color: #0066CC;">Object</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #0066CC;">trace</span><span style="color: #66cc66;">&#40;</span>event<span style="color: #66cc66;">&#41;</span>;
+&nbsp;
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<h3>IGalleryImageService</h3>
+
+<div class="wp_codebox"><table><tr id="p3866"><td class="line_numbers"><pre>1
+2
+3
+4
+</pre></td><td class="code" id="p386code6"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #0066CC;">interface</span> IGalleryImageService
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #000000; font-weight: bold;">function</span> loadGallery<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>;
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The service and its factory class are also mapped as singleton interfaces. This makes it really easy to swap out services (to add a Flickr service for example).</p>
+<h3>GalleryUpdatedSignal</h3>
+
+<div class="wp_codebox"><table><tr id="p3867"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code" id="p386code7"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> GalleryUpdatedSignal <span style="color: #0066CC;">extends</span> Signal
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> GalleryUpdatedSignal<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
+	<span style="color: #66cc66;">&#123;</span>
+		<span style="color: #0066CC;">super</span><span style="color: #66cc66;">&#40;</span>Gallery<span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The signals are simple classes that merely extend the Signal class and declare their payload type in the super() of the constructor. Signals are a really marvelous concept and provide a lot of very nice functionality. They make a great companion to Robotlegs and I think you will see some really cool stuff being done with Signals and Robotlegs in the very near future.</p>
+<h3>LoadGalleryCommand</h3>
+
+<div class="wp_codebox"><table><tr id="p3868"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code" id="p386code8"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">class</span> LoadGalleryCommand
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #66cc66;">&#91;</span>Inject<span style="color: #66cc66;">&#93;</span>
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">var</span> service:IGalleryImageService;
+&nbsp;
+	<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> execute<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>:<span style="color: #0066CC;">void</span>
+	<span style="color: #66cc66;">&#123;</span>
+		service.<span style="color: #006600;">loadGallery</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+	<span style="color: #66cc66;">&#125;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>The application has a single command, LoadGalleryCommand, that is used to actually load the initial images from service and is only called once. In fact, the event that is fired to launch this command in the context startup method is the only event that this application uses (outside of the Flex events on the UI items). That is awesome!</p>
+<p>Something you will notice right away looking at the source is that the ImageGalleryContext is the only class that extends a Robotlegs class. You could do without that too, frankly, and create your own context that created the maps and injector instances. I&#8217;m not a masochist however, and I will use the provided context for this example. There is a huge amount of potential there for implementing your own custom contexts. I think an interesting implementation might pitch Flash Events altogether and use only Signals for communication between application actors. This example is essentially doing that, but I&#8217;d like to get rid of that single event in startup too!</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-ImageGalleryPM/zipball/v1.0.0');"  href="http://github.com/joelhooks/robotlegs-examples-ImageGalleryPM/zipball/v1.0.0"><strong>Download the full source as a Zip</strong></a></p>
+<p>Let me know if you make something cool with Robotlegs and post details about it, I&#8217;ve got a stack of these to give away:</p>
+<div align="center"><a onclick="javascript:pageTracker._trackPageview('/outgoing/69.164.207.135/wp-content/uploads/2010/01/photo.jpg');"  href="http://69.164.207.135/wp-content/uploads/2010/01/photo.jpg"><img src="http://joelhooks.com/wp-content/uploads/2010/01/photo-225x300.jpg" alt="photo" title="photo" width="225" height="300" /></a></div>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2010/01/16/robotlegs-image-gallery-example-using-as3-signals-and-the-presentation-model/">Robotlegs Image Gallery Example using AS3-Signals and the Presentation Model</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-303">
+        <div id="dsq-comment-header-303" class="dsq-comment-header">
+            <cite id="dsq-cite-303">
+http://github.com/stray                <span id="dsq-author-user-303">Stray</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-303" class="dsq-comment-body">
+            <div id="dsq-comment-message-303" class="dsq-comment-message"><p>Great article &#8211; thanks Joel.</p>
+<p>I&#39;ve looked at as3signals a bunch of times and struggled to work out how it would avoid spaghetti (though I knew it must because RP is no bozo!). What I&#39;d really not understood &#8211; and your example makes so beautifully clear &#8211; is that by using the RL injection mapping to inject a singleton of the signal type, you can share a signal without the classes tuning in to that signal knowing anything about each other.</p>
+<p>Mind blowing stuff! </p>
+<p>Signals feel more and more to me like TV Stations that promise to broadcast a particular kind of content. &#8220;Just fishin&#39; here &#8211; no car chases.&#8221;</p>
+<p>A naive question: does it work if you define an interface instead of a class in the signal construction? As in IGallery instead of Gallery?  Would that have benefits or drawbacks at all? I&#39;ve got a hunch that it would make testing easier, but it&#39;s not really founded on anything. I guess I could mock and stub out the functions but sometimes I like to create a one-code-fits-all-tests concrete implementation of an interface that spits the same data each time.</p>
+<p>I was going to ask about compile time error checking&#8230; but of course the conventional event model in Flex/Flash doesn&#39;t provide a lot of that anyway.</p>
+<p>Seriously &#8211; thanks &#8211; I *knew* there was a beautiful marriage to be made but had completely overlooked how elegantly it could be achieved.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-304">
+        <div id="dsq-comment-header-304" class="dsq-comment-header">
+            <cite id="dsq-cite-304">
+http://joelhooks.com                <span id="dsq-author-user-304">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-304" class="dsq-comment-body">
+            <div id="dsq-comment-message-304" class="dsq-comment-message"><p>Interfaces work perfectly. I&#39;m pretty happy with how this came together. I need to figure out a Signals based command execution scheme. I could just use a controller, but I really fig the encapsulation of a command.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-305">
+        <div id="dsq-comment-header-305" class="dsq-comment-header">
+            <cite id="dsq-cite-305">
+http://twitter.com/robpenner                <span id="dsq-author-user-305">robpenner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-305" class="dsq-comment-body">
+            <div id="dsq-comment-message-305" class="dsq-comment-message"><p>Fantastic example. The creative way you used Signals kind of blew my mind. I have some pondering to do.</p>
+<p>P.S. I love the one-click Twitter comment registration. First time I&#39;ve seen it.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-306">
+        <div id="dsq-comment-header-306" class="dsq-comment-header">
+            <cite id="dsq-cite-306">
+http://joelhooks.com                <span id="dsq-author-user-306">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-306" class="dsq-comment-body">
+            <div id="dsq-comment-message-306" class="dsq-comment-message"><p>I am incredibly excited by the concept of not using events at all outside of components. Signals make a lot more sense to me. Excellent work.</p>
+<p>Disqus is a really fantastic system. Not only did it remove my spam problem, but it is much more usable.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-307">
+        <div id="dsq-comment-header-307" class="dsq-comment-header">
+            <cite id="dsq-cite-307">
+http://www.benclinkinbeard.com/                <span id="dsq-author-user-307">Ben Clinkinbeard</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-307" class="dsq-comment-body">
+            <div id="dsq-comment-message-307" class="dsq-comment-message"><p>This is nice. I&#39;ve only done a quick read-through so far, but it looks very clean. I am a fan of the presentation model pattern, and of course like the absence of framework class extension.</p>
+<p>Not to be cheeky, but it kind of reminds me of a Swiz application. <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' />  One of the reasons I like Swiz so much is that I feel like it allows you to focus on writing code that has a &#8220;business purpose&#8221;, and I think this app does that as well. The context is pretty equivalent to a Swiz BeanProvider, etc. I&#39;m not saying these things to promote Swiz or anything like that, just pointing out the good, framework-independent qualities that this architecture possesses in my opinion.</p>
+<p>I&#39;ve not looked into Signals yet, but this makes me want to. Great work Joel, consider me impressed.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-308">
+        <div id="dsq-comment-header-308" class="dsq-comment-header">
+            <cite id="dsq-cite-308">
+http://pbking.com/blog                <span id="dsq-author-user-308">Jason Crist</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-308" class="dsq-comment-body">
+            <div id="dsq-comment-message-308" class="dsq-comment-message"><p>Great.  You put your code where your mouth was.  I appreciate that a lot Joel.  Easy alternatives in getting a framework to work like me rather than getting me to work like X is important to me and this is a good example of that.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-309">
+        <div id="dsq-comment-header-309" class="dsq-comment-header">
+            <cite id="dsq-cite-309">
+http://twitter.com/robpenner                <span id="dsq-author-user-309">robpenner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-309" class="dsq-comment-body">
+            <div id="dsq-comment-message-309" class="dsq-comment-message"><p>Joel, how do you feel now about Presentation Model after doing this example?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-310">
+        <div id="dsq-comment-header-310" class="dsq-comment-header">
+            <cite id="dsq-cite-310">
+http://pbking.com/blog                <span id="dsq-author-user-310">Jason Crist</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-310" class="dsq-comment-body">
+            <div id="dsq-comment-message-310" class="dsq-comment-message"><p>Oh yes, please do tell.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-311">
+        <div id="dsq-comment-header-311" class="dsq-comment-header">
+            <cite id="dsq-cite-311">
+http://joelhooks.com                <span id="dsq-author-user-311">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-311" class="dsq-comment-body">
+            <div id="dsq-comment-message-311" class="dsq-comment-message"><p>Signals is wicked. I didn&#39;t really need it here, but I&#39;ve been dying to get into it.</p>
+<p>But really, it all comes down to the logo <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-312">
+        <div id="dsq-comment-header-312" class="dsq-comment-header">
+            <cite id="dsq-cite-312">
+http://joelhooks.com                <span id="dsq-author-user-312">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-312" class="dsq-comment-body">
+            <div id="dsq-comment-message-312" class="dsq-comment-message"><p>The things I don&#39;t like about PM are still there. I don&#39;t like the binding into the app layer. I don&#39;t like losing the &#8220;overlord&#8221; capabilities that the mediator gives me. I don&#39;t like the PM in the view component. I&#39;m a control freak and the PM feels like I am relegating some measure of control that mediators give me. I want to pass/bind VALUES to my view components, not full on Objects.</p>
+<p>I&#39;ll take the PM over a shitty code behind scheme any day (and Signals improves my disposition a bit), but I&#39;m still voting for mediator as my preference.</p>
+<p>I&#39;m using proper PMs on the current gig with Swiz, so I&#39;ve spent a good 10 hours a day for the last 5 weeks to build my opinion <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-313">
+        <div id="dsq-comment-header-313" class="dsq-comment-header">
+            <cite id="dsq-cite-313">
+http://joelhooks.com                <span id="dsq-author-user-313">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-313" class="dsq-comment-body">
+            <div id="dsq-comment-message-313" class="dsq-comment-message"><p>Putting my code where my mouth was (gross?) is an homage to Mr. Penner and Signals.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-429">
+        <div id="dsq-comment-header-429" class="dsq-comment-header">
+            <cite id="dsq-cite-429">
+http://github.com/stray                <span id="dsq-author-user-429">Stray</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-429" class="dsq-comment-body">
+            <div id="dsq-comment-message-429" class="dsq-comment-message"><p>Great article &#8211; thanks Joel.</p>
+<p>I&#39;ve looked at as3signals a bunch of times and struggled to work out how it would avoid spaghetti (though I knew it must because RP is no bozo!). What I&#39;d really not understood &#8211; and your example makes so beautifully clear &#8211; is that by using the RL injection mapping to inject a singleton of the signal type, you can share a signal without the classes tuning in to that signal knowing anything about each other.</p>
+<p>Mind blowing stuff! </p>
+<p>Signals feel more and more to me like TV Stations that promise to broadcast a particular kind of content. &#8220;Just fishin&#39; here &#8211; no car chases.&#8221;</p>
+<p>A naive question: does it work if you define an interface instead of a class in the signal construction? As in IGallery instead of Gallery?  Would that have benefits or drawbacks at all? I&#39;ve got a hunch that it would make testing easier, but it&#39;s not really founded on anything. I guess I could mock and stub out the functions but sometimes I like to create a one-code-fits-all-tests concrete implementation of an interface that spits the same data each time.</p>
+<p>I was going to ask about compile time error checking&#8230; but of course the conventional event model in Flex/Flash doesn&#39;t provide a lot of that anyway.</p>
+<p>Seriously &#8211; thanks &#8211; I *knew* there was a beautiful marriage to be made but had completely overlooked how elegantly it could be achieved.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-430">
+        <div id="dsq-comment-header-430" class="dsq-comment-header">
+            <cite id="dsq-cite-430">
+http://joelhooks.com                <span id="dsq-author-user-430">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-430" class="dsq-comment-body">
+            <div id="dsq-comment-message-430" class="dsq-comment-message"><p>Interfaces work perfectly. I&#39;m pretty happy with how this came together. I need to figure out a Signals based command execution scheme. I could just use a controller, but I really dig the encapsulation of a command.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-427">
+        <div id="dsq-comment-header-427" class="dsq-comment-header">
+            <cite id="dsq-cite-427">
+http://twitter.com/robpenner                <span id="dsq-author-user-427">robpenner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-427" class="dsq-comment-body">
+            <div id="dsq-comment-message-427" class="dsq-comment-message"><p>Fantastic example. The creative way you used Signals kind of blew my mind. I have some pondering to do.</p>
+<p>P.S. I love the one-click Twitter comment registration. First time I&#39;ve seen it.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-428">
+        <div id="dsq-comment-header-428" class="dsq-comment-header">
+            <cite id="dsq-cite-428">
+http://joelhooks.com                <span id="dsq-author-user-428">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-428" class="dsq-comment-body">
+            <div id="dsq-comment-message-428" class="dsq-comment-message"><p>I am incredibly excited by the concept of not using events at all outside of components. Signals make a lot more sense to me. Excellent work.</p>
+<p>Disqus is a really fantastic system. Not only did it remove my spam problem, but it is much more usable.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-425">
+        <div id="dsq-comment-header-425" class="dsq-comment-header">
+            <cite id="dsq-cite-425">
+http://www.benclinkinbeard.com/                <span id="dsq-author-user-425">Ben Clinkinbeard</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-425" class="dsq-comment-body">
+            <div id="dsq-comment-message-425" class="dsq-comment-message"><p>This is nice. I&#39;ve only done a quick read-through so far, but it looks very clean. I am a fan of the presentation model pattern, and of course like the absence of framework class extension.</p>
+<p>Not to be cheeky, but it kind of reminds me of a Swiz application. <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' />  One of the reasons I like Swiz so much is that I feel like it allows you to focus on writing code that has a &#8220;business purpose&#8221;, and I think this app does that as well. The context is pretty equivalent to a Swiz BeanProvider, etc. I&#39;m not saying these things to promote Swiz or anything like that, just pointing out the good, framework-independent qualities that this architecture possesses in my opinion.</p>
+<p>I&#39;ve not looked into Signals yet, but this makes me want to. Great work Joel, consider me impressed.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-423">
+        <div id="dsq-comment-header-423" class="dsq-comment-header">
+            <cite id="dsq-cite-423">
+http://pbking.com/blog                <span id="dsq-author-user-423">Jason Crist</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-423" class="dsq-comment-body">
+            <div id="dsq-comment-message-423" class="dsq-comment-message"><p>Great.  You put your code where your mouth was.  I appreciate that a lot Joel.  Easy alternatives in getting a framework to work like me rather than getting me to work like X is important to me and this is a good example of that.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-420">
+        <div id="dsq-comment-header-420" class="dsq-comment-header">
+            <cite id="dsq-cite-420">
+http://twitter.com/robpenner                <span id="dsq-author-user-420">robpenner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-420" class="dsq-comment-body">
+            <div id="dsq-comment-message-420" class="dsq-comment-message"><p>Joel, how do you feel now about Presentation Model after doing this example?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-422">
+        <div id="dsq-comment-header-422" class="dsq-comment-header">
+            <cite id="dsq-cite-422">
+http://pbking.com/blog                <span id="dsq-author-user-422">Jason Crist</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-422" class="dsq-comment-body">
+            <div id="dsq-comment-message-422" class="dsq-comment-message"><p>Oh yes, please do tell.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-426">
+        <div id="dsq-comment-header-426" class="dsq-comment-header">
+            <cite id="dsq-cite-426">
+http://joelhooks.com                <span id="dsq-author-user-426">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-426" class="dsq-comment-body">
+            <div id="dsq-comment-message-426" class="dsq-comment-message"><p>Signals is wicked. I didn&#39;t really need it here, but I&#39;ve been dying to get into it.</p>
+<p>But really, it all comes down to the logo <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-421">
+        <div id="dsq-comment-header-421" class="dsq-comment-header">
+            <cite id="dsq-cite-421">
+http://joelhooks.com                <span id="dsq-author-user-421">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-421" class="dsq-comment-body">
+            <div id="dsq-comment-message-421" class="dsq-comment-message"><p>The things I don&#39;t like about PM are still there. I don&#39;t like the binding into the app layer. I don&#39;t like losing the &#8220;overlord&#8221; capabilities that the mediator gives me. I don&#39;t like the PM in the view component. I&#39;m a control freak and the PM feels like I am relegating some measure of control that mediators give me. I want to pass/bind VALUES to my view components, not full on Objects.</p>
+<p>I&#39;ll take the PM over a shitty code behind scheme any day (and Signals improves my disposition a bit), but I&#39;m still voting for mediator as my preference.</p>
+<p>I&#39;m using proper PMs on the current gig with Swiz, so I&#39;ve spent a good 10 hours a day for the last 5 weeks to build my opinion <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-424">
+        <div id="dsq-comment-header-424" class="dsq-comment-header">
+            <cite id="dsq-cite-424">
+http://joelhooks.com                <span id="dsq-author-user-424">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-424" class="dsq-comment-body">
+            <div id="dsq-comment-message-424" class="dsq-comment-message"><p>Putting my code where my mouth was (gross?) is an homage to Mr. Penner and Signals.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-314">
+        <div id="dsq-comment-header-314" class="dsq-comment-header">
+            <cite id="dsq-cite-314">
+                <span id="dsq-author-user-314">Alexander Jäger</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-314" class="dsq-comment-body">
+            <div id="dsq-comment-message-314" class="dsq-comment-message"><p>You have a Typo in the href in the Git Link <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-315">
+        <div id="dsq-comment-header-315" class="dsq-comment-header">
+            <cite id="dsq-cite-315">
+http://joelhooks.com                <span id="dsq-author-user-315">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-315" class="dsq-comment-body">
+            <div id="dsq-comment-message-315" class="dsq-comment-message"><p>d&#39;oh! Fixed, thank you. :&gt;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-418">
+        <div id="dsq-comment-header-418" class="dsq-comment-header">
+            <cite id="dsq-cite-418">
+                <span id="dsq-author-user-418">Alexander Jäger</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-418" class="dsq-comment-body">
+            <div id="dsq-comment-message-418" class="dsq-comment-message"><p>You have a Typo in the href in the Git Link <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-419">
+        <div id="dsq-comment-header-419" class="dsq-comment-header">
+            <cite id="dsq-cite-419">
+http://joelhooks.com                <span id="dsq-author-user-419">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-419" class="dsq-comment-body">
+            <div id="dsq-comment-message-419" class="dsq-comment-message"><p>d&#39;oh! Fixed, thank you. :&gt;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-316">
+        <div id="dsq-comment-header-316" class="dsq-comment-header">
+            <cite id="dsq-cite-316">
+                <span id="dsq-author-user-316">varriastudios</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-316" class="dsq-comment-body">
+            <div id="dsq-comment-message-316" class="dsq-comment-message"><p>thank you for showing the source code, sharedtut</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-417">
+        <div id="dsq-comment-header-417" class="dsq-comment-header">
+            <cite id="dsq-cite-417">
+                <span id="dsq-author-user-417">varriastudios</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-417" class="dsq-comment-body">
+            <div id="dsq-comment-message-417" class="dsq-comment-message"><p>thank you for showing the source code, sharedtut</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-317">
+        <div id="dsq-comment-header-317" class="dsq-comment-header">
+            <cite id="dsq-cite-317">
+                <span id="dsq-author-user-317">codecraig</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-317" class="dsq-comment-body">
+            <div id="dsq-comment-message-317" class="dsq-comment-message"><p>I&#39;ve created several Flex modules making use of Robotlegs. The modules get loaded and presented when the user wants (i.e. they click on the icon in the dock). The modules are able to communicate with one another and with the servers they originate from (think mashup).</p>
+<p>I use Robotlegs throughout for commands, mediators, models and services, however, I implemented my own REST service &#8220;helper&#8221;. This put me in a weird spot for a minute b/c I didn&#39;t want to extend Actor to have these helpers play with the rest of the Robotlegs goodies&#8230;which is why I posted on the Robotlegs discussion board. Then I realized I could just use the bits I wanted without extending Actor, and wa-la! </p>
+<p>So much better than PureMVC and the fact that I could strip away the use of some of the concrete classes is a perk as well&#8230;can&#39;t wait to use it on my next project. Maybe if I had a RL patch I could spread the love <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-318">
+        <div id="dsq-comment-header-318" class="dsq-comment-header">
+            <cite id="dsq-cite-318">
+http://joelhooks.com                <span id="dsq-author-user-318">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-318" class="dsq-comment-body">
+            <div id="dsq-comment-message-318" class="dsq-comment-message"><p>We have a chicken and egg situation with the patches! They will be delivered to those that make significant contributions via content, tutorials, code etc <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-319">
+        <div id="dsq-comment-header-319" class="dsq-comment-header">
+            <cite id="dsq-cite-319">
+                <span id="dsq-author-user-319">codecraig</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-319" class="dsq-comment-body">
+            <div id="dsq-comment-message-319" class="dsq-comment-message"><p>Gotcha. Well I&#39;ve been working on a new Groovy project which is currently a command line thing&#8230;would be nice to have a UI&#8230;perhaps I&#39;ll look into it while using RL and then post it up.</p>
+<p>Thanks</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-414">
+        <div id="dsq-comment-header-414" class="dsq-comment-header">
+            <cite id="dsq-cite-414">
+                <span id="dsq-author-user-414">codecraig</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-414" class="dsq-comment-body">
+            <div id="dsq-comment-message-414" class="dsq-comment-message"><p>I&#39;ve created several Flex modules making use of Robotlegs. The modules get loaded and presented when the user wants (i.e. they click on the icon in the dock). The modules are able to communicate with one another and with the servers they originate from (think mashup).</p>
+<p>I use Robotlegs throughout for commands, mediators, models and services, however, I implemented my own REST service &#8220;helper&#8221;. This put me in a weird spot for a minute b/c I didn&#39;t want to extend Actor to have these helpers play with the rest of the Robotlegs goodies&#8230;which is why I posted on the Robotlegs discussion board. Then I realized I could just use the bits I wanted without extending Actor, and wa-la! </p>
+<p>So much better than PureMVC and the fact that I could strip away the use of some of the concrete classes is a perk as well&#8230;can&#39;t wait to use it on my next project. Maybe if I had a RL patch I could spread the love <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-415">
+        <div id="dsq-comment-header-415" class="dsq-comment-header">
+            <cite id="dsq-cite-415">
+http://joelhooks.com                <span id="dsq-author-user-415">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-415" class="dsq-comment-body">
+            <div id="dsq-comment-message-415" class="dsq-comment-message"><p>We have a chicken and egg situation with the patches! They will be delivered to those that make significant contributions via content, tutorials, code etc <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-416">
+        <div id="dsq-comment-header-416" class="dsq-comment-header">
+            <cite id="dsq-cite-416">
+                <span id="dsq-author-user-416">codecraig</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-416" class="dsq-comment-body">
+            <div id="dsq-comment-message-416" class="dsq-comment-message"><p>Gotcha. Well I&#39;ve been working on a new Groovy project which is currently a command line thing&#8230;would be nice to have a UI&#8230;perhaps I&#39;ll look into it while using RL and then post it up.</p>
+<p>Thanks</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-320">
+        <div id="dsq-comment-header-320" class="dsq-comment-header">
+            <cite id="dsq-cite-320">
+                <span id="dsq-author-user-320">Yennick Trevels</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-320" class="dsq-comment-body">
+            <div id="dsq-comment-message-320" class="dsq-comment-message"><p>Very nice article. Shows again that robotlegs can be used in many ways.<br />Joel, do you know whether you have to remove the listeners which you added to a signal manually to clean things up(like with standard flex event listeners), or is this done automaticly by signals?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-321">
+        <div id="dsq-comment-header-321" class="dsq-comment-header">
+            <cite id="dsq-cite-321">
+                <span id="dsq-author-user-321">JP</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-321" class="dsq-comment-body">
+            <div id="dsq-comment-message-321" class="dsq-comment-message"><p>So in trying to compile this project i&#39;m getting some errors. </p>
+<p>I can&#39;t seem to find this class in robotlegs:<br />org.robotlegs.mvcs.SignalContext</p>
+<p>Is this in a dev branch somewhere or is it in master and i&#39;m just blind?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-413">
+        <div id="dsq-comment-header-413" class="dsq-comment-header">
+            <cite id="dsq-cite-413">
+                <span id="dsq-author-user-413">Yennick Trevels</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-413" class="dsq-comment-body">
+            <div id="dsq-comment-message-413" class="dsq-comment-message"><p>Very nice article. Shows again that robotlegs can be used in many ways.<br />Joel, do you know whether you have to remove the listeners which you added to a signal manually to clean things up(like with standard flex event listeners), or is this done automaticly by signals?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-411">
+        <div id="dsq-comment-header-411" class="dsq-comment-header">
+            <cite id="dsq-cite-411">
+                <span id="dsq-author-user-411">JP</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-411" class="dsq-comment-body">
+            <div id="dsq-comment-message-411" class="dsq-comment-message"><p>So in trying to compile this project i&#39;m getting some errors. </p>
+<p>I can&#39;t seem to find this class in robotlegs:<br />org.robotlegs.mvcs.SignalContext</p>
+<p>Is this in a dev branch somewhere or is it in master and i&#39;m just blind?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-322">
+        <div id="dsq-comment-header-322" class="dsq-comment-header">
+            <cite id="dsq-cite-322">
+http://joelhooks.com                <span id="dsq-author-user-322">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-322" class="dsq-comment-body">
+            <div id="dsq-comment-message-322" class="dsq-comment-message"><p>sorry, my bad. I modified it to use the SignalsCommandMap lib I am working on. <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/signals-extensions-CommandSignal');"  href="http://github.com/joelhooks/signals-extensions-CommandSignal" rel="nofollow">http://github.com/joelhooks/signals-extensions-&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-412">
+        <div id="dsq-comment-header-412" class="dsq-comment-header">
+            <cite id="dsq-cite-412">
+http://joelhooks.com                <span id="dsq-author-user-412">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-412" class="dsq-comment-body">
+            <div id="dsq-comment-message-412" class="dsq-comment-message"><p>sorry, my bad. I modified it to use the SignalsCommandMap lib I am working on. <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/signals-extensions-CommandSignal');"  href="http://github.com/joelhooks/signals-extensions-CommandSignal" rel="nofollow">http://github.com/joelhooks/signals-extensions-&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-323">
+        <div id="dsq-comment-header-323" class="dsq-comment-header">
+            <cite id="dsq-cite-323">
+                <span id="dsq-author-user-323">Elad Elrom</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-323" class="dsq-comment-body">
+            <div id="dsq-comment-message-323" class="dsq-comment-message"><p>Awesome times last night on RIARadio, Great post thanks Joel. To add to this example I created an implementation of RobotLegs using the Presentation Model that access entire component&#39;s events lifecycle using the passive view: <br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/elromdesign.com/blog/2010/01/23/robotlegs-presentation-model-access-entire-component-events-lifecycle/');"  href="http://elromdesign.com/blog/2010/01/23/robotlegs-presentation-model-access-entire-component-events-lifecycle/" rel="nofollow">http://elromdesign.com/blog/2010/01/23/robotleg&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-410">
+        <div id="dsq-comment-header-410" class="dsq-comment-header">
+            <cite id="dsq-cite-410">
+                <span id="dsq-author-user-410">Elad Elrom</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-410" class="dsq-comment-body">
+            <div id="dsq-comment-message-410" class="dsq-comment-message"><p>Awesome times last night on RIARadio, Great post thanks Joel. To add to this example I created an implementation of RobotLegs using the Presentation Model that access entire component&#39;s events lifecycle using the passive view: <br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/elromdesign.com/blog/2010/01/23/robotlegs-presentation-model-access-entire-component-events-lifecycle/');"  href="http://elromdesign.com/blog/2010/01/23/robotlegs-presentation-model-access-entire-component-events-lifecycle/" rel="nofollow">http://elromdesign.com/blog/2010/01/23/robotleg&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-487">
+        <div id="dsq-comment-header-487" class="dsq-comment-header">
+            <cite id="dsq-cite-487">
+http://www.gucci-outlet-store.com/                <span id="dsq-author-user-487">gucci</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-487" class="dsq-comment-body">
+            <div id="dsq-comment-message-487" class="dsq-comment-message"><p>Well , the view of the passage is  totally correct ,your details is really reasonable and you guy give us valuable informative post, I totally agree the standpoint of upstairs. I often surfing on this forum when I m free and I find there are so much good information we can learn in this forum! <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.in-donesia.net/');"  href="http://www.in-donesia.net/" rel="nofollow">http://www.in-donesia.net/</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-542">
+        <div id="dsq-comment-header-542" class="dsq-comment-header">
+            <cite id="dsq-cite-542">
+                <span id="dsq-author-user-542">Jb</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-542" class="dsq-comment-body">
+            <div id="dsq-comment-message-542" class="dsq-comment-message"><p>Thanks Joel for this example.. Really useful and a good implementation of PM with Robotlegs.</p>
+<p>I got a question concerning the GalleryImageThumbnailItemRenderer component. <br />You choose to dispatch the ImageSelectedSignal in the click of a thumbnail. <br />I understand by this way, you can advise the other PM (GalleryViewPresentationModel) to update the preview. But regarding the PM mind, does it was preferable to have a function in the PM (GalleryThumbnailsPresentationModel) like changeImageSelected and call it directly from the component (model.changeImageSelected(String)) who perform the signal dispatch and the updateImageSelectionState ? <br />In this way your view should be totaly passive.</p>
+<p>What do you think ?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-632">
+        <div id="dsq-comment-header-632" class="dsq-comment-header">
+            <cite id="dsq-cite-632">
+http://www.flashxml.net/galleries/                <span id="dsq-author-user-632">flash gallery</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-632" class="dsq-comment-body">
+            <div id="dsq-comment-message-632" class="dsq-comment-message"><p>Robotlegs and AS3 signals are when combined together, works great.Both fixes object-oriented principles to implement its goals. Signals is very well automated dependency injection. Combining the signals and Robotlegs you can turn off the flash events within your application layer.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-635">
+        <div id="dsq-comment-header-635" class="dsq-comment-header">
+            <cite id="dsq-cite-635">
+                <span id="dsq-author-user-635">Hebejin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-635" class="dsq-comment-body">
+            <div id="dsq-comment-message-635" class="dsq-comment-message"><p>good article, it is worth to having a good read.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-735">
+        <div id="dsq-comment-header-735" class="dsq-comment-header">
+            <cite id="dsq-cite-735">
+http://profiles.google.com/dadmyshitsays                <span id="dsq-author-user-735">Sam Rivello</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-735" class="dsq-comment-body">
+            <div id="dsq-comment-message-735" class="dsq-comment-message"><p>Download a free AS3-Signals Presentation PDF and AS3-Only project here!</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.blog.rivellomultimediaconsulting.com/posts/as3-signals-introduction-presentation');"  href="http://www.blog.rivellomultimediaconsulting.com/posts/as3-signals-introduction-presentation" rel="nofollow">http://www.blog.rivellomultime&#8230;</a></p>
+<p>-Samuel Asher Rivello<br /><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.RivelloMultimediaConsulting.com');"  href="http://www.RivelloMultimediaConsulting.com" rel="nofollow">http://www.RivelloMultimediaCo&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-750">
+        <div id="dsq-comment-header-750" class="dsq-comment-header">
+            <cite id="dsq-cite-750">
+http://profiles.google.com/samuel.tilly                <span id="dsq-author-user-750">Samuel Tilly</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-750" class="dsq-comment-body">
+            <div id="dsq-comment-message-750" class="dsq-comment-message"><p>I am a bit confused by this, i have been developing a huge application for a while and recently started to look into using the MVC model when doing a complete rewrite of this application. The only previous MVC experience that i have is from CakePHP, the thing i don&#39;t get is really the structure of things here, i started going through the guides over at <a onclick="javascript:pageTracker._trackPageview('/outgoing/robotlegs.org');"  href="http://robotlegs.org" rel="nofollow">robotlegs.org</a> and was a bit confused about the mediator stuff, i was afraid it would be an issue later on in my project so i started looking at implementing signals into robotlegs but i don&#39;t really understand the structure of this code. </p>
+<p>Why is modules in .vo and what is the real advantage of using interfaces for each model?</p>
+<p>Why is the LoadGalleryCommand in controllers? maby just the name confuses me here.</p>
+<p>Is there a way of having the service loading only if views depending on it is mapped in the context? without ApplicationStartSignal?</p>
+<p>Can signals me automatically added to context the same way views are?</p>
+<p>Sorry for the novice questions and thanks for this great article!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-932">
+        <div id="dsq-comment-header-932" class="dsq-comment-header">
+            <cite id="dsq-cite-932">
+http://www.facebook.com/people/Hrithik-Shah/100001617339268                <span id="dsq-author-user-932">Hrithik Shah</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-932" class="dsq-comment-body">
+            <div id="dsq-comment-message-932" class="dsq-comment-message"><p>Thanks for the great article it really helps me in understanding as3 signals. Finally mine search ends here. Thanks once again.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/fungamingzone.com/  ');"  href="http://fungamingzone.com/  " rel="nofollow">http://fungamingzone.com/  </a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2010/01/16/robotlegs-image-gallery-example-using-as3-signals-and-the-presentation-model/';
+    var disqus_identifier = '386 http://joelhooks.com/?p=386';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Robotlegs Image Gallery Example using AS3-Signals and the Presentation Model";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=386');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2010\/01\/16\/robotlegs-image-gallery-example-using-as3-signals-and-the-presentation-model\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.462 seconds. Made 5 queries to database and 14 cached queries. Memory used - 16.41MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

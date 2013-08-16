@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of PipingTheMachine</title>
+	<nodes>
+		<node label="html-template">
+			<node label="history">
+				<node label="history.css" icon="cssIcon" url="source/html-template/history/history.css.html"/>
+				<node label="history.js" url="source/html-template/history/history.js.txt"/>
+				<node label="historyFrame.html" icon="htmlIcon" url="source/html-template/history/historyFrame.html"/>
+			</node>
+			<node label="AC_OETags.js" url="source/html-template/AC_OETags.js.txt"/>
+			<node label="index.template.html" icon="htmlIcon" url="source/html-template/index.template.html"/>
+			<node label="playerProductInstall.swf" icon="swfIcon" url="source/html-template/playerProductInstall.swf"/>
+		</node>
+		<node label="libs" icon="classpathIcon" expanded="true">
+			<node label="com.ericfeminella.collections" icon="packageIcon" expanded="true">
+				<node label="HashMap.as" icon="actionScriptIcon" url="source/libs/com/ericfeminella/collections/HashMap.as.html"/>
+				<node label="IMap.as" icon="actionScriptIcon" url="source/libs/com/ericfeminella/collections/IMap.as.html"/>
+			</node>
+			<node label="com.ericfeminella.display" icon="packageIcon" expanded="true">
+				<node label="AlertWindowHelper.as" icon="actionScriptIcon" url="source/libs/com/ericfeminella/display/AlertWindowHelper.as.html"/>
+			</node>
+			<node label="com.ericfeminella.sql" icon="packageIcon" expanded="true">
+				<node label="ISQLConnectionResponder.as" icon="actionScriptIcon" url="source/libs/com/ericfeminella/sql/ISQLConnectionResponder.as.html"/>
+				<node label="ISQLStatementResponder.as" icon="actionScriptIcon" url="source/libs/com/ericfeminella/sql/ISQLStatementResponder.as.html"/>
+			</node>
+			<node label="com.ericfeminella.tests" icon="packageIcon" expanded="true">
+				<node label="TestSuiteHelper.as" icon="actionScriptIcon" url="source/libs/com/ericfeminella/tests/TestSuiteHelper.as.html"/>
+			</node>
+			<node label="com.ericfeminella.utils" icon="packageIcon" expanded="true">
+				<node label="DeepCopy.as" icon="actionScriptIcon" url="source/libs/com/ericfeminella/utils/DeepCopy.as.html"/>
+				<node label="ManagedTimer.as" icon="actionScriptIcon" url="source/libs/com/ericfeminella/utils/ManagedTimer.as.html"/>
+			</node>
+			<node label="org.puremvc.as3.multicore.utilities.pipes.interfaces" icon="packageIcon" expanded="true">
+				<node label="IPipeAware.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/interfaces/IPipeAware.as.html"/>
+				<node label="IPipeFitting.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/interfaces/IPipeFitting.as.html"/>
+				<node label="IPipeMessage.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/interfaces/IPipeMessage.as.html"/>
+			</node>
+			<node label="org.puremvc.as3.multicore.utilities.pipes.messages" icon="packageIcon" expanded="true">
+				<node label="FilterControlMessage.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/messages/FilterControlMessage.as.html"/>
+				<node label="Message.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/messages/Message.as.html"/>
+				<node label="QueueControlMessage.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/messages/QueueControlMessage.as.html"/>
+			</node>
+			<node label="org.puremvc.as3.multicore.utilities.pipes.plumbing" icon="packageIcon" expanded="true">
+				<node label="Filter.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/plumbing/Filter.as.html"/>
+				<node label="Junction.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/plumbing/Junction.as.html"/>
+				<node label="JunctionMediator.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/plumbing/JunctionMediator.as.html"/>
+				<node label="Pipe.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/plumbing/Pipe.as.html"/>
+				<node label="PipeListener.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/plumbing/PipeListener.as.html"/>
+				<node label="Queue.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/plumbing/Queue.as.html"/>
+				<node label="TeeMerge.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/plumbing/TeeMerge.as.html"/>
+				<node label="TeeSplit.as" icon="actionScriptIcon" url="source/libs/org/puremvc/as3/multicore/utilities/pipes/plumbing/TeeSplit.as.html"/>
+			</node>
+			<node label="PureMVC_AS3_MultiCore_1_0_4.swc" url="source/libs/PureMVC_AS3_MultiCore_1_0_4.swc"/>
+			<node label="Utility_AS3_MultiCore_StateMachine_1_1.swc" url="source/libs/Utility_AS3_MultiCore_StateMachine_1_1.swc"/>
+		</node>
+		<node label="src" icon="classpathIcon" expanded="true">
+			<node label="assets">
+				<node label="pmvc_icon.png" icon="imageIcon" url="source/assets/pmvc_icon.png.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.common.interfaces" icon="packageIcon" expanded="true">
+				<node label="IJuntionMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/common/interfaces/IJuntionMediator.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.common.model.message" icon="packageIcon" expanded="true">
+				<node label="LogMessage.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/common/model/message/LogMessage.as.html"/>
+				<node label="UIQueryMessage.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/common/model/message/UIQueryMessage.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.common.view" icon="packageIcon" expanded="true">
+				<node label="ManagedJunctionMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/common/view/ManagedJunctionMediator.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.common.view.components" icon="packageIcon" expanded="true">
+				<node label="PipeAwareModule.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/common/view/components/PipeAwareModule.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.modules.doodad" icon="packageIcon" expanded="true">
+				<node label="DoodadModule.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html"/>
+				<node label="DoodadModuleFacade.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModuleFacade.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.modules.doodad.controller" icon="packageIcon" expanded="true">
+				<node label="CreateDoodadCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/doodad/controller/CreateDoodadCommand.as.html"/>
+				<node label="DoodadModuleStartupCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/doodad/controller/DoodadModuleStartupCommand.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.modules.doodad.view" icon="packageIcon" expanded="true">
+				<node label="DoodadJunctionMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/doodad/view/DoodadJunctionMediator.as.html"/>
+				<node label="DoodadMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/doodad/view/DoodadMediator.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.modules.doodad.view.components" icon="packageIcon" expanded="true">
+				<node label="Doodad.mxml" icon="mxmlIcon" url="source/com/joelhooks/pipingthemachine/modules/doodad/view/components/Doodad.mxml.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.modules.logger" icon="packageIcon" expanded="true">
+				<node label="LoggerModule.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/logger/LoggerModule.as.html"/>
+				<node label="LoggerModuleFacade.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/logger/LoggerModuleFacade.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.modules.logger.controller" icon="packageIcon" expanded="true">
+				<node label="CreateLogWindowCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/logger/controller/CreateLogWindowCommand.as.html"/>
+				<node label="LoggerModuleStartupCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/logger/controller/LoggerModuleStartupCommand.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.modules.logger.view" icon="packageIcon" expanded="true">
+				<node label="LoggerWindowJunctionMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/logger/view/LoggerWindowJunctionMediator.as.html"/>
+				<node label="LoggerWindowMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/modules/logger/view/LoggerWindowMediator.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.modules.logger.view.components" icon="packageIcon" expanded="true">
+				<node label="LoggerWindow.mxml" icon="mxmlIcon" url="source/com/joelhooks/pipingthemachine/modules/logger/view/components/LoggerWindow.mxml.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.shell" icon="packageIcon" expanded="true">
+				<node label="ShellFacade.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/ShellFacade.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.shell.controller" icon="packageIcon" expanded="true">
+				<node label="AddNewDoodadCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/controller/AddNewDoodadCommand.as.html"/>
+				<node label="StartupCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/controller/StartupCommand.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.shell.controller.state" icon="packageIcon" expanded="true">
+				<node label="AssembleCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/controller/state/AssembleCommand.as.html"/>
+				<node label="FailCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/controller/state/FailCommand.as.html"/>
+				<node label="InjectFSMCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/controller/state/InjectFSMCommand.as.html"/>
+				<node label="PlumbCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/controller/state/PlumbCommand.as.html"/>
+				<node label="StartShellCommand.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/controller/state/StartShellCommand.as.html"/>
+			</node>
+			<node label="com.joelhooks.pipingthemachine.shell.view" icon="packageIcon" expanded="true">
+				<node label="DoodadModuleMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/view/DoodadModuleMediator.as.html"/>
+				<node label="LoggerModuleMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/view/LoggerModuleMediator.as.html"/>
+				<node label="ShellJunctionMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/view/ShellJunctionMediator.as.html"/>
+				<node label="ShellMediator.as" icon="actionScriptIcon" url="source/com/joelhooks/pipingthemachine/shell/view/ShellMediator.as.html"/>
+			</node>
+			<node selected="true" label="PipingTheMachine.mxml" icon="mxmlAppIcon" url="source/PipingTheMachine.mxml.html"/>
+		</node>
+	</nodes>
+</index>

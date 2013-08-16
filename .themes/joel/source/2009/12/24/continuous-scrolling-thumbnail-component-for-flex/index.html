@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Continuous Scrolling Thumbnail Component for Flexjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Robotlegs Image Gallery Example using AS3-Signals and the Presentation Model' href='http://joelhooks.com/2010/01/16/robotlegs-image-gallery-example-using-as3-signals-and-the-presentation-model/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=378' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,707] -->
+<link rel="canonical" href="http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_SimpleSlideshow_863740508","10.0.0","http://joelhooks.com/wp-content/plugins/kimili-flash-embed/lib/expressInstall.swf");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-378 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-378" class="post-378 post type-post status-publish format-standard hentry category-components category-flex">
+					<h1>Continuous Scrolling Thumbnail Component for Flex</h1>
+		
+					<div class="entry-content">
+						<p><a href="http://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/">This post</a> continues to be the most popular on this space after a year and a half. I&#8217;ve never been particularly fond of the implmenetation. Tightly coupled to very specific data sets and not really anything like a Flex component. It is setup more like an application (because it was pulled out of an application and generalized).</p>
+<p>I&#8217;ve finally found the opportunity to rewrite the continuous scrolling thumbnail view portion of the slideshow and I am much happier with the results. Now, instead of resembling an application it is structured like a standard Flex 3 List based component. You supply it with a dataProvider and an itemRenderer (IListItemRenderer) and it acts as you would expect it to.</p>
+<p>This approach is much nicer, as the data is cleanly decoupled from the component implementation and it opens up the doors for reuse.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/components-thumbScroller');"  href="http://github.com/joelhooks/components-thumbScroller">The code is available on Github</a>. If you have any suggestions or would like to add to the component, fork it and let me know!</p>
+<div align="center">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_SimpleSlideshow_863740508"
+			class="flashmovie"
+			width="450"
+			height="600">
+	<param name="movie" value="http://joelhooks.com/examples/thumbScroller/SimpleSlideshow.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="http://joelhooks.com/examples/thumbScroller/SimpleSlideshow.swf"
+			name="fm_SimpleSlideshow_863740508"
+			width="450"
+			height="600">
+	<!--<![endif]-->
+		
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object></div>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/">Continuous Scrolling Thumbnail Component for Flex</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-595">
+        <div id="dsq-comment-header-595" class="dsq-comment-header">
+            <cite id="dsq-cite-595">
+                <span id="dsq-author-user-595">Noel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-595" class="dsq-comment-body">
+            <div id="dsq-comment-message-595" class="dsq-comment-message"><p>Thx for sharing your work! The current code seems not to update the dataprovider if the data happens to change and<br />it does not matter if it is declared as binded. eg. differents albums may have different sets of photos, on album <br />change, how can the dataprovider be refreshed with new set (thumbnail and image)? Can this be done or is it by design?<br />Any tip is appreciated!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-596">
+        <div id="dsq-comment-header-596" class="dsq-comment-header">
+            <cite id="dsq-cite-596">
+                <span id="dsq-author-user-596">Noel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-596" class="dsq-comment-body">
+            <div id="dsq-comment-message-596" class="dsq-comment-message"><p>Managed to get it working now with little code modification! Pls ignore my request! <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-597">
+        <div id="dsq-comment-header-597" class="dsq-comment-header">
+            <cite id="dsq-cite-597">
+http://joelhooks.com                <span id="dsq-author-user-597">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-597" class="dsq-comment-body">
+            <div id="dsq-comment-message-597" class="dsq-comment-message"><p>What is the modification? Have you forked it on Github? Maybe I can merge it in.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-612">
+        <div id="dsq-comment-header-612" class="dsq-comment-header">
+            <cite id="dsq-cite-612">
+                <span id="dsq-author-user-612">Noel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-612" class="dsq-comment-body">
+            <div id="dsq-comment-message-612" class="dsq-comment-message"><p>Sorry, could not get to you sooner. I have to look at the code and get back to you. It just few lines to add. You can take a look here: <a onclick="javascript:pageTracker._trackPageview('/outgoing/vietbt.org');"  href="http://vietbt.org" rel="nofollow">http://vietbt.org</a> . You do need to sign up a free account to access the gallery that I made modification on your sample to get it work!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-725">
+        <div id="dsq-comment-header-725" class="dsq-comment-header">
+            <cite id="dsq-cite-725">
+                <span id="dsq-author-user-725">Andy Lees</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-725" class="dsq-comment-body">
+            <div id="dsq-comment-message-725" class="dsq-comment-message"><p>I have been after sometinhg like this for ages. Will it run on Goolge Sites?</p>
+<p>Andy</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/';
+    var disqus_identifier = '378 http://joelhooks.com/?p=378';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Continuous Scrolling Thumbnail Component for Flex";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=378');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2009\/12\/24\/continuous-scrolling-thumbnail-component-for-flex\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.208 seconds. Made 5 queries to database and 14 cached queries. Memory used - 16.11MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

@@ -1,0 +1,156 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Interestingness.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+    Copyright (c) 2008, Adobe Systems Incorporated
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without 
+    modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, 
+        this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, 
+        this list of conditions and the following disclaimer in the 
+        documentation and/or other materials provided with the distribution.
+    * Neither the name of Adobe Systems Incorporated nor the names of its 
+        contributors may be used to endorse or promote products derived from 
+        this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; 
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+    POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">methodgroups</span> <span class="ActionScriptBracket/Brace">{</span>
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">FlickrResultEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">URLLoader</span>;
+    
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getList method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an empty object
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getList
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;interestingnessGetList&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+    
+    <span class="ActionScriptASDoc">/**
+     * Contains the methods for the Interestingness method group in the Flickr API.
+     * 
+     * Even though the events are listed here, they&apos;re really broadcast
+     * from the FlickrService instance itself to make using the service
+     * easier.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Interestingness</span> <span class="ActionScriptBracket/Brace">{</span>
+             
+        <span class="ActionScriptASDoc">/** 
+         * A reference to the FlickrService that contains the api key
+         * and logic for processing API calls/responses
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_service</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrService</span>;
+            
+        <span class="ActionScriptASDoc">/**
+         * Construct a new Interestingness &quot;method group&quot; class
+         *
+         * @param service The FlickrService this method group
+         *        is associated with.
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Interestingness</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">service</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrService</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_service</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">service</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns the list of interesting photos for the most recent day or a user-specified date.
+         *
+         * @param date (Optional) A specific date, to return interesting photos for.
+         * @param extras (Optional) A comma-delimited list of extra information to 
+         *            fetch for each returned record. Currently supported fields are:
+         *            license, date_upload, date_taken, owner_name, icon_server, and
+         *            original_format.
+         * @param per_page (Optional) Number of photos to return per page. If this 
+         *            argument is omitted, it defaults to 100. The maximum allowed 
+         *            value is 500.
+         * @param page (Optional) The page of results to return. If this argument 
+         *            is omitted, it defaults to 1.
+         * @see http://www.flickr.com/services/api/flickr.interestingness.getList.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getList</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">extras</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 100, <span class="ActionScriptDefault_Text">page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 1 <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method    
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dateStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">date</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fullMonth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">date</span>.<span class="ActionScriptDefault_Text">getMonth</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> 1<span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">date</span>.<span class="ActionScriptDefault_Text">getMonth</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&lt;=</span> 9<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptDefault_Text">fullMonth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">fullMonth</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fullDay</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">date</span>.<span class="ActionScriptDefault_Text">getDate</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">date</span>.<span class="ActionScriptDefault_Text">getDate</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&lt;=</span> 9<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptDefault_Text">fullDay</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">fullDay</span>;
+                <span class="ActionScriptDefault_Text">dateStr</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">date</span>.<span class="ActionScriptDefault_Text">getFullYear</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;-&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">fullMonth</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;-&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">fullDay</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getList_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.interestingness.getList&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;date&quot;</span>, <span class="ActionScriptDefault_Text">dateStr</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;extras&quot;</span>, <span class="ActionScriptDefault_Text">extras</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;per_page&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;page&quot;</span>, <span class="ActionScriptDefault_Text">page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getList call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getList_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a INTERESTINGNESS_GET_LIST event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">INTERESTINGNESS_GET_LIST</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photos&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePagedPhotoList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptBracket/Brace">}</span>    
+    
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

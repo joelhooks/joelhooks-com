@@ -1,0 +1,710 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>DateUtil.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">utils</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">formatters</span>.<span class="ActionScriptDefault_Text">DateBase</span>;
+
+    <span class="ActionScriptASDoc">/**
+    *     Class that contains static utility methods for manipulating and working
+    *    with Dates.
+    * 
+    *     @langversion ActionScript 3.0
+    *    @playerversion Flash 9.0
+    *    @tiptext
+    */</span>    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">DateUtil</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+    
+        <span class="ActionScriptASDoc">/**
+        *    Returns the English Short Month name (3 letters) for the Month that
+        *    the Date represents.      
+        * 
+        *     @param d The Date instance whose month will be used to retrieve the
+        *    short month name.
+        * 
+        *     @return An English 3 Letter Month abbreviation.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        *
+        *    @see SHORT_MONTH
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getShortMonthName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">monthNamesShort</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getMonth</span><span class="ActionScriptBracket/Brace">()]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+        *    Returns the index of the month that the short month name string
+        *    represents.     
+        * 
+        *     @param m The 3 letter abbreviation representing a short month name.
+        *
+        *    @param Optional parameter indicating whether the search should be case
+        *    sensitive
+        * 
+        *     @return A int that represents that month represented by the specifed
+        *    short name.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        *
+        *    @see SHORT_MONTH
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getShortMonthIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">m</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">monthNamesShort</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">m</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        *    Returns the English full Month name for the Month that
+        *    the Date represents.      
+        * 
+        *     @param d The Date instance whose month will be used to retrieve the
+        *    full month name.
+        * 
+        *     @return An English full month name.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        *
+        *    @see FULL_MONTH
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getFullMonthName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">monthNamesLong</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getMonth</span><span class="ActionScriptBracket/Brace">()]</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+        *    Returns the index of the month that the full month name string
+        *    represents.     
+        * 
+        *     @param m A full month name.
+        * 
+        *     @return A int that represents that month represented by the specifed
+        *    full month name.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        *
+        *    @see FULL_MONTH
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getFullMonthIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">m</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">monthNamesLong</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">m</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+        *    Returns the English Short Day name (3 letters) for the day that
+        *    the Date represents.      
+        * 
+        *     @param d The Date instance whose day will be used to retrieve the
+        *    short day name.
+        * 
+        *     @return An English 3 Letter day abbreviation.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        *
+        *    @see SHORT_DAY
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getShortDayName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">dayNamesShort</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getDay</span><span class="ActionScriptBracket/Brace">()]</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        *    Returns the index of the day that the short day name string
+        *    represents.     
+        * 
+        *     @param m A short day name.
+        * 
+        *     @return A int that represents that short day represented by the specifed
+        *    full month name.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        *
+        *    @see SHORT_DAY
+        */</span>            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getShortDayIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">dayNamesShort</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+        *    Returns the English full day name for the day that
+        *    the Date represents.      
+        * 
+        *     @param d The Date instance whose day will be used to retrieve the
+        *    full day name.
+        * 
+        *     @return An English full day name.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        *
+        *    @see FULL_DAY
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getFullDayName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">dayNamesLong</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getDay</span><span class="ActionScriptBracket/Brace">()]</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>        
+
+        <span class="ActionScriptASDoc">/**
+        *    Returns the index of the day that the full day name string
+        *    represents.     
+        * 
+        *     @param m A full day name.
+        * 
+        *     @return A int that represents that full day represented by the specifed
+        *    full month name.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        *
+        *    @see FULL_DAY
+        */</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getFullDayIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">dayNamesLong</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+        *    Returns a two digit representation of the year represented by the 
+        *    specified date.
+        * 
+        *     @param d The Date instance whose year will be used to generate a two
+        *    digit string representation of the year.
+        * 
+        *     @return A string that contains a 2 digit representation of the year.
+        *    Single digits will be padded with 0.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getShortYear</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getFullYear</span><span class="ActionScriptBracket/Brace">())</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dStr</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">&lt;</span> 3<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">dStr</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dStr</span>.<span class="ActionScriptDefault_Text">substr</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dStr</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptBracket/Brace">))</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+        *    Compares two dates and returns an integer depending on their relationship.
+        *
+        *    Returns -1 if d1 is greater than d2.
+        *    Returns 1 if d2 is greater than d1.
+        *    Returns 0 if both dates are equal.
+        * 
+        *     @param d1 The date that will be compared to the second date.
+        *    @param d2 The date that will be compared to the first date.
+        * 
+        *     @return An int indicating how the two dates compare.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">compareDates</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>, <span class="ActionScriptDefault_Text">d2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">d1ms</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d1</span>.<span class="ActionScriptDefault_Text">getTime</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">d2ms</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d2</span>.<span class="ActionScriptDefault_Text">getTime</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d1ms</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">d2ms</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptOperator">-</span>1;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d1ms</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">d2ms</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> 1;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> 0;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+        *    Returns a short hour (0 - 12) represented by the specified date.
+        *
+        *    If the hour is less than 12 (0 - 11 AM) then the hour will be returned.
+        *
+        *    If the hour is greater than 12 (12 - 23 PM) then the hour minus 12
+        *    will be returned.
+        * 
+        *     @param d1 The Date from which to generate the short hour
+        * 
+        *     @return An int between 0 and 13 ( 1 - 12 ) representing the short hour.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getShortHour</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">hours</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">==</span> 0 <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">==</span> 12<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> 12;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">&gt;</span> 12<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 12;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">h</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        *    Returns a string indicating whether the date represents a time in the
+        *    ante meridiem (AM) or post meridiem (PM).
+        *
+        *    If the hour is less than 12 then &quot;AM&quot; will be returned.
+        *
+        *    If the hour is greater than 12 then &quot;PM&quot; will be returned.
+        * 
+        *     @param d1 The Date from which to generate the 12 hour clock indicator.
+        * 
+        *     @return A String (&quot;AM&quot; or &quot;PM&quot;) indicating which half of the day the 
+        *    hour represents.
+        *
+        *     @langversion ActionScript 3.0
+        *    @playerversion Flash 9.0
+        *    @tiptext
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getAMPM</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">hours</span> <span class="ActionScriptOperator">&gt;</span> 11<span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;PM&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;AM&quot;</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+        * Parses dates that conform to RFC822 into Date objects. This method also
+        * supports four-digit years (not supported in RFC822), but two-digit years
+        * (referring to the 20th century) are fine, too.
+        *
+        * This function is useful for parsing RSS .91, .92, and 2.0 dates.
+        *
+        * @param str
+        *
+        * @returns
+        *
+        * @langversion ActionScript 3.0
+        * @playerversion Flash 9.0
+        * @tiptext
+        *
+        * @see http://asg.web.cmu.edu/rfc/rfc822.html
+        */</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseRFC822</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">str</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">finalDate</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>;
+            <span class="ActionScriptReserved">try</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dateParts</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">str</span>.<span class="ActionScriptDefault_Text">split</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot; &quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">day</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dateParts</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">search</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">/</span><span class="ActionScriptDefault_Text">\d</span><span class="ActionScriptOperator">/</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">day</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dateParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">replace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">/</span><span class="ActionScriptDefault_Text">\W</span><span class="ActionScriptOperator">/</span>, <span class="ActionScriptString">&quot;&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dateParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">month</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(D</span><span class="ActionScriptDefault_Text">ateUtil</span>.<span class="ActionScriptDefault_Text">getShortMonthIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dateParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">()))</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">year</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dateParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timeParts</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dateParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">split</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;:&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hour</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minute</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">second</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeParts</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span><span class="ActionScriptOperator">:</span> 0;
+    
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">milliseconds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Date</span>.<span class="ActionScriptDefault_Text">UTC</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">year</span>, <span class="ActionScriptDefault_Text">month</span>, <span class="ActionScriptDefault_Text">date</span>, <span class="ActionScriptDefault_Text">hour</span>, <span class="ActionScriptDefault_Text">minute</span>, <span class="ActionScriptDefault_Text">second</span>, 0<span class="ActionScriptBracket/Brace">)</span>;
+    
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timezone</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dateParts</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timezone</span>.<span class="ActionScriptDefault_Text">search</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">/</span><span class="ActionScriptDefault_Text">\d</span><span class="ActionScriptOperator">/</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">switch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timezone</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UT&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> 0;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UTC&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> 0;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;GMT&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> 0;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;EST&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>5 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;EDT&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>4 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;CST&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>6 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;CDT&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>5 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;MST&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>7 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;MDT&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>6 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;PST&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>8 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;PDT&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>7 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;Z&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> 0;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;A&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>1 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;M&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span>12 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;N&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span>1 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;Y&quot;</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span>12 <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span>;
+                            <span class="ActionScriptReserved">break</span>;
+                        <span class="ActionScriptReserved">default</span><span class="ActionScriptOperator">:</span>
+                            <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> 0;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">multiplier</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 1;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oHours</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oMinutes</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timezone</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">!=</span> 4<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timezone</span>.<span class="ActionScriptDefault_Text">charAt</span><span class="ActionScriptBracket/Brace">(</span>0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;-&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptDefault_Text">multiplier</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+                        <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptDefault_Text">timezone</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timezone</span>.<span class="ActionScriptDefault_Text">substr</span><span class="ActionScriptBracket/Brace">(</span>1, 4<span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptDefault_Text">oHours</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timezone</span>.<span class="ActionScriptDefault_Text">substr</span><span class="ActionScriptBracket/Brace">(</span>0, 2<span class="ActionScriptBracket/Brace">))</span>;
+                    <span class="ActionScriptDefault_Text">oMinutes</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timezone</span>.<span class="ActionScriptDefault_Text">substr</span><span class="ActionScriptBracket/Brace">(</span>2, 2<span class="ActionScriptBracket/Brace">))</span>;
+                    <span class="ActionScriptDefault_Text">offset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(((</span><span class="ActionScriptDefault_Text">oHours</span> <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">oMinutes</span> <span class="ActionScriptOperator">*</span> 60000<span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">multiplier</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+
+                <span class="ActionScriptDefault_Text">finalDate</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">milliseconds</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptBracket/Brace">)</span>;
+
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">finalDate</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;Invalid Date&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">throw</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;This date does not conform to RFC822.&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">catch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">eStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unable to parse the string [&quot;</span> <span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">str</span><span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;] into a date. &quot;</span>;
+                <span class="ActionScriptDefault_Text">eStr</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;The internal error was: &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">throw</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">eStr</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">finalDate</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+         
+        <span class="ActionScriptASDoc">/**
+        * Returns a date string formatted according to RFC822.
+        *
+        * @param d
+        *
+        * @returns
+        *
+        * @langversion ActionScript 3.0
+        * @playerversion Flash 9.0
+        * @tiptext
+        *
+        * @see http://asg.web.cmu.edu/rfc/rfc822.html
+        */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">toRFC822</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCDate</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hours</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCHours</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minutes</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCMinutes</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">seconds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCSeconds</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">sb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">dayNamesShort</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCDay</span><span class="ActionScriptBracket/Brace">()]</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;, &quot;</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">date</span> <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">date</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot; &quot;</span>;
+            <span class="ActionScriptComment">//sb += DateUtil.SHORT_MONTH[d.getUTCMonth()];
+</span>            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">DateBase</span>.<span class="ActionScriptDefault_Text">monthNamesShort</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCMonth</span><span class="ActionScriptBracket/Brace">()]</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot; &quot;</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCFullYear</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot; &quot;</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">hours</span> <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>            
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">hours</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;:&quot;</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">minutes</span> <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>            
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">minutes</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;:&quot;</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">seconds</span> <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>            
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">seconds</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot; GMT&quot;</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">sb</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+         
+        <span class="ActionScriptASDoc">/**
+        * Parses dates that conform to the W3C Date-time Format into Date objects.
+        *
+        * This function is useful for parsing RSS 1.0 and Atom 1.0 dates.
+        *
+        * @param str
+        *
+        * @returns
+        *
+        * @langversion ActionScript 3.0
+        * @playerversion Flash 9.0
+        * @tiptext
+        *
+        * @see http://www.w3.org/TR/NOTE-datetime
+        */</span>             
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseW3CDTF</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">str</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">finalDate</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>;
+            <span class="ActionScriptReserved">try</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dateStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">str</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span>0, <span class="ActionScriptDefault_Text">str</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;T&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timeStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">str</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">str</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;T&quot;</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">str</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dateArr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dateStr</span>.<span class="ActionScriptDefault_Text">split</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;-&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">year</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dateArr</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">month</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dateArr</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dateArr</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">multiplier</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">offsetHours</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">offsetMinutes</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">offsetStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;Z&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">multiplier</span> <span class="ActionScriptOperator">=</span> 1;
+                    <span class="ActionScriptDefault_Text">offsetHours</span> <span class="ActionScriptOperator">=</span> 0;
+                    <span class="ActionScriptDefault_Text">offsetMinutes</span> <span class="ActionScriptOperator">=</span> 0;
+                    <span class="ActionScriptDefault_Text">timeStr</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">replace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;Z&quot;</span>, <span class="ActionScriptString">&quot;&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;+&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">multiplier</span> <span class="ActionScriptOperator">=</span> 1;
+                    <span class="ActionScriptDefault_Text">offsetStr</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;+&quot;</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">offsetHours</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span>0, <span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;:&quot;</span><span class="ActionScriptBracket/Brace">)))</span>;
+                    <span class="ActionScriptDefault_Text">offsetMinutes</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;:&quot;</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">))</span>;
+                    <span class="ActionScriptDefault_Text">timeStr</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span>0, <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;+&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptComment">// offset is -
+</span>                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">multiplier</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+                    <span class="ActionScriptDefault_Text">offsetStr</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;-&quot;</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">offsetHours</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span>0, <span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;:&quot;</span><span class="ActionScriptBracket/Brace">)))</span>;
+                    <span class="ActionScriptDefault_Text">offsetMinutes</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;:&quot;</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">offsetStr</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">))</span>;
+                    <span class="ActionScriptDefault_Text">timeStr</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span>0, <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;-&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timeArr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeStr</span>.<span class="ActionScriptDefault_Text">split</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;:&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hour</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeArr</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minutes</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeArr</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">secondsArr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeArr</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timeArr</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span>.<span class="ActionScriptDefault_Text">split</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;.&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">null</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">seconds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">secondsArr</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">secondsArr</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">secondsArr</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span> <span class="ActionScriptOperator">:</span> 0;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">milliseconds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">secondsArr</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">secondsArr</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">secondsArr</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">())</span> <span class="ActionScriptOperator">:</span> 0;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">utc</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Date</span>.<span class="ActionScriptDefault_Text">UTC</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">year</span>, <span class="ActionScriptDefault_Text">month</span><span class="ActionScriptOperator">-</span>1, <span class="ActionScriptDefault_Text">date</span>, <span class="ActionScriptDefault_Text">hour</span>, <span class="ActionScriptDefault_Text">minutes</span>, <span class="ActionScriptDefault_Text">seconds</span>, <span class="ActionScriptDefault_Text">milliseconds</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(((</span><span class="ActionScriptDefault_Text">offsetHours</span> <span class="ActionScriptOperator">*</span> 3600000<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">offsetMinutes</span> <span class="ActionScriptOperator">*</span> 60000<span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">multiplier</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">finalDate</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">utc</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">finalDate</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;Invalid Date&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">throw</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;This date does not conform to W3CDTF.&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">catch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">eStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unable to parse the string [&quot;</span> <span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">str</span><span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;] into a date. &quot;</span>;
+                <span class="ActionScriptDefault_Text">eStr</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;The internal error was: &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">throw</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">eStr</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">finalDate</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+         
+        <span class="ActionScriptASDoc">/**
+        * Returns a date string formatted according to W3CDTF.
+        *
+        * @param d
+        * @param includeMilliseconds Determines whether to include the
+        * milliseconds value (if any) in the formatted string.
+        *
+        * @returns
+        *
+        * @langversion ActionScript 3.0
+        * @playerversion Flash 9.0
+        * @tiptext
+        *
+        * @see http://www.w3.org/TR/NOTE-datetime
+        */</span>             
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">toW3CDTF</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>,<span class="ActionScriptDefault_Text">includeMilliseconds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCDate</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">month</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCMonth</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hours</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCHours</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minutes</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCMinutes</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">seconds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCSeconds</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">milliseconds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCMilliseconds</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">sb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getUTCFullYear</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;-&quot;</span>;
+            
+            <span class="ActionScriptComment">//thanks to &quot;dom&quot; who sent in a fix for the line below
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">month</span> <span class="ActionScriptOperator">+</span> 1 <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">month</span> <span class="ActionScriptOperator">+</span> 1;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;-&quot;</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">date</span> <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">date</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;T&quot;</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">hours</span> <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">hours</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;:&quot;</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">minutes</span> <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">minutes</span>;
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;:&quot;</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">seconds</span> <span class="ActionScriptOperator">&lt;</span> 10<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;0&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">seconds</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">includeMilliseconds</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">milliseconds</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;.&quot;</span>;
+                <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">milliseconds</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">sb</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;-00:00&quot;</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">sb</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Converts a date into just after midnight.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">makeMorning</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">time</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">hours</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">minutes</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">seconds</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">milliseconds</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">d</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Converts a date into just befor midnight.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">makeNight</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">time</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">hours</span> <span class="ActionScriptOperator">=</span> 23;
+            <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">minutes</span> <span class="ActionScriptOperator">=</span> 59;
+            <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">seconds</span> <span class="ActionScriptOperator">=</span> 59;
+            <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">milliseconds</span> <span class="ActionScriptOperator">=</span> 999;                
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">d</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * Sort of converts a date into UTC.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getUTCDate</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">nd</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getTimezoneOffset</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">*</span> 60 <span class="ActionScriptOperator">*</span> 1000; 
+            <span class="ActionScriptDefault_Text">nd</span>.<span class="ActionScriptDefault_Text">setTime</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">d</span>.<span class="ActionScriptDefault_Text">getTime</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">offset</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">nd</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

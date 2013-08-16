@@ -1,0 +1,241 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Auth.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+    Copyright (c) 2008, Adobe Systems Incorporated
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without 
+    modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, 
+        this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, 
+        this list of conditions and the following disclaimer in the 
+        documentation and/or other materials provided with the distribution.
+    * Neither the name of Adobe Systems Incorporated nor the names of its 
+        contributors may be used to endorse or promote products derived from 
+        this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; 
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+    POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">methodgroups</span> <span class="ActionScriptBracket/Brace">{</span>
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">FlickrResultEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">URLLoader</span>;
+    
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the checkToken method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, contains an &quot;auth&quot; AuthResult instance
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #checkToken
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;authCheckToken&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getFrob method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, contains a &quot;frob&quot; string (the frob value to be 
+         *                used for authentication)
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getFrob
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;authGetFrob&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getToken method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, contains an &quot;auth&quot; AuthResult instance
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getToken
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;authGetToken&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>    
+    
+    <span class="ActionScriptASDoc">/**
+     * Contains the methods for the Auth method group in the Flickr API.
+     * 
+     * Even though the events are listed here, they&apos;re really broadcast
+     * from the FlickrService instance itself to make using the service
+     * easier.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Auth</span> <span class="ActionScriptBracket/Brace">{</span>
+             
+        <span class="ActionScriptASDoc">/** 
+         * A reference to the FlickrService that contains the api key
+         * and logic for processing API calls/responses
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_service</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrService</span>;
+    
+        <span class="ActionScriptASDoc">/**
+         * Construct a new Test &quot;method group&quot; class
+         *
+         * @param service The FlickrService this method group
+         *        is associated with.
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Auth</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">service</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrService</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_service</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">service</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns the credentials attached to an authentication token.
+         *
+         * @param token The authentication token to check
+         * @see http://www.flickr.com/services/api/flickr.auth.checkToken.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">checkToken</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">checkToken_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.auth.checkToken&quot;</span>, 
+                                   <span class="ActionScriptReserved">true</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;auth_token&quot;</span>, <span class="ActionScriptDefault_Text">token</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the checkToken call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">checkToken_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create an AUTH_CHECK_TOKEN event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">AUTH_CHECK_TOKEN</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;auth&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parseAuthResult</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns a frob to be used during authentication.
+         *
+         * @see http://www.flickr.com/services/api/flickr.auth.getFrob.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getFrob</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getFrob_result</span>, <span class="ActionScriptString">&quot;flickr.auth.getFrob&quot;</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getFrob call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getFrob_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create an AUTH_GET_FROB event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">AUTH_GET_FROB</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;frob&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parseFrob</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns the auth token for the given frob, if one has been attached.
+         *
+         * @param frob The frob to get the token for
+         *
+         * @see http://www.flickr.com/services/api/flickr.auth.getToken.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getToken</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">frob</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getToken_result</span>, 
+                                    <span class="ActionScriptString">&quot;flickr.auth.getToken&quot;</span>,
+                                    <span class="ActionScriptReserved">true</span>,
+                                    <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;frob&quot;</span>, <span class="ActionScriptDefault_Text">frob</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getToken call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getToken_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create an AUTH_GET_TOKEN event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">AUTH_GET_TOKEN</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;auth&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parseAuthResult</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>    
+    
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

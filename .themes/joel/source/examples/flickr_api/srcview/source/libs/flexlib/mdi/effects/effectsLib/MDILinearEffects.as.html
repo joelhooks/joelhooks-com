@@ -1,0 +1,156 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>MDILinearEffects.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">mdi</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">effectsLib</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Point</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">mdi</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">MDIWindow</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">mdi</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">IMDIEffectsDescriptor</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">mdi</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">MDIEffectsDescriptorBase</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">mdi</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">effectClasses</span>.<span class="ActionScriptDefault_Text">MDIGroupEffectItem</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">mdi</span>.<span class="ActionScriptDefault_Text">managers</span>.<span class="ActionScriptDefault_Text">MDIManager</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Blur</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Effect</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Move</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Parallel</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Resize</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Rotate</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Sequence</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">WipeDown</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">EffectEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">AnimateProperty</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Dissolve</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Rectangle</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * Collection of effects that limit movement to one dimension (horizontal/vertical) at a time.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">MDILinearEffects</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">MDIEffectsDescriptorBase</span> <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">IMDIEffectsDescriptor</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getWindowMinimizeEffect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MDIWindow</span>, <span class="ActionScriptDefault_Text">manager</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MDIManager</span>, <span class="ActionScriptDefault_Text">moveTo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Point</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Effect</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">seq</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sequence</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Sequence</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resizeW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Resize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Resize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">resizeW</span>.<span class="ActionScriptDefault_Text">widthTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">window</span>.<span class="ActionScriptDefault_Text">minWidth</span>;
+            <span class="ActionScriptDefault_Text">resizeW</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">resizeW</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resizeH</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Resize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Resize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">resizeH</span>.<span class="ActionScriptDefault_Text">heightTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">window</span>.<span class="ActionScriptDefault_Text">minimizeHeight</span>;
+            <span class="ActionScriptDefault_Text">resizeH</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">resizeH</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">moveX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Move</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">moveX</span>.<span class="ActionScriptDefault_Text">xTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">moveTo</span>.<span class="ActionScriptDefault_Text">x</span>;
+            <span class="ActionScriptDefault_Text">moveX</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">moveX</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">moveY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Move</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">moveY</span>.<span class="ActionScriptDefault_Text">yTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">moveTo</span>.<span class="ActionScriptDefault_Text">y</span>;
+            <span class="ActionScriptDefault_Text">moveY</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">moveY</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">end</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">seq</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getWindowRestoreEffect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MDIWindow</span>, <span class="ActionScriptDefault_Text">manager</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MDIManager</span>, <span class="ActionScriptDefault_Text">restoreTo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Effect</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">seq</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sequence</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Sequence</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">moveY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Move</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">moveY</span>.<span class="ActionScriptDefault_Text">yTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">restoreTo</span>.<span class="ActionScriptDefault_Text">y</span>;
+            <span class="ActionScriptDefault_Text">moveY</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">moveY</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">moveX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Move</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">moveX</span>.<span class="ActionScriptDefault_Text">xTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">restoreTo</span>.<span class="ActionScriptDefault_Text">x</span>;
+            <span class="ActionScriptDefault_Text">moveX</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">moveX</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resizeW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Resize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Resize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">resizeW</span>.<span class="ActionScriptDefault_Text">widthTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">restoreTo</span>.<span class="ActionScriptDefault_Text">width</span>;
+            <span class="ActionScriptDefault_Text">resizeW</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">resizeW</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resizeH</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Resize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Resize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">resizeH</span>.<span class="ActionScriptDefault_Text">heightTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">restoreTo</span>.<span class="ActionScriptDefault_Text">height</span>;
+            <span class="ActionScriptDefault_Text">resizeH</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">resizeH</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">end</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">seq</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getWindowMaximizeEffect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MDIWindow</span>, <span class="ActionScriptDefault_Text">manager</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MDIManager</span>, <span class="ActionScriptDefault_Text">bottomOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Effect</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">seq</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sequence</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Sequence</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">moveX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Move</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">moveX</span>.<span class="ActionScriptDefault_Text">xTo</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptDefault_Text">moveX</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">moveX</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">moveY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Move</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">moveY</span>.<span class="ActionScriptDefault_Text">yTo</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptDefault_Text">moveY</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">moveY</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resizeW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Resize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Resize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">resizeW</span>.<span class="ActionScriptDefault_Text">widthTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">manager</span>.<span class="ActionScriptDefault_Text">container</span>.<span class="ActionScriptDefault_Text">width</span>;
+            <span class="ActionScriptDefault_Text">resizeW</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">resizeW</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resizeH</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Resize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Resize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">resizeH</span>.<span class="ActionScriptDefault_Text">heightTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">manager</span>.<span class="ActionScriptDefault_Text">container</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">bottomOffset</span>;
+            <span class="ActionScriptDefault_Text">resizeH</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">resizeH</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">seq</span>.<span class="ActionScriptDefault_Text">end</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">seq</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getWindowCloseEffect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MDIWindow</span>, <span class="ActionScriptDefault_Text">manager</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MDIManager</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Effect</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">window</span>.<span class="ActionScriptDefault_Text">minWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">window</span>.<span class="ActionScriptDefault_Text">minHeight</span> <span class="ActionScriptOperator">=</span> 1;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resize</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Resize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Resize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">window</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">resize</span>.<span class="ActionScriptDefault_Text">widthTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resize</span>.<span class="ActionScriptDefault_Text">heightTo</span> <span class="ActionScriptOperator">=</span> 1;
+            <span class="ActionScriptDefault_Text">resize</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> 100;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">resize</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

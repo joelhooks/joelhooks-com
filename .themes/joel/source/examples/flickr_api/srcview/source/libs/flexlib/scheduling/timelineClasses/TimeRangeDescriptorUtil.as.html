@@ -1,0 +1,96 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>TimeRangeDescriptorUtil.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+
+Copyright (c) 2006. Adobe Systems Incorporated.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+  * Neither the name of Adobe Systems Incorporated nor the names of its
+    contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+@ignore
+*/</span><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">timelineClasses</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">util</span>.<span class="ActionScriptDefault_Text">DateUtil</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">ArrayCollection</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">IList</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">TimeRangeDescriptorUtil</span>
+    <span class="ActionScriptBracket/Brace">{</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">defaultTimeRangeDescriptor</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span> 
+            <span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MINUTE_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 5 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MINUTE_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 10 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MINUTE_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 15 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MINUTE_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 30 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MINUTE_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 60 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MINUTE_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">HOUR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 6 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">HOUR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 12 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">HOUR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;L:NNAA&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 24 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">HOUR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;DD/MM/YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">DAY_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;DD/MM/YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span> 4 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">DAY_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;DD/MM/YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,     
+            <span class="ActionScriptBracket/Brace">[</span> 7 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">DAY_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;DD/MM/YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 14 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">DAY_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;DD/MM/YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,    
+            <span class="ActionScriptBracket/Brace">[</span> 30 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">DAY_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;MMM YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,                 
+            <span class="ActionScriptBracket/Brace">[</span> 4 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MONTH_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;MMM YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span> 6 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MONTH_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;MMM YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span> 9 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MONTH_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;MMM YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span> 12 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">MONTH_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;MMM YY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">YEAR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;YYYY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span> 5 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">YEAR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;YYYY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span> 10 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">YEAR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;YYYY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span> 25 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">YEAR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;YYYY&quot;</span> <span class="ActionScriptBracket/Brace">]</span>, 
+            <span class="ActionScriptBracket/Brace">[</span> 500 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">DateUtil</span>.<span class="ActionScriptDefault_Text">YEAR_IN_MILLISECONDS</span>, <span class="ActionScriptString">&quot;YYYY&quot;</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">]</span>;
+                                                            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">convertArrayToTimeRangeDescriptor</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">timeDescriptor</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ArrayCollection</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">len</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeDescriptor</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">len</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">timeDescriptor</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">entry</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ITimeDescriptor</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">SimpleTimeDescriptor</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">entry</span>.<span class="ActionScriptDefault_Text">date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">[</span> 0 <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">entry</span>.<span class="ActionScriptDefault_Text">description</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">[</span> 1 <span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">addItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entry</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">dataProvider</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getDefaultTimeRangeDescriptor</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">TimeRangeDescriptorUtil</span>.<span class="ActionScriptDefault_Text">convertArrayToTimeRangeDescriptor</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">defaultTimeRangeDescriptor</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

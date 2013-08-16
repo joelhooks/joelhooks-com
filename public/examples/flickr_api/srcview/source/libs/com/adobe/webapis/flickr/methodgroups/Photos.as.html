@@ -1,0 +1,1456 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Photos.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+    Copyright (c) 2008, Adobe Systems Incorporated
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without 
+    modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, 
+        this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, 
+        this list of conditions and the following disclaimer in the 
+        documentation and/or other materials provided with the distribution.
+    * Neither the name of Adobe Systems Incorporated nor the names of its 
+        contributors may be used to endorse or promote products derived from 
+        this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; 
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+    POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">methodgroups</span> <span class="ActionScriptBracket/Brace">{</span>
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">FlickrResultEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">methodgroups</span>.<span class="ActionScriptDefault_Text">helpers</span>.<span class="ActionScriptDefault_Text">PhotoSearchParams</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">URLLoader</span>;
+    
+    
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the addTags method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an empty object
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #addTags
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosAddTags&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getAllContexts method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, a PhotoContext instance
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getAllContexts
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetAllContexts&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getContactsPhotos method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an Array of Photo instances
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getContactsPhotos
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetContactsPhotos&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getContactsPublicPhotos method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an Array of Photo instances
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getContactsPublicPhotos
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetContactsPublicPhotos&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getContext method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an Array of Photo instances.  The first
+         *                element is the previous photo, the second element is
+         *                the next photo.
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getContext
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetContext&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getCounts method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an array of PhotoCount instances
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getCounts
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetCounts&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getExif method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, a Photo instance
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getExif
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetExif&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getInfo method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, a Photo instance
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getInfo
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetInfo&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getNotInSet method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, a PagedPhotoList instance
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getNotInSet
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetNotInSet&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getPerms method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, a Photo instance
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getPerms
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetPerms&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getRecent method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, a PagedPhotoList instance
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getRecent
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetRecent&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getSizes method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an Array of PhotoSize instances
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getSizes
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetSizes&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the getUntagged method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, a PagedPhotoList instnace
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #getUntagged
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>     
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosGetUntagged&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a result of the removeTag method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an empty object
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #removeTag
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>     
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosRemoveTag&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a search of the search method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, a PagedPhotoList instnace
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #search
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>     
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosSearch&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a search of the setDates method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an empty object
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #setDates
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>     
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosSetDates&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a search of the setMeta method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an empty object
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #setMeta
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>     
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosSetMeta&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a search of the setPerms method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an empty object
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #setPerms
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>    
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosSetPerms&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+             
+        <span class="ActionScriptASDoc">/**
+         * Broadcast as a search of the setTags method being called
+         *
+         * The event contains the following properties
+         *    success    - Boolean indicating if the call was successful or not
+         *    data - When success is true, an empty object
+         *           When success is false, contains an &quot;error&quot; FlickrError instance
+         *
+         * @see #setTags
+         * @see com.adobe.service.flickr.FlickrError
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>    
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;photosSetTags&quot;</span>, 
+             <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;com.adobe.webapis.flickr.events.FlickrResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>    
+    
+    <span class="ActionScriptASDoc">/**
+     * Contains the methods for the Photos method group in the Flickr API.
+     * 
+     * Even though the events are listed here, they&apos;re really broadcast
+     * from the FlickrService instance itself to make using the service
+     * easier.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Photos</span> <span class="ActionScriptBracket/Brace">{</span>
+             
+        <span class="ActionScriptASDoc">/** 
+         * A reference to the FlickrService that contains the api key
+         * and logic for processing API calls/responses
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_service</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrService</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Private variable that we provide read-only access to
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_licenses</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Licenses</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_notes</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Notes</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_transform</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Transform</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_upload</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Upload</span>;
+    
+        <span class="ActionScriptASDoc">/**
+         * Construct a new Blogs &quot;method group&quot; class
+         *
+         * @param service The FlickrService this method group
+         *        is associated with.
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Photos</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">service</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrService</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_service</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">service</span>;
+            <span class="ActionScriptDefault_Text">_licenses</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Licenses</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">service</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">_notes</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Notes</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">service</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">_transform</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Transform</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">service</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">_upload</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Upload</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">service</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Provide read-only access to the Licenses method group in the Flickr API
+         *
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">licenses</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Licenses</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_licenses</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Provide read-only access to the Notes method group in the Flickr API
+         *
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">notes</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Notes</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_notes</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Provide read-only access to the Transform method group in the Flickr API
+         *
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">transform</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Transform</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_transform</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Provide read-only access to the Upload method group in the Flickr API
+         *
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">upload</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Upload</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_upload</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         * Add tags to a photo.
+         *
+         * This method requires authentication with WRITE permission.
+         *
+         * @param photo_id The id of the photo to add tags to.
+         * @param tags The tags to add to the photo.
+         * @see http://www.flickr.com/services/api/flickr.photos.addTags.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addTags</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">tags</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">addTags_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.addTags&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;tags&quot;</span>, <span class="ActionScriptDefault_Text">tags</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the addTags call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addTags_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_ADD_TAGS event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_ADD_TAGS</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns all visble sets and pools the photo belongs to.
+         *
+         * @param photo_id The photo to return information for.
+         * @see http://www.flickr.com/services/api/flickr.photos.getAllContexts.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getAllContexts</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getAllContexts_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getAllContexts&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getAllContexts call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getAllContexts_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_ALL_CONTEXTS event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_ALL_CONTEXTS</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photoContext&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePhotoContext</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Fetch a list of recent photos from the calling users&apos; contacts.
+         *
+         * This method requires authentication with READ permission.
+         *
+         * @param count (Optional) Number of photos to return. Defaults to 10, maximum 50. 
+         *            This is only used if single_photo is not passed.
+         * @param just_friends (Optional) Set as true to only show photos from friends and
+         *            family (excluding regular contacts).
+         * @param single_photo (Optional) Only fetch one photo (the latest) per contact, 
+         *            instead of all photos in chronological order.
+         * @param include_self (Optional) Set to true to include photos from the calling user.
+         * @see http://www.flickr.com/services/api/flickr.photos.getContactsPhotos.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getContactsPhotos</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">count</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 10, <span class="ActionScriptDefault_Text">just_friends</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">single_photo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">include_self</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getContactsPhotos_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getContactsPhotos&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;count&quot;</span>, <span class="ActionScriptDefault_Text">count</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;just_friends&quot;</span>, <span class="ActionScriptDefault_Text">just_friends</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;single_photo&quot;</span>, <span class="ActionScriptDefault_Text">single_photo</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;include_self&quot;</span>, <span class="ActionScriptDefault_Text">include_self</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getContactsPhotos call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getContactsPhotos_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_CONTACTS_PHOTOS event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_CONTACTS_PHOTOS</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photos&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePhotoList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Fetch a list of recent public photos from a users&apos; contacts.
+         *
+         * @param user_id The NSID of the user to fetch photos for.
+         * @param count (Optional) Number of photos to return. Defaults to 10, maximum 50. 
+         *            This is only used if single_photo is not passed.
+         * @param just_friends (Optional) Set as true to only show photos from friends and
+         *            family (excluding regular contacts).
+         * @param single_photo (Optional) Only fetch one photo (the latest) per contact, 
+         *            instead of all photos in chronological order.
+         * @param include_self (Optional) Set to true to include photos from user specified
+         *            by user_id
+         * @see http://www.flickr.com/services/api/flickr.photos.getContactsPublicPhotos.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getContactsPublicPhotos</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">user_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">count</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 10, <span class="ActionScriptDefault_Text">just_friends</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">single_photo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>, <span class="ActionScriptDefault_Text">include_self</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getContactsPublicPhotos_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getContactsPublicPhotos&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;user_id&quot;</span>, <span class="ActionScriptDefault_Text">user_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;count&quot;</span>, <span class="ActionScriptDefault_Text">count</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;just_friends&quot;</span>, <span class="ActionScriptDefault_Text">just_friends</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;single_photo&quot;</span>, <span class="ActionScriptDefault_Text">single_photo</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;include_self&quot;</span>, <span class="ActionScriptDefault_Text">include_self</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getContactsPublicPhotos call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getContactsPublicPhotos_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_CONTACTS_PUBLIC_PHOTOS event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_CONTACTS_PUBLIC_PHOTOS</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photos&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePhotoList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns next and previous photos for a photo in a photostream.
+         *
+         * @param photo_id The id of the photo to fetch the context for.
+         * @see http://www.flickr.com/services/api/flickr.photos.getContext.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getContext</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getContext_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getContext&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getContext call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getContext_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_CONTEXT event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_CONTEXT</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;context&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parseContext</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Gets a list of photo counts for the given date ranges for the 
+         * calling user.
+         *
+         * This method requires authentication with READ permission.
+         *
+         * @param dates (Optional) A list of Date objects, specified earliest first
+         * @param taken_dates (Optional) A list of Date objects, specified earliest
+         *                first 
+         * @see http://www.flickr.com/services/api/flickr.photos.getCounts.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getCounts</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">dates</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">taken_dates</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">datesStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">takenDatesStr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>
+            
+            <span class="ActionScriptComment">// Make sure dates exists so we don&apos;t get an error accessing length
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">datesLen</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dates</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">?</span> 0 <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">dates</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptComment">// Construct a string to pass to Flickr from the dates
+</span>            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">datesLen</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// Add comma as necessary
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">datesStr</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;,&quot;</span>;    
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptComment">// Convert date to # of seconds since midnight January 1, 1970
+</span>                <span class="ActionScriptDefault_Text">datesStr</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">dates</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">getTime</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">/</span> 1000;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// Make sure taken dates exists so we don&apos;t get an error accessing length
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">takenDatesLen</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">taken_dates</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">?</span> 0 <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">taken_dates</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptComment">// Construct a string to pass to Flickr from the dates
+</span>            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">takenDatesLen</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// Add comma as necessary
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">takenDatesStr</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;,&quot;</span>;    
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptComment">// Convert date to # of milliseconds since midnight January 1, 1970
+</span>                <span class="ActionScriptDefault_Text">takenDatesStr</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">taken_dates</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">valueOf</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getCounts_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getCounts&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;dates&quot;</span>, <span class="ActionScriptDefault_Text">datesStr</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;taken_dates&quot;</span>, <span class="ActionScriptDefault_Text">takenDatesStr</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getCounts call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getCounts_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_COUNTS event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_COUNTS</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photoCounts&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePhotoCountList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Retrieves a list of EXIF/TIFF/GPS tags for a given photo. The calling
+         * user must have permission to view the photo.
+         *
+         * @param photo_id The id of the photo to fetch information for.
+         * @param secret (Optional) The secret for the photo. If the correct secret 
+         *            is passed then permissions checking is skipped. This enables 
+         *            the &apos;sharing&apos; of individual photos by passing around the id 
+         *            and secret.
+         * @see http://www.flickr.com/services/api/flickr.photos.getExif.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getExif</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">secret</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getExif_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getExif&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;secret&quot;</span>, <span class="ActionScriptDefault_Text">secret</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getExif call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getExif_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_EXIF event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_EXIF</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photo&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePhotoExifs</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Get information about a photo. The calling user must have permission to 
+         * view the photo.
+         *
+         * @param photo_id The id of the photo to fetch information for.
+         * @param secret (Optional) The secret for the photo. If the correct secret 
+         *            is passed then permissions checking is skipped. This enables 
+         *            the &apos;sharing&apos; of individual photos by passing around the id 
+         *            and secret.
+         * @see http://www.flickr.com/services/api/flickr.photos.getInfo.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getInfo</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">secret</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getInfo_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getInfo&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;secret&quot;</span>, <span class="ActionScriptDefault_Text">secret</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getInfo call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getInfo_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_INFO event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_INFO</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photo&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePhoto</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns a list of your photos that are not part of any sets.
+         *
+         * This method requires authentication with READ permission.
+         *
+         * @param extras (Optional) A comma-delimited list of extra information to 
+         *            fetch for each returned record. Currently supported fields are:
+         *            license, date_upload, date_taken, owner_name, icon_server, and
+         *            original_format.
+         * @param per_page (Optional) Number of photos to return per page. If this 
+         *            argument is omitted, it defaults to 100. The maximum allowed 
+         *            value is 500.
+         * @param page (Optional) The page of results to return. If this argument 
+         *            is omitted, it defaults to 1.
+         * @see http://www.flickr.com/services/api/flickr.photos.getNotInSet.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getNotInSet</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">extras</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 100, <span class="ActionScriptDefault_Text">page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 1 <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getNotInSet_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getNotInSet&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;extras&quot;</span>, <span class="ActionScriptDefault_Text">extras</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;per_page&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;page&quot;</span>, <span class="ActionScriptDefault_Text">page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getNotInSet call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getNotInSet_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_NOT_IN_SET event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_NOT_IN_SET</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photos&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePagedPhotoList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Get permissions for a photo.
+         *
+         * This method requires authentication with READ permission.
+         *
+         * @param photo_id The id of the photo to get permissions for.
+         * @see http://www.flickr.com/services/api/flickr.photos.getPerms.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getPerms</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getPerms_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getPerms&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getPerms call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getPerms_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_PERMS event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_PERMS</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photo&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePhotoPerms</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns a list of the latest public photos uploaded to flickr.
+         *
+         * @param extras (Optional) A comma-delimited list of extra information to 
+         *            fetch for each returned record. Currently supported fields are:
+         *            license, date_upload, date_taken, owner_name, icon_server, and
+         *            original_format.
+         * @param per_page (Optional) Number of photos to return per page. If this 
+         *            argument is omitted, it defaults to 100. The maximum allowed 
+         *            value is 500.
+         * @param page (Optional) The page of results to return. If this argument 
+         *            is omitted, it defaults to 1.
+         * @see http://www.flickr.com/services/api/flickr.photos.getRecent.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getRecent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">extras</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 100, <span class="ActionScriptDefault_Text">page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 1 <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getRecent_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getRecent&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;extras&quot;</span>, <span class="ActionScriptDefault_Text">extras</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;per_page&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;page&quot;</span>, <span class="ActionScriptDefault_Text">page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getRecent call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getRecent_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_RECENT event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_RECENT</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photos&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePagedPhotoList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns the available sizes for a photo. The calling user must have 
+         * permission to view the photo.
+         *
+         * @param photo_id The id of the photo to get permissions for.
+         * @see http://www.flickr.com/services/api/flickr.photos.getSizes.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getSizes</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getSizes_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getSizes&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getSizes call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getSizes_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_SIZES event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_SIZES</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photoSizes&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePhotoSizeList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns a list of your photos with no tags.
+         *
+         * This method requires authentication with READ permission.
+         *
+         * @param extras (Optional) A comma-delimited list of extra information to 
+         *            fetch for each returned record. Currently supported fields are:
+         *            license, date_upload, date_taken, owner_name, icon_server, and
+         *            original_format.
+         * @param per_page (Optional) Number of photos to return per page. If this 
+         *            argument is omitted, it defaults to 100. The maximum allowed 
+         *            value is 500.
+         * @param page (Optional) The page of results to return. If this argument 
+         *            is omitted, it defaults to 1.
+         * @see http://www.flickr.com/services/api/flickr.photos.getUntagged.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getUntagged</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">extras</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 100, <span class="ActionScriptDefault_Text">page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 1 <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">getUntagged_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.getUntagged&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;extras&quot;</span>, <span class="ActionScriptDefault_Text">extras</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;per_page&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;page&quot;</span>, <span class="ActionScriptDefault_Text">page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the getUntagged call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getUntagged_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_GET_UNTAGGED event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_GET_UNTAGGED</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photos&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePagedPhotoList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Remove a tag from a photo.
+         *
+         * This method requires authentication with WRITE permission.
+         *
+         * @param tag_id The tag to remove from the photo. This parameter should 
+         *            be a tag id such as one returned by flickr.photos.getInfo
+         * @see http://www.flickr.com/services/api/flickr.photos.removeTag.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">removeTag</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tag_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">removeTag_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.removeTag&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;tag_id&quot;</span>, <span class="ActionScriptDefault_Text">tag_id</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the removeTag call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">removeTag_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_REMOVE_TAG event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_REMOVE_TAG</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">searchWithParamHelper</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">p</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">PhotoSearchParams</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">search</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">user_id</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">tags</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">tag_mode</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">text</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">min_upload_date</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">max_upload_date</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">min_taken_date</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">max_taken_date</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">license</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">sort</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">privacy_filter</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">bbox</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">accuracy</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">safe_search</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">content_type</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">machine_tags</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">machine_tag_mode</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">group_id</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">contacts</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">woe_id</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">place_id</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">media</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">has_geo</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">lat</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">lon</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">radius</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">radius_units</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">extras</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">per_page</span>,
+                    <span class="ActionScriptDefault_Text">p</span>.<span class="ActionScriptDefault_Text">page</span><span class="ActionScriptBracket/Brace">)</span>;                    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Return a list of photos matching some criteria. Only photos visible to 
+         * the calling user will be returned. To return private or semi-private 
+         * photos, the caller must be authenticated with &apos;read&apos; permissions, and 
+         * have permission to view the photos. Unauthenticated calls will only 
+         * return public photos.
+         *
+         * @param user_id (Optional) The NSID of the user who&apos;s photo to search. 
+         *            If this parameter isn&apos;t passed then everybody&apos;s public photos 
+         *            will be searched.
+         * @param tags (Optional) A comma-delimited list of tags. Photos with one
+         *            or more of the tags listed will be returned.
+         * @param tag_mode (Optional) Either &apos;any&apos; for an OR combination of tags, 
+         *            or &apos;all&apos; for an AND combination. Defaults to &apos;any&apos; if not specified.
+         * @param text (Optional) A free text search. Photos who&apos;s title, 
+         *            description or tags contain the text will be returned.
+         * @param min_upload_date (Optional) Minimum upload date. Photos with an 
+         *            upload date greater than or equal to this value will be returned. 
+         * @param max_upload_date (Optional) Maximum upload date. Photos with an 
+         *            upload date less than or equal to this value will be returned.
+         * @param min_taken_date (Optional) Minimum taken date. Photos with an taken
+         *            date greater than or equal to this value will be returned
+         * @param max_taken_date (Optional) Maximum taken date. Photos with an taken
+         *            date less than or equal to this value will be returned.
+         * @param license (Optional) The license id for photos (for possible values 
+         *            see the flickr.photos.licenses.getInfo method).
+         * @param extras (Optional) A comma-delimited list of extra information to 
+         *            fetch for each returned record. Currently supported fields are:
+         *            license, date_upload, date_taken, owner_name, icon_server, and
+         *            original_format.
+         * @param per_page (Optional) Number of photos to return per page. If this 
+         *            argument is omitted, it defaults to 100. The maximum allowed 
+         *            value is 500.
+         * @param page (Optional) The page of results to return. If this argument 
+         *            is omitted, it defaults to 1.
+         * @param sort (Optional) The order in which to sort returned photos. 
+         *            Deafults to date-posted-desc. The possible values are: 
+         *            date-posted-asc, date-posted-desc, date-taken-asc and 
+         *            date-taken-desc.
+         * @see http://www.flickr.com/services/api/flickr.photos.search.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">search</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">user_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">tags</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">tag_mode</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;any&quot;</span>, 
+                                <span class="ActionScriptDefault_Text">text</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">min_upload_date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>,
+                                <span class="ActionScriptDefault_Text">max_upload_date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>, 
+                                <span class="ActionScriptDefault_Text">min_taken_date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>,
+                                <span class="ActionScriptDefault_Text">max_taken_date</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>,
+                                <span class="ActionScriptDefault_Text">license</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1,
+                                <span class="ActionScriptDefault_Text">sort</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;date-posted-desc&quot;</span>,
+                                <span class="ActionScriptDefault_Text">privacy_filter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1,
+                                <span class="ActionScriptDefault_Text">bbox</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">accuracy</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1,
+                                <span class="ActionScriptDefault_Text">safe_search</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1,
+                                <span class="ActionScriptDefault_Text">content_type</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1,
+                                <span class="ActionScriptDefault_Text">machine_tags</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">machine_tag_mode</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">group_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">contacts</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">woe_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">place_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">media</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">has_geo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>,<span class="ActionScriptComment">//true, false or all
+</span>                                <span class="ActionScriptDefault_Text">lat</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">lon</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">radius</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1,
+                                <span class="ActionScriptDefault_Text">radius_units</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1,
+                                <span class="ActionScriptDefault_Text">extras</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>,
+                                <span class="ActionScriptDefault_Text">per_page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 100,
+                                <span class="ActionScriptDefault_Text">page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 1<span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+            
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">search_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.search&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;user_id&quot;</span>, <span class="ActionScriptDefault_Text">user_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;tags&quot;</span>, <span class="ActionScriptDefault_Text">tags</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;tag_mode&quot;</span>, <span class="ActionScriptDefault_Text">tag_mode</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;text&quot;</span>, <span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptComment">// convert dates to # of milliseconds
+</span>                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;min_upload_date&quot;</span>, <span class="ActionScriptDefault_Text">min_upload_date</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">min_upload_date</span>.<span class="ActionScriptDefault_Text">valueOf</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;max_upload_date&quot;</span>, <span class="ActionScriptDefault_Text">max_upload_date</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">max_upload_date</span>.<span class="ActionScriptDefault_Text">valueOf</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;min_taken_date&quot;</span>, <span class="ActionScriptDefault_Text">min_taken_date</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">min_taken_date</span>.<span class="ActionScriptDefault_Text">valueOf</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;max_taken_date&quot;</span>, <span class="ActionScriptDefault_Text">max_taken_date</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">max_taken_date</span>.<span class="ActionScriptDefault_Text">valueOf</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;license&quot;</span>, <span class="ActionScriptDefault_Text">license</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">license</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;sort&quot;</span>, <span class="ActionScriptDefault_Text">sort</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;privacy_filter&quot;</span>, <span class="ActionScriptDefault_Text">privacy_filter</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">privacy_filter</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;bbox&quot;</span>, <span class="ActionScriptDefault_Text">bbox</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;accuracy&quot;</span>, <span class="ActionScriptDefault_Text">accuracy</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">accuracy</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;safe_search&quot;</span>, <span class="ActionScriptDefault_Text">safe_search</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">safe_search</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;content_type&quot;</span>, <span class="ActionScriptDefault_Text">content_type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">content_type</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;machine_tags&quot;</span>, <span class="ActionScriptDefault_Text">machine_tags</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;machine_tag_mode&quot;</span>, <span class="ActionScriptDefault_Text">machine_tag_mode</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;group_id&quot;</span>, <span class="ActionScriptDefault_Text">group_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;contacts&quot;</span>, <span class="ActionScriptDefault_Text">contacts</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;woe_id&quot;</span>, <span class="ActionScriptDefault_Text">woe_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;place_id&quot;</span>, <span class="ActionScriptDefault_Text">place_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;media&quot;</span>, <span class="ActionScriptDefault_Text">media</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;has_geo&quot;</span>, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">has_geo</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">?</span><span class="ActionScriptString">&quot;true&quot;</span><span class="ActionScriptOperator">:</span><span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;lat&quot;</span>, <span class="ActionScriptDefault_Text">lat</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;lon&quot;</span>, <span class="ActionScriptDefault_Text">lon</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;radius&quot;</span>, <span class="ActionScriptDefault_Text">radius</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">radius</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;radius_units&quot;</span>, <span class="ActionScriptDefault_Text">radius_units</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">radius_units</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;extras&quot;</span>, <span class="ActionScriptDefault_Text">extras</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;per_page&quot;</span>, <span class="ActionScriptDefault_Text">per_page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;page&quot;</span>, <span class="ActionScriptDefault_Text">page</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>
+                                   <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the search call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">search_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_SEARCH event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_SEARCH</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, 
+                                                  <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, 
+                                                  <span class="ActionScriptDefault_Text">result</span>,
+                                                  <span class="ActionScriptString">&quot;photos&quot;</span>,
+                                                  <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">parsePagedPhotoList</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Set one or both of the dates for a photo.
+         *
+         * This method requires authentication with WRITE permission.
+         *
+         * @param photo_id The id of the photo to edit dates for.
+         * @param date_posted (Optional) The date the photo was uploaded to flickr
+         * @param date_taken (Optional) The date the photo was taken
+         * @param date_taken_granularity (Optional) The granularity of the date 
+         *            the photo was taken
+         * @see http://www.flickr.com/services/api/flickr.photos.setDates.html
+         * @see http://www.flickr.com/services/api/misc.dates.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setDates</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">date_posted</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">date_taken</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">date_taken_granularity</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0 <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">setDates_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.setDates&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;date_posted&quot;</span>, <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">dateToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">date_posted</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;date_taken&quot;</span>, <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">dateToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">date_taken</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;date_taken_granularity&quot;</span>, <span class="ActionScriptDefault_Text">date_taken_granularity</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the setDates call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setDates_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_SET_DATES event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_SET_DATES</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Set the meta information for a photo.
+         *
+         * This method requires authentication with WRITE permission.
+         *
+         * @param photo_id The id of the photo to set information for.
+         * @param title The title for the photo.
+         * @param description The description for the photo.
+         * @see http://www.flickr.com/services/api/flickr.photos.setMeta.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setMeta</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">title</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">description</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">setMeta_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.setMeta&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;title&quot;</span>, <span class="ActionScriptDefault_Text">title</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;description&quot;</span>, <span class="ActionScriptDefault_Text">description</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the setMeta call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setMeta_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_SET_META event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_SET_META</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Set permissions for a photo.
+         *
+         * This method requires authentication with WRITE permission.
+         *
+         * @param photo_id The id of the photo to set permissions for.
+         * @param is_public true to set the photo to public, false to set it to private.
+         * @param is_friend true to make the photo visible to friends when private, 
+         *                false to not.
+         * @param is_family true to make the photo visible to family when private, 
+         *                false to not.
+         * @param perm_comment Who can add comments to the photo and it&apos;s notes. one of:
+         *                0: nobody
+         *                1: friends &amp; family
+         *                2: contacts
+         *                3: everybody
+         * @param perm_addmeta Who can add notes and tags to the photo. one of:
+         *                0: nobody / just the owner
+         *                1: friends &amp; family
+         *                2: contacts
+         *                3: everybody
+         * @param description The description for the photo.
+         * @see http://www.flickr.com/services/api/flickr.photos.setPerms.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setPerms</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">is_public</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>, <span class="ActionScriptDefault_Text">is_friend</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>, 
+                                  <span class="ActionScriptDefault_Text">is_family</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>, <span class="ActionScriptDefault_Text">perm_comment</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">perm_addmeta</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">setPerms_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.setPerms&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;is_public&quot;</span>, <span class="ActionScriptDefault_Text">is_public</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;is_friend&quot;</span>, <span class="ActionScriptDefault_Text">is_friend</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;is_family&quot;</span>, <span class="ActionScriptDefault_Text">is_family</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;1&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;0&quot;</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;perm_comment&quot;</span>, <span class="ActionScriptDefault_Text">perm_comment</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;perm_addmeta&quot;</span>, <span class="ActionScriptDefault_Text">perm_addmeta</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the setPerms call, and dispatch
+         * the event to anyone listening.
+         *
+         * This method requires authentication with WRITE permission.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setPerms_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_SET_PERMS event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_SET_PERMS</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Set the tags for a photo.
+         *
+         * @param photo_id The id of the photo to set tags for.
+         * @param tags All tags for the photo (as a single space-delimited string).
+         * @param description The description for the photo.
+         * @see http://www.flickr.com/services/api/flickr.photos.setTags.html
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 8.5
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setTags</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">photo_id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">tags</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Let the Helper do the work to invoke the method            
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">invokeMethod</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">setTags_result</span>, 
+                                   <span class="ActionScriptString">&quot;flickr.photos.setTags&quot;</span>, 
+                                   <span class="ActionScriptReserved">false</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;photo_id&quot;</span>, <span class="ActionScriptDefault_Text">photo_id</span> <span class="ActionScriptBracket/Brace">)</span>,
+                                   <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">NameValuePair</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;tags&quot;</span>, <span class="ActionScriptDefault_Text">tags</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Capture the result of the setTags call, and dispatch
+         * the event to anyone listening.
+         *
+         * @param event The complete event generated by the URLLoader
+         *             that was used to communicate with the Flickr API
+         *            from the invokeMethod method in MethodGroupHelper
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setTags_result</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create a PHOTOS_SET_TAGS event
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">PHOTOS_SET_TAGS</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Have the Helper handle parsing the result from the server - get the data
+</span>            <span class="ActionScriptComment">// from the URLLoader which correspondes to the result from the API call
+</span>            <span class="ActionScriptDefault_Text">MethodGroupHelper</span>.<span class="ActionScriptDefault_Text">processAndDispatch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_service</span>, <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">data</span>, <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>    
+    
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

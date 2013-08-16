@@ -1,0 +1,625 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>EnhancedButtonSkin.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">skins</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">GradientType</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Button</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">UIComponent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">Border</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">skins</span>.<span class="ActionScriptDefault_Text">halo</span>.<span class="ActionScriptDefault_Text">HaloColors</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">StyleManager</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ColorUtil</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">GraphicsUtil</span>;
+
+<span class="ActionScriptASDoc">/**
+ * This is the enhanced version of the Halo ButtonSkin that has been customized to support four numeric
+ * values in the corner, a more configurable border, and also a large number of colors in the gradient
+ * (limited by 15 in ProgrammaticSkin.drawRoundRect), individually specified for up, over, etc states..
+ * 
+ * &lt;p&gt;
+ * &lt;ul&gt;
+ *  &lt;li&gt;
+ *         corner-radii: An array of four numeric values indicating the four corner radii [TL, TR, BR, BL] 
+ *     &lt;/li&gt;
+ *     &lt;li&gt;
+ *        fill-colors: An array of colors to use for the fill state gradient (of arbitrary number)
+ *    &lt;/li&gt;
+ *     &lt;li&gt;
+ *         selected-fill-colors: An array of colors to use for the fill gradient of the selected state.
+ *     &lt;/li&gt;
+ *     &lt;li&gt;    
+ *         over-fill-colors: An array of colors to use for the fill gradient of the over state.     
+ *     &lt;/li&gt;
+ *     &lt;li&gt;
+ *         disabled-fill-colors: An array of colors to use for the fill gradient of the disabled state.
+ *    &lt;/li&gt;
+ *  &lt;li&gt;
+ *    down-fill-colors: An array of colors to use for the fill gradient of the down state.
+ *  &lt;/li&gt;
+ * &lt;/ul&gt;
+ * 
+ * &lt;ul&gt;
+ *     &lt;li&gt;    
+ *        fill-color-ratios: An array of values from 0 to 255 that indicate the position of the colors in the selection gradient. 
+ *         Must match the cardinality of the fill-colors, or else a default will be used.
+ *    &lt;/li&gt;
+ *     &lt;li&gt;
+ *         selected-fill-color-ratios:  An array of values from 0 to 255 that indicate the position of the colors in the selection gradient.
+ *                        Must match the cardinality of the fill-colors, or else a default will be used.
+ *     &lt;/li&gt;
+ *     &lt;li&gt;
+ *        over-fill-color-ratios:  An array of values from 0 to 255 that indicate the position of the colors in the over gradient.
+ *                        Must match the cardinality of the fill-colors, or else a default will be used.
+ *     &lt;/li&gt;
+ *     &lt;li&gt;
+ *        disabled-fill-color-ratios:  An array of values from 0 to 255 that indicate the position of the colors in the disabled gradient.
+ *                        Must match the cardinality of the fill-colors, or else a default will be used.
+ *    &lt;/li&gt;
+ *  &lt;li&gt;
+ *    down-fill-color-ratios: An array of values from 0 to 255 that indicate the position of the colors in the down gradient.
+ *                                             Must match the cardinality of the fill-colors, or else a default will be used.
+ *  &lt;/li&gt;
+ * &lt;/ul&gt;
+ * 
+ * &lt;ul&gt;
+ *     &lt;li&gt;
+ *         border-colors: An array of color values for the border in the up state. (defaults to border-color).
+ *     &lt;/li&gt;
+ *     &lt;li&gt;    
+ *         over-border-colors: An array of color values for the border in the up state. (defaults to theme-color derived)
+ *    &lt;/li&gt;
+ *     &lt;li&gt;
+ *         selected-border-colors: An array of values indicating the color of the selected border. (defaults to over-border-colors)
+ *    &lt;/li&gt;
+ * &lt;/ul&gt;
+ * 
+ * &lt;ul&gt;
+ *     &lt;li&gt;
+ *        border-thickness: The thickness of the border.
+ *    &lt;/li&gt;
+ *     &lt;li&gt;
+ *         border-alpha: The alpha value of the border.
+ *     &lt;/li&gt;
+ *     &lt;li&gt;
+ *         disabled-border-alpha (defaults to 50% of border-alpha).
+ *     &lt;/li&gt;
+ * &lt;/ul&gt; 
+ * &lt;/p&gt;
+ * 
+ * @author Daniel Wabyick
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">EnhancedButtonSkin</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Border</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//include &quot;../../core/Version.as&quot;;
+</span>
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Class variables
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cache</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{}</span>; 
+    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Class methods
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Several colors used for drawing are calculated from the base colors
+     *  of the component (themeColor, borderColor and fillColors).
+     *  Since these calculations can be a bit expensive,
+     *  we calculate once per color set and cache the results.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">calcDerivedStyles</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">themeColor</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span>,
+                                              <span class="ActionScriptDefault_Text">fillColor0</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span>,
+                                              <span class="ActionScriptDefault_Text">fillColor1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">HaloColors</span>.<span class="ActionScriptDefault_Text">getCacheKey</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">themeColor</span>,
+                                                <span class="ActionScriptDefault_Text">fillColor0</span>, <span class="ActionScriptDefault_Text">fillColor1</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">cache</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">])</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">o</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">cache</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{}</span>;
+            
+            <span class="ActionScriptComment">// Cross-component styles.
+</span>            <span class="ActionScriptDefault_Text">HaloColors</span>.<span class="ActionScriptDefault_Text">addHaloColors</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">o</span>, <span class="ActionScriptDefault_Text">themeColor</span>, <span class="ActionScriptDefault_Text">fillColor0</span>, <span class="ActionScriptDefault_Text">fillColor1</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">cache</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Constructor
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  Constructor.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">EnhancedButtonSkin</span><span class="ActionScriptBracket/Brace">()</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden properties
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  measuredWidth
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">measuredWidth</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">UIComponent</span>.<span class="ActionScriptDefault_Text">DEFAULT_MEASURED_MIN_WIDTH</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  measuredHeight
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">measuredHeight</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">UIComponent</span>.<span class="ActionScriptDefault_Text">DEFAULT_MEASURED_MIN_HEIGHT</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden methods
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+       
+        <span class="ActionScriptComment">// corner-radius
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cornerRadii</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;cornerRadii&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cornerRadius</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;cornerRadius&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">cornerRadii</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">cornerRadius</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">cornerRadius</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">cornerRadii</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">cornerRadius</span>, <span class="ActionScriptDefault_Text">cornerRadius</span>, <span class="ActionScriptDefault_Text">cornerRadius</span>, <span class="ActionScriptDefault_Text">cornerRadius</span> <span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptComment">// fill gradient colors        
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fillColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;fillColors&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptComment">// tricky, code below relies on two fillColors
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">fillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">==</span> 1 <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">fillColors</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">fillColors</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">upFillColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">fillColors</span>;
+        
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">selectedFillColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;selectedFillColors&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">selectedFillColors</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">selectedFillColors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">fillColors</span><span class="ActionScriptBracket/Brace">[</span>1<span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">fillColors</span><span class="ActionScriptBracket/Brace">[</span>1<span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">overFillColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;overFillColors&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">overFillColors</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">overFillColors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">selectedFillColors</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">disFillColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;disabledFillColors&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">disFillColors</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">disFillColors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">fillColors</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">downFillColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;downFillColors&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptComment">// not set to a default value to allow for backwards compatibility (from .2)
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">downFillColors</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">downFillColorRatios</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getColorRatios</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;downFillColorRatios&quot;</span>, <span class="ActionScriptDefault_Text">downFillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">downFillAlphas</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getAlphas</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;downFillAlphas&quot;</span>, <span class="ActionScriptDefault_Text">downFillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">upFillColorRatios</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getColorRatios</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;fillColorRatios&quot;</span>, <span class="ActionScriptDefault_Text">fillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">overFillColorRatios</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getColorRatios</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;overFillColorRatios&quot;</span>, <span class="ActionScriptDefault_Text">overFillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">selectedFillColorRatios</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getColorRatios</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;selectedFillColorRatios&quot;</span>, <span class="ActionScriptDefault_Text">selectedFillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">disFillColorRatios</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getColorRatios</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;disabledFillColorRatios&quot;</span>, <span class="ActionScriptDefault_Text">disFillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fillAlphas</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getAlphas</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;fillAlphas&quot;</span>, <span class="ActionScriptDefault_Text">fillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">overFillAlphas</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getAlphas</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;overFillAlphas&quot;</span>, <span class="ActionScriptDefault_Text">overFillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">selectedFillAlphas</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getAlphas</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;selectedFillAlphas&quot;</span>, <span class="ActionScriptDefault_Text">selectedFillColors</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">disFillAlphas</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">fillAlphas</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">disFillAlphas</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span> 0, <span class="ActionScriptDefault_Text">fillAlphas</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">-</span> 0.15 <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptComment">// make sure the fillAlphas is padded to the fillColors length if its too short.
+</span>        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">fillAlphas</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">fillColors</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">fillAlphas</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">fillAlphas</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">upFillAlphas</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">fillAlphas</span>;
+        
+        <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getColorNames</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">fillColors</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getColorNames</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">upFillColors</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getColorNames</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">overFillColors</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getColorNames</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">selectedFillColors</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        
+      <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">highlightAlphas</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;highlightAlphas&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+     
+        <span class="ActionScriptComment">// Border props
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">themeColor</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;themeColor&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">borderThickness</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;borderThickness&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">borderColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;borderColors&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">borderColors</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">borderColor</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;borderColor&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">borderColors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">borderColor</span>, <span class="ActionScriptDefault_Text">ColorUtil</span>.<span class="ActionScriptDefault_Text">adjustBrightness</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">borderColor</span>, <span class="ActionScriptOperator">-</span>50 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">overBorderColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;overBorderColors&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">overBorderColors</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+           <span class="ActionScriptDefault_Text">overBorderColors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">themeColor</span>, <span class="ActionScriptDefault_Text">ColorUtil</span>.<span class="ActionScriptDefault_Text">adjustBrightness2</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">themeColor</span>, <span class="ActionScriptOperator">-</span>25 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">]</span>; 
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">selectedBorderColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;selectedBorderColors&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">selectedBorderColors</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">selectedBorderColors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">overBorderColors</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">borderAlpha</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;borderAlpha&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">borderAlpha</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">borderAlpha</span> <span class="ActionScriptOperator">=</span> 1;
+            
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">disabledBorderAlpha</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;disabledBorderAlpha&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">disabledBorderAlpha</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">disabledBorderAlpha</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">borderAlpha</span> <span class="ActionScriptOperator">/</span> 0.5;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+
+        <span class="ActionScriptComment">// Derivative styles.
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">derStyles</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">calcDerivedStyles</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">themeColor</span>, <span class="ActionScriptDefault_Text">fillColors</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span>,
+                                                 <span class="ActionScriptDefault_Text">fillColors</span><span class="ActionScriptBracket/Brace">[</span>1<span class="ActionScriptBracket/Brace">])</span>;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">emph</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">parent</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Button</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">emph</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Button</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">parent</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">emphasized</span>;
+            
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">radiiUtil</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">cornerRadii</span>, 0 <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cr1</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">radiiUtil</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">cornerRadii</span>, 1 <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cr2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">radiiUtil</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">cornerRadii</span>, 2 <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">borderThickness</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+        
+        <span class="ActionScriptDefault_Text">graphics</span>.<span class="ActionScriptDefault_Text">clear</span><span class="ActionScriptBracket/Brace">()</span>;
+                                                
+        <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>    
+            <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;selectedUpSkin&quot;</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;selectedOverSkin&quot;</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// button border/edge
+</span>                <span class="ActionScriptComment">/*drawRoundRect(
+                    0, 0, w, h, cr,
+                    selectedBorderColors, 1,
+                    verticalGradientMatrix(0, 0, w , h )); 
+                */</span>
+                <span class="ActionScriptComment">// button border/edge
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    0, 0, <span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span>, <span class="ActionScriptDefault_Text">cr</span>,
+                    <span class="ActionScriptDefault_Text">selectedBorderColors</span>, <span class="ActionScriptDefault_Text">borderAlpha</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span>0, 0, <span class="ActionScriptDefault_Text">w</span> , <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptBracket/Brace">)</span>,
+                    <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>, <span class="ActionScriptReserved">null</span>, 
+                    <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">-</span> 2, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2, <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr2</span> <span class="ActionScriptBracket/Brace">})</span>;
+                
+                                            
+                <span class="ActionScriptComment">// button fill
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">cr1</span>,
+                    <span class="ActionScriptDefault_Text">selectedFillColors</span>, <span class="ActionScriptDefault_Text">selectedFillAlphas</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span>0, 0, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span>,
+                    <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>,
+                    <span class="ActionScriptDefault_Text">selectedFillColorRatios</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    
+                <span class="ActionScriptComment">// top highlight
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2, <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2,
+                    <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">tl</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr2</span>.<span class="ActionScriptDefault_Text">tl</span>, <span class="ActionScriptDefault_Text">tr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">cr2</span>.<span class="ActionScriptDefault_Text">tr</span>, <span class="ActionScriptDefault_Text">bl</span><span class="ActionScriptOperator">:</span>0, <span class="ActionScriptDefault_Text">br</span><span class="ActionScriptOperator">:</span> 0 <span class="ActionScriptBracket/Brace">}</span>, 
+                    <span class="ActionScriptComment">//{ tl: cr2, tr: cr2, bl: 0, br: 0 },
+</span>                    <span class="ActionScriptBracket/Brace">[</span> 0<span class="ActionScriptDefault_Text">xFFFFFF</span>, 0<span class="ActionScriptDefault_Text">xFFFFFF</span> <span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">highlightAlphas</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2<span class="ActionScriptBracket/Brace">))</span>; 
+                                                          
+                <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;upSkin&quot;</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">emph</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// button border/edge
+</span>                    <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                        0, 0, <span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span>, <span class="ActionScriptDefault_Text">cr</span>,
+                        <span class="ActionScriptDefault_Text">borderColors</span>, <span class="ActionScriptDefault_Text">borderAlpha</span>,
+                        <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span>0, 0, <span class="ActionScriptDefault_Text">w</span> , <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptBracket/Brace">)</span>,
+                        <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>, <span class="ActionScriptReserved">null</span>, 
+                        <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">-</span> 2, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2, <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr2</span> <span class="ActionScriptBracket/Brace">})</span>;
+                        <span class="ActionScriptComment">//{ x: 2, y: 2, w: w - 4, h: h - 4, r: cornerRadius - 2 });
+</span>                            
+                    <span class="ActionScriptComment">// button fill
+</span>                    <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                        <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2, <span class="ActionScriptDefault_Text">cr2</span>,
+                        <span class="ActionScriptDefault_Text">upFillColors</span>, <span class="ActionScriptDefault_Text">upFillAlphas</span>,
+                        <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span>, 
+                        <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>,
+                        <span class="ActionScriptDefault_Text">upFillColorRatios</span><span class="ActionScriptBracket/Brace">)</span>;
+                                          
+                    <span class="ActionScriptComment">// top highlight
+</span>                    <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                        <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2, <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2,
+                        <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">tl</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr2</span>.<span class="ActionScriptDefault_Text">tl</span>, <span class="ActionScriptDefault_Text">tr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">cr2</span>.<span class="ActionScriptDefault_Text">tr</span>, <span class="ActionScriptDefault_Text">bl</span><span class="ActionScriptOperator">:</span>0, <span class="ActionScriptDefault_Text">br</span><span class="ActionScriptOperator">:</span> 0 <span class="ActionScriptBracket/Brace">}</span>, 
+                        <span class="ActionScriptComment">//{ tl: cr2, tr: cr2, bl: 0, br: 0 },
+</span>                        <span class="ActionScriptBracket/Brace">[</span> 0<span class="ActionScriptDefault_Text">xFFFFFF</span>, 0<span class="ActionScriptDefault_Text">xFFFFFF</span> <span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">highlightAlphas</span>,
+                        <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2<span class="ActionScriptBracket/Brace">))</span>; 
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// button border/edge
+</span>                    <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                        0, 0, <span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span>, <span class="ActionScriptDefault_Text">cr</span>,
+                        <span class="ActionScriptDefault_Text">borderColors</span>, <span class="ActionScriptDefault_Text">borderAlpha</span>,
+                        <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span>0, 0, <span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptBracket/Brace">)</span>,
+                        <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>, <span class="ActionScriptReserved">null</span>, 
+                        <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr1</span> <span class="ActionScriptBracket/Brace">})</span>; 
+                        <span class="ActionScriptComment">//{ x: 1, y: 1, w: w - 2, h: h - 2, r: cornerRadius - 1 }); 
+</span>                        
+                    <span class="ActionScriptComment">// button fill
+</span>                    <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                        <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">cr1</span>,
+                        <span class="ActionScriptDefault_Text">upFillColors</span>, <span class="ActionScriptDefault_Text">upFillAlphas</span>,
+                        <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span>,
+                        <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>,
+                        <span class="ActionScriptDefault_Text">upFillColorRatios</span><span class="ActionScriptBracket/Brace">)</span>; 
+
+                    <span class="ActionScriptComment">// top highlight
+</span>                    <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                        <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2,
+                        <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">tl</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr1</span>.<span class="ActionScriptDefault_Text">tl</span>, <span class="ActionScriptDefault_Text">tr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">cr1</span>.<span class="ActionScriptDefault_Text">tr</span>, <span class="ActionScriptDefault_Text">bl</span><span class="ActionScriptOperator">:</span>0, <span class="ActionScriptDefault_Text">br</span><span class="ActionScriptOperator">:</span> 0 <span class="ActionScriptBracket/Brace">}</span>, 
+                        <span class="ActionScriptComment">//{ tl: cr1, tr: cr1, bl: 0, br: 0 },
+</span>                        <span class="ActionScriptBracket/Brace">[</span> 0<span class="ActionScriptDefault_Text">xFFFFFF</span>, 0<span class="ActionScriptDefault_Text">xFFFFFF</span> <span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">highlightAlphas</span>,
+                        <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2<span class="ActionScriptBracket/Brace">))</span>; 
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+                        
+            <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;overSkin&quot;</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// button border/edge
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    0, 0, <span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span>, <span class="ActionScriptDefault_Text">cr</span>,
+                    <span class="ActionScriptDefault_Text">overBorderColors</span>, <span class="ActionScriptDefault_Text">borderAlpha</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span>0, 0, <span class="ActionScriptDefault_Text">w</span> , <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptBracket/Brace">)</span>,
+                    <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>, <span class="ActionScriptReserved">null</span>, 
+                    <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr1</span> <span class="ActionScriptBracket/Brace">})</span>; 
+                    <span class="ActionScriptComment">//{ x: 1, y: 1, w: w - 2, h: h - 2, r: cornerRadius - 1 }); 
+</span>                                            
+                <span class="ActionScriptComment">// button fill
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">cr1</span>,
+                    <span class="ActionScriptDefault_Text">overFillColors</span>, <span class="ActionScriptDefault_Text">overFillAlphas</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span>,
+                    <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>,
+                    <span class="ActionScriptDefault_Text">overFillColorRatios</span><span class="ActionScriptBracket/Brace">)</span>;  
+                                          
+                <span class="ActionScriptComment">// top highlight
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2,
+                    <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">tl</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr1</span>.<span class="ActionScriptDefault_Text">tl</span>, <span class="ActionScriptDefault_Text">tr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">cr1</span>.<span class="ActionScriptDefault_Text">tr</span>, <span class="ActionScriptDefault_Text">bl</span><span class="ActionScriptOperator">:</span>0, <span class="ActionScriptDefault_Text">br</span><span class="ActionScriptOperator">:</span> 0 <span class="ActionScriptBracket/Brace">}</span>, 
+                    <span class="ActionScriptComment">//{ tl: cr1, tr: cr1, bl: 0, br: 0 },
+</span>                    <span class="ActionScriptBracket/Brace">[</span> 0<span class="ActionScriptDefault_Text">xFFFFFF</span>, 0<span class="ActionScriptDefault_Text">xFFFFFF</span> <span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">highlightAlphas</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2<span class="ActionScriptBracket/Brace">))</span>;  
+                
+                <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;downSkin&quot;</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;selectedDownSkin&quot;</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// button border/edge
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    0, 0, <span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span>, <span class="ActionScriptDefault_Text">cr</span>,
+                    <span class="ActionScriptDefault_Text">overBorderColors</span>, <span class="ActionScriptDefault_Text">borderAlpha</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span>0, 0, <span class="ActionScriptDefault_Text">w</span> , <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptBracket/Brace">))</span>; 
+                                                
+                <span class="ActionScriptComment">// button fill
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">downFillColors</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                        <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">cr1</span>,
+                        <span class="ActionScriptDefault_Text">downFillColors</span>, <span class="ActionScriptDefault_Text">downFillAlphas</span>,
+                        <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span>,
+                        <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>,
+                        <span class="ActionScriptDefault_Text">downFillColorRatios</span><span class="ActionScriptBracket/Brace">)</span>;  
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptComment">// use derived style if no custom defined (backwards compatibility from .2)
+</span>                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                        <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">cr1</span>,
+                        <span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">derStyles</span>.<span class="ActionScriptDefault_Text">fillColorPress1</span>, <span class="ActionScriptDefault_Text">derStyles</span>.<span class="ActionScriptDefault_Text">fillColorPress2</span><span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">fillAlphas</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span>,
+                        <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">))</span>;  
+                <span class="ActionScriptBracket/Brace">}</span>                          
+
+                <span class="ActionScriptComment">// top highlight
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptOperator">+</span>1, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2, <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2,
+                    <span class="ActionScriptComment">//{ tl: cr2, tr: cr2, bl: 0, br: 0 },
+</span>                    <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">tl</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr2</span>.<span class="ActionScriptDefault_Text">tl</span>, <span class="ActionScriptDefault_Text">tr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">cr2</span>.<span class="ActionScriptDefault_Text">tr</span>, <span class="ActionScriptDefault_Text">bl</span><span class="ActionScriptOperator">:</span>0, <span class="ActionScriptDefault_Text">br</span><span class="ActionScriptOperator">:</span> 0 <span class="ActionScriptBracket/Brace">}</span>, 
+                    <span class="ActionScriptBracket/Brace">[</span> 0<span class="ActionScriptDefault_Text">xFFFFFF</span>, 0<span class="ActionScriptDefault_Text">xFFFFFF</span> <span class="ActionScriptBracket/Brace">]</span>, <span class="ActionScriptDefault_Text">highlightAlphas</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">-</span>2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2<span class="ActionScriptBracket/Brace">))</span>;  
+                
+                <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;disabledSkin&quot;</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;selectedDisabledSkin&quot;</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// button border/edge
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    0, 0, <span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span>, <span class="ActionScriptDefault_Text">cr</span>,
+                    <span class="ActionScriptDefault_Text">borderColors</span>, <span class="ActionScriptDefault_Text">disabledBorderAlpha</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span>0, 0, <span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptBracket/Brace">)</span>,
+                    <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>, <span class="ActionScriptReserved">null</span>, 
+                    <span class="ActionScriptComment">//{ x: 1, y: 1, w: w - 2, h: h - 2, r: cornerRadius - 1 });
+</span>                    <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">cr1</span> <span class="ActionScriptBracket/Brace">})</span>;
+                    
+                <span class="ActionScriptComment">// button fill
+</span>                <span class="ActionScriptDefault_Text">drawRoundRect</span><span class="ActionScriptBracket/Brace">(</span>
+                    <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">cr1</span>,
+                    <span class="ActionScriptDefault_Text">disFillColors</span>, <span class="ActionScriptDefault_Text">disFillAlphas</span>,
+                    <span class="ActionScriptDefault_Text">verticalGradientMatrix</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">w</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span>, <span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> 2<span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">bt</span><span class="ActionScriptBracket/Brace">)</span>,
+                    <span class="ActionScriptDefault_Text">GradientType</span>.<span class="ActionScriptDefault_Text">LINEAR</span>,
+                    <span class="ActionScriptDefault_Text">disFillColorRatios</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Utility to create smaller radii for incremental shapes.
+     */</span> 
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">radiiUtil</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">rads</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>, <span class="ActionScriptDefault_Text">inset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newRads</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{}</span>;
+        
+        <span class="ActionScriptDefault_Text">newRads</span>.<span class="ActionScriptDefault_Text">tl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span> 0, <span class="ActionScriptDefault_Text">rads</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">inset</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">newRads</span>.<span class="ActionScriptDefault_Text">tr</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span> 0, <span class="ActionScriptDefault_Text">rads</span><span class="ActionScriptBracket/Brace">[</span>1<span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">inset</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">newRads</span>.<span class="ActionScriptDefault_Text">br</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span> 0, <span class="ActionScriptDefault_Text">rads</span><span class="ActionScriptBracket/Brace">[</span>2<span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">inset</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">newRads</span>.<span class="ActionScriptDefault_Text">bl</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span> 0, <span class="ActionScriptDefault_Text">rads</span><span class="ActionScriptBracket/Brace">[</span>3<span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">inset</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">newRads</span>;
+    <span class="ActionScriptBracket/Brace">}</span> 
+    
+    <span class="ActionScriptASDoc">/**
+     * Utility function to get color ratios that match a given number of fill colors. 
+     */</span> 
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getColorRatios</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleAttributeName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">numColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ratios</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleAttributeName</span> <span class="ActionScriptBracket/Brace">)</span>;
+    
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ratios</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">ratios</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">numColors</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">ratios</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleAttributeName</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptString">&quot;fillColorRatios&quot;</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">getColorRatios</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;fillColorRatios&quot;</span>, <span class="ActionScriptDefault_Text">numColors</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Create an evenly spaced default [ 0, chunk*1, chunk*2 ... 255]
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">chunkSize</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 255<span class="ActionScriptOperator">/</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">numColors</span> <span class="ActionScriptOperator">-</span> 1<span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">ratios</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">numColors</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">ratios</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">round</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">chunkSize</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">ratios</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Utility function to get fill alphas that match a given number of fill colors.
+     */</span> 
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getAlphas</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleAttributeName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">numColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">alphas</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleAttributeName</span> <span class="ActionScriptBracket/Brace">)</span>;
+    
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">alphas</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">alphas</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">numColors</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">alphas</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleAttributeName</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptString">&quot;fillAlphas&quot;</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">getAlphas</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;fillAlphas&quot;</span>, <span class="ActionScriptDefault_Text">numColors</span> <span class="ActionScriptBracket/Brace">)</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">else</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// default to 50% alpha
+</span>            <span class="ActionScriptDefault_Text">alphas</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">numColors</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">alphas</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> 0.5 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">alphas</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    
+<span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

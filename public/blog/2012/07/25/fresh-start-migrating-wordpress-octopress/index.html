@@ -1,0 +1,279 @@
+
+<!DOCTYPE HTML>
+<html itemscope itemtype="http://schema.org/Article">
+<head>
+	<meta charset="utf-8">
+	<title>Fresh Start: Migrating from Wordpress to Octopress - </title>
+	<meta name="author" content="Your Name">
+
+	
+	<meta name="description" content="photo by: Thomas Hawk I&rsquo;ve been wanting to part ways with WordPress for some time. It&rsquo;s been expensive, running a VPS for the hosting. I &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+
+
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+
+	<script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<meta property="og:description" content="" />
+<meta property="og:image" content="/images/head.png" />
+<meta property="og:title" value="Fresh Start: Migrating from Wordpress to Octopress - My Octopress Blog" />
+<meta property="og:url" value="http://yoursite.com/blog/2012/07/25/fresh-start-migrating-wordpress-octopress/" />                    
+<meta property="og:type" content="website" />                                    
+ 
+
+<script type="text/javascript" src="//use.typekit.net/wbq6rdy.js"></script>
+<script type="text/javascript">try {
+    Typekit.load();
+} catch (e) {
+}</script>
+
+<!-- Start Visual Website Optimizer Asynchronous Code -->
+<script type='text/javascript'>
+var _vwo_code=(function(){
+var account_id=48528,
+settings_tolerance=2000,
+library_tolerance=2500,
+use_existing_jquery=false,
+// DO NOT EDIT BELOW THIS LINE
+f=false,d=document;return{use_existing_jquery:function(){return use_existing_jquery;},library_tolerance:function(){return library_tolerance;},finish:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);}},finished:function(){return f;},load:function(a){var b=d.createElement('script');b.src=a;b.type='text/javascript';b.innerText;b.onerror=function(){_vwo_code.finish();};d.getElementsByTagName('head')[0].appendChild(b);},init:function(){settings_timer=setTimeout('_vwo_code.finish()',settings_tolerance);this.load('//dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&r='+Math.random());var a=d.createElement('style'),b='body{opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;}',h=d.getElementsByTagName('head')[0];a.setAttribute('id','_vis_opt_path_hides');a.setAttribute('type','text/css');if(a.styleSheet)a.styleSheet.cssText=b;else a.appendChild(d.createTextNode(b));h.appendChild(a);return settings_timer;}};}());_vwo_settings_timer=_vwo_code.init();
+</script>
+<!-- End Visual Website Optimizer Asynchronous Code -->
+
+<script type="text/javascript">
+    if(typeof(_vis_opt_top_initialize) == "function") {
+    // Code for Custom Goal: Goal #4
+     _vis_opt_goal_conversion(200);
+    // uncomment the following line to introduce a half second pause to ensure goal always registers with the server
+    _vis_opt_pause(500);
+    }
+</script>
+
+
+
+
+</head>
+
+
+<body>
+	<div class="topbar">
+		<div class="inner">
+			<div class="form">				
+				<form name="header_signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+					<div class="text"><strong>Weekly AngularJS Content Sent Right to Your Inbox:</strong></div>
+					<div class="button-container">
+			        <input class="input" type="email" name="EMAIL" placeholder="hey@you.com"> 
+			        
+			        <a class="button"  onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } document.header_signup.submit();" href="#">Keep me Updated!</a>
+			        </div>
+			        <div class="text">(1~2 emails a week. No spam.)</div>
+		      	</form>	    
+			</div>
+
+		</div>
+
+	</div>
+	<header id="header" class="inner">
+<a href="/"><div class="myface">
+
+</div></a>
+
+
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+
+</nav>
+
+</header>
+	<div id="content" class="inner"><article class="post">
+
+	<h1 itemprop="name" class="title article-title">Fresh Start: Migrating From Wordpress to Octopress</h1>
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-25T14:21:00-05:00" pubdate data-updated="true">Jul 25<span>th</span>, 2012</time></div>
+
+	<div class="entry-content">
+		
+		<p><img src="/images/content/no_exit.png" style="display: block; margin: auto"/></p>
+
+<h5>photo by: <a href="http://www.flickr.com/photos/thomashawk/31115789/">Thomas Hawk</a></h5>
+
+<p>I&rsquo;ve been wanting to part ways with WordPress for some time. It&rsquo;s been expensive, running a VPS for the hosting. I&rsquo;ve been &ldquo;attacked&rdquo; on multiple occasions that result in blacklisting from the Google when I ran on much less expensive shared hosting. It is probably theme dependent also, as well as how a given server is configured.</p>
+
+<p>What I&rsquo;ve really been wanting to do is migrate my words to a static Github repository and serve it up through Github Pages. I&rsquo;m already shelling out for the Github, why not take advantage. It is also appealing to serve up an entirely static site. Suck it script kiddies.</p>
+
+<h2>Exiting Wordpress</h2>
+
+<p>I&rsquo;ve got a lot of words written that people still find useful. I don&rsquo;t want to disappoint Rob! And frankly, I don&rsquo;t want to break the internet and leave a trail of broken links across the Google.</p>
+
+<div align="center"><blockquote class="twitter-tweet"><p>@<a href="https://twitter.com/jhooks">jhooks</a> I still refer to some of your blog posts when I’m doing RobotLegs stuff so I would definitely kep them around in some format</p>&mdash; Rob Dodson (@rob_dodson) <a href="https://twitter.com/rob_dodson/status/227195345283727360" data-datetime="2012-07-23T00:16:06+00:00">July 23, 2012</a></blockquote></div>
+
+
+<p>The first step was to strip out all of the &ldquo;junk&rdquo; posts that have accumulated. These were generally time based announcements that weren&rsquo;t adding anything to <strong>any</strong> conversation. After that, I stripped the theme and used the excellent <a href="http://wordpress.org/extend/themes/boilerplate">Boilerplate</a> theme. If I was to build a Wordpress theme &ldquo;from scratch,&rdquo; this is the theme I&rsquo;d go for. I wish I&rsquo;d found it before. It has an excellent separation of concerns and seems like it would be a pleasure to build upon. Sorry Wordpress, it&rsquo;s too late for that.</p>
+
+<p>With the theme stripped an all non-essential plugins disabled, I tweaked the theme so that individual pages had much of the extra fluff removed from them. All dates are gone, next/previous navigation is gone, and I added in a box at the bottom just to let people know that the page should be considered an &ldquo;archive.&rdquo; It&rsquo;s important to get the pages right at this step. It would be a severe pain to manipulate the resulting static pages.</p>
+
+<p>All that was left was extracting all of the <a href="http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/">individual posts into static pages</a>. <a href="http://wordpress.org/extend/plugins/static-html-output-plugin/">The WP Static HTML Output</a> plugin is excellent. It spit out a zip with the proper folder structure to ensure that my links would not be broken. The only flaw was that the Archive Utility on OS X wouldn&rsquo;t unzip the output. I had to use the command line unzip utility. It gave me all of the resources for each page, including the SWFs and other media that they linked to. This was perfect.</p>
+
+<p>There are other options for this too. <a href="https://github.com/thomasf/exitwp/">exitWP</a> looks like a solid way to extract posts and create markdown that could potentially be used with <a href="https://github.com/mojombo/jekyll">Jekyll</a> (and subsequently <a href="http://octopress.org/">Octopress</a>), but I liked the flat file structure of the straight brute force HTML output.</p>
+
+<h2>Enter Octopress</h2>
+
+<p>Octopress is a wicked open-source blogging platform that leverages a hosted git repository to deliver my words. It hooks up to Github and Heroku, depending on your preference for platform. I&rsquo;ve got mine working through Github.</p>
+
+<p>What I like about Octopress is that <strong>everything is version controlled</strong>. I can start a draft, work, commit, come back later to work some more, and finally deploy it when it is ready. It allows my blog to <em>feel</em> like a proper software project, and I like that.</p>
+
+<p>There is a handful of themes, and I haven&rsquo;t got into customization yet, but it looks a lot nicer to modify than Wordpress PHP. It feels like the type of system that <strong>I</strong> like to work on and tinker with.</p>
+
+<p>Octopress is <strong><em>dead simple</em></strong> to get up and running with. The documentation is first rate, and the steps are clear and concise. You can literally have something public facing in 10 minutes via Github or Heroku.</p>
+
+<p>To get my static pages integrated, I simply dropped the files and folders into the source folder within the Octopress structure. The next time I generated and deployed, all of my links were working. Fantastic.</p>
+
+<p>One item that I didn&rsquo;t really think about was the <code>sitemap.xml</code>. I stripped all the navigation from the archived pages, and I didn&rsquo;t leave crawlers any way to navigate my content. I grabbed the sitemap from and added some awful code to the sitemap generator plugin that Octopress uses.</p>
+
+<div><script src='https://gist.github.com/3179101.js?file=sitemap_generator.rb'></script>
+<noscript><pre><code>fill_pages(site, urlset)
+fill_legacy(urlset)
+sitemap.add_element(urlset)
+
+# File I/O: create sitemap.xml file and write out pretty-printed XML
+unless File.exists?(site.dest)
+  FileUtils.mkdir_p(site.dest)
+end
+file = File.new(File.join(site.dest, SITEMAP_FILE_NAME), &quot;w&quot;)
+formatter = REXML::Formatters::Pretty.new(4)
+formatter.compact = true
+formatter.write(sitemap, file)
+file.close
+
+# Keep the sitemap.xml file from being cleaned by Jekyll
+site.static_files &lt;&lt; Jekyll::SitemapFile.new(site, site.dest, &quot;/&quot;, SITEMAP_FILE_NAME)
+end
+
+#this is a hack addition to push in my legacy content
+def fill_legacy(urlset)
+file = File.new(&quot;/Volumes/Gonzales/Users/joel/Code/octopress/plugins/sitemapx.xml&quot;)
+doc = REXML::Document.new(file)
+root = doc.root
+root.elements.each do |post|
+  urlset.add_element(post)
+end
+end
+
+# Create url elements for all the posts and find the date of the latest one
+#
+# Returns last_modified_date of latest post
+def fill_posts(site, urlset)
+last_modified_date = nil
+site.posts.each do |post|
+  if !excluded?(post.name)</code></pre></noscript></div>
+
+
+<p>It isn&rsquo;t pretty, but it got all of my post page links wedged into the sitemap. Hopefully this appeases the robots.</p>
+
+<p>Another cool tool that works well with Octopress is <a href="http://pow.cx/">Pow</a>. Octopress is a rack app, and once to point Pow at your Octopress folder, it serves the page up locally at <code>http://foldername.dev</code>. Then it&rsquo;s just a matter of running <code>rake watch</code> and going to town.</p>
+
+<h2>Conclusion</h2>
+
+<p>I&rsquo;m stoked about making progress on my blogspace. It has been on the todo list for some time. It falls well into the <a href="http://redsquirrel.com/dave/work/a2j/patterns/BreakableToys.html">breakable toy</a> category of things, and that is something I can use right now as I learn new tools. I&rsquo;m looking forward to improving this space with quality content about modern standards-based web development with open source tools.</p>
+
+	</div>
+
+	<div class="contact">Want to chat about this post? I'd love to hear from you. <br>You can find me on twitter <a href="http://twitter.com/jhooks">@jhooks</a> or via email <a href="mailto:joelhooks@gmail.com?Subject=Hello%20,%20email%20from%20joelhooks.com">joelhooks@gmail.com</a></div>
+
+	
+	<div class="cta">
+		<div class="signup">
+		    <p class="message">
+		      <a id="signup-for-updates"></a>
+              Get weekly AngularJS content and curated links. Keep up to date with the latest, <strong>sign up below</strong>:
+		    </p>
+
+		    <div>
+		      <form name="signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+		        <input class="input" type="email" name="EMAIL" placeholder="Email Address"> 
+		        <div class="button_container"><a class="button" onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } setTimeout(function(){document.signup.submit();},500);" href="#">Send Me Updates!</a></div>
+		        <div class="arrow"></div>
+		      </form>
+		    </div>
+		    <p class="small">I will <strong>never</strong> spam you. Unsubscribe at anytime.</p>
+
+	    </div>
+    </div>
+    
+
+
+</article>
+
+</div>
+	<footer id="footer" class="inner"><p>
+you can learn more about me <a href="/about"> here.</a>
+</p>
+<p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+
+</footer>
+	<script type="text/javascript" src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+    <script type="text/javascript" src="https://gumroad.com/js/gumroad.js"></script>
+
+    <script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '51ddb932613f5d3030000126');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+</script>
+</body>
+</html>

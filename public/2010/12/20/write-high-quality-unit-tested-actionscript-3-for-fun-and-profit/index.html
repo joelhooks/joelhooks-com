@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Write high quality unit tested Actionscript 3 for fun and profit&#8230;joelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='An Introduction to Robotlegs AS3 Part 1: Context and Mediators' href='http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-1-context-and-mediators/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=564' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,729] -->
+<link rel="canonical" href="http://joelhooks.com/2010/12/20/write-high-quality-unit-tested-actionscript-3-for-fun-and-profit/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-564 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-564" class="post-564 post type-post status-publish format-standard hentry category-actionscript category-unit-testing">
+					<h1>Write high quality unit tested Actionscript 3 for fun and profit&#8230;</h1>
+		
+					<div class="entry-content">
+						<p>For the past year or so unit testing has been one of my favorite subjects. There are tons of books on the subject, but several really stand out. Here are my favorites so far:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/downloads/wp-content/uploads/2010/12/clean-code.jpg');"  href="http://joelhooks.com/wp-content/uploads/2010/12/clean-code.jpg"><img class="size-full wp-image-565 alignnone" title="clean code" src="http://joelhooks.com/wp-content/uploads/2010/12/clean-code.jpg" alt="" width="120" height="160" /></a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/0132350882/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/0132350882/joehoobuiblo-20/ref=nosim/">Clean Code</a> by Uncle Bob Martin</p>
+<p>This book does cover unit testing a bit. It isn&#8217;t the focus of the book, but regardless it sits here at the top of my unit testing list. Why? Because the hardest part of writing unit tests is writing code that can be tested in the first place. Get it. Read it. Learn it. Seriously. Uncle Bob rides in the vanguard in the battle against horrible dirty code.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/1933988274/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/1933988274/joehoobuiblo-20/ref=nosim/"><img class="size-full wp-image-569 alignnone" title="art of unit testing" src="http://joelhooks.com/wp-content/uploads/2010/12/art-of-unit-testing.jpg" alt="" width="128" height="160" /></a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/1933988274/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/1933988274/joehoobuiblo-20/ref=nosim/">The Art of Unit Testing</a> by Roy Osherove</p>
+<p>This is a small book, but it is stuffed to the gills with distilled information on the subject of unit testing. Don&#8217;t be put off with the .NET examples. It doesn&#8217;t make a difference at all. There are a couple of chapters that are .NET specific that you can just skip, but 90% of the book is killer information on testing your code.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/0131177052/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/0131177052/joehoobuiblo-20/ref=nosim/"><img class="size-full wp-image-570 alignnone" title="working effectively" src="http://joelhooks.com/wp-content/uploads/2010/12/working-effectively.jpg" alt="" width="121" height="160" /></a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/0131177052/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/0131177052/joehoobuiblo-20/ref=nosim/">Working Effectively With Legacy Code</a> by Michael Feathers</p>
+<p>Like <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/0132350882/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/0132350882/joehoobuiblo-20/ref=nosim/">Clean Code</a>, this book isn&#8217;t specifically focused on writing unit tests, but it totally is. Feathers defines &#8220;legacy code&#8221; as &#8220;code with no unit tests&#8221;. You can quibble about the semantics of this definition, but you&#8217;d be missing the point of this kickass book. How do you take a pile of code with no tests and make it better in a safe incremental way? How do you stop producing legacy code at a furious pace? That&#8217;s right, the code you wrote today is probably sitting in the &#8220;legacy&#8221; column already. Even if you are writing tight unit tested code you will likely stumble into code that isn&#8217;t, and this book has tons of good advice on how to deal with it.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/0131495054/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/0131495054/joehoobuiblo-20/ref=nosim/"><img class="size-full wp-image-571 alignnone" title="xUnit Patterns" src="http://joelhooks.com/wp-content/uploads/2010/12/xUnit-Patterns.jpg" alt="" width="116" height="160" /></a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/0131495054/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/0131495054/joehoobuiblo-20/ref=nosim/">xUnit Test Patterns</a> by Gerard Meszaros</p>
+<p>This one is a monster. It is a <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.martinfowler.com/bliki/DuplexBook.html');"  href="http://www.martinfowler.com/bliki/DuplexBook.html">duplex book</a> with a strong narrative up front and a massive patterns catalog bringing up the rear. if you read a lot of unit testing books you will &#8220;feel&#8221; this one under the best ones as the giant upon whom they are standing. This is source material here, and might be my personal favorite. I think <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/1933988274/joehoobuiblo-20/ref=nosim');"  href="http://www.amazon.com/exec/obidos/ASIN/1933988274/joehoobuiblo-20/ref=nosim">The Art of Unit Testing</a> makes for an easier (quicker anyway) read and if you were to choose one or the other go for it. Don&#8217;t choose one or the other though. Read both!</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/0321503627/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/0321503627/joehoobuiblo-20/ref=nosim/"><img class="size-full wp-image-572 alignnone" title="growing oos" src="http://joelhooks.com/wp-content/uploads/2010/12/growing-oos.jpg" alt="" width="120" height="160" /></a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.amazon.com/exec/obidos/ASIN/0321503627/joehoobuiblo-20/ref=nosim/');"  href="http://www.amazon.com/exec/obidos/ASIN/0321503627/joehoobuiblo-20/ref=nosim/">Growing Object Oriented Software Guided by Tests</a> by Steve Freeman</p>
+<p>While the above books touch on the concept of TDD it isn&#8217;t their focus. This relatively small volume is a great introduction to the subject of test-driving your code. It steps out of simple unit tests and gets into the realm of integration and acceptance testing. It has a fabulous explanation of mocking and is a fantastic introduction to the &#8220;testing layer cake&#8221; that high quality maintainable applications are guarded with.</p>
+<p>So what is the take away from all of these books? Unit testing is actually pretty easy. Writing clean testable code is harder. We (developers) tend to complicate unit tests a lot. We write them as integration, acceptance, or other more complex test types that are orders of magnitude harder to write and maintain. A unit should be tiny and easy to test. If it isn&#8217;t, then something is probably wrong with the unit or the scope of the test. Unit tests are <strong>for developers by developers</strong> and shouldn&#8217;t be considered an afterthought or some line item on a managers spreadsheet. A high percentage of test coverage should <strong>not</strong> be the goal. Quality over quantity. Confusing unmaintainable tests are a liability to a project. Concise readable unit tests can be a trusted asset.</p>
+<p>As with all code, complexity is easy. It is the default. Elegant simplicity is much more difficult. At the end of the day, cramming all the information the above books offer into my head has me writing dead simple unit tests. It seems weird as I examine it, but that&#8217;s how it has worked out. Study up and write some high quality tests. You will be well thanked by both your fellow developers and your future self.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2010/12/20/write-high-quality-unit-tested-actionscript-3-for-fun-and-profit/">Write high quality unit tested Actionscript 3 for fun and profit&#8230;</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-643">
+        <div id="dsq-comment-header-643" class="dsq-comment-header">
+            <cite id="dsq-cite-643">
+http://twitter.com/tonylukasavage                <span id="dsq-author-user-643">Tony Lukasavage</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-643" class="dsq-comment-body">
+            <div id="dsq-comment-message-643" class="dsq-comment-message"><p>I&#39;ve been looking for a reason to cram some TDD education into my schedule.  I think this post is enough to make it happen.  Great work!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2010/12/20/write-high-quality-unit-tested-actionscript-3-for-fun-and-profit/';
+    var disqus_identifier = '564 http://joelhooks.com/?p=564';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Write high quality unit tested Actionscript 3 for fun and profit&#8230;";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=564');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2010\/12\/20\/write-high-quality-unit-tested-actionscript-3-for-fun-and-profit\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.220 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.1MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

@@ -1,0 +1,124 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>WSSEUsernameToken.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">crypto</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">formatters</span>.<span class="ActionScriptDefault_Text">DateFormatter</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">Base64Encoder</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * Web Services Security Username Token
+     *
+     * Implementation based on algorithm description at 
+     * http://www.oasis-open.org/committees/wss/documents/WSS-Username-02-0223-merged.pdf
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">WSSEUsernameToken</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Generates a WSSE Username Token.
+         *
+         * @param username The username
+         * @param password The password
+         * @param nonce A cryptographically random nonce (if null, the nonce
+         * will be generated)
+         * @param timestamp The time at which the token is generated (if null,
+         * the time will be set to the moment of execution)
+         * @return The generated token
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getUsernameToken</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">username</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">password</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">nonce</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">timestamp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">nonce</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">nonce</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">generateNonce</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">nonce</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">base64Encode</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">nonce</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">created</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">generateTimestamp</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timestamp</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">password64</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getBase64Digest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">nonce</span>,
+                <span class="ActionScriptDefault_Text">created</span>,
+                <span class="ActionScriptDefault_Text">password</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">token</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;UsernameToken Username=\&quot;&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">token</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">username</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;\&quot;, &quot;</span> <span class="ActionScriptOperator">+</span>
+                     <span class="ActionScriptString">&quot;PasswordDigest=\&quot;&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">password64</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;\&quot;, &quot;</span> <span class="ActionScriptOperator">+</span>
+                     <span class="ActionScriptString">&quot;Nonce=\&quot;&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">nonce</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;\&quot;, &quot;</span> <span class="ActionScriptOperator">+</span>
+                     <span class="ActionScriptString">&quot;Created=\&quot;&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">created</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;\&quot;&quot;</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">token</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">generateNonce</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Math.random returns a Number between 0 and 1.  We don&apos;t want our
+</span>            <span class="ActionScriptComment">// nonce to contain invalid characters (e.g. the period) so we
+</span>            <span class="ActionScriptComment">// strip them out before returning the result.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span>  <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">random</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">s</span>.<span class="ActionScriptDefault_Text">replace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;.&quot;</span>, <span class="ActionScriptString">&quot;&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">internal</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">base64Encode</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">encoder</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Base64Encoder</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Base64Encoder</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">encoder</span>.<span class="ActionScriptDefault_Text">encode</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">s</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">encoder</span>.<span class="ActionScriptDefault_Text">flush</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">internal</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">generateTimestamp</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timestamp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timestamp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">timestamp</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Date</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dateFormatter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DateFormatter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">DateFormatter</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">dateFormatter</span>.<span class="ActionScriptDefault_Text">formatString</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;YYYY-MM-DDTJJ:NN:SS&quot;</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">dateFormatter</span>.<span class="ActionScriptDefault_Text">format</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">timestamp</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;Z&quot;</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">internal</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getBase64Digest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">nonce</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">created</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">password</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">SHA1</span>.<span class="ActionScriptDefault_Text">hashToBase64</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">nonce</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">created</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">password</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

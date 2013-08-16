@@ -1,0 +1,205 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ScrollablePopUpMenuButton.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">baseClasses</span>.<span class="ActionScriptDefault_Text">PopUpMenuButtonBase</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IUIComponent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">mx_internal</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">FlexEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MenuEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">managers</span>.<span class="ActionScriptDefault_Text">PopUpManager</span>;
+    
+    <span class="ActionScriptReserved">use</span> <span class="ActionScriptReserved">namespace</span> <span class="ActionScriptDefault_Text">mx_internal</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * ScrollablePopUpMenuButton is an extension of PopUpMenuButton that uses &lt;code&gt;flexlib.controls.ScrollableMenu&lt;/code&gt;
+     * instead of using the original &lt;controls&gt;mx.controls.Menu&lt;/controls&gt;, which adds scrolling functionality
+     * to the menu.
+     * 
+     * &lt;p&gt;This control extends &lt;code&gt;PopUpMenuButtonBase&lt;/code&gt;, which was a copy/paste version of the 
+     * original &lt;code&gt;mx.controls.PopUpMenuButton&lt;/code&gt;. The only changes made to our copied version
+     * of the base class was to change some private variables and methods to protected, so we can
+     * access them here in our subclass.&lt;/p&gt;
+     * 
+     * @mxml
+     *  
+     *  &lt;p&gt;The &lt;code&gt;&amp;lt;flexlib:ScrollablePopUpMenuButton&amp;gt;&lt;/code&gt; tag inherits all of the tag
+     *  attributes of its superclass, and adds the following tag attributes:&lt;/p&gt;
+     *  
+     *  &lt;pre&gt;
+     *  &amp;lt;flexlib:ScrollablePopUpMenuButton
+     *    &lt;strong&gt;Properties&lt;/strong&gt;
+     *    verticalScrollPolicy=&quot;auto|on|off&quot;
+     *       arrowScrollPolicy=&quot;auto|on|off&quot;
+     *    maxHeight=&quot;undefined&quot;
+     * 
+     *  /&amp;gt;
+     *  &lt;/pre&gt;
+     * 
+     * @see mx.controls.PopUpMenuButton
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ScrollablePopUpMenuButton</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">PopUpMenuButtonBase</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Constructor
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ScrollablePopUpMenuButton</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * @private
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_verticalScrollPolicy</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * Controls the vertical scrolling of the ScrollablePopUpMenuButton.
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">verticalScrollPolicy</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_verticalScrollPolicy</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">verticalScrollPolicy</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newPolicy</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">toLowerCase</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_verticalScrollPolicy</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">newPolicy</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_verticalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">newPolicy</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_arrowScrollPolicy</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * The scrolling policy that determines when to show the up and down buttons for scrolling.
+        * 
+        * &lt;p&gt;This property is independant of &lt;code&gt;verticalScrollPolicy&lt;/code&gt;. The property here
+        * just serves a proxy to set the &lt;code&gt;arrowScrollPolicy&lt;/code&gt; of the child menu component.&lt;/p&gt;
+        * 
+        * @see flexlib.controls.ScrollableMenu
+        */</span> 
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">arrowScrollPolicy</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_arrowScrollPolicy</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * @private
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">arrowScrollPolicy</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newPolicy</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">toLowerCase</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_arrowScrollPolicy</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">newPolicy</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_arrowScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">newPolicy</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">ScrollableArrowMenu</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">arrowScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">arrowScrollPolicy</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptASDoc">/**
+         * Overriden to also set the maxHeight of the child menu control.
+         * 
+         * &lt;p&gt;This makes setting the maxHeight also set the maxHeight of the popUpMenu item.&lt;/p&gt;
+         */</span> 
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">maxHeight</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">maxHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">maxHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * 
+         * This override is needed because we need to create a ScrollableArrowMenu instead of
+         * a normal Menu control. This is basically the same function as in the original
+         * PopUpMenuButton class, with a few minor changes.
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getPopUp</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IUIComponent</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+           
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ScrollableArrowMenu</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">maxHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">maxHeight</span>;
+              
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">labelField</span>;
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">labelFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">labelFunction</span>;
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">showRoot</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">showRoot</span>;
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataDescriptor</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataDescriptor</span>;
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataProvider</span>;
+
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MenuEvent</span>.<span class="ActionScriptDefault_Text">ITEM_CLICK</span>, <span class="ActionScriptDefault_Text">menuChangeHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FlexEvent</span>.<span class="ActionScriptDefault_Text">VALUE_COMMIT</span>,
+                                           <span class="ActionScriptDefault_Text">menuValueCommitHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">popUp</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>;
+                <span class="ActionScriptComment">// Add PopUp to PopUpManager here so that
+</span>                <span class="ActionScriptComment">// commitProperties of Menu gets called even
+</span>                <span class="ActionScriptComment">// before the PopUp is opened. This is 
+</span>                <span class="ActionScriptComment">// necessary to get the initial label and dp.
+</span>                <span class="ActionScriptDefault_Text">PopUpManager</span>.<span class="ActionScriptDefault_Text">addPopUp</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">popUp</span>, <span class="ActionScriptReserved">this</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">popUp</span>.<span class="ActionScriptDefault_Text">owner</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">((</span><span class="ActionScriptDefault_Text">popUpMenu</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">ScrollableArrowMenu</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">arrowScrollPolicy</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">arrowScrollPolicy</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">ScrollableArrowMenu</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">arrowScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">arrowScrollPolicy</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">popUpMenu</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

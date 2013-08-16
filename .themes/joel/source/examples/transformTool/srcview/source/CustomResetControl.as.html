@@ -1,0 +1,83 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>CustomResetControl.as</title>
+<link rel="stylesheet" type="text/css" href="../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptBracket/Brace">{</span>
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MouseEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Matrix</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Point</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">senocular</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">TransformTool</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">senocular</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">TransformToolControl</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">senocular</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">TransformToolCursor</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">CustomResetControl</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">TransformToolControl</span> <span class="ActionScriptBracket/Brace">{</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">CustomResetControl</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">ransformTool</span>.<span class="ActionScriptDefault_Text">CONTROL_INIT</span>, <span class="ActionScriptDefault_Text">init</span>, <span class="ActionScriptReserved">false</span>, 0, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">init</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+            <span class="ActionScriptComment">// add event listeners 
+</span>            <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">ransformTool</span>.<span class="ActionScriptDefault_Text">NEW_TARGET</span>, <span class="ActionScriptDefault_Text">update</span>, <span class="ActionScriptReserved">false</span>, 0, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">ransformTool</span>.<span class="ActionScriptDefault_Text">TRANSFORM_TOOL</span>, <span class="ActionScriptDefault_Text">update</span>, <span class="ActionScriptReserved">false</span>, 0, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">ransformTool</span>.<span class="ActionScriptDefault_Text">CONTROL_TRANSFORM_TOOL</span>, <span class="ActionScriptDefault_Text">update</span>, <span class="ActionScriptReserved">false</span>, 0, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">CLICK</span>, <span class="ActionScriptDefault_Text">resetClick</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// initial positioning
+</span>            <span class="ActionScriptDefault_Text">update</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">update</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">target</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// find to bottom right of selection
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">maxX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">boundsTopLeft</span>.<span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">boundsTopRight</span>.<span class="ActionScriptDefault_Text">x</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">maxX</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxX</span>, <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">boundsBottomRight</span>.<span class="ActionScriptDefault_Text">x</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">maxX</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxX</span>, <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">boundsBottomLeft</span>.<span class="ActionScriptDefault_Text">x</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">maxY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">boundsTopLeft</span>.<span class="ActionScriptDefault_Text">y</span>, <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">boundsTopRight</span>.<span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">maxY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxY</span>, <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">boundsBottomRight</span>.<span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">maxY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxY</span>, <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">boundsBottomLeft</span>.<span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptComment">// set location to found values
+</span>                <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">maxX</span>;
+                <span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">maxY</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">resetClick</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+            <span class="ActionScriptComment">// reset the matrix but keep the current location by 
+</span>            <span class="ActionScriptComment">// noting the change in the registration point
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">origReg</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Point</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">registration</span>;
+            
+            <span class="ActionScriptComment">// global matrix as a default matrix (identity)
+</span>            <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">globalMatrix</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Matrix</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">// find change in positioning based on registration
+</span>            <span class="ActionScriptComment">// Note: registration location is based within
+</span>            <span class="ActionScriptComment">// the coordinate space of the tool (not global)
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">regDiff</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">origReg</span>.<span class="ActionScriptDefault_Text">subtract</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">registration</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// update the tool matrix with the change in position
+</span>            <span class="ActionScriptComment">// offsetting movement from the new matrix to have
+</span>            <span class="ActionScriptComment">// the old and new registration points match
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">toolMatrix</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Matrix</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">toolMatrix</span>;
+            <span class="ActionScriptDefault_Text">toolMatrix</span>.<span class="ActionScriptDefault_Text">tx</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">regDiff</span>.<span class="ActionScriptDefault_Text">x</span>;
+            <span class="ActionScriptDefault_Text">toolMatrix</span>.<span class="ActionScriptDefault_Text">ty</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">regDiff</span>.<span class="ActionScriptDefault_Text">y</span>;
+            <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">toolMatrix</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">toolMatrix</span>;
+            
+            <span class="ActionScriptComment">// apply the new matrix to the target
+</span>            <span class="ActionScriptDefault_Text">transformTool</span>.<span class="ActionScriptDefault_Text">apply</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

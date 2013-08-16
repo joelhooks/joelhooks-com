@@ -1,0 +1,310 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>JSONEncoder.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">serialization</span>.<span class="ActionScriptDefault_Text">json</span> 
+<span class="ActionScriptBracket/Brace">{</span>
+
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">describeType</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">JSONEncoder</span> <span class="ActionScriptBracket/Brace">{</span>
+    
+        <span class="ActionScriptASDoc">/** The string that is going to represent the object we&apos;re encoding */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">jsonString</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Creates a new JSONEncoder.
+         *
+         * @param o The object to encode as a JSON string
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">JSONEncoder</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">jsonString</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">convertToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Gets the JSON string from the encoder.
+         *
+         * @return The JSON string representation of the object
+         *         that was passed to the constructor
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getString</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">jsonString</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Converts a value to it&apos;s JSON string equivalent.
+         *
+         * @param value The value to convert.  Could be any 
+         *        type (object, number, array, etc)
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">convertToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+            <span class="ActionScriptComment">// determine what value is and convert it based on it&apos;s type
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                
+                <span class="ActionScriptComment">// escape the string so it&apos;s formatted correctly
+</span>                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">escapeString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span>;
+                
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                
+                <span class="ActionScriptComment">// only encode numbers that finate
+</span>                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">isFinite</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;null&quot;</span>;
+
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                
+                <span class="ActionScriptComment">// convert boolean to string easily
+</span>                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;true&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;false&quot;</span>;
+
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+                <span class="ActionScriptComment">// call the helper method to convert an array
+</span>                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">arrayToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+                <span class="ActionScriptComment">// call the helper method to convert an object
+</span>                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">objectToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;null&quot;</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Escapes a string accoding to the JSON specification.
+         *
+         * @param str The string to be escaped
+         * @return The string with escaped special characters
+         *         according to the JSON specification
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">escapeString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">str</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// create a string to store the string&apos;s jsonstring value
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+            <span class="ActionScriptComment">// current character in the string we&apos;re processing
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ch</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+            <span class="ActionScriptComment">// store the length in a local variable to reduce lookups
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">len</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">str</span>.<span class="ActionScriptDefault_Text">length</span>;
+            
+            <span class="ActionScriptComment">// loop over all of the characters in the string
+</span>            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">len</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+                <span class="ActionScriptComment">// examine the character to determine if we have to escape it
+</span>                <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">str</span>.<span class="ActionScriptDefault_Text">charAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;&quot;&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// quotation mark
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;\\\&quot;&quot;</span>;
+                        <span class="ActionScriptReserved">break</span>;
+                        
+                    <span class="ActionScriptComment">//case &apos;/&apos;:    // solidus
+</span>                    <span class="ActionScriptComment">//    s += &quot;\\/&quot;;
+</span>                    <span class="ActionScriptComment">//    break;
+</span>                        
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;\\&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// reverse solidus
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;\\\\&quot;</span>;
+                        <span class="ActionScriptReserved">break</span>;
+                        
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;\b&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// bell
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;\\b&quot;</span>;
+                        <span class="ActionScriptReserved">break</span>;
+                        
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;\f&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// form feed
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;\\f&quot;</span>;
+                        <span class="ActionScriptReserved">break</span>;
+                        
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;\n&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// newline
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;\\n&quot;</span>;
+                        <span class="ActionScriptReserved">break</span>;
+                        
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;\r&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// carriage return
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;\\r&quot;</span>;
+                        <span class="ActionScriptReserved">break</span>;
+                        
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&apos;\t&apos;</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// horizontal tab
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;\\t&quot;</span>;
+                        <span class="ActionScriptReserved">break</span>;
+                        
+                    <span class="ActionScriptReserved">default</span><span class="ActionScriptOperator">:</span>    <span class="ActionScriptComment">// everything else
+</span>                        
+                        <span class="ActionScriptComment">// check for a control character and escape as unicode
+</span>                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ch</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptString">&apos; &apos;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptComment">// get the hex digit(s) of the character (either 1 or 2 digits)
+</span>                            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hexCode</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ch</span>.<span class="ActionScriptDefault_Text">charCodeAt</span><span class="ActionScriptBracket/Brace">(</span> 0 <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">(</span> 16 <span class="ActionScriptBracket/Brace">)</span>;
+                            
+                            <span class="ActionScriptComment">// ensure that there are 4 digits by adjusting
+</span>                            <span class="ActionScriptComment">// the # of zeros accordingly.
+</span>                            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">zeroPad</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">hexCode</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">==</span> 2 <span class="ActionScriptOperator">?</span> <span class="ActionScriptString">&quot;00&quot;</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptString">&quot;000&quot;</span>;
+                            
+                            <span class="ActionScriptComment">// create the unicode escape sequence with 4 hex digits
+</span>                            <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;\\u&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">zeroPad</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">hexCode</span>;
+                        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                        
+                            <span class="ActionScriptComment">// no need to do any special encoding, just pass-through
+</span>                            <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">ch</span>;
+                            
+                        <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>    <span class="ActionScriptComment">// end switch
+</span>                
+            <span class="ActionScriptBracket/Brace">}</span>    <span class="ActionScriptComment">// end for loop
+</span>                        
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;\&quot;&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;\&quot;&quot;</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Converts an array to it&apos;s JSON string equivalent
+         *
+         * @param a The array to convert
+         * @return The JSON string representation of &lt;code&gt;a&lt;/code&gt;
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">arrayToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// create a string to store the array&apos;s jsonstring value
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+            
+            <span class="ActionScriptComment">// loop over the elements in the array and add their converted
+</span>            <span class="ActionScriptComment">// values to the string
+</span>            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">a</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// when the length is 0 we&apos;re adding the first element so
+</span>                <span class="ActionScriptComment">// no comma is necessary
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// we&apos;ve already added an element, so add the comma separator
+</span>                    <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;,&quot;</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptComment">// convert the value to a string
+</span>                <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">convertToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;    
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// KNOWN ISSUE:  In ActionScript, Arrays can also be associative
+</span>            <span class="ActionScriptComment">// objects and you can put anything in them, ie:
+</span>            <span class="ActionScriptComment">//        myArray[&quot;foo&quot;] = &quot;bar&quot;;
+</span>            <span class="ActionScriptComment">//
+</span>            <span class="ActionScriptComment">// These properties aren&apos;t picked up in the for loop above because
+</span>            <span class="ActionScriptComment">// the properties don&apos;t correspond to indexes.  However, we&apos;re
+</span>            <span class="ActionScriptComment">// sort of out luck because the JSON specification doesn&apos;t allow
+</span>            <span class="ActionScriptComment">// these types of array properties.
+</span>            <span class="ActionScriptComment">//
+</span>            <span class="ActionScriptComment">// So, if the array was also used as an associative object, there
+</span>            <span class="ActionScriptComment">// may be some values in the array that don&apos;t get properly encoded.
+</span>            <span class="ActionScriptComment">//
+</span>            <span class="ActionScriptComment">// A possible solution is to instead encode the Array as an Object
+</span>            <span class="ActionScriptComment">// but then it won&apos;t get decoded correctly (and won&apos;t be an
+</span>            <span class="ActionScriptComment">// Array instance)
+</span>                        
+            <span class="ActionScriptComment">// close the array and return it&apos;s string value
+</span>            <span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;[&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;]&quot;</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Converts an object to it&apos;s JSON string equivalent
+         *
+         * @param o The object to convert
+         * @return The JSON string representation of &lt;code&gt;o&lt;/code&gt;
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">objectToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">o</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// create a string to store the object&apos;s jsonstring value
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+            
+            <span class="ActionScriptComment">// determine if o is a class instance or a plain object
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">classInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">o</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">classInfo</span>.@<span class="ActionScriptDefault_Text">name</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;Object&quot;</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// the value of o[key] in the loop below - store this 
+</span>                <span class="ActionScriptComment">// as a variable so we don&apos;t have to keep looking up o[key]
+</span>                <span class="ActionScriptComment">// when testing for valid values to convert
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+                
+                <span class="ActionScriptComment">// loop over the keys in the object and add their converted
+</span>                <span class="ActionScriptComment">// values to the string
+</span>                <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">o</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// assign value to a variable for quick lookup
+</span>                    <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">o</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span>;
+                    
+                    <span class="ActionScriptComment">// don&apos;t add function&apos;s to the JSON string
+</span>                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Function</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptComment">// skip this key and try another
+</span>                        <span class="ActionScriptReserved">continue</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptComment">// when the length is 0 we&apos;re adding the first item so
+</span>                    <span class="ActionScriptComment">// no comma is necessary
+</span>                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptComment">// we&apos;ve already added an item, so add the comma separator
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;,&quot;</span>
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">escapeString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;:&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">convertToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptComment">// o is a class instance
+</span>            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// Loop over all of the variables and accessors in the class and 
+</span>                <span class="ActionScriptComment">// serialize them along with their values.
+</span>                <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">v</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">classInfo</span>..<span class="ActionScriptOperator">*</span>.<span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;variable&quot;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;accessor&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// When the length is 0 we&apos;re adding the first item so
+</span>                    <span class="ActionScriptComment">// no comma is necessary
+</span>                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptComment">// We&apos;ve already added an item, so add the comma separator
+</span>                        <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptString">&quot;,&quot;</span>
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">escapeString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">v</span>.@<span class="ActionScriptDefault_Text">name</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;:&quot;</span> 
+                            <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">convertToString</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">o</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">v</span>.@<span class="ActionScriptDefault_Text">name</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;{&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">s</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;}&quot;</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

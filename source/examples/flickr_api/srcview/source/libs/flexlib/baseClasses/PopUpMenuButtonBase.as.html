@@ -1,0 +1,643 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>PopUpMenuButtonBase.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">//  Copyright (C) 2003-2006 Adobe Macromedia Software LLC and its licensors.
+</span><span class="ActionScriptComment">//  All Rights Reserved. The following is Source Code and is subject to all
+</span><span class="ActionScriptComment">//  restrictions on such code as contained in the End User License Agreement
+</span><span class="ActionScriptComment">//  accompanying this product.
+</span><span class="ActionScriptComment">//
+</span><span class="ActionScriptComment">////////////////////////////////////////////////////////////////////////////////
+</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">baseClasses</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MouseEvent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">ICollectionView</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">listClasses</span>.<span class="ActionScriptDefault_Text">IListItemRenderer</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">menuClasses</span>.<span class="ActionScriptDefault_Text">IMenuDataDescriptor</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">treeClasses</span>.<span class="ActionScriptDefault_Text">DefaultDataDescriptor</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IUIComponent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">mx_internal</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">FlexEvent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">ListEvent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MenuEvent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">managers</span>.<span class="ActionScriptDefault_Text">PopUpManager</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">PopUpButton</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Menu</span>;
+
+<span class="ActionScriptReserved">use</span> <span class="ActionScriptReserved">namespace</span> <span class="ActionScriptDefault_Text">mx_internal</span>;
+
+<span class="ActionScriptComment">//--------------------------------------
+</span><span class="ActionScriptComment">//  Events
+</span><span class="ActionScriptComment">//-------------------------------------- 
+</span>
+<span class="ActionScriptASDoc">/**
+ *  Dispatched when a user selects an item from the pop-up menu.
+ *
+ *  @eventType mx.events.MenuEvent.ITEM_CLICK
+ */</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;itemClick&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;mx.events.MenuEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptComment">//--------------------------------------
+</span><span class="ActionScriptComment">//  Excluded APIs
+</span><span class="ActionScriptComment">//--------------------------------------
+</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;toggle&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;property&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectedDisabledIcon&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectedDisabledSkin&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectedDownIcon&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectedDownSkin&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectedOverIcon&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectedOverSkin&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectedUpIcon&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;selectedUpSkin&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptComment">//--------------------------------------
+</span><span class="ActionScriptComment">//  Other metadata
+</span><span class="ActionScriptComment">//-------------------------------------- 
+</span>
+<span class="ActionScriptComment">//[IconFile(&quot;PopUpMenuButton.png&quot;)]
+</span>
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">RequiresDataBinding</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptASDoc">/**
+ *  PopUpMenuButtonBase is a copy/paste version of the original PopUpMenuButton class in the Flex framework.
+ * 
+ *     &lt;p&gt;The only modifications made to this class were to change some properties and
+ * methods from private to protected so we can override them in a subclass.&lt;/p&gt;
+ * 
+ *  &lt;p&gt;The PopUpMenuButton control creates a PopUpButton control with a main
+ *  sub-button and a secondary sub-button.
+ *  Clicking on the secondary (right) sub-button drops down a menu that
+ *  can be popluated through a &lt;code&gt;dataProvider&lt;/code&gt; property. 
+ *  Unlike the Menu and MenuBar controls, the PopUpMenuButton control 
+ *  supports only a single-level menu. This means that the menu cannot contain
+ *  cascading submenus.&lt;/p&gt;
+ * 
+ *  &lt;p&gt;The main sub-button of the PopUpMenuButton control can have a text
+ *  label, an icon, or both on its face.
+ *  When a user selects an item from the drop-down menu or clicks the main 
+ *  button of the PopUpMenuButton control, the control dispatches an 
+ *  &lt;code&gt;itemClick&lt;/code&gt; event.
+ *  When a user clicks the main button of the 
+ *  control, the control also dispatches a &lt;code&gt;click&lt;/code&gt; event. 
+ *  You can customize the look of a PopUpMenuButton control.&lt;/p&gt;
+ *
+ *  @mxml
+ *  
+ *  &lt;p&gt;The &lt;code&gt;&amp;lt;mx:PopUpMenuButton&amp;gt;&lt;/code&gt; tag inherits all of the tag
+ *  attributes of its superclass, and adds the following tag attributes:&lt;/p&gt;
+ *  
+ *  &lt;pre&gt;
+ *  &amp;lt;mx:PopUpMenuButton
+ *    &lt;strong&gt;Properties&lt;/strong&gt;
+ *    dataDescriptor=&quot;&lt;i&gt;instance of DefaultDataDescriptor&lt;/i&gt;&quot;
+ *    dataProvider=&quot;undefined&quot;
+ *    labelField=&quot;null&quot;
+ *    labelFunction=&quot;undefined&quot;
+ *    showRoot=&quot;false|true&quot;
+ *    &amp;nbsp;
+ *    &lt;strong&gt;Event&lt;/strong&gt;
+ *    change=&lt;i&gt;No default&lt;/i&gt;
+ *  /&amp;gt;
+ *  &lt;/pre&gt;
+ *
+ * 
+ *
+ *  @see mx.controls.Menu
+ *  @see mx.controls.MenuBar
+ *
+ *  @tiptext Provides ability to pop up a menu and act as a button
+ *  @helpid 3441
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">PopUpMenuButtonBase</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">PopUpButton</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//include &quot;../core/Version.as&quot;;
+</span>
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Constructor
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  Constructor.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">PopUpMenuButtonBase</span><span class="ActionScriptBracket/Brace">()</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Variables
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dataProviderChanged</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">labelSet</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Change by Doug McCune to protected.
+     */</span>
+    <span class="ActionScriptReserved">protected</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span> 
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">itemRenderer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IListItemRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden properties
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  A reference to the pop-up Menu object.
+     *
+     *  &lt;p&gt;This property is read-only, and setting it has no effect.
+     *  Set the &lt;code&gt;dataProvider&lt;/code&gt; property, instead.
+     *  (The write-only indicator appears in the syntax summary because the
+     *  property in the superclass is read-write and this class overrides
+     *  the setter with an empty implementation.)&lt;/p&gt;
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">popUp</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IUIComponent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">//Added by Doug McCune
+</span>        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">popUp</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Properties
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">// dataDescriptor
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for the dataDescriptor property.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_dataDescriptor</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IMenuDataDescriptor</span> <span class="ActionScriptOperator">=</span>
+                                        <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">DefaultDataDescriptor</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *  The data descriptor accesses and manipulates data in the data provider.
+     *  &lt;p&gt;When you specify this property as an attribute in MXML, you must
+     *  use a reference to the data descriptor, not the string name of the
+     *  descriptor. Use the following format for the property:&lt;/p&gt;
+     *
+     *  &lt;pre&gt;&amp;lt;mx:PopUpMenuButton id=&quot;menubar&quot; dataDescriptor=&quot;{new MyCustomDataDescriptor()}&quot;/&amp;gt;&lt;/pre&gt;
+     *
+     *  &lt;p&gt;Alternatively, you can specify the property in MXML as a nested
+     *  subtag, as the following example shows:&lt;/p&gt;
+     *
+     *  &lt;pre&gt;&amp;lt;mx:PopUpMenuButton&amp;gt;
+     *  &amp;lt;mx:dataDescriptor&amp;gt;
+     *     &amp;lt;myCustomDataDescriptor&amp;gt;
+     *  &amp;lt;/mx:dataDescriptor&amp;gt;
+     *  ...&lt;/pre&gt;
+     *
+     *  &lt;p&gt;The default value is an internal instance of the
+     *  DefaultDataDescriptor class.&lt;/p&gt;
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">dataDescriptor</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IMenuDataDescriptor</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">IMenuDataDescriptor</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_dataDescriptor</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">dataDescriptor</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IMenuDataDescriptor</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_dataDescriptor</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">// dataProvider
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for dataProvider property.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_dataProvider</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;collectionChange&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">category</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Data&quot;</span>, <span class="ActionScriptDefault_Text">defaultValue</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;null&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  DataProvider for popUpMenu.
+     *
+     *  @default null
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">Menu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">dataProvider</span>;
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptDefault_Text">dataProviderChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+        <span class="ActionScriptComment">// In general we shouldn&apos;t create the popUp&apos;s until
+</span>        <span class="ActionScriptComment">// they are actually popped up. However, in this case
+</span>        <span class="ActionScriptComment">// the initial label, icon and action on the main button&apos;s 
+</span>        <span class="ActionScriptComment">// click are to be borrowed from the popped menu. 
+</span>        <span class="ActionScriptComment">// Moreover since PopUpMenuButton doesn&apos;t expose selectedIndex
+</span>        <span class="ActionScriptComment">// selectedItem etc., one should be able to access them
+</span>        <span class="ActionScriptComment">// prior to popping up the menu.        
+</span>        <span class="ActionScriptDefault_Text">getPopUp</span><span class="ActionScriptBracket/Brace">()</span>;
+        
+        <span class="ActionScriptDefault_Text">invalidateProperties</span><span class="ActionScriptBracket/Brace">()</span>;     
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//  label
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for the label property.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_label</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">category</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;General&quot;</span>, <span class="ActionScriptDefault_Text">defaultValue</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">label</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">// labelSet is different from labelChanged as it is never unset.
+</span>        <span class="ActionScriptDefault_Text">labelSet</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptDefault_Text">_label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_label</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//  labelField
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for the labelField property.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_labelField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;label&quot;</span>;
+
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;labelFieldChanged&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">category</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Data&quot;</span>, <span class="ActionScriptDefault_Text">defaultValue</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;label&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  Name of the field in the &lt;code&gt;dataProvider&lt;/code&gt; Array that contains the text to
+     *  show for each menu item.
+     *  The &lt;code&gt;labelFunction&lt;/code&gt; property, if set, overrides this property.
+     *  If the data provider is an Array of Strings, Flex uses each String
+     *  value as the label.
+     *  If the data provider is an E4X XML object, you must set this property
+     *  explicitly; for example, use &amp;#064;label to specify the &lt;code&gt;label&lt;/code&gt; attribute.
+     *
+     *  @default &quot;label&quot;
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">labelField</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_labelField</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">labelField</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_labelField</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_labelField</span>;
+            
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;labelFieldChanged&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//  labelFunction
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for the labelFunction property.
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_labelFunction</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">category</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Data&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  A function that determines the text to display for each menu item.
+     *  If you omit this property, Flex uses the contents of the field or attribute
+     *  determined by the &lt;code&gt;labelField&lt;/code&gt; property.
+     *  If you specify this property, Flex ignores any &lt;code&gt;labelField&lt;/code&gt;
+     *  property value.
+     *
+     *  &lt;p&gt;If you specify this property, the label function must find the
+     *  appropriate field or fields and return a displayable string.
+     *  The &lt;code&gt;labelFunction&lt;/code&gt; property is good for handling formatting
+     *  and localization.&lt;/p&gt;
+     *
+     *  &lt;p&gt;The label function must take a single argument which is the item
+     *  in the dataProvider and return a String.&lt;/p&gt;
+     * 
+     *  &lt;blockquote&gt;
+     *  &lt;code&gt;labelFunction(item:Object):String&lt;/code&gt;
+     *  &lt;/blockquote&gt;
+     *
+     *  @default null
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">labelFunction</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_labelFunction</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">labelFunction</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_labelFunction</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_labelFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">labelFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_labelFunction</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//  showRoot
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Storage for the showRoot property.
+     */</span>
+    <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_showRoot</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_showRootChanged</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">category</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Data&quot;</span>, <span class="ActionScriptDefault_Text">enumeration</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;true,false&quot;</span>, <span class="ActionScriptDefault_Text">defaultValue</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;true&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  Specifies whether to display the top-level node or nodes of the data provider.
+     *
+     *  If this is set to &lt;code&gt;false&lt;/code&gt;, the control displays
+     *  only descendants of the first top-level node.
+     *  Any other top-level nodes are ignored.
+     *  You normally set this property to &lt;code&gt;false&lt;/code&gt; for
+     *  E4X format XML data providers, where the top-level node is the document
+     *  object.
+     *
+     *  @default true
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">showRoot</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_showRoot</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">showRoot</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_showRoot</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_showRoot</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">_showRootChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+            <span class="ActionScriptDefault_Text">invalidateProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden methods: UIComopnent
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">commitProperties</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_showRootChanged</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_showRootChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">showRoot</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_showRoot</span>;
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">dataProviderChanged</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_dataProvider</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">validateNow</span><span class="ActionScriptBracket/Brace">()</span>;
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataProvider</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">=</span> 0;
+                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">item</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+                
+                <span class="ActionScriptComment">// Set button label.
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">labelSet</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_label</span>;
+                <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">itemToLabel</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptComment">// Set button icon,
+</span>                <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;icon&quot;</span>, <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">itemToIcon</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">labelSet</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_label</span>;
+                <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+                
+                <span class="ActionScriptDefault_Text">clearStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;icon&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptDefault_Text">dataProviderChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">commitProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden methods: PopUpButton
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+     
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getPopUp</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IUIComponent</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getPopUp</span><span class="ActionScriptBracket/Brace">()</span>;
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">popUpMenu</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">popUpMenu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Menu</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">labelField</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_labelField</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">labelFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_labelFunction</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">showRoot</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_showRoot</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataDescriptor</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_dataDescriptor</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_dataProvider</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MenuEvent</span>.<span class="ActionScriptDefault_Text">ITEM_CLICK</span>, <span class="ActionScriptDefault_Text">menuChangeHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FlexEvent</span>.<span class="ActionScriptDefault_Text">VALUE_COMMIT</span>,
+                                       <span class="ActionScriptDefault_Text">menuValueCommitHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">popUp</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>;
+            <span class="ActionScriptComment">// Add PopUp to PopUpManager here so that
+</span>            <span class="ActionScriptComment">// commitProperties of Menu gets called even
+</span>            <span class="ActionScriptComment">// before the PopUp is opened. This is 
+</span>            <span class="ActionScriptComment">// necessary to get the initial label and dp.
+</span>            <span class="ActionScriptDefault_Text">PopUpManager</span>.<span class="ActionScriptDefault_Text">addPopUp</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">popUp</span>, <span class="ActionScriptReserved">this</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">popUp</span>.<span class="ActionScriptDefault_Text">owner</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">popUpMenu</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden event handlers: Button
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">clickHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">clickHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">overArrowButton</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">))</span>
+            <span class="ActionScriptDefault_Text">menuClickHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Event handlers
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">menuClickHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">&gt;=</span> 0<span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">menuEvent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MenuEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">MenuEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MenuEvent</span>.<span class="ActionScriptDefault_Text">ITEM_CLICK</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">selectedIndex</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptOperator">=</span>  <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">itemRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">itemRenderer</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">index</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">selectedIndex</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span>
+                <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">itemToLabel</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">])</span>;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menuEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Reset selection after the change event is dispatched
+</span>            <span class="ActionScriptComment">// just like in a menu.
+</span>            <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Changed by Doug McCune to protected
+     */</span>
+    <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">menuValueCommitHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlexEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">// Change label/icon if selectedIndex is changed programatically.
+</span>        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">&gt;=</span>0<span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">selectedIndex</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">labelSet</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_label</span>;
+            <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">itemToLabel</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">])</span>;
+            <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;icon&quot;</span>, <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">itemToIcon</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">]))</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     * Changed by Doug McCune to protected
+     */</span>
+    <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">menuChangeHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MenuEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">index</span> <span class="ActionScriptOperator">&gt;=</span> 0<span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">menuEvent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MenuEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">MenuEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MenuEvent</span>.<span class="ActionScriptDefault_Text">ITEM_CLICK</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">itemToLabel</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">labelSet</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_label</span>;
+            <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">itemToLabel</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;icon&quot;</span>, <span class="ActionScriptDefault_Text">popUpMenu</span>.<span class="ActionScriptDefault_Text">itemToIcon</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">item</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">popUpMenu</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">index</span> <span class="ActionScriptOperator">=</span> 
+                <span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">index</span>;
+            <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">item</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">item</span>;
+            <span class="ActionScriptDefault_Text">itemRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">menuEvent</span>.<span class="ActionScriptDefault_Text">itemRenderer</span> <span class="ActionScriptOperator">=</span> 
+                <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">itemRenderer</span>;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menuEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

@@ -1,0 +1,508 @@
+
+<!DOCTYPE HTML>
+<html itemscope itemtype="http://schema.org/Article">
+<head>
+	<meta charset="utf-8">
+	<title>AngularJS Directives That Override Standard HTML Tags - </title>
+	<meta name="author" content="Your Name">
+
+	
+	<meta name="description" content="Directives are the heart and soul of AngularJS. They are incredibly powerful.
+AngularJS sets out to extend the grammar of the browser to supply &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+
+
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+
+	<script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<meta property="og:description" content="" />
+<meta property="og:image" content="/images/lhc.jpg " />
+<meta property="og:title" value="AngularJS Directives That Override Standard HTML Tags - My Octopress Blog" />
+<meta property="og:url" value="http://yoursite.com/blog/2013/07/15/a-look-at-angularjs-internal-directives-that-override-standard-html-tags/" />                    
+<meta property="og:type" content="website" />                                    
+ 
+
+<script type="text/javascript" src="//use.typekit.net/wbq6rdy.js"></script>
+<script type="text/javascript">try {
+    Typekit.load();
+} catch (e) {
+}</script>
+
+<!-- Start Visual Website Optimizer Asynchronous Code -->
+<script type='text/javascript'>
+var _vwo_code=(function(){
+var account_id=48528,
+settings_tolerance=2000,
+library_tolerance=2500,
+use_existing_jquery=false,
+// DO NOT EDIT BELOW THIS LINE
+f=false,d=document;return{use_existing_jquery:function(){return use_existing_jquery;},library_tolerance:function(){return library_tolerance;},finish:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);}},finished:function(){return f;},load:function(a){var b=d.createElement('script');b.src=a;b.type='text/javascript';b.innerText;b.onerror=function(){_vwo_code.finish();};d.getElementsByTagName('head')[0].appendChild(b);},init:function(){settings_timer=setTimeout('_vwo_code.finish()',settings_tolerance);this.load('//dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&r='+Math.random());var a=d.createElement('style'),b='body{opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;}',h=d.getElementsByTagName('head')[0];a.setAttribute('id','_vis_opt_path_hides');a.setAttribute('type','text/css');if(a.styleSheet)a.styleSheet.cssText=b;else a.appendChild(d.createTextNode(b));h.appendChild(a);return settings_timer;}};}());_vwo_settings_timer=_vwo_code.init();
+</script>
+<!-- End Visual Website Optimizer Asynchronous Code -->
+
+<script type="text/javascript">
+    if(typeof(_vis_opt_top_initialize) == "function") {
+    // Code for Custom Goal: Goal #4
+     _vis_opt_goal_conversion(200);
+    // uncomment the following line to introduce a half second pause to ensure goal always registers with the server
+    _vis_opt_pause(500);
+    }
+</script>
+
+
+
+
+</head>
+
+
+<body>
+	<div class="topbar">
+		<div class="inner">
+			<div class="form">				
+				<form name="header_signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+					<div class="text"><strong>Weekly AngularJS Content Sent Right to Your Inbox:</strong></div>
+					<div class="button-container">
+			        <input class="input" type="email" name="EMAIL" placeholder="hey@you.com"> 
+			        
+			        <a class="button"  onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } document.header_signup.submit();" href="#">Keep me Updated!</a>
+			        </div>
+			        <div class="text">(1~2 emails a week. No spam.)</div>
+		      	</form>	    
+			</div>
+
+		</div>
+
+	</div>
+	<header id="header" class="inner">
+<a href="/"><div class="myface">
+
+</div></a>
+
+
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+
+</nav>
+
+</header>
+	<div id="content" class="inner"><article class="post">
+
+	<h1 itemprop="name" class="title article-title">AngularJS Directives That Override Standard HTML Tags</h1>
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-15T13:22:00-05:00" pubdate data-updated="true">Jul 15<span>th</span>, 2013</time></div>
+
+	<div class="entry-content">
+		
+			<div class="article-image">
+			<img itemprop="image" src="/images/lhc.jpg" alt="Photo Credit: Maximilien Brice">
+			</div>
+		
+		<p>Directives are the heart and soul of AngularJS. They are incredibly powerful.
+AngularJS sets out to extend the grammar of the browser to supply semantics that
+facilitate the creation of web applications, going beyond the standard
+hyper-linked web page. The primary weapon to accomplish this is the directive.</p>
+
+<p>Creating your own directives is an awesome way to create composed, reusable
+behaviors in your applications. This article isn&rsquo;t about making your own
+directives, instead I wanted to take a closer look at the internal directives of
+AngularJS. Specifically, we will be looking at how and why AngularJS extends the
+functionality of native HTML tags like <code>&lt;input&gt;</code> and <code>&lt;a&gt;</code> to make the magic
+happen.</p>
+
+<h2>A is for Anchor</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">htmlAnchorDirective</span> <span class="o">=</span> <span class="nx">valueFn</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">compile</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">msie</span> <span class="o">&lt;=</span> <span class="mi">8</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// turn &lt;a href ng-click=&quot;..&quot;&gt;link&lt;/a&gt; into a stylable link in IE</span>
+</span><span class='line'>      <span class="c1">// but only if it doesn&#39;t have name attribute, in which case it&#39;s an anchor</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">attr</span><span class="p">.</span><span class="nx">href</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">attr</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">attr</span><span class="p">.</span><span class="nx">$set</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// add a comment node to anchors to workaround IE bug that causes element content to be reset</span>
+</span><span class='line'>      <span class="c1">// to new attribute content if attribute is updated with value containing @ and element also</span>
+</span><span class='line'>      <span class="c1">// contains value with @</span>
+</span><span class='line'>      <span class="c1">// see issue #1949</span>
+</span><span class='line'>      <span class="nx">element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createComment</span><span class="p">(</span><span class="s1">&#39;IE fix&#39;</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">element</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class='line'>        <span class="c1">// if we have no href url, then don&#39;t navigate anywhere.</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">element</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <a href="https://github.com/angular/angular.js/blob/master/src/ng/directive/a.js"><code>htmlAnchorDirective</code></a> has a simple job. It is there to prevent navigation and page reloading. Typically this is in conjunction with <code>ng-click</code>, which is used to actually capture the click and navigate the user within the application. Every <code>&lt;a&gt;</code> in your application is effectively extended by AngularJS. The functionality is primarily the <code>event.preventDefault()</code> that is applied if the anchor tag doesn&rsquo;t have an <code>href</code> attribute.</p>
+
+<p>One thing to note, and this is typical throughout the AngularJS internals, is that this directive requires special attention for IE 7. When I&rsquo;m digging around in the internals, I&rsquo;m always appreciative of this effort made by the AngularJS contributors. These aren&rsquo;t fun problems to solve, and it is nice that somebody has made the effort to solve them for us :></p>
+
+<h2>Digging into &lt;form></h2>
+
+<p><a href="https://github.com/angular/angular.js/blob/master/src/ng/directive/form.js">AngularJS overrides <code>&lt;form&gt;</code></a> to provide some important functionality. The core of this extension of <code>&lt;form&gt;</code> is to prevent any page refresh that would occur with an unmodified <code>&lt;form&gt;</code> tag. Lets have a look:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">formDirectiveFactory</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isNgForm</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;$timeout&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$timeout</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">formDirective</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;form&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">controller</span><span class="o">:</span> <span class="nx">FormController</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">compile</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">pre</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">formElement</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">controller</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">attr</span><span class="p">.</span><span class="nx">action</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="c1">// we can&#39;t use jq events because if a form is destroyed during submission the default</span>
+</span><span class='line'>              <span class="c1">// action is not prevented. see #1238</span>
+</span><span class='line'>              <span class="c1">//</span>
+</span><span class='line'>              <span class="c1">// IE 9 is not affected because it doesn&#39;t fire a submit event and try to do a full</span>
+</span><span class='line'>              <span class="c1">// page reload if the form was destroyed by submission of the form via a click handler</span>
+</span><span class='line'>              <span class="c1">// on a button in the form. Looks like an IE9 specific bug.</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">preventDefaultListener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span>
+</span><span class='line'>                  <span class="o">?</span> <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+</span><span class='line'>                  <span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">returnValue</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// IE</span>
+</span><span class='line'>              <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>              <span class="nx">addEventListenerFn</span><span class="p">(</span><span class="nx">formElement</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="nx">preventDefaultListener</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>              <span class="c1">// unregister the preventDefault listener so that we don&#39;t not leak memory but in a</span>
+</span><span class='line'>              <span class="c1">// way that will achieve the prevention of the default action.</span>
+</span><span class='line'>              <span class="nx">formElement</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$destroy&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">$timeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="nx">removeEventListenerFn</span><span class="p">(</span><span class="nx">formElement</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="nx">preventDefaultListener</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">},</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>              <span class="p">});</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">parentFormCtrl</span> <span class="o">=</span> <span class="nx">formElement</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">),</span>
+</span><span class='line'>                <span class="nx">alias</span> <span class="o">=</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">ngForm</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">alias</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nx">scope</span><span class="p">[</span><span class="nx">alias</span><span class="p">]</span> <span class="o">=</span> <span class="nx">controller</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">parentFormCtrl</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nx">formElement</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$destroy&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">parentFormCtrl</span><span class="p">.</span><span class="nx">$removeControl</span><span class="p">(</span><span class="nx">controller</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="nx">alias</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="nx">scope</span><span class="p">[</span><span class="nx">alias</span><span class="p">]</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>                <span class="nx">extend</span><span class="p">(</span><span class="nx">controller</span><span class="p">,</span> <span class="nx">nullFormCtrl</span><span class="p">);</span> <span class="c1">//stop propagating child destruction handlers upwards</span>
+</span><span class='line'>              <span class="p">});</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">isNgForm</span> <span class="o">?</span> <span class="nx">extend</span><span class="p">(</span><span class="nx">copy</span><span class="p">(</span><span class="nx">formDirective</span><span class="p">),</span> <span class="p">{</span><span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;EAC&#39;</span><span class="p">})</span> <span class="o">:</span> <span class="nx">formDirective</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}];</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above function is a factory that creates a form directive. The directive itself does several things. Aside from some memory management it also serves to prevent the default behavior of the form action. Typically with an AngularJS application, you will want to capture the user&rsquo;s input it a form, and feed that data into a controller to send it to the server. This is different from the standard <code>action</code> attribute of a form that will perform a POST operation and typically redirect the user to a new page. This behavior is probably not what you want in your single-page JavaScript application, so AngularJS is working to help prevent that. You probably still want to be able to submit your form, and the <code>ngSubmit</code> directive placed as an attribute on the <code>&lt;form&gt;</code> tag will execute an expression when your designated submit input is clicked.</p>
+
+<p>If you&rsquo;re paying close attention, you&rsquo;ll notice that the form directive above has a <code>FormController</code> assigned to it. The <code>FormController</code> is the brains of all the forms within an AngularJS application, and every <code>&lt;form&gt;</code> gets one. The <code>FormController</code> tracks all of the controls within a form and manages the validity of the form.</p>
+
+<h2>The Input Directive</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">inputDirective</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$browser&#39;</span><span class="p">,</span> <span class="s1">&#39;$sniffer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$browser</span><span class="p">,</span> <span class="nx">$sniffer</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">require</span><span class="o">:</span> <span class="s1">&#39;?ngModel&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">ctrl</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">ctrl</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">(</span><span class="nx">inputType</span><span class="p">[</span><span class="nx">lowercase</span><span class="p">(</span><span class="nx">attr</span><span class="p">.</span><span class="nx">type</span><span class="p">)]</span> <span class="o">||</span> <span class="nx">inputType</span><span class="p">.</span><span class="nx">text</span><span class="p">)(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">ctrl</span><span class="p">,</span> <span class="nx">$sniffer</span><span class="p">,</span>
+</span><span class='line'>                                                            <span class="nx">$browser</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow! It&rsquo;s so simple ;)</p>
+
+<p>It is. This is because <a href="https://github.com/angular/angular.js/blob/master/src/ng/directive/input.js">the actual <code>&lt;input&gt;</code> tag</a> is only the entry point. The real work is done based on the <strong>type</strong> of input that is being used. AngularJS is looking for the following input types:</p>
+
+<ul>
+<li>text</li>
+<li>number</li>
+<li>url</li>
+<li>email</li>
+<li>radio</li>
+<li>checkbox</li>
+</ul>
+
+
+<p>With the URL, email, and number types, AngularJS provides some basic validation:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">URL_REGEXP</span> <span class="o">=</span> <span class="sr">/^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&amp;%@!\-\/]))?$/</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">EMAIL_REGEXP</span> <span class="o">=</span> <span class="sr">/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">NUMBER_REGEXP</span> <span class="o">=</span> <span class="sr">/^\s*(\-|\+)?(\d+|(\d*(\.\d*)))\s*$/</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s the code for the URL type:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">urlInputType</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">ctrl</span><span class="p">,</span> <span class="nx">$sniffer</span><span class="p">,</span> <span class="nx">$browser</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">textInputType</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">ctrl</span><span class="p">,</span> <span class="nx">$sniffer</span><span class="p">,</span> <span class="nx">$browser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">urlValidator</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">||</span> <span class="nx">URL_REGEXP</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">ctrl</span><span class="p">.</span><span class="nx">$setValidity</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">ctrl</span><span class="p">.</span><span class="nx">$setValidity</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">ctrl</span><span class="p">.</span><span class="nx">$formatters</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">urlValidator</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">ctrl</span><span class="p">.</span><span class="nx">$parsers</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">urlValidator</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Simple stuff. It is using the REGEX above and setting the validity on the <code>FormController</code>, which you can then use to display feedback to the user. Email and number validation works in a similar fashion.</p>
+
+<p>With text-type inputs AnglularJS also provides <strong>data-binding</strong> via <code>ngModel</code>, which is an extremely convenient solution to capturing user input and displaying it in the form. We should look at <code>ngModel</code> a bit closer in a future post.</p>
+
+<h2>Just the beginning.</h2>
+
+<p>It wasn&rsquo;t immediately obvious to me when I started using AngularJS that the framework was overriding these default HTML tags to add the secret sauce on top. Once the realization dawned on me, it opened my eyes to the power and potential that directives hold. You aren&rsquo;t restricted to the extensions that AngularJS provides with these built-in directives. You can further extend the capabilities of HTML by creating your own directives that override and extend the native HTML elements.</p>
+
+<p>Digging into the guts of the <a href="https://github.com/angular/angular.js/tree/master/src">AngularJS source code</a> is a great way to learn the hows and whys of the framework, and can reveal techniques that can be applied to your own applications. The AngularJS source is well documented, cleanly written, and well tested. If you&rsquo;re working with AngularJS, I highly recommend diving into these internals and discovering this for yourself. It won&rsquo;t be time wasted.</p>
+
+<p>You might also enjoy: <a href="http://joelhooks.com/blog/2013/05/22/lessons-learned-kicking-off-an-angularjs-project/"><strong>Lessons Learned: A Year with a Large AngularJS Project</strong></a></p>
+
+<p>or maybe: <a href="http://joelhooks.com/blog/2013/08/03/learn-angularjs-in-a-weekend/"><strong>Learn AngularJS this Weekend</strong></a></p>
+
+	</div>
+
+	<div class="contact">Want to chat about this post? I'd love to hear from you. <br>You can find me on twitter <a href="http://twitter.com/jhooks">@jhooks</a> or via email <a href="mailto:joelhooks@gmail.com?Subject=Hello%20,%20email%20from%20joelhooks.com">joelhooks@gmail.com</a></div>
+
+	
+	<div class="cta">
+		<div class="signup">
+		    <p class="message">
+		      <a id="signup-for-updates"></a>
+              Get weekly AngularJS content and curated links. Keep up to date with the latest, <strong>sign up below</strong>:
+		    </p>
+
+		    <div>
+		      <form name="signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+		        <input class="input" type="email" name="EMAIL" placeholder="Email Address"> 
+		        <div class="button_container"><a class="button" onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } setTimeout(function(){document.signup.submit();},500);" href="#">Send Me Updates!</a></div>
+		        <div class="arrow"></div>
+		      </form>
+		    </div>
+		    <p class="small">I will <strong>never</strong> spam you. Unsubscribe at anytime.</p>
+
+	    </div>
+    </div>
+    
+
+
+</article>
+
+</div>
+	<footer id="footer" class="inner"><p>
+you can learn more about me <a href="/about"> here.</a>
+</p>
+<p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+
+</footer>
+	<script type="text/javascript" src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+    <script type="text/javascript" src="https://gumroad.com/js/gumroad.js"></script>
+
+    <script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '51ddb932613f5d3030000126');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+</script>
+</body>
+</html>

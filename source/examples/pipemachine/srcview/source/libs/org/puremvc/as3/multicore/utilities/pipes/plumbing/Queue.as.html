@@ -1,0 +1,136 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Queue.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ PureMVC AS3/MultiCore Utility – Pipes
+ Copyright (c) 2008 Cliff Hall&lt;cliff.hall@puremvc.org&gt;
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">plumbing</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">IPipeFitting</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">IPipeMessage</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">messages</span>.<span class="ActionScriptDefault_Text">Message</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">messages</span>.<span class="ActionScriptDefault_Text">QueueControlMessage</span>;
+    
+    <span class="ActionScriptASDoc">/** 
+     * Pipe Queue.
+     * &lt;P&gt;
+     * The Queue always stores inbound messages until you send it
+     * a FLUSH control message, at which point it writes its buffer 
+     * to the output pipe fitting. The Queue can be sent a SORT 
+     * control message to go into sort-by-priority mode or a FIFO 
+     * control message to cancel sort mode and return the
+     * default mode of operation, FIFO.&lt;/P&gt;
+     * 
+     * &lt;P&gt;
+     * NOTE: There can effectively be only one Queue on a given 
+     * pipeline, since the first Queue acts on any queue control 
+     * message. Multiple queues in one pipeline are of dubious 
+     * use, and so having to name them would make their operation 
+     * more complex than need be.&lt;/P&gt; 
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Queue</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Pipe</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Queue</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">output</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">output</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Handle the incoming message.
+         * &lt;P&gt;
+         * Normal messages are enqueued.&lt;/P&gt;
+         * &lt;P&gt;
+         * The FLUSH message type tells the Queue to write all 
+         * stored messages to the ouptut PipeFitting, then 
+         * return to normal enqueing operation.&lt;/P&gt;
+         * &lt;P&gt;
+         * The SORT message type tells the Queue to sort all 
+         * &lt;I&gt;subsequent&lt;/I&gt; incoming messages by priority. If there
+         * are unflushed messages in the queue, they will not be
+         * sorted unless a new message is sent before the next FLUSH.
+         * Sorting-by-priority behavior continues even after a FLUSH, 
+         * and can be turned off by sending a FIFO message, which is 
+         * the default behavior for enqueue/dequeue.&lt;/P&gt; 
+         */</span> 
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">write</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeMessage</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">success</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span>.<span class="ActionScriptDefault_Text">getType</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>    
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// Store normal messages
+</span>                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">Message</span>.<span class="ActionScriptDefault_Text">NORMAL</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">store</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                    
+                <span class="ActionScriptComment">// Flush the queue
+</span>                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">QueueControlMessage</span>.<span class="ActionScriptDefault_Text">FLUSH</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">success</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">flush</span><span class="ActionScriptBracket/Brace">()</span>;        
+                    <span class="ActionScriptReserved">break</span>;
+
+                <span class="ActionScriptComment">// Put Queue into Priority Sort or FIFO mode 
+</span>                <span class="ActionScriptComment">// Subsequent messages written to the queue
+</span>                <span class="ActionScriptComment">// will be affected. Sorted messages cannot
+</span>                <span class="ActionScriptComment">// be put back into FIFO order!
+</span>                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">QueueControlMessage</span>.<span class="ActionScriptDefault_Text">SORT</span><span class="ActionScriptOperator">:</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">QueueControlMessage</span>.<span class="ActionScriptDefault_Text">FIFO</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">mode</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">message</span>.<span class="ActionScriptDefault_Text">getType</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">success</span>;
+        <span class="ActionScriptBracket/Brace">}</span> 
+        
+        <span class="ActionScriptASDoc">/**
+         * Store a message.
+         * @param message the IPipeMessage to enqueue.
+         * @return int the new count of messages in the queue
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">store</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeMessage</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">messages</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">QueueControlMessage</span>.<span class="ActionScriptDefault_Text">SORT</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">messages</span>.<span class="ActionScriptDefault_Text">sort</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">sortMessagesByPriority</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+
+        <span class="ActionScriptASDoc">/**
+         * Sort the Messages by priority.
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">sortMessagesByPriority</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">msgA</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeMessage</span>, <span class="ActionScriptDefault_Text">msgB</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeMessage</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">num</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">msgA</span>.<span class="ActionScriptDefault_Text">getPriority</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">msgB</span>.<span class="ActionScriptDefault_Text">getPriority</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">num</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">msgA</span>.<span class="ActionScriptDefault_Text">getPriority</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">msgB</span>.<span class="ActionScriptDefault_Text">getPriority</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">num</span> <span class="ActionScriptOperator">=</span> 1;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">num</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Flush the queue.
+         * &lt;P&gt;
+         * NOTE: This empties the queue.&lt;/P&gt;
+         * @return Boolean true if all messages written successfully.
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">flush</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">success</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeMessage</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">messages</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">IPipeMessage</span>;
+            <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> 
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ok</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">output</span>.<span class="ActionScriptDefault_Text">write</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">ok</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">success</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">message</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">messages</span>.<span class="ActionScriptDefault_Text">shift</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">IPipeMessage</span>;
+            <span class="ActionScriptBracket/Brace">}</span> 
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">success</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">mode</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">QueueControlMessage</span>.<span class="ActionScriptDefault_Text">SORT</span>;
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">messages</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

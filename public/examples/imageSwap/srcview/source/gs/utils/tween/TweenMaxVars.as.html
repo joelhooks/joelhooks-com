@@ -1,0 +1,125 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>TweenMaxVars.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+VERSION: 0.92
+DATE: 8/15/2008
+ACTIONSCRIPT VERSION: 3.0
+DESCRIPTION:
+    There are 2 primary benefits of using this utility to define your TweenMax variables:
+        1) In most code editors, code hinting will be activated which helps remind you which special properties are available in TweenMax
+        2) It allows you to code using strict datatyping (although it doesn&apos;t force you to).
+
+USAGE:
+    
+    Instead of TweenMax.to(my_mc, 1, {x:300, tint:0xFF0000, onComplete:myFunction}), you could use this utility like:
+    
+        var myVars:TweenMaxVars = new TweenMaxVars();
+        myVars.addProp(&quot;x&quot;, 300); // use addProp() to add any property that doesn&apos;t already exist in the TweenMaxVars instance.
+        myVars.tint = 0xFF0000;
+        myVars.onComplete = myFunction;
+        TweenMax.to(my_mc, 1, myVars);
+        
+    Or if you just want to add multiple properties with one function, you can add up to 15 with the addProps() function, like:
+    
+        var myVars:TweenMaxVars = new TweenMaxVars();
+        myVars.addProps(&quot;x&quot;, 300, false, &quot;y&quot;, 100, false, &quot;scaleX&quot;, 1.5, false, &quot;scaleY&quot;, 1.5, false);
+        myVars.onComplete = myFunction;
+        TweenMax.to(my_mc, 1, myVars);
+        
+NOTES:
+    - This class adds about 4 Kb to your published SWF.
+    - This utility is completely optional. If you prefer the shorter synatax in the regular TweenMax class, feel
+      free to use it. The purpose of this utility is simply to enable code hinting and to allow for strict datatyping.
+    - You may add custom properties to this class if you want, but in order to expose them to TweenMax, make sure
+      you also add a getter and a setter that adds the property to the _exposedInternalProps Object.
+    - You can reuse a single TweenMaxVars Object for multiple tweens if you want, but be aware that there are a few
+      properties that must be handled in a special way, and once you set them, you cannot remove them. Those properties
+      are: frame, visible, tint, and volume. If you are altering these values, it might be better to avoid reusing a TweenMaxVars
+      Object.
+
+CODED BY: Jack Doyle, jack@greensock.com
+Copyright 2008, GreenSock (This work is subject to the terms in http://www.greensock.com/terms_of_use.html.)
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span>.<span class="ActionScriptDefault_Text">TweenFilterLiteVars</span>;
+
+    <span class="ActionScriptReserved">dynamic</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">TweenMaxVars</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">TweenFilterLiteVars</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">version</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0.91;
+        <span class="ActionScriptASDoc">/**
+         * Array of Objects, one for each &quot;control point&quot; (see documentation on Flash&apos;s curveTo() drawing method for more about how control points work). In this example, let&apos;s say the control point would be at x/y coordinates 250,50. Just make sure your my_mc is at coordinates 0,0 and then do: TweenMax.to(my_mc, 3, {_x:500, _y:0, bezier:[{_x:250, _y:50}]});
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bezier</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>; 
+        <span class="ActionScriptASDoc">/**
+         * Identical to bezier except that instead of passing Bezier control point values, you pass values through which the Bezier values should move. This can be more intuitive than using control points.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bezierThrough</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>;
+        <span class="ActionScriptASDoc">/**
+         * A common effect that designers/developers want is for a MovieClip/Sprite to orient itself in the direction of a Bezier path (alter its rotation). orientToBezier makes it easy. In order to alter a rotation property accurately, TweenMax needs 4 pieces of information:
+         * 
+         * 1. Position property 1 (typically &quot;x&quot;)
+         * 2. Position property 2 (typically &quot;y&quot;)
+         * 3. Rotational property (typically &quot;rotation&quot;)
+         * 4. Number of degrees to add (optional - makes it easy to orient your MovieClip/Sprite properly)
+         * 
+         * The orientToBezier property should be an Array containing one Array for each set of these values. For maximum flexibility, you can pass in any number of Arrays inside the container Array, one for each rotational property. This can be convenient when working in 3D because you can rotate on multiple axis. If you&apos;re doing a standard 2D x/y tween on a bezier, you can simply pass in a boolean value of true and TweenMax will use a typical setup, [[&quot;x&quot;, &quot;y&quot;, &quot;rotation&quot;, 0]]. Hint: Don&apos;t forget the container Array (notice the double outer brackets)  
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">orientToBezier</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>;
+        <span class="ActionScriptASDoc">/**
+         * Although hex colors are technically numbers, if you try to tween them conventionally, you&apos;ll notice that they don&apos;t tween smoothly. To tween them properly, the red, green, and blue components must be extracted and tweened independently. TweenMax makes it easy. To tween a property of your object that&apos;s a hex color to another hex color, use this special hexColors property of TweenMax. It must be an OBJECT with properties named the same as your object&apos;s hex color properties. For example, if your my_obj object has a &quot;myHexColor&quot; property that you&apos;d like to tween to red (0xFF0000) over the course of 2 seconds, do: TweenMax.to(my_obj, 2, {hexColors:{myHexColor:0xFF0000}}); You can pass in any number of hexColor properties. 
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hexColors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+        <span class="ActionScriptASDoc">/**
+         * A function to which the TweenMax instance should dispatch a TweenEvent when it begins. This is the same as doing myTweenMaxInstance.addEventListener(TweenEvent.START, myFunction); 
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">onStartListener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+        <span class="ActionScriptASDoc">/**
+         * A function to which the TweenMax instance should dispatch a TweenEvent every time it updates values. This is the same as doing myTweenMaxInstance.addEventListener(TweenEvent.UPDATE, myFunction); 
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">onUpdateListener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+        <span class="ActionScriptASDoc">/**
+         * A function to which the TweenMax instance should dispatch a TweenEvent when it completes. This is the same as doing myTweenMaxInstance.addEventListener(TweenEvent.COMPLETE, myFunction); 
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">onCompleteListener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+        <span class="ActionScriptASDoc">/**
+         * A function to which the TweenMax instance should dispatch a TweenEvent when it completes the allTo() or allFrom() tweens. ONLY used with allTo() and allFrom() methods!
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">onCompleteAllListener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+        <span class="ActionScriptASDoc">/**
+         * A function that should be called when the allTo() or allFrom() tweens have completed. ONLY used with allTo() and allFrom() methods!
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">onCompleteAll</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+        <span class="ActionScriptASDoc">/**
+         * An Array of parameters to pass the onCompleteAll function when the allTo() or allFrom() tweens have completed. ONLY used with allTo() and allFrom() methods!
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">onCompleteAllParams</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>;
+        <span class="ActionScriptASDoc">/**
+         * To make the tween continuously loop backwards and forwards like a yoyo, set this to true.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">yoyo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+        <span class="ActionScriptASDoc">/**
+         * To make the tween continuously loop itself, set this to true.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">loop</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+        <span class="ActionScriptComment">//public var quaternions:Object;
+</span>        
+        <span class="ActionScriptASDoc">/**
+         * 
+         * @param $vars An Object containing properties that correspond to the properties you&apos;d like to add to this TweenMaxVars Object. For example, TweenMaxVars({blurFilter:{blurX:10, blurY:20}, onComplete:myFunction})
+         * 
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">TweenMaxVars</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

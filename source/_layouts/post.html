@@ -1,0 +1,10 @@
+---
+layout: default
+single: true
+sharing: false
+---
+
+<article class="post">{% include article.html %}</article>
+{% unless page.sharing == false %}
+	{% include post/sharing.html %}
+{% endunless %}

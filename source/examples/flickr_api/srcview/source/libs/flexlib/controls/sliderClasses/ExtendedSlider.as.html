@@ -1,0 +1,472 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ExtendedSlider.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">sliderClasses</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">baseClasses</span>.<span class="ActionScriptDefault_Text">SliderBase</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">Graphics</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MouseEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Point</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">sliderClasses</span>.<span class="ActionScriptDefault_Text">SliderDataTip</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">sliderClasses</span>.<span class="ActionScriptDefault_Text">SliderDirection</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">UIComponent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">mx_internal</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">SliderEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">SliderEventClickTarget</span>;
+    <span class="ActionScriptReserved">use</span> <span class="ActionScriptReserved">namespace</span> <span class="ActionScriptDefault_Text">mx_internal</span>;
+
+    
+    <span class="ActionScriptASDoc">/**
+     * An extension of the base Slider class that adds a draggable region between the thumbs.
+     * 
+     * &lt;p&gt;The user can drag the highlight space between the thumbs and it will drag each of the
+     * thumbs all at once. It also displays dataTips for all the thumbs at the same time.&lt;/p&gt;
+     * 
+     * @see mx.controls.sliderClasses.Slider
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ExtendedSlider</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">SliderBase</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">draggingRegion</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * If this prperty is true then when you drag the draggable region between two thumbs
+         * the thumbs will always keep their same distance between each other, even when you
+         * drag the region to the left or right edges of the track. If set to false then when 
+         * you drag the region to the edges of the track the region itself will begin to resize.
+         * It&apos;s a little hard to explain, just try it out.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lockRegionsWhileDragging</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">highlightHitArea</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">UIComponent</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * 
+         * Instead of only storing one dataTip object, we store an array of 
+         * sataTip objects. This lets us display a dataTip for every slider 
+         * thumb all at once.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dataTips</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * 
+         * This variable is used to help us know when to dispatch a change event
+         * if the draggable region is dragged. The way we&apos;re dragging all the thumbs
+         * makes it so each thumb dispatches a thumbRelease and change event each time
+         * the draggable region is dropped. This means for a slider with 2 thumbs we&apos;d have
+         * 2 change events fired, which is no good.
+         * 
+         * So instead we keep track using this counter variable, so we only dispatch
+         * the thumbRelease and change events once.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">counter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constructor
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ExtendedSlider</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         * Overridden to create the draggable region and perform some initialization tasks.
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">highlightHitArea</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">highlightHitArea</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">UIComponent</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptDefault_Text">innerSlider</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">highlightHitArea</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+                <span class="ActionScriptDefault_Text">highlightHitArea</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">MOUSE_DOWN</span>,
+                                               <span class="ActionScriptDefault_Text">highlight_mouseDownHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">dataTips</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">sliderThumbClass</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderThumb</span>;
+            
+            <span class="ActionScriptComment">/* Hack to get the component to work with Flex 3 SDK.
+             * The Flex 3 SDK default stylesheet introduces the thumbSkin style and does not
+             * set the other styles (thumbUpSkin, etc), so here we check if thumbSkin
+             * has been set, and if so we set the other, older styles.
+             */</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">thumbSkin</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;thumbSkin&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumbSkin</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;thumbUpSkin&quot;</span>, <span class="ActionScriptDefault_Text">thumbSkin</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;thumbDownSkin&quot;</span>, <span class="ActionScriptDefault_Text">thumbSkin</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;thumbOverSkin&quot;</span>, <span class="ActionScriptDefault_Text">thumbSkin</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;thumbDisabledSkin&quot;</span>, <span class="ActionScriptDefault_Text">thumbSkin</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">dragHitArea</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">UIComponent</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">highlightHitArea</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * 
+         * Here&apos;s the magic behind how we drag all the thumbs at once. We basically just dispatch
+         * a mouseDown evet to each of the thumbs, which makes the thumbs think they&apos;re
+         * being dragged. Woohoo! Magic!
+         * 
+         * Setting focusEnabled = false to each of the thumbs means that they all will show
+         * the focus skin, instead of the last thumb stealing the focus away from the others.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">highlight_mouseDownHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">stageX</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">stageY</span>;
+            
+            <span class="ActionScriptDefault_Text">draggingRegion</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            
+            <span class="ActionScriptDefault_Text">systemManager</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">MOUSE_UP</span>, <span class="ActionScriptDefault_Text">regionDraggingStopped</span>, <span class="ActionScriptReserved">false</span>, 0, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptOperator">=</span>0; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptDefault_Text">thumbCount</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">curThumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderThumb</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderThumb</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumbs</span>.<span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">))</span>;
+                
+                <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">localX</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">curThumb</span>.<span class="ActionScriptDefault_Text">globalToLocal</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Point</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">))</span>.<span class="ActionScriptDefault_Text">x</span>;
+                <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">localY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">curThumb</span>.<span class="ActionScriptDefault_Text">globalToLocal</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Point</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptBracket/Brace">))</span>.<span class="ActionScriptDefault_Text">y</span>;
+            
+                <span class="ActionScriptDefault_Text">curThumb</span>.<span class="ActionScriptDefault_Text">focusEnabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">curThumb</span>.<span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">regionDraggingStopped</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">draggingRegion</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Changed to draw the track highlighting between the first thubm and the last thumb.
+         * Also draws the draggable region in the same area as an overlay.
+         * 
+         * &lt;p&gt;I think the original &lt;code&gt;drawTrackHighlight&lt;/code&gt; function only drew the highlight
+         * correctly between the first and second thumbs. If you had three or more thumbs I think
+         * it screwed up (or at least didn&apos;t do what I wanted it to do). So instead now we
+         * figure out which thumb is first and which is last and draw the highlighting for that
+         * entire region. That&apos;s teh same region that we use for the draggable region.&lt;/p&gt;
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">drawTrackHighlight</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+               <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">firstThumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderThumb</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderThumb</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getThumbAt</span><span class="ActionScriptBracket/Brace">(</span>0<span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastThumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderThumb</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">firstThumb</span>;
+            
+            <span class="ActionScriptComment">// We loop through all the thumbs, by the end we have found the first and last
+</span>            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptOperator">=</span>0; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">&lt;</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">thumbCount</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">curThumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderThumb</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderThumb</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getThumbAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">))</span>;
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">curThumb</span>.<span class="ActionScriptDefault_Text">xPosition</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">firstThumb</span>.<span class="ActionScriptDefault_Text">xPosition</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">firstThumb</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">curThumb</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">curThumb</span>.<span class="ActionScriptDefault_Text">xPosition</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">lastThumb</span>.<span class="ActionScriptDefault_Text">xPosition</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">lastThumb</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">curThumb</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xPos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">firstThumb</span>.<span class="ActionScriptDefault_Text">xPosition</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">lastThumb</span>.<span class="ActionScriptDefault_Text">xPosition</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">firstThumb</span>.<span class="ActionScriptDefault_Text">xPosition</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fullThumbHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">firstThumb</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">highlightSkinHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">fullThumbHeight</span> <span class="ActionScriptOperator">-</span> 2;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">highlightTrack</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">highlightTrack</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xPos</span>, <span class="ActionScriptDefault_Text">track</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">highlightTrack</span>.<span class="ActionScriptDefault_Text">height</span><span class="ActionScriptOperator">/</span>2 <span class="ActionScriptOperator">+</span> 2<span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">highlightTrack</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tWidth</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">tWidth</span> <span class="ActionScriptOperator">:</span> 0, <span class="ActionScriptDefault_Text">highlightTrack</span>.<span class="ActionScriptDefault_Text">height</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptComment">// Here&apos;s where we define the draggable region
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">highlightHitArea</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">g</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Graphics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">highlightHitArea</span>.<span class="ActionScriptDefault_Text">graphics</span>;
+    
+                <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">clear</span><span class="ActionScriptBracket/Brace">()</span>;        
+                <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">beginFill</span><span class="ActionScriptBracket/Brace">(</span>0<span class="ActionScriptDefault_Text">xff0000</span>,0<span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">drawRect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xPos</span>, 
+                        <span class="ActionScriptDefault_Text">track</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">track</span>.<span class="ActionScriptDefault_Text">height</span><span class="ActionScriptOperator">/</span>2 <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">highlightSkinHeight</span><span class="ActionScriptOperator">/</span>2 , 
+                        <span class="ActionScriptDefault_Text">tWidth</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">tWidth</span> <span class="ActionScriptOperator">:</span> 0, 
+                        <span class="ActionScriptDefault_Text">highlightSkinHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+                    
+                <span class="ActionScriptDefault_Text">g</span>.<span class="ActionScriptDefault_Text">endFill</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Overridden to allow for multiple dataTips displayed at once.
+        * 
+        * &lt;p&gt;Instead of using one single instance of a SliderDataTip, now we can use as
+        * many as there are thumbs. So we can have one dataTip per thumb all displayed at once
+        * if we want. This is what we want if we&apos;re dragging the entire region.&lt;/p&gt;
+        * 
+        * &lt;p&gt;This function is very similar to the &lt;code&gt;onThumbPress&lt;/code&gt; function in the 
+        * original Slider class.&lt;/p&gt;
+        */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onThumbPress</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Here we jack up the counter, see the code for onThumbRelease to see how we use this
+</span>            <span class="ActionScriptDefault_Text">counter</span><span class="ActionScriptOperator">++</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">showDataTip</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dataTip</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderDataTip</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataTips</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">dataTip</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">dataTip</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderDataTip</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">sliderDataTipClass</span><span class="ActionScriptBracket/Brace">())</span>;
+                    <span class="ActionScriptDefault_Text">dataTips</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataTip</span>;
+                    
+                    <span class="ActionScriptDefault_Text">systemManager</span>.<span class="ActionScriptDefault_Text">toolTipChildren</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dataTipStyleName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;dataTipStyleName&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTipStyleName</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">styleName</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataTipStyleName</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+              
+    
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">formattedVal</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_dataTipFormatFunction</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptDefault_Text">formattedVal</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_dataTipFormatFunction</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getValueFromX</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">xPosition</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptDefault_Text">formattedVal</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataFormatter</span>.<span class="ActionScriptDefault_Text">formatPrecision</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getValueFromX</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">xPosition</span><span class="ActionScriptBracket/Brace">))</span>,
+                                                <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;dataTipPrecision&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+    
+                <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formattedVal</span>;
+    
+                <span class="ActionScriptComment">//dataTip.text = String(getValueFromX(thumb.xPosition));
+</span>    
+                <span class="ActionScriptComment">// Tool tip has been freshly created and new text assigned to it.
+</span>                <span class="ActionScriptComment">// Hence force a validation so that we can set the
+</span>                <span class="ActionScriptComment">// size required to show the text completely.
+</span>                <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">validateNow</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span>,<span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptDefault_Text">positionDataTip</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">keyInteraction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">SliderEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">SliderEvent</span>.<span class="ActionScriptDefault_Text">THUMB_PRESS</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">thumbIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span>;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Overridden to allow for multiple dataTips displayed at once.
+        * 
+        * &lt;p&gt;This function is very similar to the &lt;code&gt;onThumbMove&lt;/code&gt; function in the 
+        * original Slider class.&lt;/p&gt;
+        */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onThumbMove</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getValueFromX</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">xPosition</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dataTip</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderDataTip</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataTips</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">showDataTip</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_dataTipFormatFunction</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">?</span>
+                               <span class="ActionScriptDefault_Text">_dataTipFormatFunction</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span>
+                               <span class="ActionScriptDefault_Text">dataFormatter</span>.<span class="ActionScriptDefault_Text">formatPrecision</span><span class="ActionScriptBracket/Brace">(</span>
+                                   <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>, <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;dataTipPrecision&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+                
+                <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span>,
+                                      <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">())</span>;
+                
+                <span class="ActionScriptDefault_Text">positionDataTip</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">liveDragging</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">interactionClickTarget</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderEventClickTarget</span>.<span class="ActionScriptDefault_Text">THUMB</span>;
+                <span class="ActionScriptDefault_Text">setValueAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>, <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">SliderEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">SliderEvent</span>.<span class="ActionScriptDefault_Text">THUMB_DRAG</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">thumbIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span>;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Overridden to allow for multiple dataTips displayed at once.
+        * 
+        * &lt;p&gt;This function is very similar to the &lt;code&gt;onThumbMove&lt;/code&gt; function in the 
+        * original Slider class.&lt;/p&gt;
+        */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onThumbRelease</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">localDataTip</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderDataTip</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataTips</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localDataTip</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">systemManager</span>.<span class="ActionScriptDefault_Text">toolTipChildren</span>.<span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localDataTip</span><span class="ActionScriptBracket/Brace">)</span>;
+                 
+                <span class="ActionScriptDefault_Text">localDataTip</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+                <span class="ActionScriptDefault_Text">dataTips</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// Drop down the counter by one
+</span>            <span class="ActionScriptDefault_Text">counter</span><span class="ActionScriptOperator">--</span>;
+            
+            <span class="ActionScriptDefault_Text">interactionClickTarget</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderEventClickTarget</span>.<span class="ActionScriptDefault_Text">THUMB</span>;
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">mythumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderThumb</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SliderThumb</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumbs</span>.<span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span><span class="ActionScriptBracket/Brace">))</span>;
+            
+            <span class="ActionScriptComment">// If the counter is zero that means that all thumbs have been
+</span>            <span class="ActionScriptComment">// released, so we&apos;re the last one that can trigger a change event.
+</span>            <span class="ActionScriptComment">// In that case we need to dispatch our events.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dispatch</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">counter</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">setValueAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getValueFromX</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mythumb</span>.<span class="ActionScriptDefault_Text">xPosition</span><span class="ActionScriptBracket/Brace">)</span>, <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span>, <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">dispatch</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dispatch</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">SliderEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">SliderEvent</span>.<span class="ActionScriptDefault_Text">THUMB_RELEASE</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">thumbIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span>;
+                <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * Overridden to allow for multiple dataTips.
+        */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">positionDataTip</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dataTip</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SliderDataTip</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">dataTips</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">thumbIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+                
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">relX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">relY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">x</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">y</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tPlacement</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span>  <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;dataTipPlacement&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;dataTipOffset&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// Need to special case tooltip position because the tooltip movieclip
+</span>            <span class="ActionScriptComment">// resides in the root movie clip, instead of the Slider movieclip
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_direction</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">SliderDirection</span>.<span class="ActionScriptDefault_Text">HORIZONTAL</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tX</span>;
+                <span class="ActionScriptDefault_Text">relY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tY</span>;
+    
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tPlacement</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;left&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">tOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">width</span>;
+                    <span class="ActionScriptDefault_Text">relY</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">height</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tPlacement</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;right&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">tOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">width</span>;
+                    <span class="ActionScriptDefault_Text">relY</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">height</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tPlacement</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;top&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">relY</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">tOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">height</span>;
+                    <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">width</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tPlacement</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;bottom&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">relY</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">tOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">height</span>;
+                    <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">width</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tY</span>;
+                <span class="ActionScriptDefault_Text">relY</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledHeight</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">tX</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">width</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+    
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tPlacement</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;left&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">tOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">width</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tPlacement</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;right&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">tOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">height</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tPlacement</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;top&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">relY</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">tOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">width</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+                    <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">height</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tPlacement</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;bottom&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">relY</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">tOffset</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">width</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+                    <span class="ActionScriptDefault_Text">relX</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">thumb</span>.<span class="ActionScriptDefault_Text">height</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">/</span> 2;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">o</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Point</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Point</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">relX</span>, <span class="ActionScriptDefault_Text">relY</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">r</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Point</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">localToGlobal</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">o</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">&lt;</span> 0 <span class="ActionScriptOperator">?</span> 0 <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">x</span>;
+            <span class="ActionScriptDefault_Text">dataTip</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">&lt;</span> 0 <span class="ActionScriptOperator">?</span> 0 <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">r</span>.<span class="ActionScriptDefault_Text">y</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getXBounds</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">selectedThumbIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">draggingRegion</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">lockRegionsWhileDragging</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getXBounds</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">selectedThumbIndex</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minThumbValue</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">maxThumbValue</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                
+                <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">values</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">minThumbValue</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">minThumbValue</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">minThumbValue</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxThumbValue</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">maxThumbValue</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">maxThumbValue</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+        
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minValue</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">values</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">selectedThumbIndex</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">minThumbValue</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">minimum</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">maxValue</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">maximum</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxThumbValue</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">values</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">selectedThumbIndex</span><span class="ActionScriptBracket/Brace">])</span>;
+                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getXFromValue</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">minValue</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">maxX</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getXFromValue</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxValue</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptDefault_Text">min</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">minX</span>, <span class="ActionScriptDefault_Text">max</span><span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">maxX</span> <span class="ActionScriptBracket/Brace">}</span>;        
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: javascript, | My Octopress Blog]]></title>
+  <link href="http://yoursite.com/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2013-08-16T18:33:00-05:00</updated>
+  <id>http://yoursite.com/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Learn AngularJS this Weekend]]></title>
+    <link href="http://yoursite.com/blog/2013/08/03/learn-angularjs-in-a-weekend/"/>
+    <updated>2013-08-03T23:36:00-05:00</updated>
+    <id>http://yoursite.com/blog/2013/08/03/learn-angularjs-in-a-weekend</id>
+    <content type="html"><![CDATA[<p>AngularJS has a reputation for a steep learning curve. It&rsquo;s definitely complex, but follows the 80/20 rule. <strong>20% of the features are what you will use 80% of the time</strong>. If you are new to AngularJS and have a weekend to study, there are some very high quality resources that will let you <strong>start Monday with a strong working knowledge of AngularJS</strong>.</p>
+
+<p>Already know AngularJS? Feel free to skip ahead. These resources are excellent, and you&rsquo;re bound to learn something.</p>
+
+<h2>The Official Tutorial ~4hrs</h2>
+
+<p>Start with <a href="http://docs.angularjs.org/tutorial">the official tutorial</a>. It provides a very straight forward overview of AngularJS and walks step by step through building a simple app. When you&rsquo;re done, you should have <strong>a solid understanding of the basics</strong> and the vocabulary you will need to move on to the next step.</p>
+
+<p>The official tutorial is <em>very</em> well put together. Unfortunately it utilizes the angular-seed project as a template. The angular-seed project is fine for quickly throwing together a working AngularJS app, but it doesn&rsquo;t provide a structure that scales well in a production application.</p>
+
+<p><strong>Don&rsquo;t use the angular-seed to start your real projects!</strong> It&rsquo;s a learning tool only.</p>
+
+<h2>Kickass (<strong>free!</strong>) Video Tutorials on Egghead.io ~3hrs</h2>
+
+<div style="float: left; padding:10px;"><a class="nofancybox" href="http://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(/images/egghead_logo.png);"></div></a></div>
+
+
+<p>You&rsquo;ve done the tutorial, and should have a good grasp of the basics. Your next stop is John Lindquist&rsquo;s <a href="http://www.egghead.io/">egghead.io for free AngularJS videos</a>. This series of bite-sized videos will deliver a ton of great information. John has gone through almost all of the &ldquo;hard&rdquo; concepts, and presented them in an easy to understand way.</p>
+
+<p><em>All</em> of the videos are great, but the <strong>series on directives is extra fantastic</strong>. Transclusion? No problem. Even after using AngularJS for over a year, I was able to solidify some of the concepts that were confusing for me.</p>
+
+<p>Watch them all and <strong>take some notes</strong>. When you come out of the other side your AngularJS-fu will be starting to take shape.</p>
+
+<p><img src="/images/lemonade.jpg" alt="ahhhhhhh Learning AngularJS is refreshing - Photo Credit: chotda" /></p>
+
+<p>That will take you through Saturday evening, and you deserve a rest. <strong>Send John a donation for his hard work</strong>, pour a tall glass of lemonade, and relax as you reflect on the your new-found knowledge of an awesome framework. Nice work!</p>
+
+<h2>Things get real with angular-app ~4hrs</h2>
+
+<p>Sunday morning.</p>
+
+<p>At this point you should understand the core AngularJS concepts and terminology. Time to brew a fresh pot and get to work.</p>
+
+<p><img src="/images/french_press.jpg" alt="AngularJS Fuel - Photo Credit: Bjørn Giesenbauer" /></p>
+
+<p>If you are anything like me, by now you&rsquo;re ready to dig into a <strong>proper example application</strong>. Luckily we have the excellent <a href="https://github.com/angular-app/angular-app">angular-app</a> project to explore. This non-trivial example focuses on best practices for:</p>
+
+<ul>
+<li>Folder structure (important!)</li>
+<li>Modules (very important!)</li>
+<li><strong>Testing</strong> (super important!)</li>
+<li>RESTful services</li>
+<li>Navigation</li>
+<li>Security</li>
+</ul>
+
+
+<p>angular-app combines a solid AngularJS UI with a node.js backend. It is non-trivial, and studying this app will give you a realistic sense of a proper AngularJS app.</p>
+
+<p>One killer aspect of this example is the build system. It <strong>demonstrates a fantastic Grunt.js build with an integrated Karma Test Runner</strong>.</p>
+
+<p>Peter Bacon Darwin and Pewel Kozlowski have done a great job. Front to back, this project is worth your study time. You could spend several days investigating the nooks and crannies of this example, but we&rsquo;ve only got the weekend. Set angular-app to the side for now, but keep it handy. It will serve as valuable reference in the future.</p>
+
+<h2>Start building your own app with ng-boilerplate ~4hrs</h2>
+
+<p>At this point you should have a solid knowledge to start building something. The <a href="https://github.com/joshdmiller/ng-boilerplate">ng-boilerplate</a> project will get you started. <strong>This is the seed you should use</strong>. It takes the lessons you learned studying angular-app, and provides the foundation upon which to build something substantial.</p>
+
+<p><img src="/images/engine.jpg" alt="a strong engine for your AngularJS app" /></p>
+
+<p>ng-boilerplate, unlike the angular-seed project, is <strong>suitable as a starting point for building a production app</strong>. It&rsquo;s a solid shortcut, and worth study.</p>
+
+<p>Spend some time getting to know ng-boilerplate through its excellent README. The READMEs don&rsquo;t stop at the root of the project. Josh has sprinkled them throughout the project to help you understand what is going on.</p>
+
+<p>Once you have your head around ng-boilerplate, you can delete all of the placeholder views, and <strong>start trying things out for yourself</strong>.</p>
+
+<p>Need some ideas?</p>
+
+<ul>
+<li>PRISM:Refract &ndash; NSA Dashboard</li>
+<li>FlySwatter &ndash; A simple bug tracker</li>
+<li>GeekTalk &ndash; Multiroom Chat</li>
+<li>OctoStats &ndash; Ranked Github Users with Clever D3 Visuals</li>
+<li>1000words &ndash; Writing app that sets target of 1000 words per day and graphs your success</li>
+<li>GetItDone &ndash; Yup, a todo list.</li>
+<li>&hellip;?</li>
+</ul>
+
+
+<p>The sky is the limit. Using the reference material you&rsquo;ve studied all weekend, combined with the official AngularJS docs, you should be well on the way to AngularJS mastery. You&rsquo;ll be over the hump, having defeated that infamous curve. Build something cool and tell me about it.</p>
+
+<p>If you&rsquo;ve hit any road blocks, <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to=joelhooks@gmail.com&amp;su=Hello,%can%I%20get%20some%20help?">send me an email</a> and I&rsquo;ll help you out.</p>
+
+<h2>Congrats! You&rsquo;ve leveled up.</h2>
+
+<p>The fun isn&rsquo;t over. There is <strong>plenty left to learn</strong>. The weekend <em>is</em> over though, and you&rsquo;ve worked hard. Take a break and relax.</p>
+
+<p>You&rsquo;ve earned it.</p>
+
+<p><img src="/images/yellow_belt.jpg" alt="You've Leveled up your AngularJS! - Photo Credit: Cayusa" /></p>
+
+<p>P.S. Initial project setup is one of the most critical factors to a project&rsquo;s success. Using templates is a great way to get a head start, but using a template without solid understanding of all the moving parts can be dangerous. I&rsquo;m working on <strong>step-by-step guide to building your own best practices AngularJS project template</strong>. If you want to get notified of its progress, as well as launch-day discounts, sign up to my newsletter below.</p>
+
+<p>You might also enjoy: <a href="http://joelhooks.com/blog/2013/05/22/lessons-learned-kicking-off-an-angularjs-project/"><strong>Lessons Learned: A Year with a Large AngularJS Project</strong></a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The basics of using ui-router with AngularJS]]></title>
+    <link href="http://yoursite.com/blog/2013/07/22/the-basics-of-using-ui-router-with-angularjs/"/>
+    <updated>2013-07-22T10:55:00-05:00</updated>
+    <id>http://yoursite.com/blog/2013/07/22/the-basics-of-using-ui-router-with-angularjs</id>
+    <content type="html"><![CDATA[<p>URL routing is a popular approach to matching the contents of a URL to specific
+functionality within a web application. URL routes programatically present
+specific content to users based on the URL that they are visiting. It is a
+popular approach that has proven to be very effective.</p>
+
+<p>Something that might not be obvious is that URL routing is also a <a href="https://en.wikipedia.org/wiki/Finite-state_machine">finite state
+machine</a>. When you configure
+the routing for an app, you are laying out the various states the application
+can be in, and informing the application what to display and do when a specific
+route is encountered.</p>
+
+<p>AngularJS supplies <a href="http://docs.angularjs.org/tutorial/step_07">URL routing</a> by default.
+It is adequate, but also has some limitations.</p>
+
+<p><img src="/images/app-layout.png" alt="A resonable application structure" /></p>
+
+<h2>So what&rsquo;s the problem?</h2>
+
+<p>Looking at the structure above, imagine an application where interacting with
+items on the header or the sidebar causes the main content to load completely
+different HTML. AngularJS provides a mechanism for this with <code>ng-switch</code>. You
+can see a (very simple) example of this below.</p>
+
+<p><iframe style="width: 100%; height: 300px" src="http://jsfiddle.net/joelhooks/embedded/Swm48/light/"></iframe></p>
+
+<p>In this case, <code>ng-switch</code> is swapping out <code>div</code> elements, but you can also use
+this approach to swap out templates using <code>ng-include</code>.</p>
+
+<p>I&rsquo;m not going to explore this option. I&rsquo;m not particularly fond of it.</p>
+
+<p><strong>Why not?</strong></p>
+
+<ul>
+<li>The <code>ng-switch</code> adds markup that could be confusing</li>
+<li>The state of the main content area is captured and stored on a model</li>
+<li>It feels like &ldquo;logic in markup&rdquo;, which I try to avoid</li>
+<li>If you go down the <code>ng-include</code> road, you need to remember to always put
+single quotes around your template names. I always forget. ;&lt;</li>
+</ul>
+
+
+<h2>ui-router</h2>
+
+<p><a href="https://github.com/angular-ui/ui-router">ui-router</a> fully embraces the
+state-machine nature of a routing system. It allows you to define states, and
+transition your application to those states. The real win is that it allows you
+to decouple nested states, and do some very complicated layouts in an elegant
+way.</p>
+
+<p>You need to think about your routing a bit differently, but once you get your
+head around the state-based approach, I think you will like it.</p>
+
+<p><iframe style="width: 100%; height: 300px" src="http://jsfiddle.net/joelhooks/embedded/Swm48/light/"></iframe></p>
+
+<p>This example is functionally very similar to the <code>ng-switch</code> approach. The main
+difference is that the main content area is populated with templated HTML for
+each of the states, without using switching or <code>ng-include</code>.</p>
+
+<p>``` javascript
+angular.module(&lsquo;app&rsquo;, [&lsquo;ui.compat&rsquo;])</p>
+
+<pre><code>.config(['$stateProvider', function ($stateProvider) {
+    var home = {
+            name: 'home',
+            url: '/',
+            templateUrl: 'content.html'
+        },
+        red = {
+            name: 'red',
+            url: '/red',
+            parent: home,
+            templateUrl: 'content.red.html'
+        },
+        blue = {
+            name: 'blue',
+            url: '/blue',
+            parent: home,
+            templateUrl: 'content.blue.html'
+        },
+        green = {
+            name: 'green',
+            url: '/green',
+            parent: home,
+            templateUrl: 'content.green.html'
+        };
+
+    $stateProvider.state(home);
+    $stateProvider.state(red);
+    $stateProvider.state(green);
+    $stateProvider.state(blue);
+}])
+</code></pre>
+
+<p>```</p>
+
+<p>The above code is the configuration for the router. We are defining the <code>module</code>, but instead
+of injecting <code>$routeProvider</code> as we would with stock AngularJS, we are injecting
+a <code>$stateProvider</code> that is used to define the states. We are defining 4 states.</p>
+
+<ul>
+<li><code>home</code> is the parent state of the next 3. It defines the header, siderbar, and
+the <code>ui-view</code> element that will be populated with the child states.</li>
+<li><code>red</code> is the first child state. It references the <code>home</code> as its parent, as
+well as targeting its own template.</li>
+<li><code>blue</code> and <code>green</code> are identical to <code>red</code>, but use different templates.</li>
+</ul>
+
+
+<p>After the states are defined, they are added to the <code>$stateProvider</code>. They are
+now ready to be navigated to.</p>
+
+<p>``` javascript</p>
+
+<pre><code>.run(['$state', function ($state) {
+   $state.transitionTo('home'); 
+}])
+</code></pre>
+
+<p>```</p>
+
+<p>the <code>run</code> method is a great place to navigate to your intial state. You are able to
+inject the now-resolved <code>$state</code> object and use its <code>transitionTo</code> method to set <code>home</code>
+as the current state.</p>
+
+<p>``` javascript</p>
+
+<pre><code>.controller('SidebarCtrl', function ($scope, $state) {
+
+$scope.content = ['red', 'green', 'blue'];
+
+$scope.setPage = function (page) {
+    $state.transitionTo(page);
+};
+</code></pre>
+
+<p>```</p>
+
+<p>The <code>SidebarCtrl</code> lists contains a simple array called content on its <code>$scope</code> which
+is used in a <code>ng-repeat</code> to give us a simple menu. When one of those items is clicked
+the <code>setPage</code> function is called with the item that was clicked. In this case, the
+content items correspond to the names of the states that we&rsquo;ve defined, so we simply
+<code>transitionTo</code> the selected state to display the content of that state.</p>
+
+<h2>Next steps with ui-router</h2>
+
+<p>This only really scratches the very surface of what you can pull off with
+ui-router. There are a ton of options and the
+<a href="https://github.com/angular-ui/ui-router/wiki">wiki</a> is well put together. Some
+things I didn&rsquo;t explore, but that are available:</p>
+
+<ul>
+<li>Passing data between states</li>
+<li>Listening for state events</li>
+<li>Named views (love this, it deserves its own post)</li>
+<li>URL Routing</li>
+</ul>
+
+
+<p><strong>The ui-router README warns that the utility is still in active early
+development</strong>. The API is still subject to change, so if you choose ui-router for
+your next project, that is something to be aware of.</p>
+
+<p>Let me know if you&rsquo;d like me to explore ui-router a bit deeper in future posts.
+I think it is an excellent approach to routing, and look forward to using it
+more.</p>
+]]></content>
+  </entry>
+  
+</feed>

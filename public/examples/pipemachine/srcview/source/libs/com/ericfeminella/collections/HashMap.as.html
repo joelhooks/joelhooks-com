@@ -1,0 +1,548 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>HashMap.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ Copyright (c) 2006 Eric J. Feminella  &lt;eric@ericfeminella.com&gt;
+ All rights reserved.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the &quot;Software&quot;), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is furnished
+ to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ @internal
+ */</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">ericfeminella</span>.<span class="ActionScriptDefault_Text">collections</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">Dictionary</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *
+     * IMap implementation which dynamically creates a HashMap
+     * of key / value pairs and provides a standard API for
+     * working with the map
+     *
+     * &lt;p&gt;
+     * The following example demonstrates a typical use-case in
+     * a &lt;code&gt;Hashmap&lt;/code&gt; instance has keys and values added
+     * and retrieved
+     * &lt;/p&gt;
+     *
+     * @example
+     * &lt;listing version=&quot;3.0&quot;&gt;
+     *
+     * import com.ericfeminella.collections.HashMap;
+     * import com.ericfeminella.collections.IMap;
+     *
+     * private function init() : void
+     * {
+     *     var map:IMap = new HashMap();
+     *     map.put(&quot;a&quot;, &quot;value A&quot;);
+     *     map.put(&quot;b&quot;, &quot;value B&quot;);
+     *     map.put(&quot;c&quot;, &quot;value C&quot;);
+     *     map.put(&quot;x&quot;, &quot;value X&quot;);
+     *     map.put(&quot;y&quot;, &quot;value Y&quot;);
+     *     map.put(&quot;z&quot;, &quot;value Z&quot;);
+     *
+     *     trace( map.getKeys() );
+     *     trace( map.getValues() );
+     *     trace( map.size() );
+     *
+     *     // outputs the following:
+     *     // b,x,z,a,c,y
+     *     // value B,value X,value Z,value A,value C,value Y
+     *     // 6
+     * }
+     *
+     * &lt;/listing&gt;
+     *
+     * @see flash.utils.Dictionary
+     * @see com.ericfeminella.collections.IMap
+     *
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">final</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">HashMap</span> <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">IMap</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * 
+         * Defines the object which contains the key / value mappings 
+         * for IMap instance
+         * 
+         * @see flash.utils.Dictionary
+         * 
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Dictionary</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         *
+         * Creates a new HashMap instance. By default, weak key
+         * references are used in order to ensure that objects are
+         * eligible for Garbage Collection iimmediatly after they
+         * are no longer being referenced, if the only reference to
+         * an object is in the specified HashMap object, the key is
+         * eligible for garbage collection and is removed from the
+         * table when the object is collected
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap( false );
+         *
+         * &lt;/listing&gt;
+         *
+         * @param specifies if weak key references should be used
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">HashMap</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">useWeakReferences</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">map</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Dictionary</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">useWeakReferences</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Adds a key and value to the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;user&quot;, userVO );
+         *
+         * &lt;/listing&gt;
+         *
+         * @param the key to add to the map
+         * @param the value of the specified key
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">put</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span>, <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Removes a key and value from the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.remove( &quot;admin&quot; );
+         *
+         * &lt;/listing&gt;
+         *
+         * @param the key to remove from the map
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">remove</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">delete</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Determines if a key exists in the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         *
+         * trace( map.containsKey( &quot;admin&quot; ) ); //true
+         *
+         * &lt;/listing&gt;
+         *
+         * @param  the key in which to determine existance in the map
+         * @return true if the key exisits, false if not
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">containsKey</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Determines if a value exists in the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         *
+         * trace( map.containsValue( adminVO ) ); //true
+         *
+         * &lt;/listing&gt;
+         *
+         * @param  the value in which to determine existance in the map
+         * @return true if the value exisits, false if not
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">containsValue</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">result</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">result</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Returns a key value from the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         *
+         * trace( map.getKey( adminVO ) ); //admin
+         *
+         * &lt;/listing&gt;
+         *
+         * @param  the key in which to retrieve the value of
+         * @return the value of the specified key
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getKey</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">id</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">id</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">key</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">id</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Returns each key added to the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.put( &quot;editor&quot;, editorVO );
+         *
+         * trace( map.getKeys() ); //admin, editor
+         *
+         * &lt;/listing&gt;
+         *
+         * @return Array of key identifiers
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getKeys</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">keys</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">keys</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">keys</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Retrieves the value of the specified key from the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.put( &quot;editor&quot;, editorVO );
+         *
+         * trace( map.getValue( &quot;editor&quot; ) ); //[object, editorVO]
+         *
+         * &lt;/listing&gt;
+         *
+         * @param  the key in which to retrieve the value of
+         * @return the value of the specified key, otherwise returns undefined
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getValue</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptOperator">*</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Retrieves each value assigned to each key in the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.put( &quot;editor&quot;, editorVO );
+         *
+         * trace( map.getValues() ); //[object, adminVO],[object, editorVO]
+         *
+         * &lt;/listing&gt;
+         *
+         * @return Array of values assigned for all keys in the map
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getValues</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">values</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">values</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">values</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Determines the size of the HashMap instance
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.put( &quot;editor&quot;, editorVO );
+         *
+         * trace( map.size() ); //2
+         *
+         * &lt;/listing&gt;
+         *
+         * @return the current size of the map instance
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">size</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">length</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">length</span><span class="ActionScriptOperator">++</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">length</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Determines if the current HashMap instance is empty
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * trace( map.isEmpty() ); //true
+         *
+         * map.put( &quot;admin&quot;, adminVO );
+         * trace( map.isEmpty() ); //false
+         *
+         * &lt;/listing&gt;
+         *
+         * @return true if the current map is empty, false if not
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">isEmpty</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">size</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">&lt;=</span> 0;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Resets all key value assignments in the HashMap instance to null
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.put( &quot;editor&quot;, editorVO );
+         * map.reset();
+         *
+         * trace( map.getValues() ); //null, null
+         *
+         * &lt;/listing&gt;
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">reset</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Resets all key / values defined in the HashMap instance to null
+         * with the exception of the specified key
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.put( &quot;editor&quot;, editorVO );
+         *
+         * trace( map.getValues() ); //[object, adminVO],[object, editorVO]
+         *
+         * map.resetAllExcept( &quot;editor&quot;, editorVO );
+         * trace( map.getValues() ); //null,[object, editorVO]
+         *
+         * &lt;/listing&gt;
+         *
+         * @param the key which is not to be cleared from the map
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">resetAllExcept</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">keyId</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">keyId</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Resets all key / values in the HashMap instance to null
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.put( &quot;editor&quot;, editorVO );
+         * trace( map.size() ); //2
+         *
+         * map.clear();
+         * trace( map.size() ); //0
+         *
+         * &lt;/listing&gt;
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">clear</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">remove</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Clears all key / values defined in the HashMap instance
+         * with the exception of the specified key
+         *
+         * @example
+         * &lt;listing version=&quot;3.0&quot;&gt;
+         *
+         * import com.ericfeminella.collections.HashMap;
+         * import com.ericfeminella.collections.IMap;
+         *
+         * var map:IMap = new HashMap();
+         * map.put( &quot;admin&quot;, adminVO );
+         * map.put( &quot;editor&quot;, editorVO );
+         * trace( map.size() ); //2
+         *
+         * map.clearAllExcept( &quot;editor&quot;, editorVO );
+         * trace( map.getValues() ); //[object, editorVO]
+         * trace( map.size() ); //1
+         *
+         * &lt;/listing&gt;
+         *
+         * @param the key which is not to be cleared from the map
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">clearAllExcept</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">keyId</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">map</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">keyId</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">remove</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

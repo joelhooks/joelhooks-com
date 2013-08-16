@@ -1,0 +1,11 @@
+<div class="content">
+{% if post.image_url %}
+	<div class="image-container"> 
+	<a href="{{ root_url }}{{ post.url }}"><img class="index-img" src="/images/t_{{ post.image_url }}" alt="{{ post.image_alt }}"></a>
+	</div>
+{% endif %}
+<div class="post-info">
+<h1 class="title article-title"><a href="{{ root_url }}{{ post.url }}">{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a></h1>
+<div class="date">{{ post.date | date: "%B %Y" }}</div>
+</div>
+</div>

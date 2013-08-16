@@ -1,0 +1,67 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>DoodadModuleMediator.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">examples</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModularDoodads</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">modules</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">doodad</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">examples</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModularDoodads</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">common</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">events</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">DoodadModuleEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">examples</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModularDoodads</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">common</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">events</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">LoggingEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">utilities</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">modular</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">mvcs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModuleMediator</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">DoodadModuleMediator</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">ModuleMediator</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inject</span><span class="ActionScriptBracket/Brace">]</span><span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">view</span>:<span class="ActionScriptDefault_Text">DoodadModule</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">requestedFlash</span>:<span class="ActionScriptDefault_Text">Boolean</span>;
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onRegister</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">addModuleListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">DoodadModuleEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">CHANGE_DOODAD_COLORS</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">handleChangeColors</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addModuleListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">DoodadModuleEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">FLASH_DOODADS</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">handleFlash</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addViewListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">DoodadModuleEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">FLASH_DOODADS</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">handleFlashDoodadRequest</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addViewListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">DoodadModuleEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">REMOVE_DOODAD</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">handleRemoveDoodad</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onRemove</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScripttrace">trace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">"removing mediator"</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleChangeColors</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>:<span class="ActionScriptDefault_Text">DoodadModuleEvent</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">view</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">backgroundColor</span> <span class="ActionScriptOperator">=</span> 0xFFFFFF;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleFlash</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>:<span class="ActionScriptDefault_Text">DoodadModuleEvent</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">requestedFlash</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">view</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">flash</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">requestedFlash</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleFlashDoodadRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>:<span class="ActionScriptDefault_Text">DoodadModuleEvent</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">requestedFlash</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">dispatchToModules</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">dispatchToModules</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">LoggingEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">LoggingEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">LOG_MESSAGE</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptString">"flash em Doodads!"</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleRemoveDoodad</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>:<span class="ActionScriptDefault_Text">DoodadModuleEvent</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">dispatchToModules</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">LoggingEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">LoggingEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">LOG_MESSAGE</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptString">"removing Doodad..."</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">dispatchToModules</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">view</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">removeMe</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">mediatorMap</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">removeMediator</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

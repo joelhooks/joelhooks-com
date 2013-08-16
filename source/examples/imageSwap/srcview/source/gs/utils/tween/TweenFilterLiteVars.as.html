@@ -1,0 +1,115 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>TweenFilterLiteVars.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+VERSION: 1.01
+DATE: 8/29/2008
+ACTIONSCRIPT VERSION: 3.0
+DESCRIPTION:
+    There are 2 primary benefits of using this utility to define your TweenFilterLite variables:
+        1) In most code editors, code hinting will be activated which helps remind you which special properties are available in TweenFilterLite
+        2) It allows you to code using strict datatyping (although it doesn&apos;t force you to).
+
+USAGE:
+    
+    Instead of TweenFilterLite.to(my_mc, 1, {x:300, colorMatrixFilter:{colorize:0xFF0000, amount:0.5}, onComplete:myFunction}), you could use this utility like:
+    
+        var myVars:TweenFilterLiteVars = new TweenFilterLiteVars();
+        myVars.addProp(&quot;x&quot;, 300); // use addProp() to add any property that doesn&apos;t already exist in the TweenFilterLiteVars instance.
+        myVars.colorMatrixFilter = new ColorMatrixFilterVars(0xFF0000, 0.5);
+        myVars.onComplete = myFunction;
+        TweenFilterLite.to(my_mc, 1, myVars);
+        
+    Or if you just want to add multiple (non-filter) properties with one function, you can add up to 15 with the addProps() function, like:
+    
+        var myVars:TweenFilterLiteVars = new TweenFilterLiteVars();
+        myVars.addProps(&quot;x&quot;, 300, false, &quot;y&quot;, 100, false, &quot;scaleX&quot;, 1.5, false, &quot;scaleY&quot;, 1.5, false);
+        myVars.onComplete = myFunction;
+        TweenFilterLite.to(my_mc, 1, myVars);
+        
+NOTES:
+    - This class adds about 4 Kb to your published SWF.
+    - This utility is completely optional. If you prefer the shorter synatax in the regular TweenFilterLite class, feel
+      free to use it. The purpose of this utility is simply to enable code hinting and to allow for strict datatyping.
+    - You may add custom properties to this class if you want, but in order to expose them to TweenFilterLite, make sure
+      you also add a getter and a setter that adds the property to the _exposedInternalProps Object.
+    - You can reuse a single TweenFilterLiteVars Object for multiple tweens if you want, but be aware that there are a few
+      properties that must be handled in a special way, and once you set them, you cannot remove them. Those properties
+      are: frame, visible, tint, and volume. If you are altering these values, it might be better to avoid reusing a TweenFilterLiteVars
+      Object.
+
+CODED BY: Jack Doyle, jack@greensock.com
+Copyright 2008, GreenSock (This work is subject to the terms in http://www.greensock.com/terms_of_use.html.)
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span>.<span class="ActionScriptDefault_Text">TweenLiteVars</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span>.<span class="ActionScriptDefault_Text">BevelFilterVars</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span>.<span class="ActionScriptDefault_Text">BlurFilterVars</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span>.<span class="ActionScriptDefault_Text">ColorMatrixFilterVars</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span>.<span class="ActionScriptDefault_Text">DropShadowFilterVars</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">gs</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">tween</span>.<span class="ActionScriptDefault_Text">GlowFilterVars</span>;
+
+    <span class="ActionScriptReserved">dynamic</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">TweenFilterLiteVars</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">TweenLiteVars</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">version</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 1.01;
+        <span class="ActionScriptASDoc">/**
+         * Adds a BlurFilter. Available properties: blurX, blurY, quality
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">blurFilter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BlurFilterVars</span>; 
+        <span class="ActionScriptASDoc">/**
+         * Adds a ColorMatrixFilter. Available properties: colorize, amount, contrast, brightness, saturation, hue, threshold, relative, matrix 
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">colorMatrixFilter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ColorMatrixFilterVars</span>;
+        <span class="ActionScriptASDoc">/**
+         * Adds a GlowFilter. Available properties: alpha, blurX, blurY, color, strength, quality, inner, knockout 
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">glowFilter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GlowFilterVars</span>;
+        <span class="ActionScriptASDoc">/**
+         * Adds a DropShadowFilter. Available properties: alpha, angle, blurX, blurY, color, distance, strength, quality
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">dropShadowFilter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DropShadowFilterVars</span>; 
+        <span class="ActionScriptASDoc">/**
+         * Adds a BevelFilter. Available properties: angle, blurX, blurY, distance, highlightAlpha, highlightColor, shadowAlpha, shadowColor, strength, quality
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bevelFilter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BevelFilterVars</span>; 
+        <span class="ActionScriptASDoc">/**
+         * Multiplier that controls the speed of the tween. 1 = normal speed, 0.5 = half speed, 2 = double speed, etc.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">timeScale</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>; 
+        
+        <span class="ActionScriptASDoc">/**
+         * 
+         * @param $vars An Object containing properties that correspond to the properties you&apos;d like to add to this TweenFilterLiteVars Object. For example, TweenFilterLiteVars({blurFilter:{blurX:10, blurY:20}, onComplete:myFunction})
+         * 
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">TweenFilterLiteVars</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">blurFilter</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">blurFilter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">BlurFilterVars</span>.<span class="ActionScriptDefault_Text">createFromGeneric</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">blurFilter</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">bevelFilter</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">bevelFilter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">BevelFilterVars</span>.<span class="ActionScriptDefault_Text">createFromGeneric</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">bevelFilter</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">colorMatrixFilter</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">colorMatrixFilter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ColorMatrixFilterVars</span>.<span class="ActionScriptDefault_Text">createFromGeneric</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">colorMatrixFilter</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">dropShadowFilter</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">dropShadowFilter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">DropShadowFilterVars</span>.<span class="ActionScriptDefault_Text">createFromGeneric</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">dropShadowFilter</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">glowFilter</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">glowFilter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">GlowFilterVars</span>.<span class="ActionScriptDefault_Text">createFromGeneric</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">$vars</span>.<span class="ActionScriptDefault_Text">glowFilter</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

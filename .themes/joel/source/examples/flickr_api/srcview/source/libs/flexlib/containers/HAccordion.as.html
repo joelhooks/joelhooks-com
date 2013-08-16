@@ -1,0 +1,654 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>HAccordion.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">containers</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">baseClasses</span>.<span class="ActionScriptDefault_Text">AccordionBase</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">geom</span>.<span class="ActionScriptDefault_Text">Rectangle</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Button</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">ClassFactory</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">Container</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">EdgeMetrics</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IUIComponent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">UIComponent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">mx_internal</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Tween</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">CSSStyleDeclaration</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">StyleManager</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">accordionClasses</span>.<span class="ActionScriptDefault_Text">AccordionHeaderLocation</span>;
+    
+    <span class="ActionScriptReserved">use</span> <span class="ActionScriptReserved">namespace</span> <span class="ActionScriptDefault_Text">mx_internal</span>;
+    
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">IconFile</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;HAccordion.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * If true, the icon for each accordion header will remain vertical instead of being rotated by 90
+     * degrees (like the entire header).
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;keepIconVertical&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Boolean&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptASDoc">/**
+     *  Width of each accordion header, in pixels.
+     *  This style is used instead of &lt;code&gt;headerWidth&lt;/code&gt; of the normal
+     *  &lt;code&gt;Accordion&lt;/code&gt; or &lt;code&gt;VAccordion&lt;/code&gt;.
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;headerWidth&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Number&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Length&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Exclude</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;headerHeight&quot;</span>, <span class="ActionScriptDefault_Text">kind</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;style&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">HAccordion</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">AccordionBase</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">initializeStyles</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">selector</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">CSSStyleDeclaration</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;HAccordion&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">selector</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">selector</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">CSSStyleDeclaration</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">selector</span>.<span class="ActionScriptDefault_Text">defaultFactory</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptfunction">function</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">backgroundColor</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xFFFFFF</span>;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">borderStyle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;solid&quot;</span>;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">paddingBottom</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">paddingLeft</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">paddingRight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">paddingTop</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">verticalGap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">horizontalGap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">setStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;HAccordion&quot;</span>, <span class="ActionScriptDefault_Text">selector</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptDefault_Text">initializeStyles</span><span class="ActionScriptBracket/Brace">()</span>;
+        
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">enumeration</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;left,right&quot;</span>, <span class="ActionScriptDefault_Text">defaultValue</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;left&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptASDoc">/**
+         * Location of the header renderer for each content item. Must be either
+         * &lt;code&gt;AccordionHeaderLocation.LEFT&lt;/code&gt; or &lt;code&gt;AccordionHeaderLocation.RIGHT&lt;/code&gt;
+         * 
+         * @see flexlib.containers.accordionClasses.AccordionHeaderLocation
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerLocation</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">AccordionHeaderLocation</span>.<span class="ActionScriptDefault_Text">LEFT</span>;
+        
+
+        <span class="ActionScriptASDoc">/**
+         *  The height of the area, in pixels, in which content is displayed.
+         *  You can override this getter if your content
+         *  does not occupy the entire area of the container.
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">contentHeight</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Start with the width of the entire accordion.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledHeight</span>;
+    
+            <span class="ActionScriptComment">// Subtract the widths of the left and right borders.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">viewMetricsAndPadding</span>;
+            <span class="ActionScriptDefault_Text">contentHeight</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">top</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">bottom</span>;
+    
+            <span class="ActionScriptDefault_Text">contentHeight</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingTop&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span>
+                            <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingBottom&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">contentHeight</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">contentWidth</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Start with the height of the entire accordion.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledWidth</span>;
+    
+            <span class="ActionScriptComment">// Subtract the heights of the top and bottom borders.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">viewMetricsAndPadding</span>;
+            <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">right</span>;
+    
+            <span class="ActionScriptComment">// Subtract the header heights.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">horizontalGap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;horizontalGap&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">numChildren</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">n</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">getHeaderAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">width</span>;
+    
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">horizontalGap</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">contentWidth</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">preferredWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">preferredHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingLeft</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingLeft&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingRight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingRight&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingTop</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingTop&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingBottom</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingBottom&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+           
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptComment">// Only measure once, unless resizeToContent=&apos;true&apos;
+</span>            <span class="ActionScriptComment">// Thereafter, we&apos;ll just use cached values.
+</span>            <span class="ActionScriptComment">// (However, if a layout style like headerHeight changes,
+</span>            <span class="ActionScriptComment">// we have to re-measure.)
+</span>            <span class="ActionScriptComment">//
+</span>            <span class="ActionScriptComment">// We need to copy the cached values into the measured fields
+</span>            <span class="ActionScriptComment">// again to handle the case where scaleX or scaleY is not 1.0.
+</span>            <span class="ActionScriptComment">// When the Accordion is zoomed, code in UIComponent.measureSizes
+</span>            <span class="ActionScriptComment">// scales the measuredWidth/Height values every time that
+</span>            <span class="ActionScriptComment">// measureSizes is called.  (bug 100749)
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">accPreferredWidth</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">_resizeToContent</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">layoutStyleChanged</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">measuredMinWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">accMinWidth</span>;
+                <span class="ActionScriptDefault_Text">measuredMinHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">accMinHeight</span>;
+                <span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">accPreferredWidth</span>;
+                <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">accPreferredHeight</span>;
+                <span class="ActionScriptReserved">return</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptDefault_Text">layoutStyleChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">numChildren</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">n</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">button</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IUIComponent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IUIComponent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">))</span>;
+    
+                <span class="ActionScriptDefault_Text">minWidth</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">headerWidth</span>;
+                <span class="ActionScriptDefault_Text">minHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">minHeight</span>, <span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">minHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptDefault_Text">preferredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">preferredHeight</span>, <span class="ActionScriptDefault_Text">minHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">preferredWidth</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">headerWidth</span>;
+    
+                <span class="ActionScriptComment">// The headers preferredWidth is messing up the accordion measurement. This may not
+</span>                <span class="ActionScriptComment">// be needed anyway because we&apos;re still using the headers minWidth to determine our overall
+</span>                <span class="ActionScriptComment">// minWidth.
+</span>    
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">preferredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">preferredWidth</span>, <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">())</span>;
+                    <span class="ActionScriptDefault_Text">preferredHeight</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+                    <span class="ActionScriptDefault_Text">minWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">minWidth</span>, <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">minWidth</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">minHeight</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">minHeight</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// Add space for borders and margins
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">viewMetricsAndPadding</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">widthPadding</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">right</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">heightPadding</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">top</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">bottom</span>;
+    
+            <span class="ActionScriptComment">// Need to adjust the widthPadding if paddingLeft and paddingRight are negative numbers
+</span>            <span class="ActionScriptComment">// (see explanation in updateDisplayList())
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">paddingLeft</span> <span class="ActionScriptOperator">&lt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">widthPadding</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">paddingLeft</span>;
+    
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">paddingRight</span> <span class="ActionScriptOperator">&lt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">widthPadding</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">paddingRight</span>;
+    
+            <span class="ActionScriptDefault_Text">minWidth</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">widthPadding</span>;
+            <span class="ActionScriptDefault_Text">preferredWidth</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">widthPadding</span>;
+            <span class="ActionScriptDefault_Text">minHeight</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">heightPadding</span>;
+            <span class="ActionScriptDefault_Text">preferredHeight</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">heightPadding</span>;
+    
+            <span class="ActionScriptDefault_Text">measuredMinWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minWidth</span>;
+            <span class="ActionScriptDefault_Text">measuredMinHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minHeight</span>;
+            <span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">preferredWidth</span>;
+            <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">preferredHeight</span>;
+    
+            <span class="ActionScriptComment">// If we&apos;re called before instantiateSelectedChild, then bail.
+</span>            <span class="ActionScriptComment">// We&apos;ll be called again later (instantiateSelectedChild calls
+</span>            <span class="ActionScriptComment">// invalidateSize), and we don&apos;t want to load values into the
+</span>            <span class="ActionScriptComment">// cache until we&apos;re fully initialized.  (bug 102639)
+</span>            <span class="ActionScriptComment">// This check was moved from the beginning of this function to
+</span>            <span class="ActionScriptComment">// here to fix bugs 103665/104213.
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">selectedChild</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">selectedChild</span><span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">numChildrenCreated</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">return</span>;
+
+            <span class="ActionScriptComment">// Don&apos;t remember sizes if we don&apos;t have any children
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">return</span>;
+    
+            <span class="ActionScriptDefault_Text">accMinWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minWidth</span>;
+            <span class="ActionScriptDefault_Text">accMinHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minHeight</span>;
+            <span class="ActionScriptDefault_Text">accPreferredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">preferredWidth</span>;
+            <span class="ActionScriptDefault_Text">accPreferredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">preferredHeight</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        
+        <span class="ActionScriptASDoc">/**
+         *  @private
+         *  Arranges the layout of the accordion contents.
+         *
+         *  @tiptext Arranges the layout of the Accordion&apos;s contents
+         *  @helpid 3017
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,
+                                                      <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptComment">// Don&apos;t do layout if we&apos;re tweening because the tweening
+</span>            <span class="ActionScriptComment">// code is handling it.
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tween</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">return</span>;
+    
+            <span class="ActionScriptComment">// Measure the border.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">bm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">borderMetrics</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingLeft</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingLeft&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingRight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingRight&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingTop</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingTop&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingBottom</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingBottom&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">horizontalGap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;horizontalGap&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptComment">// Determine the width and height of the content area.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">localContentWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">calcContentWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">localContentHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">calcContentHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptComment">// Arrange the headers, the content clips,
+</span>            <span class="ActionScriptComment">// based on selectedIndex.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">left</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">paddingLeft</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">y</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">bm</span>.<span class="ActionScriptDefault_Text">top</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">paddingTop</span>;
+    
+            <span class="ActionScriptComment">// Adjustments. These are required since the default halo
+</span>            <span class="ActionScriptComment">// appearance has verticalGap and all margins set to -1
+</span>            <span class="ActionScriptComment">// so the edges of the headers overlap each other and the
+</span>            <span class="ActionScriptComment">// border of the accordion. These overlaps cause problems with
+</span>            <span class="ActionScriptComment">// the content area clipping, so we adjust for them here.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">y</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">adjContentHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">localContentHeight</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">paddingTop</span> <span class="ActionScriptOperator">&lt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">contentY</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">paddingTop</span>;
+                <span class="ActionScriptDefault_Text">adjContentHeight</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">paddingTop</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">paddingBottom</span> <span class="ActionScriptOperator">&lt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">adjContentHeight</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">paddingBottom</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">numChildren</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">n</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">header</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">content</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IUIComponent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IUIComponent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">))</span>;
+    
+                <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">rotation</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>90;
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerLocation</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">AccordionHeaderLocation</span>.<span class="ActionScriptDefault_Text">RIGHT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">localContentHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localContentHeight</span>, <span class="ActionScriptDefault_Text">headerWidth</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">headerWidth</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">contentY</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+    
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">localContentWidth</span>;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentH</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">adjContentHeight</span>;
+    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">percentWidth</span><span class="ActionScriptBracket/Brace">))</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">contentW</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">maxWidth</span><span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptDefault_Text">contentW</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">maxWidth</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">contentW</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">())</span>
+                            <span class="ActionScriptDefault_Text">contentW</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">percentHeight</span><span class="ActionScriptBracket/Brace">))</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">contentH</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">maxHeight</span><span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptDefault_Text">contentH</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">maxHeight</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">contentH</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">())</span>
+                            <span class="ActionScriptDefault_Text">contentH</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">contentW</span> <span class="ActionScriptOperator">||</span>
+                        <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">contentH</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">contentW</span>, <span class="ActionScriptDefault_Text">contentH</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+    
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">localContentWidth</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">selectedIndex</span>
+                            <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">localContentWidth</span>, <span class="ActionScriptDefault_Text">contentY</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerLocation</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">AccordionHeaderLocation</span>.<span class="ActionScriptDefault_Text">RIGHT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">localContentHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">localContentHeight</span>, <span class="ActionScriptDefault_Text">headerWidth</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">headerWidth</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+    
+                <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">horizontalGap</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptComment">// Make sure blocker is in front
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">blocker</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">rawChildren</span>.<span class="ActionScriptDefault_Text">setChildIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">blocker</span>, <span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptOperator">-</span> 1<span class="ActionScriptBracket/Brace">)</span>;
+    
+            <span class="ActionScriptComment">// refresh the focus rect, the dimensions might have changed.
+</span>            <span class="ActionScriptDefault_Text">drawHeaderFocus</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">focusedIndex</span>, <span class="ActionScriptDefault_Text">showFocusIndicator</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         *  @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">calcContentHeight</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Start with the height of the entire accordion.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledHeight</span>;
+    
+            <span class="ActionScriptComment">// Subtract the heights of the top and bottom borders.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">viewMetricsAndPadding</span>;
+            <span class="ActionScriptDefault_Text">contentHeight</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">top</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">bottom</span>;
+    
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">contentHeight</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         *  @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">calcContentWidth</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Start with the width of the entire accordion.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledWidth</span>;
+    
+            <span class="ActionScriptComment">// Subtract the widths of the left and right borders.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">viewMetricsAndPadding</span>;
+            <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">right</span>;
+    
+            <span class="ActionScriptComment">// Subtract the header widths.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">horizontalGap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;horizontalGap&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">numChildren</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">n</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">headerWidth</span>;
+    
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">-=</span> <span class="ActionScriptDefault_Text">horizontalGap</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">contentWidth</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getHeaderWidth</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;headerWidth&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerWidth</span><span class="ActionScriptBracket/Brace">))</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">headerWidth</span> <span class="ActionScriptOperator">=</span> 0;
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptOperator">&gt;</span> 0<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptDefault_Text">headerWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderAt</span><span class="ActionScriptBracket/Brace">(</span>0<span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">measuredHeight</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">headerWidth</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         *  @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">startTween</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">oldSelectedIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">newSelectedIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">bSliding</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+    
+            <span class="ActionScriptComment">// To improve the animation performance, we set up some invariants
+</span>            <span class="ActionScriptComment">// used in onTweenUpdate. (Some of these, like contentHeight, are
+</span>            <span class="ActionScriptComment">// too slow to recalculate at every tween step.)
+</span>            <span class="ActionScriptDefault_Text">tweenViewMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">viewMetricsAndPadding</span>;
+            <span class="ActionScriptDefault_Text">tweenContentWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">calcContentWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">tweenContentHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">calcContentHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">tweenOldSelectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">oldSelectedIndex</span>;
+            <span class="ActionScriptDefault_Text">tweenNewSelectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">newSelectedIndex</span>;
+    
+            <span class="ActionScriptComment">// A single instance of Tween drives the animation.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">openDuration</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;openDuration&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">tween</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Tween</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>, 0, <span class="ActionScriptDefault_Text">tweenContentWidth</span>, <span class="ActionScriptDefault_Text">openDuration</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">easingFunction</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;openEasingFunction&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Function</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">easingFunction</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">tween</span>.<span class="ActionScriptDefault_Text">easingFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">easingFunction</span>;
+    
+            <span class="ActionScriptComment">// Ideally, all tweening should be managed by the EffectManager.  Since
+</span>            <span class="ActionScriptComment">// this tween isn&apos;t managed by the EffectManager, we need this alternate
+</span>            <span class="ActionScriptComment">// mechanism to tell the EffectManager that we&apos;re tweening.  Otherwise, the
+</span>            <span class="ActionScriptComment">// EffectManager might try to play another effect that animates the same
+</span>            <span class="ActionScriptComment">// properties.
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">oldSelectedIndex</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">oldSelectedIndex</span><span class="ActionScriptBracket/Brace">))</span>.<span class="ActionScriptDefault_Text">tweeningProperties</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;x&quot;</span>, <span class="ActionScriptString">&quot;y&quot;</span>, <span class="ActionScriptString">&quot;width&quot;</span>, <span class="ActionScriptString">&quot;height&quot;</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">newSelectedIndex</span><span class="ActionScriptBracket/Brace">))</span>.<span class="ActionScriptDefault_Text">tweeningProperties</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;x&quot;</span>, <span class="ActionScriptString">&quot;y&quot;</span>, <span class="ActionScriptString">&quot;width&quot;</span>, <span class="ActionScriptString">&quot;height&quot;</span><span class="ActionScriptBracket/Brace">]</span>;
+    
+            <span class="ActionScriptComment">// If the content of the new child hasn&apos;t been created yet, set the new child
+</span>            <span class="ActionScriptComment">// to the content width/height. This way any background color will show up
+</span>            <span class="ActionScriptComment">// properly during the animation.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newSelectedChild</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Container</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">newSelectedIndex</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">newSelectedChild</span>.<span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">paddingTop</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingTop&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">borderMetrics</span>.<span class="ActionScriptDefault_Text">top</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">paddingTop</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">paddingTop</span> <span class="ActionScriptOperator">:</span> 0<span class="ActionScriptBracket/Brace">)</span>;
+    
+                <span class="ActionScriptDefault_Text">newSelectedChild</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">newSelectedChild</span>.<span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptDefault_Text">contentY</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newSelectedChild</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tweenContentWidth</span>, <span class="ActionScriptDefault_Text">tweenContentHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptDefault_Text">UIComponent</span>.<span class="ActionScriptDefault_Text">suspendBackgroundProcessing</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         *  @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onTweenUpdate</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Fetch the tween invariants we set up in startTween.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tweenViewMetrics</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tweenContentWidth</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contentHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tweenContentHeight</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldSelectedIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tweenOldSelectedIndex</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newSelectedIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tweenNewSelectedIndex</span>;
+    
+            <span class="ActionScriptComment">// The tweened value is the height of the new content area, which varies
+</span>            <span class="ActionScriptComment">// from 0 to the contentHeight. As the new content area grows, the
+</span>            <span class="ActionScriptComment">// old content area shrinks.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newContentWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldContentWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">value</span>;
+    
+            <span class="ActionScriptComment">// These offsets for the Y position of the content clips make the content
+</span>            <span class="ActionScriptComment">// clips appear to be pushed up and pulled down.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">oldSelectedIndex</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">newSelectedIndex</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptOperator">-</span><span class="ActionScriptDefault_Text">newContentWidth</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">newContentWidth</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">newSelectedIndex</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">oldSelectedIndex</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">oldContentWidth</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptOperator">-</span><span class="ActionScriptDefault_Text">oldContentWidth</span>;
+    
+            <span class="ActionScriptComment">// Loop over all the headers to arrange them vertically.
+</span>            <span class="ActionScriptComment">// The loop is intentionally over ALL the headers, not just the ones that
+</span>            <span class="ActionScriptComment">// need to move; this makes the animation look equally smooth
+</span>            <span class="ActionScriptComment">// regardless of how many headers are moving.
+</span>            <span class="ActionScriptComment">// We also reposition the two visible content clips.
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">horizontalGap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;horizontalGap&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">numChildren</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">n</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">header</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">content</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Container</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">))</span>;
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerLocation</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">AccordionHeaderLocation</span>.<span class="ActionScriptDefault_Text">RIGHT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">$x</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">x</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">height</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">oldSelectedIndex</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">cacheAsBitmap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">scrollRect</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span><span class="ActionScriptDefault_Text">oldOffset</span>, 0,
+                            <span class="ActionScriptDefault_Text">contentWidth</span>, <span class="ActionScriptDefault_Text">contentHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">oldContentWidth</span>;
+    
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">newSelectedIndex</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">cacheAsBitmap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">scrollRect</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Rectangle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">-</span><span class="ActionScriptDefault_Text">newOffset</span>, 0,
+                            <span class="ActionScriptDefault_Text">contentWidth</span>, <span class="ActionScriptDefault_Text">contentHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">newContentWidth</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerLocation</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">AccordionHeaderLocation</span>.<span class="ActionScriptDefault_Text">RIGHT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">$x</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">x</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">height</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">horizontalGap</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         *  @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onTweenEnd</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">bSliding</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">oldSelectedIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tweenOldSelectedIndex</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tweenViewMetrics</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">horizontalGap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;horizontalGap&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">localContentWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">calcContentWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">localContentHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">calcContentHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">content</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Container</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">numChildren</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">n</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">header</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getHeaderAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerLocation</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">AccordionHeaderLocation</span>.<span class="ActionScriptDefault_Text">RIGHT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">$x</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">x</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">headerWidth</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">content</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">))</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">cacheAsBitmap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">scrollRect</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+                    <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">localContentWidth</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerLocation</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">AccordionHeaderLocation</span>.<span class="ActionScriptDefault_Text">RIGHT</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">header</span>.<span class="ActionScriptDefault_Text">$x</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">x</span>;
+                    <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">headerWidth</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">horizontalGap</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">oldSelectedIndex</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">content</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">oldSelectedIndex</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">cacheAsBitmap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">scrollRect</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+                <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">visible</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">tweeningProperties</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptComment">// Delete the temporary tween invariants we set up in startTween.
+</span>            <span class="ActionScriptDefault_Text">tweenViewMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+            <span class="ActionScriptDefault_Text">tweenContentWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">NaN</span>;
+            <span class="ActionScriptDefault_Text">tweenContentHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">NaN</span>;
+            <span class="ActionScriptDefault_Text">tweenOldSelectedIndex</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptDefault_Text">tweenNewSelectedIndex</span> <span class="ActionScriptOperator">=</span> 0;
+    
+            <span class="ActionScriptDefault_Text">tween</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+    
+            <span class="ActionScriptDefault_Text">UIComponent</span>.<span class="ActionScriptDefault_Text">resumeBackgroundProcessing</span><span class="ActionScriptBracket/Brace">()</span>;
+    
+            <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">selectedIndex</span><span class="ActionScriptBracket/Brace">))</span>.<span class="ActionScriptDefault_Text">tweeningProperties</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+    
+            <span class="ActionScriptComment">// If we interrupted a Dissolve effect, restart it here
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">currentDissolveEffect</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">currentDissolveEffect</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">currentDissolveEffect</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">currentDissolveEffect</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">([</span><span class="ActionScriptReserved">this</span><span class="ActionScriptBracket/Brace">])</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+    
+            <span class="ActionScriptComment">// Let the screen render the last frame of the animation before
+</span>            <span class="ActionScriptComment">// we begin instantiating the new child.
+</span>            <span class="ActionScriptDefault_Text">callLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">instantiateSelectedChild</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>
