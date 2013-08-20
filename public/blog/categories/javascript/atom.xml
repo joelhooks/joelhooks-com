@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript, | Joel Hooks]]></title>
   <link href="http://joelhooks.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2013-08-18T17:01:46-05:00</updated>
+  <updated>2013-08-19T20:08:42-05:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -18,9 +18,14 @@
     <link href="http://joelhooks.com/blog/2013/08/18/configuring-dependency-injection-in-angularjs/"/>
     <updated>2013-08-18T12:45:00-05:00</updated>
     <id>http://joelhooks.com/blog/2013/08/18/configuring-dependency-injection-in-angularjs</id>
-    <content type="html"><![CDATA[<p>Dependency injection is the act of supplying dependencies to objects
-<em>externally</em>. This means that a given object does <strong>not</strong> use the <code>new</code> keyword
-internally to create its own dependencies. By creating and managing dependencies
+    <content type="html"><![CDATA[<p>Dependency injection is the act of supplying values or object instances (dependencies) to target objects
+from outside of the target object. In many (most?) cases this is automated
+by a framework, such as AngularJS.</p>
+
+<p>This means that a given target object does <strong>not</strong> create its own dependencies,
+through the use of the <code>new</code> keyword or other creation methods.</p>
+
+<p>By creating and managing dependencies
 outside of an object, it makes it much easier to switch out that dependency as
 needed. This is very useful when you are writing your unit tests, and can have
 many advantages in larger systems.</p>
@@ -53,9 +58,8 @@ defining your dependencies, ordered by complexity from least to most:</p>
 going to get into those two today.</em></p>
 
 <p>Both <code>service</code> and <code>factory</code> are abstractions that sit on top of <code>provider</code>.
-Using <code>factory</code> and <code>provider</code> will give you more flexibility, but is more
-verbose. Let&rsquo;s take a look at the simplest case, and work our way through
-something more complex.</p>
+Using <code>factory</code> and <code>provider</code> will give you more flexibility, but are more
+verbose.</p>
 
 <p>Before we look at how to use these tools, let&rsquo;s take a look at the AngularJS
 source code and understand how they work.</p>
@@ -98,13 +102,21 @@ return providerCache[name + providerSuffix] = provider_;
 <p>As you can see at a glance, <code>service</code> calls <code>factory</code> which calls <code>provider</code>. So, when it
 gets right down to it, these three methods are the exact same thing. Convenient!</p>
 
-<p>Almost the exact same thing. One thing to note is that <code>service</code> is using
-<code>$injector.instantiate</code> on the constructor that you pass in. <strong><code>factory</code> doesn&rsquo;t,
-so <code>new</code> will not automatically be called on your constructor</strong> when using <code>factory</code>. This
-could result in <code>this</code> scoping issues with your constructor. Hat tip to
+<p>Almost the exact same thing.</p>
+
+<p>There is a subtle difference. The AngularJS <code>service</code> uses
+<code>$injector.instantiate</code> on the constructor function that you pass in. This means
+that internally the <code>service</code> creates an instance of your function with the
+<code>new</code> operator. This will provide the resulting object a valid &lsquo;this&rsquo; scope.</p>
+
+<p>Using <strong><code>factory</code> doesn&rsquo;t call <code>new</code> on the function that is passed in</strong>.
+When using <code>factory</code>, the function that is passed in is called directly, and an
+object is expteded to be returned.</p>
+
+<p>Hat tip to
 <a href="http://twitter.com/ThomasBurleson">@ThomasBurleson</a> for pointing this
-out. It is a subtle distinction, but one that could jump up and bite you in the
-ass if you aren&rsquo;t aware of it.</p>
+out. This can be confusing if encountered in the wild. Now you know.
+Half the battle.</p>
 
 <p>Let&rsquo;s start with the simplest use case. The <code>service</code>.</p>
 
@@ -125,7 +137,7 @@ var MyModel = function MyModel(asyncService) {
     };
 }
 
-module.service('myModel', ['asyncService', MyModel]); //most simple option
+module.service('myModel', ['asyncService', MyModel]); //simple option
 </code></pre>
 
 <p>}(angular))
@@ -140,7 +152,7 @@ every be created and used by the application.</p>
 dependencies.</p>
 
 <p><code>javascript
-module.service('myModel',  MyModel); //most most simple option
+module.service('myModel',  MyModel); //most simple option
 </code></p>
 
 <p><code>module.service</code> requires only two arguments. A string for its unique name, and a constructor
