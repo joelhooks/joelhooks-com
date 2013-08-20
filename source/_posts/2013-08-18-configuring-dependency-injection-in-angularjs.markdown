@@ -140,6 +140,8 @@ When you need more flexibility than the `service` provides, it is time to look a
 
 ### Defining a factory in AngularJS
 
+A factory returns an object.
+
 ``` javascript
 (function(angular) {
  
