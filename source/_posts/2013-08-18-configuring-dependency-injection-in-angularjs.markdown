@@ -123,7 +123,7 @@ A service instantiates a constructor function.
 In this example we are creating a module that will store a model that grabs data from some asynchronous
 service. The `myModel` service will return an instance of `MyModel` when it is requested 
 for injection by other objects. The instance of `MyModel` is a singleton, and only one instance will
-every be created and used by the application.
+ever be created and used by the application.
 
 This example could actually be even simpler if the injectable doesn't require any additional 
 dependencies.
@@ -165,9 +165,9 @@ A factory returns an object.
 
 Using a `factory` provides additional flexibility. By providing a factory function
 over a straight constructor, you are provided with the opportunity to do some work
-prior to the returning the object. You are also in charge of creating the
+prior to returning the object. You are also in charge of creating the
 instance that you want returned, unlike `service`, which creates the
-instance for you the constructor function you provide.
+instance for the constructor function you provide.
 
 The above example is obviously not
 doing anything interesting, but when you need to do some work prior to resolving a 
@@ -222,6 +222,8 @@ you.
 For all practical purposes you will likely never need to use `provider` unless you are a 
 control freak. In most circumstances a `factory` or `service` will suffice, but it is nice
 to know that `provider` is there, if you needed that level of explicit control for some reason.
+
+One thing to note about providers is that the provider is *available during **configuration phase** of a module*. While I haven't found a specific use case for this, it is something to have in your toolbox.
 
 ### A little trick for dynamic dependencies
 
