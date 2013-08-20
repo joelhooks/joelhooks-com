@@ -165,7 +165,11 @@ A factory returns an object.
 
 Using a `factory` provides additional flexibility. By providing a factory function
 over a straight constructor, you are provided with the opportunity to do some work
-prior to the returned instance being instantiated. The above example is obviously not
+prior to the returning the object. You are also in charge of creating the
+instance that you want returned, unlike `service`, which creates the
+instance for you the constructor function you provide.
+
+The above example is obviously not
 doing anything interesting, but when you need to do some work prior to resolving a 
 dependency, a factory can be a good choice.
 
@@ -210,14 +214,14 @@ The last way to define dependencies is with `provider`. Let's look at that next.
 }(angular))
 ```
 
-As you can see, `provider` is much lower level. Explicit and verbose. The `$get` function
+As you can see, `provider` is lower level. Explicit and verbose. The `$get` function
 is used by AngularJS internally for the injector. A provider is **required** to have a `$get`
 function. When using `factory` (and `service` as well) the `$get` function is defined for
 you.
 
 For all practical purposes you will likely never need to use `provider` unless you are a 
 control freak. In most circumstances a `factory` or `service` will suffice, but it is nice
-to know that `provider` is there, if you needed that level of explicit control.
+to know that `provider` is there, if you needed that level of explicit control for some reason.
 
 ### A little trick for dynamic dependencies
 
