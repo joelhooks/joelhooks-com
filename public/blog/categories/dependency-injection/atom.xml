@@ -4,7 +4,7 @@
   <title><![CDATA[Category: dependency-injection | Joel Hooks]]></title>
   <link href="http://joelhooks.com/blog/categories/dependency-injection/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2013-08-19T20:08:42-05:00</updated>
+  <updated>2013-08-20T14:55:41-05:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -146,7 +146,7 @@ module.service('myModel', ['asyncService', MyModel]); //simple option
 <p>In this example we are creating a module that will store a model that grabs data from some asynchronous
 service. The <code>myModel</code> service will return an instance of <code>MyModel</code> when it is requested
 for injection by other objects. The instance of <code>MyModel</code> is a singleton, and only one instance will
-every be created and used by the application.</p>
+ever be created and used by the application.</p>
 
 <p>This example could actually be even simpler if the injectable doesn&rsquo;t require any additional
 dependencies.</p>
@@ -162,6 +162,8 @@ for your application.</p>
 <p>When you need more flexibility than the <code>service</code> provides, it is time to look at <code>factory</code>.</p>
 
 <h3>Defining a factory in AngularJS</h3>
+
+<p>A factory returns an object.</p>
 
 <p>``` javascript
 (function(angular) {</p>
@@ -187,7 +189,11 @@ module.factory('myModel', ['asyncService', function (asyncService) {
 
 <p>Using a <code>factory</code> provides additional flexibility. By providing a factory function
 over a straight constructor, you are provided with the opportunity to do some work
-prior to the returned instance being instantiated. The above example is obviously not
+prior to returning the object. You are also in charge of creating the
+instance that you want returned, unlike <code>service</code>, which creates the
+instance for the constructor function you provide.</p>
+
+<p>The above example is obviously not
 doing anything interesting, but when you need to do some work prior to resolving a
 dependency, a factory can be a good choice.</p>
 
@@ -234,14 +240,16 @@ modules.provider('myModel', myModelProvider);
 <p>}(angular))
 ```</p>
 
-<p>As you can see, <code>provider</code> is much lower level. Explicit and verbose. The <code>$get</code> function
+<p>As you can see, <code>provider</code> is lower level. Explicit and verbose. The <code>$get</code> function
 is used by AngularJS internally for the injector. A provider is <strong>required</strong> to have a <code>$get</code>
 function. When using <code>factory</code> (and <code>service</code> as well) the <code>$get</code> function is defined for
 you.</p>
 
 <p>For all practical purposes you will likely never need to use <code>provider</code> unless you are a
 control freak. In most circumstances a <code>factory</code> or <code>service</code> will suffice, but it is nice
-to know that <code>provider</code> is there, if you needed that level of explicit control.</p>
+to know that <code>provider</code> is there, if you needed that level of explicit control for some reason.</p>
+
+<p>One thing to note about providers is that the provider is <em>available during <strong>configuration phase</strong> of a module</em>. While I haven&rsquo;t found a specific use case for this, it is something to have in your toolbox.</p>
 
 <h3>A little trick for dynamic dependencies</h3>
 
