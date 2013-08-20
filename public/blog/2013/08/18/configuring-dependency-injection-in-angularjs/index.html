@@ -1,0 +1,566 @@
+
+<!DOCTYPE HTML>
+<html itemscope itemtype="http://schema.org/Article">
+<head>
+	<meta charset="utf-8">
+	<title>Configuring Dependency Injection in AngularJS - @jhooks</title>
+	<meta name="author" content="Joel Hooks">
+
+	
+	<meta name="description" content="Dependency injection is the act of supplying dependencies to objects
+externally. This means that a given object does not use the new keyword &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Joel Hooks" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+
+
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+
+	<script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<meta property="og:description" content="the one where Joel discusses his trials and tribulations as a developer of fine software." />
+<meta property="og:image" content="/images/injection.jpg " />
+<meta property="og:title" value="Configuring Dependency Injection in AngularJS - Joel Hooks" />
+<meta property="og:url" value="http://joelhooks.com/blog/2013/08/18/configuring-dependency-injection-in-angularjs/" />                    
+<meta property="og:type" content="website" />                                    
+ 
+
+<script type="text/javascript" src="//use.typekit.net/wbq6rdy.js"></script>
+<script type="text/javascript">try {
+    Typekit.load();
+} catch (e) {
+}</script>
+
+<!-- Start Visual Website Optimizer Asynchronous Code -->
+<script type='text/javascript'>
+var _vwo_code=(function(){
+var account_id=48528,
+settings_tolerance=2000,
+library_tolerance=2500,
+use_existing_jquery=false,
+// DO NOT EDIT BELOW THIS LINE
+f=false,d=document;return{use_existing_jquery:function(){return use_existing_jquery;},library_tolerance:function(){return library_tolerance;},finish:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);}},finished:function(){return f;},load:function(a){var b=d.createElement('script');b.src=a;b.type='text/javascript';b.innerText;b.onerror=function(){_vwo_code.finish();};d.getElementsByTagName('head')[0].appendChild(b);},init:function(){settings_timer=setTimeout('_vwo_code.finish()',settings_tolerance);this.load('//dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&r='+Math.random());var a=d.createElement('style'),b='body{opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;}',h=d.getElementsByTagName('head')[0];a.setAttribute('id','_vis_opt_path_hides');a.setAttribute('type','text/css');if(a.styleSheet)a.styleSheet.cssText=b;else a.appendChild(d.createTextNode(b));h.appendChild(a);return settings_timer;}};}());_vwo_settings_timer=_vwo_code.init();
+</script>
+<!-- End Visual Website Optimizer Asynchronous Code -->
+
+<script type="text/javascript">
+    if(typeof(_vis_opt_top_initialize) == "function") {
+    // Code for Custom Goal: Goal #4
+     _vis_opt_goal_conversion(200);
+    // uncomment the following line to introduce a half second pause to ensure goal always registers with the server
+    _vis_opt_pause(500);
+    }
+</script>
+
+
+
+
+</head>
+
+
+<body>
+	<div class="topbar">
+		<div class="inner">
+			<div class="form">				
+				<form name="header_signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+					<div class="text"><strong>Weekly AngularJS Content Sent Right to Your Inbox:</strong></div>
+					<div class="button-container">
+			        <input class="input" type="email" name="EMAIL" placeholder="hey@you.com"> 
+			        
+			        <a class="button"  onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } document.header_signup.submit();" href="#">Keep me Updated!</a>
+			        </div>
+			        <div class="text">(1~2 emails a week. No spam.)</div>
+		      	</form>	    
+			</div>
+
+		</div>
+
+	</div>
+	<header id="header" class="inner">
+<a href="/"><div class="myface">
+
+</div></a>
+
+
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/jhooks" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/joelhooks" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+
+</nav>
+
+</header>
+	<div id="content" class="inner"><article class="post">
+
+	<h1 itemprop="name" class="title article-title">Configuring Dependency Injection in AngularJS</h1>
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-18T12:45:00-05:00" pubdate data-updated="true">August 2013</time></div>
+
+	<div class="entry-content">
+		
+			<div class="article-image">
+			<img itemprop="image" src="/images/injection.jpg" alt="So pretend this bee is your AngularJS app, and it needs dependencies injected. Photo Credit: CJ Isherwood">
+			</div>
+		
+		<p>Dependency injection is the act of supplying dependencies to objects
+<em>externally</em>. This means that a given object does <strong>not</strong> use the <code>new</code> keyword
+internally to create its own dependencies. By creating and managing dependencies
+outside of an object, it makes it much easier to switch out that dependency as
+needed. This is very useful when you are writing your unit tests, and can have
+many advantages in larger systems.</p>
+
+<p>There are only three ways for an object to resolve its dependencies:</p>
+
+<ul>
+<li>internally, via the <code>new</code> operator</li>
+<li>lookup via a global variable (requirejs is an example)</li>
+<li>the dependency is passed to the object</li>
+</ul>
+
+
+<p>The third option is <em>dependency injection</em>, and it is the preferred approach in
+AngularJS apps.</p>
+
+<h2>Defining your dependencies</h2>
+
+<p>Dependency injection is a core feature of AngularJS. There are 3 approaches to
+defining your dependencies, ordered by complexity from least to most:</p>
+
+<ul>
+<li>module.service</li>
+<li>module.factory</li>
+<li>module.provider</li>
+</ul>
+
+
+<p><strong>note:</strong> <em>AngularJS also provides <code>value</code> and <code>constant</code> dependencies. We aren&rsquo;t
+going to get into those two today.</em></p>
+
+<p>Both <code>service</code> and <code>factory</code> are abstractions that sit on top of <code>provider</code>.
+Using <code>factory</code> and <code>provider</code> will give you more flexibility, but is more
+verbose. Let&rsquo;s take a look at the simplest case, and work our way through
+something more complex.</p>
+
+<p>Before we look at how to use these tools, let&rsquo;s take a look at the AngularJS
+source code and understand how they work.</p>
+
+<h3>Interlude into the AngularJS internals</h3>
+
+<p>If you&rsquo;re a geek like me, you might be curious as to what is going on under the hood
+when you declare dependencies.</p>
+
+<p>I mentioned earlier that <code>service</code> and <code>factory</code> were abstractions on top of <code>provider</code>.
+To show you exactly how that works, we need to open up <code>injector.js</code> in <code>src/auto/</code>
+folder in the AngularJS source code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="kd">function</span> <span class="nx">provider</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">provider_</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">provider_</span><span class="p">)</span> <span class="o">||</span> <span class="nx">isArray</span><span class="p">(</span><span class="nx">provider_</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">provider_</span> <span class="o">=</span> <span class="nx">providerInjector</span><span class="p">.</span><span class="nx">instantiate</span><span class="p">(</span><span class="nx">provider_</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">provider_</span><span class="p">.</span><span class="nx">$get</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">throw</span> <span class="nx">$injectorMinErr</span><span class="p">(</span><span class="s1">&#39;pget&#39;</span><span class="p">,</span> <span class="s2">&quot;Provider &#39;{0}&#39; must define $get factory method.&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">providerCache</span><span class="p">[</span><span class="nx">name</span> <span class="o">+</span> <span class="nx">providerSuffix</span><span class="p">]</span> <span class="o">=</span> <span class="nx">provider_</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">factory</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">factoryFn</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">provider</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="p">{</span> <span class="nx">$get</span><span class="o">:</span> <span class="nx">factoryFn</span> <span class="p">});</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">service</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">constructor</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">factory</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$injector&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$injector</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">instantiate</span><span class="p">(</span><span class="nx">constructor</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}]);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see at a glance, <code>service</code> calls <code>factory</code> which calls <code>provider</code>. So, when it
+gets right down to it, these three methods are the exact same thing. Convenient!</p>
+
+<p>Almost the exact same thing. One thing to note is that <code>service</code> is using
+<code>$injector.instantiate</code> on the constructor that you pass in. <strong><code>factory</code> doesn&rsquo;t,
+so <code>new</code> will not automatically be called on your constructor</strong> when using <code>factory</code>. This
+could result in <code>this</code> scoping issues with your constructor. Hat tip to
+<a href="http://twitter.com/ThomasBurleson">@ThomasBurleson</a> for pointing this
+out. It is a subtle distinction, but one that could jump up and bite you in the
+ass if you aren&rsquo;t aware of it.</p>
+
+<p>Let&rsquo;s start with the simplest use case. The <code>service</code>.</p>
+
+<h3>Defining a service in AngularJS</h3>
+
+<p>A service instantiates a constructor function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.myModel&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">MyModel</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">MyModel</span><span class="p">(</span><span class="nx">asyncService</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">someApi</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">asyncService</span><span class="p">.</span><span class="nx">getStuff</span><span class="p">();</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;myModel&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;asyncService&#39;</span><span class="p">,</span> <span class="nx">MyModel</span><span class="p">]);</span> <span class="c1">//most simple option</span>
+</span><span class='line'><span class="p">}(</span><span class="nx">angular</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example we are creating a module that will store a model that grabs data from some asynchronous
+service. The <code>myModel</code> service will return an instance of <code>MyModel</code> when it is requested
+for injection by other objects. The instance of <code>MyModel</code> is a singleton, and only one instance will
+every be created and used by the application.</p>
+
+<p>This example could actually be even simpler if the injectable doesn&rsquo;t require any additional
+dependencies.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;myModel&#39;</span><span class="p">,</span>  <span class="nx">MyModel</span><span class="p">);</span> <span class="c1">//most most simple option</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>module.service</code> requires only two arguments. A string for its unique name, and a constructor
+to create an instance of. This approach is useful, and most of the time is probably all you need
+for your application.</p>
+
+<p>When you need more flexibility than the <code>service</code> provides, it is time to look at <code>factory</code>.</p>
+
+<h3>Defining a factory in AngularJS</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.myModel&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">MyModel</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">MyModel</span><span class="p">(</span><span class="nx">asyncService</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">someApi</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">asyncService</span><span class="p">.</span><span class="nx">getStuff</span><span class="p">();</span> <span class="c1">//promise?</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;myModel&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;asyncService&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">asyncService</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//could do some stuff here</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">(</span><span class="nx">asyncService</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}(</span><span class="nx">angular</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using a <code>factory</code> provides additional flexibility. By providing a factory function
+over a straight constructor, you are provided with the opportunity to do some work
+prior to the returned instance being instantiated. The above example is obviously not
+doing anything interesting, but when you need to do some work prior to resolving a
+dependency, a factory can be a good choice.</p>
+
+<p>In the real world, I&rsquo;ve used <code>factory</code> to provide a configurable mock data &ldquo;mode&rdquo;. The
+factory function would check to see which mode the app was in, and dynamically switch
+between mock and real data. This can be incredibly handy when you want to work with out
+depending on external services.</p>
+
+<p>Note that the factory function will be called exactly <strong>one time</strong>. Any work you do
+will only be done once, and <code>myModel</code> will be whatever your factory function returns.
+In this case, we are simply returning an instance of <code>MyModel</code>, but a factory can return
+objects <em>and</em> functions. Use that to your advantage.</p>
+
+<p>The last way to define dependencies is with <code>provider</code>. Let&rsquo;s look at that next.</p>
+
+<h3>Defining a provider with AngularJS</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.myModel&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">MyModel</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">MyModel</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">asyncService</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>            <span class="nx">someApi</span><span class="o">:</span> <span class="kd">function</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">asyncService</span><span class="p">.</span><span class="nx">getStuff</span><span class="p">();</span> <span class="c1">//promise?</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">myModelProvider</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">model</span><span class="o">:</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">();</span>
+</span><span class='line'>        <span class="nx">$get</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;asyncService&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">asyncService</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">asyncService</span> <span class="o">=</span> <span class="nx">asyncService</span><span class="p">;</span> <span class="c1">//&quot;manual&quot; dependency injection</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">;</span> <span class="c1">//resolved for the lifetime of app</span>
+</span><span class='line'>        <span class="p">}]</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">modules</span><span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;myModel&#39;</span><span class="p">,</span> <span class="nx">myModelProvider</span><span class="p">);</span>
+</span><span class='line'><span class="p">}(</span><span class="nx">angular</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, <code>provider</code> is much lower level. Explicit and verbose. The <code>$get</code> function
+is used by AngularJS internally for the injector. A provider is <strong>required</strong> to have a <code>$get</code>
+function. When using <code>factory</code> (and <code>service</code> as well) the <code>$get</code> function is defined for
+you.</p>
+
+<p>For all practical purposes you will likely never need to use <code>provider</code> unless you are a
+control freak. In most circumstances a <code>factory</code> or <code>service</code> will suffice, but it is nice
+to know that <code>provider</code> is there, if you needed that level of explicit control.</p>
+
+<h3>A little trick for dynamic dependencies</h3>
+
+<p>I mentioned before that with a <code>factory</code> (or <code>provider</code>) you can return an object or a function.
+As it turns out, this can be very useful if you need to dynamically update a resolved dependency.
+Here&rsquo;s a simple example using a factory.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;myDynamicInjectable&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">count</span> <span class="o">=</span> <span class="nx">count</span> <span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">count</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is an extremely trivial example, but now when you inject <code>myDynamicInjectable</code> and call it,
+it will return the freshly incremented <code>count</code>.</p>
+
+<p><strong>warning:</strong> <em>don&rsquo;t do this. There are two things wrong with this example. It is storing state
+with the count variable, and then it is manipulating state. This isn&rsquo;t the appropriate location
+for either of those activities! A better solution would be to create an object that stored
+that state and provided a nice API for manipulating it.</em></p>
+
+<p>A more realistic (useful) use of this might look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;getCurrentShoppingCart&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;getCurrentAccount&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">getCurrentAccount</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//getCurrentAccount is also a factory that returns a function</span>
+</span><span class='line'>        <span class="c1">//perhaps a user can have multiple accounts?</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">getCurrentAccount</span><span class="p">().</span><span class="nx">shoppingCart</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is a ton of dynamic flexibility you can take advantage of when returning functions from
+both the <code>provider</code> and <code>factory</code> approaches. I&rsquo;d proceed with caution. You could easily abuse this
+flexibility. Don&rsquo;t use this approach to manipulate and/or store state in the providers! The
+job of these tools is to <strong>resolve dependencies</strong>, and should be used only to <strong>resolve dependencies</strong>.</p>
+
+<h2>Conclusion</h2>
+
+<p>AngularJS provides several ways to configure dependency injection. From the simple <code>service</code> to the more flexible
+<code>factory</code> and <code>provider</code> approaches. You should have a solid understanding of how these work
+under the hood, and what situations are appropriate for each method.</p>
+
+<p>P.S. This article is the expansion of the answer to a question that was emailed to me.
+If you have any questions, I&rsquo;d love to help you out. My email and twitter can be found below, and I
+answer them all.</p>
+
+<p><strong>Related:</strong></p>
+
+<ul>
+<li><a href="/blog/2013/05/01/when-is-a-singleton-not-a-singleton/">AngularJS, Dependency Injection, and When Is a Singleton Not a Singleton?</a></li>
+<li><a href="/blog/2013/04/24/modeling-data-and-state-in-your-angularjs-application/">Modeling Data and State in Your AngularJS Application</a></li>
+</ul>
+
+
+	</div>
+
+	<div class="contact">Want to chat about this post? I'd love to hear from you. <br>You can find me on twitter <a href="http://twitter.com/jhooks">@jhooks</a> or via email <a href="mailto:joelhooks@gmail.com?Subject=Hello%20,%20email%20from%20joelhooks.com">joelhooks@gmail.com</a></div>
+
+	
+	<div class="cta">
+		<div class="signup">
+		    <p class="message">
+		      <a id="signup-for-updates"></a>
+              Get weekly AngularJS content and curated links. Keep up to date with the latest, <strong>sign up below</strong>:
+		    </p>
+
+		    <div>
+		      <form name="signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+		        <input class="input" type="email" name="EMAIL" placeholder="Email Address"> 
+		        <div class="button_container"><a class="button" onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } setTimeout(function(){document.signup.submit();},500);" href="#">Send Me Updates!</a></div>
+		        <div class="arrow"></div>
+		      </form>
+		    </div>
+		    <p class="small">I will <strong>never</strong> spam you. Unsubscribe at anytime.</p>
+
+	    </div>
+    </div>
+    
+
+
+</article>
+
+</div>
+	<footer id="footer" class="inner"><p>
+you can learn more about me <a href="/about"> here.</a>
+</p>
+<p>
+  Copyright &copy; 2013 - Joel Hooks -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+
+</footer>
+	<script type="text/javascript" src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-246705-7']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+    <script type="text/javascript" src="https://gumroad.com/js/gumroad.js"></script>
+
+    <script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '51ddb932613f5d3030000126');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+</script>
+</body>
+</html>
