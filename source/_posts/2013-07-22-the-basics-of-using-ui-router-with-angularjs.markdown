@@ -31,7 +31,9 @@ items on the header or the sidebar causes the main content to load completely
 different HTML. AngularJS provides a mechanism for this with `ng-switch`. You
 can see a (very simple) example of this below.
 
-{% jsfiddle joelhooks Swm48/4 result,js,html %}
+<iframe width="100%" height="300"
+  164: src="http://jsfiddle.net/joelhooks/Swm48/4/embedded/result,js,html"
+  165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 In this case, `ng-switch` is swapping out `div` elements, but you can also use
 this approach to swap out templates using `ng-include`.
@@ -57,7 +59,9 @@ way.
 You need to think about your routing a bit differently, but once you get your
 head around the state-based approach, I think you will like it.
 
-{% jsfiddle joelhooks Swm48/5 result,js,html %}
+<iframe width="100%" height="300"
+  164: src="http://jsfiddle.net/joelhooks/Swm48/5/embedded/result,js,html"
+  165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 This example is functionally very similar to the `ng-switch` approach. The main
 difference is that the main content area is populated with templated HTML for

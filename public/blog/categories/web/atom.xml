@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Joel Hooks]]></title>
   <link href="http://joelhooks.com/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2013-08-30T12:55:40-05:00</updated>
+  <updated>2013-09-15T10:54:26-05:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -41,7 +41,10 @@ items on the header or the sidebar causes the main content to load completely
 different HTML. AngularJS provides a mechanism for this with <code>ng-switch</code>. You
 can see a (very simple) example of this below.</p>
 
-<p><iframe style="width: 100%; height: 300px" src="http://jsfiddle.net/joelhooks/embedded/Swm48/light/"></iframe></p>
+<iframe width="100%" height="300"
+  164: src="http://jsfiddle.net/joelhooks/Swm48/4/embedded/result,js,html"
+  165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
 
 <p>In this case, <code>ng-switch</code> is swapping out <code>div</code> elements, but you can also use
 this approach to swap out templates using <code>ng-include</code>.</p>
@@ -70,7 +73,10 @@ way.</p>
 <p>You need to think about your routing a bit differently, but once you get your
 head around the state-based approach, I think you will like it.</p>
 
-<p><iframe style="width: 100%; height: 300px" src="http://jsfiddle.net/joelhooks/embedded/Swm48/light/"></iframe></p>
+<iframe width="100%" height="300"
+  164: src="http://jsfiddle.net/joelhooks/Swm48/5/embedded/result,js,html"
+  165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
 
 <p>This example is functionally very similar to the <code>ng-switch</code> approach. The main
 difference is that the main content area is populated with templated HTML for
