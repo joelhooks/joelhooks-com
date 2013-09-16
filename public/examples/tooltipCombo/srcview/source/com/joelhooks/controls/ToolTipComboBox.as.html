@@ -1,0 +1,75 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ToolTipComboBox.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">joelhooks</span>.<span class="ActionScriptDefault_Text">controls</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">ComboBox</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ToolTipComboBox</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">ComboBox</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ToolTipComboBox</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptComment">//----------------------------------
+</span>        <span class="ActionScriptComment">//  toolTipFunction
+</span>        <span class="ActionScriptComment">//----------------------------------
+</span>    
+        <span class="ActionScriptASDoc">/**
+         *  @private
+         *  Storage for the toolTipFunction property.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_toolTipFunction</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+    
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;toolTipFunctionChanged&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">category</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Other&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptASDoc">/**
+         *  User-supplied function to run on the &lt;code&gt;selectedItem&lt;/code&gt; to determine its tooltip..
+         * 
+         *  &lt;p&gt;The toolTipFunction takes a single argument which is the item
+         *  in the dataProvider and returns a String:&lt;/p&gt;
+         *  &lt;pre&gt;
+         *  myToolTipFunction(item:Object):String
+         *  &lt;/pre&gt;
+         *
+         * @return 
+         * 
+         */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">toolTipFunction</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_toolTipFunction</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         *  @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">toolTipFunction</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_toolTipFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;toolTipFunctionChanged&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+        <span class="ActionScriptBracket/Brace">}</span>    
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,
+                                                  <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptBracket/Brace">)</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_toolTipFunction</span><span class="ActionScriptOperator">!=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">toolTip</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">_toolTipFunction</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">selectedItem</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptBracket/Brace">}</span>            
+        <span class="ActionScriptBracket/Brace">}</span>    
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

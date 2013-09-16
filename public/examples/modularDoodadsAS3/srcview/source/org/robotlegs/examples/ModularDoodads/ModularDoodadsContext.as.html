@@ -1,0 +1,35 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ModularDoodadsContext.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">examples</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModularDoodads</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">display</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">DisplayObjectContainer</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">core</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">IInjector</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">examples</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModularDoodads</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">modules</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">doodad</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">DoodadModule</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">examples</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModularDoodads</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">modules</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">logger</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">LoggerModule</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">examples</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModularDoodads</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">view</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModularDoodadsMediator</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">robotlegs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">utilities</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">modular</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">mvcs</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">ModuleContext</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ModularDoodadsContext</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">ModuleContext</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ModularDoodadsContext</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">contextView</span>:<span class="ActionScriptDefault_Text">DisplayObjectContainer</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">contextView</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">startup</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">viewMap</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">mapType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">LoggerModule</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">viewMap</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">mapType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">DoodadModule</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">mediatorMap</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">mapView</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ModularDoodads</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">ModularDoodadsMediator</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

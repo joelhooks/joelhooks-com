@@ -1,0 +1,260 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Spinner.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ * Continuous Scrolling Slideshow 
+ * Created by Joel Hooks | joelhooks@gmail.com 
+ * Feel free to use this however you like, but leave this comment intact.
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">visualempathy</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">slideshow</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">view</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">components</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">events</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">TimerEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">utils</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">Timer</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">core</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">UIComponent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">events</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">FlexEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">styles</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">CSSStyleDeclaration</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">styles</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">StyleManager</span>;
+    
+    
+    <span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptString">"tickColor"</span><span class="ActionScriptOperator">,</span><span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">"uint"</span><span class="ActionScriptOperator">,</span><span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">"Color"</span><span class="ActionScriptOperator">,</span><span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">"no"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">]</span>
+    <span class="ActionScriptASDoc">/**
+     * Creates a spinning "loader" component that is sort of an indeterminate progress bar.
+     * @author jhawkes
+     * 
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Spinner</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">UIComponent</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">STYLE_TICK_COLOR</span>:<span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span><span class="ActionScriptBracket/Brace"></span> <span class="ActionScriptString">"tickColor"</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tickColorChanged</span>:<span class="ActionScriptDefault_Text">Boolean</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">classConstructed</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">classConstruct</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+        
+         <span class="ActionScriptComment">// Make sure we create the ticks the first time updateDisplayList is called
+</span>        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">creation</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fadeTimer</span>:<span class="ActionScriptDefault_Text">Timer</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_isPlaying</span>:<span class="ActionScriptDefault_Text">Boolean</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_numTicks</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 12;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">numTicksChanged</span>:<span class="ActionScriptDefault_Text">Boolean</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_size</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 30;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">sizeChanged</span>:<span class="ActionScriptDefault_Text">Boolean</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_tickWidth</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 3;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tickWidthChanged</span>:<span class="ActionScriptDefault_Text">Boolean</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_speed</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 1000;
+        <span class="ActionScriptMetadata">Bindable]</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fadeSpeed</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 600;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">autoPlay</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Spinner</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FlexEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">CREATION_COMPLETE</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">handleCreationComplete</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleCreationComplete</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span>:<span class="ActionScriptDefault_Text">FlexEvent</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FlexEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">CREATION_COMPLETE</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">handleCreationComplete</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">autoPlay</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Set the height and width based on the size of the spinner. This should be more robust, but oh well.
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_size</span>;
+            <span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_size</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Override the updateDisplayList method
+         */</span>
+         <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span>:<span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">unscaledHeight</span>:<span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptBracket/Brace"></span>
+             <span class="ActionScriptComment">//trace("SPIN SPIN")
+</span>             <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tickColorChanged</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">numTicksChanged</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">sizeChanged</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">tickWidthChanged</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">creation</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                 <span class="ActionScriptDefault_Text">creation</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;<span class="ActionScriptBracket/Brace"></span>
+                 <span class="ActionScriptComment">// Find out whether it's playing so we can restart it later if we need to
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">wasPlaying</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_isPlaying</span>;
+                
+                <span class="ActionScriptComment">// stop the spinning
+</span>                <span class="ActionScriptDefault_Text">stop</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptComment">// Remove all children
+</span>                <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptOperator">-</span> 1; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&gt;=</span> 0; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">--</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">removeChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptComment">// Re-create the children
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">radius</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">size</span> <span class="ActionScriptOperator">/</span> 2;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">angle</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 2 <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">Math</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">PI</span> <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">_numTicks</span>; <span class="ActionScriptComment">// The angle between each tick
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tickWidth</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_tickWidth</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">_tickWidth</span> : <span class="ActionScriptDefault_Text">size</span> <span class="ActionScriptOperator">/</span> 10;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tickColor</span>:<span class="ActionScriptDefault_Text">uint</span> <span class="ActionScriptOperator">=</span> 0xFF0000;
+                
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">currentAngle</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+                <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">j</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">j</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">_numTicks</span>; <span class="ActionScriptDefault_Text">j</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xStart</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">radius</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">Math</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">sin</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">currentAngle</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_numTicks</span> <span class="ActionScriptOperator">+</span> 2<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">tickWidth</span> <span class="ActionScriptOperator">/</span> 2 <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">Math</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">PI</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">yStart</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">radius</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">Math</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">cos</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">currentAngle</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_numTicks</span> <span class="ActionScriptOperator">+</span> 2<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptDefault_Text">tickWidth</span> <span class="ActionScriptOperator">/</span> 2 <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">Math</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">PI</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xEnd</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">radius</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">Math</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">sin</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">currentAngle</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">radius</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">tickWidth</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">yEnd</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">radius</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">Math</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">cos</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">currentAngle</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">*</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">radius</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">tickWidth</span><span class="ActionScriptBracket/Brace">)</span>;
+                    
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">t</span>:<span class="ActionScriptDefault_Text">Tick</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Tick</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xStart</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">yStart</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">xEnd</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">yEnd</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">tickWidth</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">tickColor</span><span class="ActionScriptBracket/Brace">)</span>;
+                        <span class="ActionScriptDefault_Text">t</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">alpha</span> <span class="ActionScriptOperator">=</span> 0.1;
+                        
+                    <span class="ActionScriptReserved">this</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">t</span><span class="ActionScriptBracket/Brace">)</span>;
+                    
+                    <span class="ActionScriptDefault_Text">currentAngle</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">angle</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptComment">// Start the spinning again if it was playing when this function was called.
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">wasPlaying</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptDefault_Text">tickColorChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">numTicksChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">sizeChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">tickWidthChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+         
+         
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">classConstruct</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">StyleManager</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">getStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptString">"Spinner"</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptBracket/Brace"></span>
+                <span class="ActionScriptComment">// If there is no CSS definition for StyledRectangle, 
+</span>                <span class="ActionScriptComment">// then create one and set the default value.
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newStyleDeclaration</span>:<span class="ActionScriptDefault_Text">CSSStyleDeclaration</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">CSSStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">STYLE_TICK_COLOR</span><span class="ActionScriptOperator">,</span> 0xFF0000<span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">StyleManager</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">setStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptString">"Spinner"</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptDefault_Text">newStyleDeclaration</span><span class="ActionScriptOperator">,</span><span class="ActionScriptDefault_Text"></span> <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">styleChanged</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span>:<span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">STYLE_TICK_COLOR</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">tickColorChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        
+        <span class="ActionScriptASDoc">/**
+         * Begin the circular fading of the ticks.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptOperator">!</span> <span class="ActionScriptDefault_Text">_isPlaying</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">fadeTimer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Timer</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">speed</span> <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">_numTicks</span><span class="ActionScriptOperator">,</span> 0<span class="ActionScriptBracket/Brace">)</span>;<span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace"></span>
+                <span class="ActionScriptComment">// Anonymous functions are especially useful as simple event handlers
+</span>                <span class="ActionScriptDefault_Text">fadeTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">TimerEvent</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">TIMER</span><span class="ActionScriptOperator">,</span> <span class="ActionScriptfunction">function</span><span class="ActionScriptDefault_Text"></span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span>:<span class="ActionScriptDefault_Text">TimerEvent</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tickNum</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">fadeTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">currentCount</span> <span class="ActionScriptOperator">%</span> <span class="ActionScriptDefault_Text">_numTicks</span><span class="ActionScriptBracket/Brace">)</span>;
+                    
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">tickNum</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tick</span>:<span class="ActionScriptDefault_Text">Tick</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tickNum</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Tick</span>;
+                            <span class="ActionScriptDefault_Text">tick</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">fade</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">fadeSpeed</span> <span class="ActionScriptOperator">!=</span> 1 <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">fadeSpeed</span> : <span class="ActionScriptDefault_Text">speed</span> <span class="ActionScriptOperator">*</span> 6 <span class="ActionScriptOperator">/</span> 10<span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">fadeTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">start</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">_isPlaying</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Stop the spinning.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">stop</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">fadeTimer</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">fadeTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">running</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_isPlaying</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">fadeTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">stop</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * The overall diameter of the spinner; also the height and width.
+         */</span>
+        <span class="ActionScriptMetadata">Bindable]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">size</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>:<span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_size</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_size</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+                <span class="ActionScriptDefault_Text">sizeChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">invalidateSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">size</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_size</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * The number of 'spokes' on the spinner.
+         */</span>
+        <span class="ActionScriptMetadata">Bindable]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">numTicks</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>:<span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_numTicks</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_numTicks</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+                <span class="ActionScriptDefault_Text">numTicksChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">numTicks</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_numTicks</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * The width of the 'spokes' on the spinner.
+         */</span>
+        <span class="ActionScriptMetadata">Bindable]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">tickWidth</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>:<span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_tickWidth</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_tickWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+                <span class="ActionScriptDefault_Text">tickWidthChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">tickWidth</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_tickWidth</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * The duration (in milliseconds) that it takes for the spinner to make one revolution.
+         */</span>
+        <span class="ActionScriptMetadata">Bindable]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">speed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>:<span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_speed</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_speed</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+                <span class="ActionScriptDefault_Text">fadeTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">stop</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">fadeTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">delay</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">_numTicks</span>;
+                <span class="ActionScriptDefault_Text">fadeTimer</span><span class="ActionScriptOperator">.</span><span class="ActionScriptDefault_Text">start</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">speed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_speed</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">isPlaying</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptBracket/Brace">)</span>:<span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_isPlaying</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace"></span><span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

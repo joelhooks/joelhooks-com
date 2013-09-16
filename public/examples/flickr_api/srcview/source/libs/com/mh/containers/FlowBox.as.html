@@ -1,0 +1,297 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>FlowBox.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">mh</span>.<span class="ActionScriptDefault_Text">containers</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">Box</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">ArrayCollection</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">BoxDirection</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">DisplayObject</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Alert</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">ResizeEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IUIComponent</span>;
+
+
+    <span class="ActionScriptASDoc">/**
+     * The default property assigned to when
+     * this component is used in mxml
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">DefaultProperty</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;children&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">FlowBox</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Box</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_children</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayCollection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ArrayCollection</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_childrenChanged</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        
+        
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">FlowBox</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ResizeEvent</span>.<span class="ActionScriptDefault_Text">RESIZE</span>,<span class="ActionScriptDefault_Text">resizeHanlder</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * If this component is resized, the child
+         * components must be laid out again
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">resizeHanlder</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Layout all child components (if we need to) during 
+         * the commit properties phase of execution
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptReserved">override</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">commitProperties</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">commitProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_childrenChanged</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_childrenChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+
+                <span class="ActionScriptDefault_Text">layoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Detect if any styles have been set which would 
+         * require the child components to be laid out again
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">newValue</span><span class="ActionScriptOperator">:*</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span>, <span class="ActionScriptDefault_Text">newValue</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+             <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">initialized</span> <span class="ActionScriptOperator">&amp;&amp;</span>
+                 <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;horizontalAlign&quot;</span>
+                <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;verticalAlign&quot;</span>
+                <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;horizontalGap&quot;</span>
+                <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;verticalGap&quot;</span>
+                <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;paddingLeft&quot;</span>
+                <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;paddingTop&quot;</span>
+                <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;paddingRight&quot;</span>
+                <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;paddingBottom&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Add all child components to ourself, creating
+         * sub containers as required for the layout
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">layoutChildren</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">clearContentsForRelayout</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">currentSubContainer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Box</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">createSubContainer</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">addChildAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">currentSubContainer</span>, <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">_children</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">canFit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span>, <span class="ActionScriptDefault_Text">currentSubContainer</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">currentSubContainer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">createSubContainer</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">addChildAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">currentSubContainer</span>, <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">numChildren</span> <span class="ActionScriptBracket/Brace">)</span>;    
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptDefault_Text">currentSubContainer</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Create a sub container (row or column) for 
+         * this component will the required configuration
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createSubContainer</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Box</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">subContainer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Box</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Box</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">direction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">direction</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">direction</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">BoxDirection</span>.<span class="ActionScriptDefault_Text">HORIZONTAL</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingLeft&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">-</span>  <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingRight&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingTop&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">-</span>  <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;paddingBottom&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;paddingLeft&quot;</span>, 0 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;paddingTop&quot;</span>, 0 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;paddingBottom&quot;</span>, 0 <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;paddingRight&quot;</span>, 0 <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalAlign&quot;</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalAlign&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalAlign&quot;</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalAlign&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGap&quot;</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGap&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGap&quot;</span>, <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGap&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">subContainer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;backgroundAlpha&quot;</span>, 0 <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">subContainer</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Removes all internal layout containers from this 
+         * container so that the children can be re-laid out
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">clearContentsForRelayout</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Tests whether the specified component could fit within
+         * the specfied container without any clipping or scrollbars
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">canFit</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>, <span class="ActionScriptDefault_Text">parent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Box</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>        
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">gap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">padding</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">criticalDimension</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">direction</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">BoxDirection</span>.<span class="ActionScriptDefault_Text">HORIZONTAL</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">gap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGap&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">padding</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;paddingLeft&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;paddingRight&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">criticalDimension</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;width&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">gap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGap&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">padding</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;paddingTop&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;paddingBottom&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">criticalDimension</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;height&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">usedSpace</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">padding</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">seperator</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">existingChild</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">usedSpace</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">seperator</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">existingChild</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">criticalDimension</span><span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptDefault_Text">seperator</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">gap</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">requiredSpace</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">usedSpace</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">gap</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">child</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">criticalDimension</span><span class="ActionScriptBracket/Brace">]</span>;            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">requiredSpace</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">parent</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">criticalDimension</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Flag that the children of this control have changed,
+         * and should be redrawn at the next convenient time
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_childrenChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">invalidateProperties</span><span class="ActionScriptBracket/Brace">()</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        
+        <span class="ActionScriptASDoc">/**
+         * Need to invert the direction property of this control
+         * so that the behaviour is logical
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">direction</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">BoxDirection</span>.<span class="ActionScriptDefault_Text">HORIZONTAL</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">direction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">BoxDirection</span>.<span class="ActionScriptDefault_Text">VERTICAL</span>;
+            <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">direction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">BoxDirection</span>.<span class="ActionScriptDefault_Text">HORIZONTAL</span>;
+            
+            <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">direction</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">direction</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">BoxDirection</span>.<span class="ActionScriptDefault_Text">HORIZONTAL</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">BoxDirection</span>.<span class="ActionScriptDefault_Text">VERTICAL</span>;
+            <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">BoxDirection</span>.<span class="ActionScriptDefault_Text">HORIZONTAL</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        
+        <span class="ActionScriptASDoc">/**
+         * Override all of the child manipulation functions to mask
+         * the internal child layout functions of this container
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">override</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">addItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">child</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>, <span class="ActionScriptDefault_Text">index</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">addItemAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span>, <span class="ActionScriptDefault_Text">index</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">child</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">removeItemAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">getItemIndex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">DisplayObject</span>;
+            <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">tmp</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">removeChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">index</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">removeItemAt</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">index</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">DisplayObject</span>;
+            <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">tmp</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">removeAllChildren</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">removeAll</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">toArray</span><span class="ActionScriptBracket/Brace">()</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getChildIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">getItemIndex</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        
+        <span class="ActionScriptASDoc">/**
+         * This property recieves the child components
+         * of this container when they are set in MXML
+         * 
+         * This is set as the default property of this component
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">children</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_children</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ArrayCollection</span><span class="ActionScriptBracket/Brace">([</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptBracket/Brace">])</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Array</span>;
+                <span class="ActionScriptDefault_Text">_children</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ArrayCollection</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DisplayObject</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">tmp</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">_children</span>.<span class="ActionScriptDefault_Text">addItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">child</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>            
+            <span class="ActionScriptDefault_Text">relayoutChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

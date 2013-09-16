@@ -1,0 +1,58 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>PipeListener.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">plumbing</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">IPipeFitting</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">IPipeMessage</span>;
+        
+    <span class="ActionScriptASDoc">/**
+     * Pipe Listener.
+     * &lt;P&gt;
+     * Allows a class that does not implement &lt;code&gt;IPipeFitting&lt;/code&gt; to
+     * be the final recipient of the messages in a pipeline.&lt;/P&gt;
+     * 
+     * @see Junction
+     */</span> 
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">PipeListener</span> <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">IPipeFitting</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">context</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">PipeListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">context</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>, <span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">context</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">context</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">listener</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">listener</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         *  Can&apos;t connect anything beyond this.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">connect</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">output</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptASDoc">/**
+         *  Can&apos;t disconnect since you can&apos;t connect, either.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">disconnect</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+        <span class="ActionScriptComment">// Write the message to the listener
+</span>        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">write</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeMessage</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">listener</span>.<span class="ActionScriptDefault_Text">apply</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">context</span>,<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">message</span><span class="ActionScriptBracket/Brace">])</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

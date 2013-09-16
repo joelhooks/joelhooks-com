@@ -1,0 +1,293 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>AuthorizationViewClass.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+    Copyright (c) 2008, Adobe Systems Incorporated
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without 
+    modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, 
+        this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, 
+        this list of conditions and the following disclaimer in the 
+        documentation and/or other materials provided with the distribution.
+    * Neither the name of Adobe Systems Incorporated nor the names of its 
+        contributors may be used to endorse or promote products derived from 
+        this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; 
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+    POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">FlickrService</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">User</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">authorization</span>.<span class="ActionScriptDefault_Text">AuthorizationView</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">authorization</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">AuthorizationEvent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">webapis</span>.<span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">FlickrResultEvent</span>;
+
+
+<span class="ActionScriptASDoc">/************ Panel State Constants ****************/</span>
+
+<span class="ActionScriptComment">//initial state
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">START_STATE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+
+<span class="ActionScriptComment">//settings error state - if required settings are not set
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">SETTINGS_ERROR_STATE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;settingsErrorState&quot;</span>;
+
+<span class="ActionScriptComment">//progress state - why waiting for response for server
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">AUTHORIZATION_STATE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;authorizationState&quot;</span>;
+
+<span class="ActionScriptComment">//state view to launch flickr in browser for authorization
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">URL_AUTHORIZATION_STATE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;urlAuthorizationState&quot;</span>;
+
+<span class="ActionScriptComment">//state view to start the process to get the authorization token
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">GET_TOKEN_STATE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;gettokenState&quot;</span>;
+
+<span class="ActionScriptComment">//authorization has been completed
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">AUTHORIZATION_COMPLETE_STATE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;authorizationCompleteState&quot;</span>;
+
+<span class="ActionScriptComment">//state view in case any errors occur
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ERROR_STATE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;errorState&quot;</span>;
+
+<span class="ActionScriptASDoc">/******** private vars ************/</span>
+
+<span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_settings</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrAuthorizationSettings</span>;
+
+<span class="ActionScriptComment">//flickr api instance
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">flickr</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrService</span>;
+
+<span class="ActionScriptComment">//authorization url for user authorization
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">authorizationURL</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+
+<span class="ActionScriptComment">//frob returned from flickr
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">frob</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">flickrAPIKey</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">flickrAPISecret</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+
+
+<span class="ActionScriptASDoc">/************* public vars / getters / setters *************/</span>
+
+<span class="ActionScriptComment">/*
+//application settings
+public function set settings(value:FlickrAuthorizationSettings):void
+{
+    _settings = value;
+    
+    //make sure the settings we need to authorize have been set
+    if(_settings.flickrAPIKey == null || _settings.flickrAPIKey.length == 0 ||
+        _settings.flickrAPISecret == null || _settings.flickrAPISecret.length == 0)
+    {
+        //if not, then go to the error state view
+        currentState = SETTINGS_ERROR_STATE;
+    }
+}
+*/</span>
+
+
+<span class="ActionScriptASDoc">/************* Event Handlers ***************/</span>
+
+<span class="ActionScriptComment">//when cancel button is clicked
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onCancelClick</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptDefault_Text">closeWindow</span><span class="ActionScriptBracket/Brace">()</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//event handler called to start authorization process
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onAuthorizationStartClick</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+        
+    <span class="ActionScriptComment">//make sure the settings we need to authorize have been set
+</span>    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">flickrAPIKey</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">flickrAPIKey</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">==</span> 0 <span class="ActionScriptOperator">||</span>
+        <span class="ActionScriptDefault_Text">flickrAPISecret</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">flickrAPISecret</span>.<span class="ActionScriptDefault_Text">length</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">//if not, then go to the error state view
+</span>        <span class="ActionScriptDefault_Text">currentState</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">SETTINGS_ERROR_STATE</span>;
+        <span class="ActionScriptReserved">return</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">//change state
+</span>    <span class="ActionScriptDefault_Text">currentState</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">AUTHORIZATION_STATE</span>;
+    
+    <span class="ActionScriptComment">//initialize flickr instance
+</span>    <span class="ActionScriptDefault_Text">flickr</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">FlickrService</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">flickrAPIKey</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">secret</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">flickrAPISecret</span>;
+    
+    <span class="ActionScriptComment">//register for events
+</span>    <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">IOErrorEvent</span>.<span class="ActionScriptDefault_Text">IO_ERROR</span>, <span class="ActionScriptDefault_Text">onIOError</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">SecurityErrorEvent</span>.<span class="ActionScriptDefault_Text">SECURITY_ERROR</span>, <span class="ActionScriptDefault_Text">onSecurityError</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">HTTPStatusEvent</span>.<span class="ActionScriptDefault_Text">HTTP_STATUS</span>, <span class="ActionScriptDefault_Text">onHTTPStatus</span><span class="ActionScriptBracket/Brace">)</span>;                    
+    <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">AUTH_GET_FROB</span>, <span class="ActionScriptDefault_Text">onGetFrob</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+    <span class="ActionScriptComment">//retrieve frob from flickr. This goes to the flickr server, and is async
+</span>    <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">auth</span>.<span class="ActionScriptDefault_Text">getFrob</span><span class="ActionScriptBracket/Brace">()</span>;                
+    
+    <span class="ActionScriptComment">//update progress bar
+</span>    <span class="ActionScriptDefault_Text">pBar</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Retrieving Frob from Flickr&quot;</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//handles any IOErrors while communicating with flickr
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onIOError</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ErrorEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//send an error, with info on error
+</span>    <span class="ActionScriptDefault_Text">setError</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">text</span><span class="ActionScriptBracket/Brace">)</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//handles any security errors that occur while communicating with flickr
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onSecurityError</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SecurityErrorEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//send an error, with info on error
+</span>    <span class="ActionScriptDefault_Text">setError</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">text</span><span class="ActionScriptBracket/Brace">)</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//handles any errors that occur in response to http status responses
+</span><span class="ActionScriptComment">//from server
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onHTTPStatus</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">HTTPStatusEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//send an error, with info on error
+</span>    <span class="ActionScriptDefault_Text">setError</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;HTTP Status : &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">status</span><span class="ActionScriptBracket/Brace">)</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//called when the frob is returned from flickr
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onGetFrob</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//save the frob in class instance
+</span>    <span class="ActionScriptDefault_Text">frob</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">frob</span>;
+    
+    <span class="ActionScriptComment">//create the authorization url using the frob
+</span>    <span class="ActionScriptDefault_Text">authorizationURL</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">getLoginURL</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">frob</span>, <span class="ActionScriptString">&quot;write&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+    <span class="ActionScriptComment">//switch to the url auth state to prompt the user to launch flickr
+</span>    <span class="ActionScriptComment">//in their browser
+</span>    <span class="ActionScriptDefault_Text">currentState</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">URL_AUTHORIZATION_STATE</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//called when the user clicks the button to launch flickr in the browser
+</span><span class="ActionScriptComment">//to authorize the app
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onLaunchFlickrClick</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//open the url in the systems default browser
+</span>    <span class="ActionScriptDefault_Text">navigateToURL</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">authorizationURL</span><span class="ActionScriptBracket/Brace">))</span>;
+    
+    <span class="ActionScriptComment">//switch to the state to retrieve tge authorization token
+</span>    <span class="ActionScriptDefault_Text">currentState</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">GET_TOKEN_STATE</span>;
+<span class="ActionScriptBracket/Brace">}</span>            
+
+<span class="ActionScriptComment">//called when the user clicks the button to retrieve the authorization token
+</span><span class="ActionScriptComment">//from flickr
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onGetTokenClick</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//change state to show progress bar
+</span>    <span class="ActionScriptDefault_Text">currentState</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">AUTHORIZATION_STATE</span>;
+    
+    <span class="ActionScriptComment">//set progress bar label
+</span>    <span class="ActionScriptDefault_Text">pBar</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Retrieving Application Token from Flickr&quot;</span>;
+    
+    <span class="ActionScriptComment">//register for event when token is returned
+</span>    <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span>.<span class="ActionScriptDefault_Text">AUTH_GET_TOKEN</span>, <span class="ActionScriptDefault_Text">onGetToken</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+    <span class="ActionScriptComment">//request token from flickr api. This goes to the flickr server and is
+</span>    <span class="ActionScriptComment">//async
+</span>    <span class="ActionScriptDefault_Text">flickr</span>.<span class="ActionScriptDefault_Text">auth</span>.<span class="ActionScriptDefault_Text">getToken</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">frob</span><span class="ActionScriptBracket/Brace">)</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+
+<span class="ActionScriptComment">//called when the response is received from flickr after request authorization
+</span><span class="ActionScriptComment">//token
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onGetToken</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FlickrResultEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//check and see if token was returned
+</span>    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">auth</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">//if not, there was an error, or it was rejected
+</span>        <span class="ActionScriptComment">//send error with info
+</span>        <span class="ActionScriptDefault_Text">setError</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">error</span>.<span class="ActionScriptDefault_Text">errorMessage</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptReserved">return</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">//we got the token. finally!!!
+</span>    <span class="ActionScriptComment">//save token in settings
+</span>    <span class="ActionScriptComment">//_settings.authToken = e.data.auth.token;
+</span>    
+    <span class="ActionScriptComment">//get the flickr account&apos;s user name and save it in settings
+</span>    <span class="ActionScriptComment">//_settings.accountName = e.data.auth.user.username;
+</span>    
+    <span class="ActionScriptComment">//send a SettingsEvent to indicate that settings have been updated
+</span>    <span class="ActionScriptComment">//todovar sEvent:SettingsEvent = new SettingsEvent(SettingsEvent.SETTINGS_CHANGED);
+</span>    <span class="ActionScriptComment">//todo    sEvent.settings = _settings;
+</span>        
+    <span class="ActionScriptComment">//tododispatchEvent(sEvent);
+</span>    
+    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">out</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">AuthorizationEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">AuthorizationEvent</span><span class="ActionScriptBracket/Brace">(A</span><span class="ActionScriptDefault_Text">uthorizationEvent</span>.<span class="ActionScriptDefault_Text">AUTHORIZATION_COMPLETE</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">out</span>.<span class="ActionScriptDefault_Text">user</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">User</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">auth</span>.<span class="ActionScriptDefault_Text">user</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">out</span>.<span class="ActionScriptDefault_Text">authToken</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">data</span>.<span class="ActionScriptDefault_Text">auth</span>.<span class="ActionScriptDefault_Text">token</span>;
+        
+    <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">out</span><span class="ActionScriptBracket/Brace">)</span>;
+    
+    <span class="ActionScriptComment">//change state to authorization complete
+</span>    <span class="ActionScriptDefault_Text">currentState</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">AUTHORIZATION_COMPLETE_STATE</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//called when the user clicks the open settings button from the auth panel
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onOpenSettingsClick</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//dispatch an event requesting that settings be opened
+</span>    <span class="ActionScriptComment">//todo var e:AuthorizationEvent = new AuthorizationEvent(AuthorizationEvent.ON_LAUNCH_SETTINGS);
+</span>    <span class="ActionScriptComment">//tododispatchEvent(e);
+</span>    
+    <span class="ActionScriptComment">//close window
+</span>    <span class="ActionScriptDefault_Text">closeWindow</span><span class="ActionScriptBracket/Brace">()</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//close button handler
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onCloseClick</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptDefault_Text">closeWindow</span><span class="ActionScriptBracket/Brace">()</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//handler for try again button, which is present when authorization fails
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onTryAgainClick</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>    
+    <span class="ActionScriptComment">//reinitialize state of panel
+</span>    <span class="ActionScriptDefault_Text">frob</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+    <span class="ActionScriptDefault_Text">authorizationURL</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+    
+    <span class="ActionScriptComment">//return to start state;
+</span>    <span class="ActionScriptDefault_Text">currentState</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">START_STATE</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+
+<span class="ActionScriptASDoc">/************ General functions **************/</span>
+
+<span class="ActionScriptComment">//broadcast close event
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">closeWindow</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CLOSE</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptBracket/Brace">)</span>;
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptComment">//sends an error event with information about the error
+</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setError</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">msg</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//Log.getLogger(AIRSnapshot.LOG_NAME).error(&quot;AuthorizationView : &quot; + msg);
+</span>    <span class="ActionScriptDefault_Text">currentState</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ERROR_STATE</span>;
+    <span class="ActionScriptDefault_Text">errorField</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Error : &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">msg</span>;
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,248 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>AdobeFlowLayout.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">utilityClasses</span>
+<span class="ActionScriptBracket/Brace">{</span>
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">DisplayObject</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">utilityClasses</span>.<span class="ActionScriptDefault_Text">Layout</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">VRule</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">Container</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">EdgeMetrics</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IUIComponent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">mx_internal</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">UIComponent</span>;
+
+<span class="ActionScriptReserved">use</span> <span class="ActionScriptReserved">namespace</span> <span class="ActionScriptDefault_Text">mx_internal</span>;
+
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">ExcludeClass</span><span class="ActionScriptBracket/Brace">]</span>
+
+<span class="ActionScriptASDoc">/**
+ *  @private
+ *  The FlowLayout class is for internal use only.
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">AdobeFlowLayout</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Layout</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Constructor
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  Constructor.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">AdobeFlowLayout</span><span class="ActionScriptBracket/Brace">()</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Variables
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+
+    <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">explicitHeightSet</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+
+    <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">explicitMeasuredHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+
+    <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">modifyTargetHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+
+    <span class="ActionScriptDefault_Text">mx_internal</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">rowCount</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  For future use
+     */</span>
+    <span class="ActionScriptComment">//private var direction:String = FlowDirection.HORIZONTAL;
+</span>    
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Overridden methods
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Measure container as per Flow layout rules.
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Container</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">target</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">minHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">preferredWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">preferredHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">numChildren</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">numGaps</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">n</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IUIComponent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IUIComponent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">includeInLayout</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">continue</span>;
+
+            <span class="ActionScriptDefault_Text">numGaps</span><span class="ActionScriptOperator">++</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">wPref</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hPref</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+
+            <span class="ActionScriptDefault_Text">minWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">minWidth</span>, <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">minWidth</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">minHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">minHeight</span>, <span class="ActionScriptDefault_Text">hPref</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">preferredWidth</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">wPref</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">viewMetricsAndPadding</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">wPadding</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">right</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">numGaps</span><span class="ActionScriptOperator">*</span><span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;horizontalGap&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hPadding</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">top</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">bottom</span>;
+
+        <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredMinWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minWidth</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">wPadding</span>;
+        <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredMinHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minHeight</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">hPadding</span>;
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">&gt;</span> 1<span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">preferredWidth</span> <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">wPadding</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">minWidth</span>;
+        <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">preferredWidth</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">wPadding</span>;
+        
+        <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">minHeight</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">hPadding</span>;
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">explicitMeasuredHeight</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredMinHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">explicitMeasuredHeight</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     *  Lay out children as per Flow layout rules.
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>,
+                                               <span class="ActionScriptDefault_Text">unscaledHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Container</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Container</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">target</span><span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">viewMetricsAndPadding</span>;
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">horizontalGap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;horizontalGap&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">verticalGap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;verticalGap&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+       
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xPos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">yPos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">top</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">maxYPos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> 0;
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">n</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">numChildren</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">child</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IUIComponent</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lastChild</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IUIComponent</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">childWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">childHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">popupIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xEnd</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledWidth</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">right</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">full</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">remainingRows</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xFFFF</span>;
+        
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xWrapWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">xFFFF</span>;
+        
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">&gt;</span> 0 <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">parent</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">numLines</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredHeight</span>;
+            <span class="ActionScriptDefault_Text">xWrapWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredWidth</span> <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">rowCount</span>;
+            <span class="ActionScriptDefault_Text">remainingRows</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">-</span> 1;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">for</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">numChildren</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">child</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IUIComponent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">i</span><span class="ActionScriptBracket/Brace">))</span>;
+
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">includeInLayout</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptReserved">continue</span>;
+
+            <span class="ActionScriptDefault_Text">childWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">childHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">full</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// Start a new row?
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(((</span><span class="ActionScriptDefault_Text">xPos</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">childWidth</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">xEnd</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">xPos</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">||</span>
+                    <span class="ActionScriptDefault_Text">xPos</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">xWrapWidth</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">remainingRows</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">yPos</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">maxYPos</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">verticalGap</span>;
+                    <span class="ActionScriptDefault_Text">remainingRows</span><span class="ActionScriptOperator">--</span>;
+                    <span class="ActionScriptDefault_Text">xPos</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span>;
+
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">child</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">VRule</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span>0, 0<span class="ActionScriptBracket/Brace">)</span>;
+                        <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xPos</span>, <span class="ActionScriptDefault_Text">yPos</span><span class="ActionScriptBracket/Brace">)</span>;
+                        <span class="ActionScriptReserved">continue</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lastChild</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">VRule</span><span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptDefault_Text">lastChild</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span>0, 0<span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">childWidth</span>, <span class="ActionScriptDefault_Text">childHeight</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">child</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xPos</span>, <span class="ActionScriptDefault_Text">yPos</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">lastChild</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">child</span>;
+            <span class="ActionScriptDefault_Text">maxYPos</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">max</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxYPos</span>, <span class="ActionScriptDefault_Text">yPos</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">childHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">xPos</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">childWidth</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">horizontalGap</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptDefault_Text">maxYPos</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">bottom</span>;
+
+        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">maxYPos</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">percentHeight</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">explicitHeightSet</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">modifyTargetHeight</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">maxYPos</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">explicitMeasuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">maxYPos</span>;
+                <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">NaN</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">explicitHeightSet</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lastWidth</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">unscaledWidth</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">callLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">lastWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledWidth</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptBracket/Brace">}</span>
+
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

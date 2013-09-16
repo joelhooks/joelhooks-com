@@ -1,0 +1,103 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>GTweenFilter.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptASDoc">/**
+* GTweenFilter by Grant Skinner. Dec 15, 2008
+* Visit www.gskinner.com/blog for documentation, updates and more free code.
+*
+*
+* Copyright (c) 2008 Grant Skinner
+* 
+* Permission is hereby granted, free of charge, to any person
+* obtaining a copy of this software and associated documentation
+* files (the &quot;Software&quot;), to deal in the Software without
+* restriction, including without limitation the rights to use,
+* copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the
+* Software is furnished to do so, subject to the following
+* conditions:
+* 
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+* OTHER DEALINGS IN THE SOFTWARE.
+**/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">gskinner</span>.<span class="ActionScriptDefault_Text">motion</span> <span class="ActionScriptBracket/Brace">{</span>
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">gskinner</span>.<span class="ActionScriptDefault_Text">motion</span>.<span class="ActionScriptDefault_Text">GTween</span>;
+    
+    <span class="ActionScriptASDoc">/**
+    * &lt;b&gt;GTweenFilter ©2008 Grant Skinner, gskinner.com. Visit www.gskinner.com/blog for documentation, updates and more free code. Licensed under the MIT license. See the source file header for more information.&lt;/b&gt;
+    * &lt;hr&gt;
+    * GTweenFilter is an extension to GTween, a light-weight instance oriented tween engine. It allows you to tween the properties of filters on display objects.
+    * Using GTweenFilter is almost identical to using GTween. The only major difference is that you can specify a filterIndex (which defaults to 0) to indicate which filter in the target objects
+    * .filters array will be affected by the Tween. You can use multiple instances of GTweenFilter with different filterIndexes to tween multiple filters on a single target.
+    * GTweenFilter adds ~0.3kb above GTween.
+    **/</span>
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">GTweenFilter</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">GTween</span> <span class="ActionScriptBracket/Brace">{</span>
+        
+    <span class="ActionScriptComment">// Constants:
+</span>    <span class="ActionScriptComment">// Public Properties:
+</span>        <span class="ActionScriptASDoc">/** Indicates the index of the filter in the target&apos;s .filters array to apply the tween to. Defaults to 0, which will tween the first filter in the target&apos;s filters array. **/</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">filterIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">uint</span><span class="ActionScriptOperator">=</span>0;
+        
+    <span class="ActionScriptComment">// Private Properties:
+</span>    
+    <span class="ActionScriptComment">// Initialization:
+</span>        <span class="ActionScriptASDoc">/**
+        * Constructs a new GTweenFilter instance. See the GTween documentation for a description of the parameters.
+        **/</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">GTweenFilter</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">duration</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span>10, <span class="ActionScriptDefault_Text">properties</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span>, <span class="ActionScriptDefault_Text">tweenProperties</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">target</span>,<span class="ActionScriptDefault_Text">duration</span>,<span class="ActionScriptDefault_Text">properties</span>,<span class="ActionScriptDefault_Text">tweenProperties</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">// Public getter / setters:
+</span>        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">propertyTarget</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">updatePropertyTarget</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_propertyTarget</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptComment">// Public Methods:
+</span>        
+    <span class="ActionScriptComment">// Protected Methods:
+</span>        <span class="ActionScriptASDoc">/** @private **/</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updatePropertyTarget</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_propertyTarget</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_target</span>.<span class="ActionScriptDefault_Text">filters</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">filterIndex</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_propertyTarget</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">throw</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;GTweenFilter: no filter at index &apos;&quot;</span><span class="ActionScriptOperator">+</span><span class="ActionScriptDefault_Text">filterIndex</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;&apos;.&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/** @private **/</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateProperties</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">updatePropertyTarget</span><span class="ActionScriptBracket/Brace">()</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">filters</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_target</span>.<span class="ActionScriptDefault_Text">filters</span>;
+            <span class="ActionScriptDefault_Text">filters</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">filterIndex</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_propertyTarget</span>;
+            <span class="ActionScriptDefault_Text">_target</span>.<span class="ActionScriptDefault_Text">filters</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">filters</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/** @private **/</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">init</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">updatePropertyTarget</span><span class="ActionScriptBracket/Brace">()</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">init</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,178 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>XMLUtil.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">utils</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">XMLUtil</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Constant representing a text node type returned from XML.nodeKind.
+         * 
+         * @see XML.nodeKind()
+         * 
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">TEXT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;text&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constant representing a comment node type returned from XML.nodeKind.
+         * 
+         * @see XML.nodeKind()
+         * 
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         */</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">COMMENT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;comment&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constant representing a processing instruction type returned from XML.nodeKind.
+         * 
+         * @see XML.nodeKind()
+         * 
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         */</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">PROCESSING_INSTRUCTION</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;processing-instruction&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constant representing an attribute type returned from XML.nodeKind.
+         * 
+         * @see XML.nodeKind()
+         * 
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         */</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ATTRIBUTE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;attribute&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constant representing a element type returned from XML.nodeKind.
+         * 
+         * @see XML.nodeKind()
+         * 
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         */</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ELEMENT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;element&quot;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Checks whether the specified string is valid and well formed XML.
+         * 
+         * @param data The string that is being checked to see if it is valid XML.
+         * 
+         * @return A Boolean value indicating whether the specified string is
+         * valid XML.
+         * 
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">isValidXML</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">data</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">xml</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span>;
+            
+            <span class="ActionScriptReserved">try</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">xml</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">xml</span>.<span class="ActionScriptDefault_Text">nodeKind</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">XMLUtil</span>.<span class="ActionScriptDefault_Text">ELEMENT</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns the next sibling of the specified node relative to the node&apos;s parent.
+         * 
+         * @param x The node whose next sibling will be returned.
+         * 
+         * @return The next sibling of the node. null if the node does not have 
+         * a sibling after it, or if the node has no parent.
+         * 
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         */</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getNextSibling</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span>
+        <span class="ActionScriptBracket/Brace">{</span>    
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">XMLUtil</span>.<span class="ActionScriptDefault_Text">getSiblingByIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span>, 1<span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns the sibling before the specified node relative to the node&apos;s parent.
+         * 
+         * @param x The node whose sibling before it will be returned.
+         * 
+         * @return The sibling before the node. null if the node does not have 
+         * a sibling before it, or if the node has no parent.
+         * 
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         */</span>            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getPreviousSibling</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span>
+        <span class="ActionScriptBracket/Brace">{</span>    
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">XMLUtil</span>.<span class="ActionScriptDefault_Text">getSiblingByIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span>, <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+        
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getSiblingByIndex</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">x</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span>, <span class="ActionScriptDefault_Text">count</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span>    
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">out</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span>;
+            
+            <span class="ActionScriptReserved">try</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">out</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">x</span>.<span class="ActionScriptDefault_Text">parent</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">children</span><span class="ActionScriptBracket/Brace">()[</span><span class="ActionScriptDefault_Text">x</span>.<span class="ActionScriptDefault_Text">childIndex</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">count</span><span class="ActionScriptBracket/Brace">]</span>;    
+            <span class="ActionScriptBracket/Brace">}</span>         
+            <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">out</span>;            
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

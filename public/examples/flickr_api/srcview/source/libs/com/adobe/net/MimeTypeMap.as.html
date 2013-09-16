@@ -1,0 +1,210 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>MimeTypeMap.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">net</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">MimeTypeMap</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">types</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> 
+            <span class="ActionScriptBracket/Brace">[[</span><span class="ActionScriptString">&quot;application/andrew-inset&quot;</span>,<span class="ActionScriptString">&quot;ez&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/atom+xml&quot;</span>,<span class="ActionScriptString">&quot;atom&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/mac-binhex40&quot;</span>,<span class="ActionScriptString">&quot;hqx&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/mac-compactpro&quot;</span>,<span class="ActionScriptString">&quot;cpt&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/mathml+xml&quot;</span>,<span class="ActionScriptString">&quot;mathml&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/msword&quot;</span>,<span class="ActionScriptString">&quot;doc&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/octet-stream&quot;</span>,<span class="ActionScriptString">&quot;bin&quot;</span>,<span class="ActionScriptString">&quot;dms&quot;</span>,<span class="ActionScriptString">&quot;lha&quot;</span>,<span class="ActionScriptString">&quot;lzh&quot;</span>,<span class="ActionScriptString">&quot;exe&quot;</span>,<span class="ActionScriptString">&quot;class&quot;</span>,<span class="ActionScriptString">&quot;so&quot;</span>,<span class="ActionScriptString">&quot;dll&quot;</span>,<span class="ActionScriptString">&quot;dmg&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/oda&quot;</span>,<span class="ActionScriptString">&quot;oda&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/ogg&quot;</span>,<span class="ActionScriptString">&quot;ogg&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/pdf&quot;</span>,<span class="ActionScriptString">&quot;pdf&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/postscript&quot;</span>,<span class="ActionScriptString">&quot;ai&quot;</span>,<span class="ActionScriptString">&quot;eps&quot;</span>,<span class="ActionScriptString">&quot;ps&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/rdf+xml&quot;</span>,<span class="ActionScriptString">&quot;rdf&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/smil&quot;</span>,<span class="ActionScriptString">&quot;smi&quot;</span>,<span class="ActionScriptString">&quot;smil&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/srgs&quot;</span>,<span class="ActionScriptString">&quot;gram&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/srgs+xml&quot;</span>,<span class="ActionScriptString">&quot;grxml&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.adobe.apollo-application-installer-package+zip&quot;</span>,<span class="ActionScriptString">&quot;air&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.mif&quot;</span>,<span class="ActionScriptString">&quot;mif&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.mozilla.xul+xml&quot;</span>,<span class="ActionScriptString">&quot;xul&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.ms-excel&quot;</span>,<span class="ActionScriptString">&quot;xls&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.ms-powerpoint&quot;</span>,<span class="ActionScriptString">&quot;ppt&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.rn-realmedia&quot;</span>,<span class="ActionScriptString">&quot;rm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.wap.wbxml&quot;</span>,<span class="ActionScriptString">&quot;wbxml&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.wap.wmlc&quot;</span>,<span class="ActionScriptString">&quot;wmlc&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/vnd.wap.wmlscriptc&quot;</span>,<span class="ActionScriptString">&quot;wmlsc&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/voicexml+xml&quot;</span>,<span class="ActionScriptString">&quot;vxml&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-bcpio&quot;</span>,<span class="ActionScriptString">&quot;bcpio&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-cdlink&quot;</span>,<span class="ActionScriptString">&quot;vcd&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-chess-pgn&quot;</span>,<span class="ActionScriptString">&quot;pgn&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-cpio&quot;</span>,<span class="ActionScriptString">&quot;cpio&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-csh&quot;</span>,<span class="ActionScriptString">&quot;csh&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-director&quot;</span>,<span class="ActionScriptString">&quot;dcr&quot;</span>,<span class="ActionScriptString">&quot;dir&quot;</span>,<span class="ActionScriptString">&quot;dxr&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-dvi&quot;</span>,<span class="ActionScriptString">&quot;dvi&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-futuresplash&quot;</span>,<span class="ActionScriptString">&quot;spl&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-gtar&quot;</span>,<span class="ActionScriptString">&quot;gtar&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-hdf&quot;</span>,<span class="ActionScriptString">&quot;hdf&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-javascript&quot;</span>,<span class="ActionScriptString">&quot;js&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-koan&quot;</span>,<span class="ActionScriptString">&quot;skp&quot;</span>,<span class="ActionScriptString">&quot;skd&quot;</span>,<span class="ActionScriptString">&quot;skt&quot;</span>,<span class="ActionScriptString">&quot;skm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-latex&quot;</span>,<span class="ActionScriptString">&quot;latex&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-netcdf&quot;</span>,<span class="ActionScriptString">&quot;nc&quot;</span>,<span class="ActionScriptString">&quot;cdf&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-sh&quot;</span>,<span class="ActionScriptString">&quot;sh&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-shar&quot;</span>,<span class="ActionScriptString">&quot;shar&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-shockwave-flash&quot;</span>,<span class="ActionScriptString">&quot;swf&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-stuffit&quot;</span>,<span class="ActionScriptString">&quot;sit&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-sv4cpio&quot;</span>,<span class="ActionScriptString">&quot;sv4cpio&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-sv4crc&quot;</span>,<span class="ActionScriptString">&quot;sv4crc&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-tar&quot;</span>,<span class="ActionScriptString">&quot;tar&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-tcl&quot;</span>,<span class="ActionScriptString">&quot;tcl&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-tex&quot;</span>,<span class="ActionScriptString">&quot;tex&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-texinfo&quot;</span>,<span class="ActionScriptString">&quot;texinfo&quot;</span>,<span class="ActionScriptString">&quot;texi&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-troff&quot;</span>,<span class="ActionScriptString">&quot;t&quot;</span>,<span class="ActionScriptString">&quot;tr&quot;</span>,<span class="ActionScriptString">&quot;roff&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-troff-man&quot;</span>,<span class="ActionScriptString">&quot;man&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-troff-me&quot;</span>,<span class="ActionScriptString">&quot;me&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-troff-ms&quot;</span>,<span class="ActionScriptString">&quot;ms&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-ustar&quot;</span>,<span class="ActionScriptString">&quot;ustar&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/x-wais-source&quot;</span>,<span class="ActionScriptString">&quot;src&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/xhtml+xml&quot;</span>,<span class="ActionScriptString">&quot;xhtml&quot;</span>,<span class="ActionScriptString">&quot;xht&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/xml&quot;</span>,<span class="ActionScriptString">&quot;xml&quot;</span>,<span class="ActionScriptString">&quot;xsl&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/xml-dtd&quot;</span>,<span class="ActionScriptString">&quot;dtd&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/xslt+xml&quot;</span>,<span class="ActionScriptString">&quot;xslt&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;application/zip&quot;</span>,<span class="ActionScriptString">&quot;zip&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/basic&quot;</span>,<span class="ActionScriptString">&quot;au&quot;</span>,<span class="ActionScriptString">&quot;snd&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/midi&quot;</span>,<span class="ActionScriptString">&quot;mid&quot;</span>,<span class="ActionScriptString">&quot;midi&quot;</span>,<span class="ActionScriptString">&quot;kar&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/mp4&quot;</span>,<span class="ActionScriptString">&quot;f4a&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/mp4&quot;</span>,<span class="ActionScriptString">&quot;f4b&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/mpeg&quot;</span>,<span class="ActionScriptString">&quot;mp3&quot;</span>,<span class="ActionScriptString">&quot;mpga&quot;</span>,<span class="ActionScriptString">&quot;mp2&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/x-aiff&quot;</span>,<span class="ActionScriptString">&quot;aif&quot;</span>,<span class="ActionScriptString">&quot;aiff&quot;</span>,<span class="ActionScriptString">&quot;aifc&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/x-mpegurl&quot;</span>,<span class="ActionScriptString">&quot;m3u&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/x-pn-realaudio&quot;</span>,<span class="ActionScriptString">&quot;ram&quot;</span>,<span class="ActionScriptString">&quot;ra&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;audio/x-wav&quot;</span>,<span class="ActionScriptString">&quot;wav&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;chemical/x-pdb&quot;</span>,<span class="ActionScriptString">&quot;pdb&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;chemical/x-xyz&quot;</span>,<span class="ActionScriptString">&quot;xyz&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/bmp&quot;</span>,<span class="ActionScriptString">&quot;bmp&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/cgm&quot;</span>,<span class="ActionScriptString">&quot;cgm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/gif&quot;</span>,<span class="ActionScriptString">&quot;gif&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/ief&quot;</span>,<span class="ActionScriptString">&quot;ief&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/jpeg&quot;</span>,<span class="ActionScriptString">&quot;jpg&quot;</span>,<span class="ActionScriptString">&quot;jpeg&quot;</span>,<span class="ActionScriptString">&quot;jpe&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/png&quot;</span>,<span class="ActionScriptString">&quot;png&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/svg+xml&quot;</span>,<span class="ActionScriptString">&quot;svg&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/tiff&quot;</span>,<span class="ActionScriptString">&quot;tiff&quot;</span>,<span class="ActionScriptString">&quot;tif&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/vnd.djvu&quot;</span>,<span class="ActionScriptString">&quot;djvu&quot;</span>,<span class="ActionScriptString">&quot;djv&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/vnd.wap.wbmp&quot;</span>,<span class="ActionScriptString">&quot;wbmp&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-cmu-raster&quot;</span>,<span class="ActionScriptString">&quot;ras&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-icon&quot;</span>,<span class="ActionScriptString">&quot;ico&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-portable-anymap&quot;</span>,<span class="ActionScriptString">&quot;pnm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-portable-bitmap&quot;</span>,<span class="ActionScriptString">&quot;pbm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-portable-graymap&quot;</span>,<span class="ActionScriptString">&quot;pgm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-portable-pixmap&quot;</span>,<span class="ActionScriptString">&quot;ppm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-rgb&quot;</span>,<span class="ActionScriptString">&quot;rgb&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-xbitmap&quot;</span>,<span class="ActionScriptString">&quot;xbm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-xpixmap&quot;</span>,<span class="ActionScriptString">&quot;xpm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;image/x-xwindowdump&quot;</span>,<span class="ActionScriptString">&quot;xwd&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;model/iges&quot;</span>,<span class="ActionScriptString">&quot;igs&quot;</span>,<span class="ActionScriptString">&quot;iges&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;model/mesh&quot;</span>,<span class="ActionScriptString">&quot;msh&quot;</span>,<span class="ActionScriptString">&quot;mesh&quot;</span>,<span class="ActionScriptString">&quot;silo&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;model/vrml&quot;</span>,<span class="ActionScriptString">&quot;wrl&quot;</span>,<span class="ActionScriptString">&quot;vrml&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/calendar&quot;</span>,<span class="ActionScriptString">&quot;ics&quot;</span>,<span class="ActionScriptString">&quot;ifb&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/css&quot;</span>,<span class="ActionScriptString">&quot;css&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/html&quot;</span>,<span class="ActionScriptString">&quot;html&quot;</span>,<span class="ActionScriptString">&quot;htm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/plain&quot;</span>,<span class="ActionScriptString">&quot;txt&quot;</span>,<span class="ActionScriptString">&quot;asc&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/richtext&quot;</span>,<span class="ActionScriptString">&quot;rtx&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/rtf&quot;</span>,<span class="ActionScriptString">&quot;rtf&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/sgml&quot;</span>,<span class="ActionScriptString">&quot;sgml&quot;</span>,<span class="ActionScriptString">&quot;sgm&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/tab-separated-values&quot;</span>,<span class="ActionScriptString">&quot;tsv&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/vnd.wap.wml&quot;</span>,<span class="ActionScriptString">&quot;wml&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/vnd.wap.wmlscript&quot;</span>,<span class="ActionScriptString">&quot;wmls&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;text/x-setext&quot;</span>,<span class="ActionScriptString">&quot;etx&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;video/mp4&quot;</span>,<span class="ActionScriptString">&quot;f4v&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;video/mp4&quot;</span>,<span class="ActionScriptString">&quot;f4p&quot;</span><span class="ActionScriptBracket/Brace">]</span>,            
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;video/mpeg&quot;</span>,<span class="ActionScriptString">&quot;mpg&quot;</span>,<span class="ActionScriptString">&quot;mpeg&quot;</span>,<span class="ActionScriptString">&quot;mpe&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;video/quicktime&quot;</span>,<span class="ActionScriptString">&quot;mov&quot;</span>,<span class="ActionScriptString">&quot;qt&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;video/vnd.mpegurl&quot;</span>,<span class="ActionScriptString">&quot;m4u&quot;</span>,<span class="ActionScriptString">&quot;mxu&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;video/x-flv&quot;</span>,<span class="ActionScriptString">&quot;flv&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;video/x-msvideo&quot;</span>,<span class="ActionScriptString">&quot;avi&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;video/x-sgi-movie&quot;</span>,<span class="ActionScriptString">&quot;movie&quot;</span><span class="ActionScriptBracket/Brace">]</span>,
+            <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptString">&quot;x-conference/x-cooltalk&quot;</span>,<span class="ActionScriptString">&quot;ice&quot;</span><span class="ActionScriptBracket/Brace">]]</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns the mimetype for the given extension.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getMimeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">extension</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">extension</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">extension</span>.<span class="ActionScriptDefault_Text">toLocaleLowerCase</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">types</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">b</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">b</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">extension</span><span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * Returns the prefered extension for the given mimetype.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getExtension</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mimetype</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">mimetype</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mimetype</span>.<span class="ActionScriptDefault_Text">toLocaleLowerCase</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">types</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">a</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">mimetype</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptBracket/Brace">[</span>1<span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * Adds a mimetype to the map. The order of the extensions matters. The most preferred should come first.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addMimeType</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mimetype</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">extensions</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newType</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">mimetype</span><span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">extensions</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">newType</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">a</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">types</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">newType</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

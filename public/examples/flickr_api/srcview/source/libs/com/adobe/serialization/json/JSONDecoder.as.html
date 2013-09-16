@@ -1,0 +1,338 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>JSONDecoder.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+  Copyright (c) 2008, Adobe Systems Incorporated
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are
+  met:
+
+  * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Adobe Systems Incorporated nor the names of its 
+    contributors may be used to endorse or promote products derived from 
+    this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+  IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">adobe</span>.<span class="ActionScriptDefault_Text">serialization</span>.<span class="ActionScriptDefault_Text">json</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">JSONDecoder</span>
+    <span class="ActionScriptBracket/Brace">{</span>    
+    
+        <span class="ActionScriptASDoc">/** 
+         * Flag indicating if the parser should be strict about the format
+         * of the JSON string it is attempting to decode.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">strict</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+        
+        <span class="ActionScriptASDoc">/** The value that will get parsed from the JSON string */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:*</span>;
+        
+        <span class="ActionScriptASDoc">/** The tokenizer designated to read the JSON string */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tokenizer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONTokenizer</span>;
+        
+        <span class="ActionScriptASDoc">/** The current token from the tokenizer */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">token</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONToken</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constructs a new JSONDecoder to parse a JSON string 
+         * into a native object.
+         *
+         * @param s The JSON string to be converted
+         *        into a native object
+         * @param strict Flag indicating if the JSON string needs to
+         *         strictly match the JSON standard or not.
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">JSONDecoder</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">strict</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>    
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">strict</span>;
+            <span class="ActionScriptDefault_Text">tokenizer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">JSONTokenizer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">s</span>, <span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parseValue</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">// Make sure the input stream is empty
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Unexpected characters left in input stream&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Gets the internal object that was created by parsing
+         * the JSON string passed to the constructor.
+         *
+         * @return The internal object representation of the JSON
+         *         string that was passed to the constructor
+         * @langversion ActionScript 3.0
+         * @playerversion Flash 9.0
+         * @tiptext
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getValue</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:*</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Returns the next token from the tokenzier reading
+         * the JSON string
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">JSONToken</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">token</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">getNextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Attempt to parse an array.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseArray</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// create an array internally that we&apos;re going to attempt
+</span>            <span class="ActionScriptComment">// to parse from the tokenizer
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">// grab the next token from the tokenizer to move
+</span>            <span class="ActionScriptComment">// past the opening [
+</span>            <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">// check to see if we have an empty array
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACKET</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// we&apos;re done reading the array, so return it
+</span>                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">a</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptComment">// in non-strict mode an empty array is also a comma
+</span>            <span class="ActionScriptComment">// followed by a right bracket
+</span>            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">COMMA</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// move past the comma
+</span>                <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptComment">// check to see if we&apos;re reached the end of the array
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACKET</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">a</span>;    
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Leading commas are not supported.  Expecting &apos;]&apos; but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// deal with elements of the array, and use an &quot;infinite&quot;
+</span>            <span class="ActionScriptComment">// loop because we could have any amount of elements
+</span>            <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// read in the value and add it to the array
+</span>                <span class="ActionScriptDefault_Text">a</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">parseValue</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+                <span class="ActionScriptComment">// after the value there should be a ] or a ,
+</span>                <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACKET</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// we&apos;re done reading the array, so return it
+</span>                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">a</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">COMMA</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// move past the comma and read another value
+</span>                    <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                    <span class="ActionScriptComment">// Allow arrays to have a comma after the last element
+</span>                    <span class="ActionScriptComment">// if the decoder is not in strict mode
+</span>                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptComment">// Reached &quot;,]&quot; as the end of the array, so return it
+</span>                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACKET</span> <span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">a</span>;
+                        <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting ] or , but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Attempt to parse an object.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseObject</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// create the object internally that we&apos;re going to
+</span>            <span class="ActionScriptComment">// attempt to parse from the tokenizer
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">o</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;
+                        
+            <span class="ActionScriptComment">// store the string part of an object member so
+</span>            <span class="ActionScriptComment">// that we can assign it a value in the object
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">key</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+            
+            <span class="ActionScriptComment">// grab the next token from the tokenizer
+</span>            <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">// check to see if we have an empty object
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACE</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// we&apos;re done reading the object, so return it
+</span>                <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">o</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptComment">// in non-strict mode an empty object is also a comma
+</span>            <span class="ActionScriptComment">// followed by a right bracket
+</span>            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">COMMA</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// move past the comma
+</span>                <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptComment">// check to see if we&apos;re reached the end of the object
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACE</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">o</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Leading commas are not supported.  Expecting &apos;}&apos; but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptComment">// deal with members of the object, and use an &quot;infinite&quot;
+</span>            <span class="ActionScriptComment">// loop because we could have any amount of members
+</span>            <span class="ActionScriptReserved">while</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">STRING</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">// the string value we read is the key for the object
+</span>                    <span class="ActionScriptDefault_Text">key</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    
+                    <span class="ActionScriptComment">// move past the string to see what&apos;s next
+</span>                    <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                    <span class="ActionScriptComment">// after the string there should be a :
+</span>                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">COLON</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>    
+                        <span class="ActionScriptComment">// move past the : and read/assign a value for the key
+</span>                        <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                        <span class="ActionScriptDefault_Text">o</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">key</span><span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parseValue</span><span class="ActionScriptBracket/Brace">()</span>;    
+                        
+                        <span class="ActionScriptComment">// move past the value to see what&apos;s next
+</span>                        <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                        
+                        <span class="ActionScriptComment">// after the value there&apos;s either a } or a ,
+</span>                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACE</span> <span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptComment">// we&apos;re done reading the object, so return it
+</span>                            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">o</span>;    
+                        <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">COMMA</span> <span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptComment">// skip past the comma and read another member
+</span>                            <span class="ActionScriptDefault_Text">nextToken</span><span class="ActionScriptBracket/Brace">()</span>;
+                            
+                            <span class="ActionScriptComment">// Allow objects to have a comma after the last member
+</span>                            <span class="ActionScriptComment">// if the decoder is not in strict mode
+</span>                            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptBracket/Brace">{</span>
+                                <span class="ActionScriptComment">// Reached &quot;,}&quot; as the end of the object, so return it
+</span>                                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">RIGHT_BRACE</span> <span class="ActionScriptBracket/Brace">)</span>
+                                <span class="ActionScriptBracket/Brace">{</span>
+                                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">o</span>;
+                                <span class="ActionScriptBracket/Brace">}</span>
+                            <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptBracket/Brace">}</span>
+                        <span class="ActionScriptReserved">else</span>
+                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting } or , but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                        <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting : but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span>
+                <span class="ActionScriptBracket/Brace">{</span>    
+                    <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Expecting string but found &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Attempt to parse a value
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">parseValue</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Catch errors when the input stream ends abruptly
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Unexpected end of input&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+                    
+            <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">LEFT_BRACE</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">parseObject</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">LEFT_BRACKET</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">parseArray</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">STRING</span><span class="ActionScriptOperator">:</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">NUMBER</span><span class="ActionScriptOperator">:</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">TRUE</span><span class="ActionScriptOperator">:</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">FALSE</span><span class="ActionScriptOperator">:</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">NULL</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span>;
+                    
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JSONTokenType</span>.<span class="ActionScriptDefault_Text">NAN</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">strict</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Unexpected &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+
+                <span class="ActionScriptReserved">default</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">tokenizer</span>.<span class="ActionScriptDefault_Text">parseError</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Unexpected &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">token</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">null</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

@@ -1,0 +1,120 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>JunctionMediator.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ PureMVC AS3/MultiCore Utility – Pipes
+ Copyright (c) 2008 Cliff Hall&lt;cliff.hall@puremvc.org&gt;
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">plumbing</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">INotification</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">patterns</span>.<span class="ActionScriptDefault_Text">mediator</span>.<span class="ActionScriptDefault_Text">Mediator</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">IPipeFitting</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">interfaces</span>.<span class="ActionScriptDefault_Text">IPipeMessage</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">messages</span>.<span class="ActionScriptDefault_Text">FilterControlMessage</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * Junction Mediator.
+     * &lt;P&gt;
+     * A base class for handling the Pipe Junction in an IPipeAware 
+     * Core.&lt;/P&gt;
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">JunctionMediator</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Mediator</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Accept input pipe notification name constant.
+         */</span> 
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ACCEPT_INPUT_PIPE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>     <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;acceptInputPipe&apos;</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Accept output pipe notification name constant.
+         */</span> 
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">ACCEPT_OUTPUT_PIPE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>     <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&apos;acceptOutputPipe&apos;</span>;
+
+        <span class="ActionScriptASDoc">/**
+         * Constructor.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">JunctionMediator</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">viewComponent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Junction</span> <span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">name</span>, <span class="ActionScriptDefault_Text">viewComponent</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * List Notification Interests.
+         * &lt;P&gt;
+         * Returns the notification interests for this base class.
+         * Override in subclass and call &lt;code&gt;super.listNotificationInterests&lt;/code&gt;
+         * to get this list, then add any sublcass interests to 
+         * the array before returning.&lt;/P&gt;
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">listNotificationInterests</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">JunctionMediator</span>.<span class="ActionScriptDefault_Text">ACCEPT_INPUT_PIPE</span>, 
+                     <span class="ActionScriptDefault_Text">JunctionMediator</span>.<span class="ActionScriptDefault_Text">ACCEPT_OUTPUT_PIPE</span>
+                   <span class="ActionScriptBracket/Brace">]</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Handle Notification.
+         * &lt;P&gt;
+         * This provides the handling for common junction activities. It 
+         * accepts input and output pipes in response to &lt;code&gt;IPipeAware&lt;/code&gt;
+         * interface calls.&lt;/P&gt;
+         * &lt;P&gt;
+         * Override in subclass, and call &lt;code&gt;super.handleNotification&lt;/code&gt;
+         * if none of the subclass-specific notification names are matched.&lt;/P&gt;
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handleNotification</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">note</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">INotification</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">switch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">note</span>.<span class="ActionScriptDefault_Text">getName</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// accept an input pipe
+</span>                <span class="ActionScriptComment">// register the pipe and if successful 
+</span>                <span class="ActionScriptComment">// set this mediator as its listener
+</span>                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JunctionMediator</span>.<span class="ActionScriptDefault_Text">ACCEPT_INPUT_PIPE</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">inputPipeName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">note</span>.<span class="ActionScriptDefault_Text">getType</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">inputPipe</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">note</span>.<span class="ActionScriptDefault_Text">getBody</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">IPipeFitting</span>;
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">junction</span>.<span class="ActionScriptDefault_Text">registerPipe</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">inputPipeName</span>, <span class="ActionScriptDefault_Text">Junction</span>.<span class="ActionScriptDefault_Text">INPUT</span>, <span class="ActionScriptDefault_Text">inputPipe</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span> 
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">junction</span>.<span class="ActionScriptDefault_Text">addPipeListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">inputPipeName</span>, <span class="ActionScriptReserved">this</span>, <span class="ActionScriptDefault_Text">handlePipeMessage</span> <span class="ActionScriptBracket/Brace">)</span>;        
+                    <span class="ActionScriptBracket/Brace">}</span> 
+                    <span class="ActionScriptReserved">break</span>;
+                
+                <span class="ActionScriptComment">// accept an output pipe
+</span>                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">JunctionMediator</span>.<span class="ActionScriptDefault_Text">ACCEPT_OUTPUT_PIPE</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">outputPipeName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">note</span>.<span class="ActionScriptDefault_Text">getType</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">outputPipe</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">note</span>.<span class="ActionScriptDefault_Text">getBody</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">IPipeFitting</span>;
+                    <span class="ActionScriptDefault_Text">junction</span>.<span class="ActionScriptDefault_Text">registerPipe</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">outputPipeName</span>, <span class="ActionScriptDefault_Text">Junction</span>.<span class="ActionScriptDefault_Text">OUTPUT</span>, <span class="ActionScriptDefault_Text">outputPipe</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                    
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Handle incoming pipe messages.
+         * &lt;P&gt;
+         * Override in subclass and handle messages appropriately for the module.&lt;/P&gt;
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">handlePipeMessage</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeMessage</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * The Junction for this Module.
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">junction</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Junction</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">viewComponent</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Junction</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+    
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

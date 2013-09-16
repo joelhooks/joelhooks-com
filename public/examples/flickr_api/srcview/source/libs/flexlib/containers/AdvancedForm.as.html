@@ -1,0 +1,501 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>AdvancedForm.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+<span class="ActionScriptComment">/*
+    Class that provides Reset and Undo/Redo functionality for a Form
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">containers</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptOperator">*</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">ui</span>.<span class="ActionScriptDefault_Text">KeyLocation</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">ui</span>.<span class="ActionScriptDefault_Text">Keyboard</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">describeType</span>;
+
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptOperator">*</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptOperator">*</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">Container</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">UIComponent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">ValidationResultEvent</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">messaging</span>.<span class="ActionScriptDefault_Text">errors</span>.<span class="ActionScriptDefault_Text">MessagingError</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">validators</span>.<span class="ActionScriptDefault_Text">ValidationResult</span>;
+<span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">validators</span>.<span class="ActionScriptDefault_Text">Validator</span>;
+
+<span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">IconFile</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;AdvancedForm.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+<span class="ActionScriptASDoc">/**
+ *  The Advanced Form component provides Reset, Undo and Redo functionality.
+ *
+ *  &lt;p&gt;The Advanced Form component provides Reset, Undo and Redo functionality.
+ *     Undo and Redo are accessed by pressing &quot;ctrl-Z&quot; and &quot;ctrl-Y&quot; repsectively.&lt;/p&gt;
+ *
+ *  @mxml
+ *
+ *  &lt;pre&gt;
+ *  &amp;lt;flexlib:AdvancedForm
+ *       &lt;strong&gt;Properties&lt;/strong&gt;
+ *       undoHistorySize=&quot;5&quot;
+ *       modelType=&quot;shared|memory&quot;
+ *       
+ *    &amp;gt;
+ *    ...
+ *      &lt;i&gt;child tags&lt;/i&gt;
+ *    ...
+ *  &amp;lt;/flexlib:AdvancedForm&amp;gt;
+ *  &lt;/pre&gt;
+ */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">AdvancedForm</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Form</span>
+<span class="ActionScriptBracket/Brace">{</span>
+
+    <span class="ActionScriptComment">//[Bindable]
+</span>    <span class="ActionScriptComment">//public var debug:String = &quot;&quot;;
+</span>
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Variables
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">noSnapshotFlag</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     *  @private Key for reset snapshot
+     */</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resetSnapshotKey</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;reset&quot;</span>;
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">undoCounter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0;
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">modelStack</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Properties
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  validators
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private LookupTable of isValid flags
+     */</span>        
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">validators</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  undoHistorySize
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>        
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_undoHistorySize</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 5;
+
+    <span class="ActionScriptASDoc">/**
+     *  The undoHistorySize defaults the number of undos.
+     *
+     *  @default true
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">undoHistorySize</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_undoHistorySize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">undoHistorySize</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_undoHistorySize</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  modelType
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  @private
+     */</span>        
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_modelType</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;shared&quot;</span>;
+    
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">category</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;General&quot;</span>, <span class="ActionScriptDefault_Text">enumeration</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;shared,memory&quot;</span>, <span class="ActionScriptDefault_Text">defaultValue</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;shared&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    <span class="ActionScriptASDoc">/**
+     *  The modelStack handles the data.
+     *
+     *  @default true
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">modelType</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;shared&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">modelType</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_modelType</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptComment">//----------------------------------
+</span>    <span class="ActionScriptComment">//  isValid
+</span>    <span class="ActionScriptComment">//----------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     *  Property that allows for one place to know if the From is valid
+     * 
+     *  Default to true, if any Validators are present then it will be set to false
+     */</span>        
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">isValid</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//  Methods
+</span>    <span class="ActionScriptComment">//
+</span>    <span class="ActionScriptComment">//--------------------------------------------------------------------------
+</span>
+    <span class="ActionScriptASDoc">/**
+     * Resets values of the form
+     */</span>        
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">resetForm</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">children</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptDefault_Text">resetValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">children</span>, <span class="ActionScriptDefault_Text">resetSnapshotKey</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">undoCounter</span> <span class="ActionScriptOperator">=</span> 0;
+        <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">-</span>1;
+        <span class="ActionScriptDefault_Text">modelStack</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptDefault_Text">snapshotValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">resetSnapshotKey</span> <span class="ActionScriptBracket/Brace">)</span>;            
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     * @private
+     */</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">myKeyDownHandler</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">KeyboardEvent</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">ctrlKey</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> 90 <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">NumericStepper</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">stopPropagation</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">preventDefault</span><span class="ActionScriptBracket/Brace">()</span>
+            <span class="ActionScriptDefault_Text">doUndo</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">ctrlKey</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> 89 <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">NumericStepper</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">doRedo</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">keyDownHandler</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Creates snapshot of values for reseting
+     */</span>
+    <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">childrenCreated</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">childrenCreated</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptComment">// Find Validators and add EventListeners
+</span>        <span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;creationComplete&quot;</span>, <span class="ActionScriptDefault_Text">setValidatorListenerEvents</span> <span class="ActionScriptBracket/Brace">)</span>;
+        
+        <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">KeyboardEvent</span>.<span class="ActionScriptDefault_Text">KEY_DOWN</span>, <span class="ActionScriptDefault_Text">myKeyDownHandler</span>, <span class="ActionScriptReserved">false</span>, 0, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     *     Loop through all Validtors at the same level as the Form and set a Event listener for Valid and Invalid
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setValidatorListenerEvents</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">// Take First Snapshot After All Children have been created
+</span>        <span class="ActionScriptDefault_Text">snapshotValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">resetSnapshotKey</span> <span class="ActionScriptBracket/Brace">)</span>;
+                
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">container</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">document</span>;
+
+        <span class="ActionScriptComment">// Check parent control to make sure its capable of having children
+</span>        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">container</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Container</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptReserved">return</span>;
+            
+        <span class="ActionScriptComment">// Describe Parent
+</span>        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">classInfo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">describeType</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">container</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptComment">// Reset Defaults
+</span>        <span class="ActionScriptDefault_Text">validators</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptDefault_Text">isValid</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        <span class="ActionScriptComment">// Loop over all parentDocument&apos;s properties looking for Validators
+</span>        <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">classInfo</span>..<span class="ActionScriptDefault_Text">accessor</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">try</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">container</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span>.@<span class="ActionScriptDefault_Text">name</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Validator</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptComment">//Logger.debug( &quot;setValidatorListenerEvents:Property is Validator: &quot; + a.@name );
+</span>                    
+                    <span class="ActionScriptComment">// If Validator is found default to false
+</span>                    <span class="ActionScriptDefault_Text">isValid</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                    
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">reference</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">container</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span>.@<span class="ActionScriptDefault_Text">name</span> <span class="ActionScriptBracket/Brace">]</span>;                    
+                    <span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">isValid</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                    <span class="ActionScriptDefault_Text">validators</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+                    <span class="ActionScriptComment">// Set Valid and Invalid week reference listeners on the Validators
+</span>                    <span class="ActionScriptDefault_Text">Validator</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">container</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span>.@<span class="ActionScriptDefault_Text">name</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ValidationResultEvent</span>.<span class="ActionScriptDefault_Text">VALID</span>, <span class="ActionScriptDefault_Text">setValidFlag</span>, <span class="ActionScriptReserved">false</span>, 0, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">Validator</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">container</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span>.@<span class="ActionScriptDefault_Text">name</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ValidationResultEvent</span>.<span class="ActionScriptDefault_Text">INVALID</span>, <span class="ActionScriptDefault_Text">setValidFlag</span>, <span class="ActionScriptReserved">false</span>, 0, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+             <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">err</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                 <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">err</span>.<span class="ActionScriptDefault_Text">errorID</span> <span class="ActionScriptOperator">!=</span> 1077 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                     <span class="ActionScriptComment">//Logger.error( &quot;AdvancedForm:setValidatorListenerEvents: &quot; + err.message );
+</span>                 <span class="ActionScriptBracket/Brace">}</span>
+             <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     *     Handles all valid and invalid events on the validators
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">setValidFlag</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ValidationResultEvent</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmpFlag</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">validators</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">validators</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">reference</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">//Logger.debug( &quot;setValidFlag:event.target: &quot; + event.type );
+</span>                <span class="ActionScriptDefault_Text">validators</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">isValid</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">ValidationResultEvent</span>.<span class="ActionScriptDefault_Text">VALID</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">tmpFlag</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpFlag</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">validators</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">isValid</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptDefault_Text">isValid</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tmpFlag</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * 
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">snapshotValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>, <span class="ActionScriptDefault_Text">snapshotKey</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">try</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">modelStack</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">modelStack</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">modelStack</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">snapshotKey</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">modelStack</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">snapshotKey</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;
+                    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">modelStack</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">snapshotKey</span> <span class="ActionScriptBracket/Brace">]</span>;
+            
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">obj</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">FormItem</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">snapshotValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">snapshotKey</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmpObj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptBracket/Brace">]</span>;
+    
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmpID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">undefined</span> <span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">()</span>;                    
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">TextInput</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">TextArea</span> <span class="ActionScriptBracket/Brace">)</span> 
+                        <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">text</span>;
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">RadioButton</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">CheckBox</span> <span class="ActionScriptBracket/Brace">)</span> 
+                        <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">selected</span>;
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">ComboBox</span> <span class="ActionScriptBracket/Brace">)</span> 
+                        <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">selectedIndex</span>;
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">NumericStepper</span> <span class="ActionScriptBracket/Brace">)</span> 
+                        <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">value</span>;                            
+                    
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">TextInput</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">TextArea</span> <span class="ActionScriptBracket/Brace">)</span> 
+                        <span class="ActionScriptDefault_Text">UIComponent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">FocusEvent</span>.<span class="ActionScriptDefault_Text">FOCUS_OUT</span>, <span class="ActionScriptDefault_Text">textInputChange</span> <span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">else</span>
+                        <span class="ActionScriptDefault_Text">UIComponent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">CHANGE</span>, <span class="ActionScriptDefault_Text">controlChange</span> <span class="ActionScriptBracket/Brace">)</span>;
+    
+                    <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">err</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">//Logger.error( &quot;AdvancedForm:snapshotValues: &quot; + err.message );
+</span>        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *     @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">textInputChange</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FocusEvent</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getLastestSnapshot</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmpKey</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpKey</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">undefined</span> <span class="ActionScriptBracket/Brace">)</span>
+            ;<span class="ActionScriptComment">//throw new Error( &quot;Snapshot not defined for key = &quot; + tmpKey );
+</span>        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpKey</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">parent</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">takeSnapshot</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *     @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">controlChange</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">RadioButton</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">selected</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">takeSnapshot</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">RadioButton</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptDefault_Text">takeSnapshot</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *     @private
+     */</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">doUndo</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">//debug += &quot;\ndoUndo: undoCurrentIndex: &quot; + undoCurrentIndex + &quot; undoCounter: &quot; + undoCounter;
+</span>        <span class="ActionScriptDefault_Text">noSnapshotFlag</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">index</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptOperator">-</span> 1;
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">index</span> <span class="ActionScriptOperator">&gt;=</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">undoCounter</span> <span class="ActionScriptOperator">-</span> 1 <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">undoHistorySize</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">index</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptOperator">-</span>2 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">undoCurrentIndex</span><span class="ActionScriptOperator">--</span>;
+            <span class="ActionScriptComment">//debug += &quot;\ndoUndo: resetValues: &quot; + undoCurrentIndex;
+</span>            <span class="ActionScriptDefault_Text">resetValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">getSnapshotKey</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptDefault_Text">noSnapshotFlag</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *     @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">doRedo</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">//debug += &quot;\ndoRedo: undoCurrentIndex: &quot; + undoCurrentIndex + &quot; undoCounter: &quot; + undoCounter;
+</span>        <span class="ActionScriptDefault_Text">noSnapshotFlag</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">index</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptOperator">+</span> 1;
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">index</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">undoCounter</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">undoCurrentIndex</span><span class="ActionScriptOperator">++</span>;
+            <span class="ActionScriptDefault_Text">resetValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">getSnapshotKey</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptDefault_Text">noSnapshotFlag</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+    <span class="ActionScriptBracket/Brace">}</span>        
+
+    <span class="ActionScriptASDoc">/**
+     *     @private
+     */</span>    
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">takeSnapshot</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">noSnapshotFlag</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">undoCounter</span> <span class="ActionScriptOperator">-</span> 1 <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">undoCounter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptOperator">+</span> 1;
+            <span class="ActionScriptComment">//debug += &quot;\ntakeSnaphost: undoCurrentIndex: &quot; + undoCurrentIndex + &quot; undoCounter: &quot; + undoCounter;
+</span>            <span class="ActionScriptDefault_Text">snapshotValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">undoCounter</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">undoCounter</span>;
+            <span class="ActionScriptDefault_Text">undoCounter</span><span class="ActionScriptOperator">++</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *     @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getLastestSnapshot</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptOperator">-</span>1 <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">modelStack</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">undoCurrentIndex</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;&quot;</span> <span class="ActionScriptBracket/Brace">]</span>;
+        <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">modelStack</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">resetSnapshotKey</span> <span class="ActionScriptBracket/Brace">]</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptASDoc">/**
+     *     @private
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getSnapshotKey</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">coutner</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">coutner</span> <span class="ActionScriptOperator">&gt;=</span> 0 <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">coutner</span><span class="ActionScriptOperator">+</span><span class="ActionScriptString">&quot;&quot;</span>;
+        <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">resetSnapshotKey</span>;
+    <span class="ActionScriptBracket/Brace">}</span>        
+
+    <span class="ActionScriptASDoc">/**
+     * 
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">resetValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>, <span class="ActionScriptDefault_Text">snapshotKey</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">modelStack</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">snapshotKey</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">undefined</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptReserved">throw</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Invalid snapshot&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;
+
+        <span class="ActionScriptComment">// Disable all Validators
+</span>        <span class="ActionScriptReserved">try</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">validators</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">isValid</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">Validator</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">validators</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">reference</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">enabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+                <span class="ActionScriptDefault_Text">validators</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">isValid</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">err</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">//Logger.error( &quot;AdvancedForm:resetValues:Disabling Validators: &quot; + err.message );
+</span>        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">modelStack</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">snapshotKey</span> <span class="ActionScriptBracket/Brace">]</span>;
+
+        <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">obj</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">FormItem</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">resetValues</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">getChildren</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">snapshotKey</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmpObj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptBracket/Brace">]</span>;
+
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmpID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">undefined</span> 
+                    <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Container</span>
+                        <span class="ActionScriptOperator">||</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">TextInput</span><span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">RadioButton</span><span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">ComboBox</span><span class="ActionScriptBracket/Brace">)</span>
+                            <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">NumericStepper</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                        <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>                        
+                    <span class="ActionScriptReserved">continue</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptReserved">undefined</span> <span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptReserved">throw</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Error</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;Invalid obj in snapshot: &quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">TextInput</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">TextArea</span> <span class="ActionScriptBracket/Brace">)</span> 
+                    <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">RadioButton</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">CheckBox</span> <span class="ActionScriptBracket/Brace">)</span> 
+                    <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">selected</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">ComboBox</span> <span class="ActionScriptBracket/Brace">)</span> 
+                    <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">selectedIndex</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmpObj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">NumericStepper</span> <span class="ActionScriptBracket/Brace">)</span> 
+                    <span class="ActionScriptDefault_Text">tmpObj</span>.<span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">snapshotModel</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">tmpID</span> <span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptComment">// Enable all Validators
+</span>        <span class="ActionScriptReserved">try</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">=</span> 0; <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">validators</span>.<span class="ActionScriptDefault_Text">length</span>; <span class="ActionScriptDefault_Text">i</span><span class="ActionScriptOperator">++</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">Validator</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">validators</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">i</span> <span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">reference</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">enabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">catch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">err</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Error</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">//Logger.error( &quot;AdvancedForm:resetValues:Disabling Validators: &quot; + err.message );
+</span>        <span class="ActionScriptBracket/Brace">}</span>        
+    <span class="ActionScriptBracket/Brace">}</span>        
+
+    <span class="ActionScriptASDoc">/**
+     *     Gather references and defaults of all the children
+     */</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">strChildren</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">str</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&quot;</span>;
+        <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">a</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">obj</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">str</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;=[&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">a</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;]\n&quot;</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">str</span>;
+    <span class="ActionScriptBracket/Brace">}</span>        
+    
+    
+<span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

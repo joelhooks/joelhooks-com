@@ -1,0 +1,624 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>WindowShade.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+Copyright (c) 2007 - 2008 FlexLib Contributors.  See:
+    http://code.google.com/p/flexlib/wiki/ProjectContributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">containers</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MouseEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">WindowShadeEvent</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Button</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">EdgeMetrics</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IFactory</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">LayoutContainer</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">ScrollPolicy</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">Resize</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">effects</span>.<span class="ActionScriptDefault_Text">effectClasses</span>.<span class="ActionScriptDefault_Text">ResizeInstance</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">EffectEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">PropertyChangeEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">CSSStyleDeclaration</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">StyleManager</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">StringUtil</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * This is the icon displayed on the headerButton when the WindowShade is in the open state.
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;openIcon&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Class&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * This is the icon displayed on the headerButton when the WindowShade is in the closed state.
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;closeIcon&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Class&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * The duration of the WindowShade opening transition, in milliseconds. The value 0 specifies no transition. 
+     * 
+     * @default 250
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;openDuration&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Number&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Time&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * The duration of the WindowShade closing transition, in milliseconds. The value 0 specifies no transition. 
+     * 
+     * @default 250
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;closeDuration&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Number&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Time&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * The class from which the headerButton will be instantiated. Must be mx.controls.Button
+     * or a subclass.
+     * 
+     * @default mx.controls.Button
+     */</span> 
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;headerClass&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Class&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Name of CSS style declaration that specifies styles for the headerButton.
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;headerStyleName&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;String&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * Alignment of text on the headerButton. The value set for this style is used as
+     * the textAlign style on the headerButton. Valid values are &quot;left&quot;, &quot;center&quot; and &quot;right&quot;.
+     * 
+     * @default &quot;right&quot;
+     */</span>
+     <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;headerTextAlign&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;String&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+     <span class="ActionScriptASDoc">/**
+      * If true, the value of the headerButton&apos;s &lt;code&gt;toggle&lt;/code&gt; property will be set to true; 
+      * otherwise the &lt;code&gt;toggle&lt;/code&gt; property will be left in its default state.
+      * 
+      * @default false
+      */</span>
+     <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;toggleHeader&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Boolean&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;no&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+
+
+    <span class="ActionScriptASDoc">/**
+     * Dispatched when the &lt;code&gt;opened&lt;/code&gt; property is changed, either through user action
+     * or programatically. This event is cancelable. When cancelled through a call to Event.preventDefault(),
+     * the &lt;code&gt;opened&lt;/code&gt; property will be restored to its previous state.
+     *
+     *  @eventType flexlib.events.WindowShadeEvent.OPENED_CHANGED
+     */</span>
+     <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;openedChanged&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;flexlib.events.WindowShadeEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * Dispatched when the WindowShade is about to be opened.
+     * 
+     * &lt;p&gt;In most cases, an event of this type will be followed by an event of type WindowShadeEvent.OPEN_END (&lt;code&gt;openEnd&lt;/code&gt;); however,
+     * if the user clicks the header button before the closing transition has run to completion, the &lt;code&gt;openEnd&lt;/code&gt; event will
+     * not be dispatched, since the WindowShade will not be left in the opened state.&lt;/p&gt;
+     *
+     *  @eventType flexlib.events.WindowShadeEvent.OPEN_BEGIN
+     */</span>
+     <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;openBegin&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;flexlib.events.WindowShadeEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * Dispatched when the WindowShade has finished opening. This event cannot be cancelled.
+     *
+     *  @eventType flexlib.events.WindowShadeEvent.OPEN_END
+     */</span>
+     <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;openEnd&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;flexlib.events.WindowShadeEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * Dispatched when the WindowShade is about to be closed. This event cannot be cancelled.
+     * 
+     * &lt;p&gt;In most cases, an event of this type will be followed by an event of type WindowShadeEvent.CLOSE_END (&lt;code&gt;closeEnd&lt;/code&gt;); however,
+     * if the user clicks the header button before the closing transition has run to completion, the &lt;code&gt;closeEnd&lt;/code&gt; event will
+     * not be dispatched, since the WindowShade will not be left in the closed state.&lt;/p&gt;
+     *
+     *  @eventType flexlib.events.WindowShadeEvent.CLOSE_BEGIN
+     */</span>
+     <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;closeBegin&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;flexlib.events.WindowShadeEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * Dispatched when the WindowShade has finished closing. This event cannot be cancelled.
+     *
+     *  @eventType flexlib.events.WindowShadeEvent.CLOSE_END
+     */</span>
+     <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;closeEnd&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;flexlib.events.WindowShadeEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * This control displays a button, which when clicked, will cause a panel to &quot;unroll&quot; beneath
+     * it like a windowshade being pulled down; or if the panel is already displayed it
+     * will be &quot;rolled up&quot; like a windowshade being rolled up. When multiple WindowShades are stacked
+     * in a VBox, the result will be similar to an mx.containers.Accordian container, except that multiple
+     * WindowShades can be opened simultaneously whereas an Accordian acts like a tab navigator, with only
+     * one panel visible at a time.
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">WindowShade</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">LayoutContainer</span> <span class="ActionScriptBracket/Brace">{</span>
+
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Embed</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;../assets/assets.swf&quot;</span>, <span class="ActionScriptDefault_Text">symbol</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;right_arrow&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">DEFAULT_CLOSE_ICON</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span>;
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Embed</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;../assets/assets.swf&quot;</span>, <span class="ActionScriptDefault_Text">symbol</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;down_arrow&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">DEFAULT_OPEN_ICON</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span>;
+        
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">styleDefaults</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">{</span>
+             <span class="ActionScriptDefault_Text">openDuration</span><span class="ActionScriptOperator">:</span>250
+            ,<span class="ActionScriptDefault_Text">closeDuration</span><span class="ActionScriptOperator">:</span>250
+            ,<span class="ActionScriptDefault_Text">paddingTop</span><span class="ActionScriptOperator">:</span>10
+            ,<span class="ActionScriptDefault_Text">headerClass</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span>
+            ,<span class="ActionScriptDefault_Text">headerTextAlign</span><span class="ActionScriptOperator">:</span><span class="ActionScriptString">&quot;left&quot;</span>
+            ,<span class="ActionScriptDefault_Text">toggleHeader</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">false</span>
+            ,<span class="ActionScriptDefault_Text">headerStyleName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">null</span>
+            ,<span class="ActionScriptDefault_Text">closeIcon</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DEFAULT_CLOSE_ICON</span>
+            ,<span class="ActionScriptDefault_Text">openIcon</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">DEFAULT_OPEN_ICON</span>
+        <span class="ActionScriptBracket/Brace">}</span>;
+
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">classConstructed</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">constructClass</span><span class="ActionScriptBracket/Brace">()</span>;
+
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">constructClass</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">css</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">CSSStyleDeclaration</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;WindowShade&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">changed</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">css</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// If there is no CSS definition for WindowShade,
+</span>                <span class="ActionScriptComment">// then create one and set the default value.
+</span>                <span class="ActionScriptDefault_Text">css</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">CSSStyleDeclaration</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">changed</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptComment">// make sure we have a valid values for each style. If not, set the defaults.
+</span>            <span class="ActionScriptReserved">for</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">styleProp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">styleDefaults</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">isValidStyleValue</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">css</span>.<span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span><span class="ActionScriptBracket/Brace">)))</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">css</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span>, <span class="ActionScriptDefault_Text">styleDefaults</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">styleProp</span><span class="ActionScriptBracket/Brace">])</span>;
+                    <span class="ActionScriptDefault_Text">changed</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">changed</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">setStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;WindowShade&quot;</span>, <span class="ActionScriptDefault_Text">css</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private 
+         * A reference to the Button that will be used for the header. Must always be a Button or subclass of Button.
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_headerButton</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerChanged</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * @private
+        * The header renderer factory that will get used to create the header. 
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_headerRenderer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IFactory</span>;
+        
+        <span class="ActionScriptASDoc">/**
+        * To control the header used on the WindowShade component you can either set the &lt;code&gt;headerClass&lt;/code&gt; or the
+        * &lt;code&gt;headerRenderer&lt;/code&gt;. The &lt;code&gt;headerRenderer&lt;/code&gt; works similar to the itemRenderer of a List control.
+        * You can set this using MXML using any Button control. This would let you customize things like button skin. You could
+        * even combine this with the CanvasButton component to make complex headers.
+        */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">headerRenderer</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IFactory</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_headerRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            
+            <span class="ActionScriptDefault_Text">headerChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">invalidateProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">headerRenderer</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_headerRenderer</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+        * @private
+        * Boolean dirty flag to let us know if we need to change the icon in the commitProperties method.
+        */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_openedChanged</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">WindowShade</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptComment">//default scroll policies are off
+</span>            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">verticalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ScrollPolicy</span>.<span class="ActionScriptDefault_Text">OFF</span>;
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">horizontalScrollPolicy</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ScrollPolicy</span>.<span class="ActionScriptDefault_Text">OFF</span>;
+
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">EffectEvent</span>.<span class="ActionScriptDefault_Text">EFFECT_END</span>, <span class="ActionScriptDefault_Text">onEffectEnd</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createOrReplaceHeaderButton</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+           <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerButton</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">CLICK</span>, <span class="ActionScriptDefault_Text">headerButton_clickHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">rawChildren</span>.<span class="ActionScriptDefault_Text">contains</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerButton</span><span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">rawChildren</span>.<span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerButton</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerRenderer</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_headerButton</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_headerRenderer</span>.<span class="ActionScriptDefault_Text">newInstance</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Button</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerClass</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;headerClass&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                   <span class="ActionScriptDefault_Text">_headerButton</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">headerClass</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">applyHeaderButtonStyles</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerButton</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">CLICK</span>, <span class="ActionScriptDefault_Text">headerButton_clickHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">rawChildren</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerButton</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// Fix for Issue #85
+</span>            <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">tabEnabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">applyHeaderButtonStyles</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">button</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;textAlign&quot;</span>, <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;headerTextAlign&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">headerStyleName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;headerStyleName&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerStyleName</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">headerStyleName</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">StringUtil</span>.<span class="ActionScriptDefault_Text">trim</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerStyleName</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">styleName</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">headerStyleName</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">toggle</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;toggleHeader&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">label</span>;
+
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_opened</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&apos;icon&apos;</span>, <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;openIcon&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&apos;icon&apos;</span>, <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;closeIcon&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">toggle</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">button</span>.<span class="ActionScriptDefault_Text">selected</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_opened</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * The text that appears on the headerButton.
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">label</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// This override is here only to keep the ASDoc tool from incorrectly marking this a write-only property.
+</span>            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">label</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerButton</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">label</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_opened</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Sets or gets the state of this WindowShade, either opened (true) or closed (false).
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">opened</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_opened</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_headerLocation</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;top&quot;</span>;
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Inspectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">enumeration</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;top,bottom&quot;</span>, <span class="ActionScriptDefault_Text">defaultValue</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;top&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptASDoc">/**
+         * Specifies where the header button is placed relative tot he content of this WindowShade. Possible
+         * values are &lt;code&gt;top&lt;/code&gt; and &lt;code&gt;bottom&lt;/code&gt;.
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">headerLocation</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_headerLocation</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">invalidateSize</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">headerLocation</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_headerLocation</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+         <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">opened</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">old</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_opened</span>;
+            
+            <span class="ActionScriptDefault_Text">_opened</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">_openedChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_openedChanged</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">old</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_opened</span><span class="ActionScriptBracket/Brace">)</span>;
+           
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_openedChanged</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">initialized</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// we only want to dispatch the WindowShadeEvent.OPENED_CHANGED when the property actually changes. The _openedChanged
+</span>                <span class="ActionScriptComment">// flag may be set from a previous call with the same value. In that case we want to leave it set 
+</span>                <span class="ActionScriptComment">// for the commitProperties() method.
+</span>                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">((</span><span class="ActionScriptDefault_Text">old</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_opened</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">willTrigger</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">WindowShadeEvent</span>.<span class="ActionScriptDefault_Text">OPENED_CHANGED</span><span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">evt</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">WindowShadeEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">WindowShadeEvent</span>.<span class="ActionScriptDefault_Text">OPENED_CHANGED</span>, <span class="ActionScriptReserved">false</span>, <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">evt</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cancelled</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">evt</span>.<span class="ActionScriptDefault_Text">isDefaultPrevented</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">evt</span>.<span class="ActionScriptDefault_Text">isDefaultPrevented</span><span class="ActionScriptBracket/Brace">())</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptComment">// restore the old setting. We use callLater so it happens after the PropertyChangeEvent fired
+</span>                        <span class="ActionScriptComment">// by the binding wrapper.
+</span>                        <span class="ActionScriptDefault_Text">callLater</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">restoreOpened</span>, <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">old</span><span class="ActionScriptBracket/Brace">])</span>;
+                        <span class="ActionScriptReserved">return</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+
+                <span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span>;
+                   <span class="ActionScriptDefault_Text">runResizeEffect</span><span class="ActionScriptBracket/Brace">()</span>;
+                
+                <span class="ActionScriptDefault_Text">invalidateProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         * 
+         * This exists to allow us to restore a previous opened state when a WindowShadeEvent.OPENED_CHANGED event is 
+         * cancelled, while bypassing the code that changes the visual state of the WindowShade and dispatches the WindowShadeEvent.
+         */</span>
+         <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">restoreOpened</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+             <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">old</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_opened</span>;
+             <span class="ActionScriptDefault_Text">_opened</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+             <span class="ActionScriptDefault_Text">_openedChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_openedChanged</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">old</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">_opened</span><span class="ActionScriptBracket/Brace">)</span>;
+             <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_opened</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptDefault_Text">old</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                 <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">PropertyChangeEvent</span>.<span class="ActionScriptDefault_Text">createUpdateEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span>, <span class="ActionScriptString">&quot;opened&quot;</span>, <span class="ActionScriptDefault_Text">old</span>, <span class="ActionScriptDefault_Text">_opened</span><span class="ActionScriptBracket/Brace">))</span>;
+             <span class="ActionScriptBracket/Brace">}</span>
+         <span class="ActionScriptBracket/Brace">}</span>
+
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">styleChanged</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">styleChanged</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;headerClass&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">headerChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptDefault_Text">invalidateProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;headerStyleName&quot;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;headerTextAlign&quot;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;toggleHeader&quot;</span> 
+                <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;openIcon&quot;</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;closeIcon&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">applyHeaderButtonStyles</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerButton</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+         
+            <span class="ActionScriptDefault_Text">createOrReplaceHeaderButton</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">commitProperties</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">commitProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">headerChanged</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">createOrReplaceHeaderButton</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">headerChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_openedChanged</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_opened</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&apos;icon&apos;</span>, <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;openIcon&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&apos;icon&apos;</span>, <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;closeIcon&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                
+                <span class="ActionScriptDefault_Text">_openedChanged</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">h</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerLocation</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;top&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span>0,0<span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerLocation</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;bottom&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">move</span><span class="ActionScriptBracket/Brace">(</span>0,<span class="ActionScriptDefault_Text">h</span> <span class="ActionScriptOperator">-</span> <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">())</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">w</span>, <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">())</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_viewMetrics</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span>;
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">viewMetrics</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// The getViewMetrics function needs to return its own object.
+</span>            <span class="ActionScriptComment">// Rather than allocating a new one each time, we&apos;ll allocate
+</span>            <span class="ActionScriptComment">// one once and then hold a pointer to it.
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">_viewMetrics</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">_viewMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">EdgeMetrics</span><span class="ActionScriptBracket/Brace">(</span>0, 0, 0, 0<span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">vm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_viewMetrics</span>;
+    
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">o</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EdgeMetrics</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">viewMetrics</span>;
+            
+            <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">left</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">o</span>.<span class="ActionScriptDefault_Text">left</span>;
+            <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">top</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">o</span>.<span class="ActionScriptDefault_Text">top</span>;
+            <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">right</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">o</span>.<span class="ActionScriptDefault_Text">right</span>;
+            <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">bottom</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">o</span>.<span class="ActionScriptDefault_Text">bottom</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">hHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">hHeight</span><span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerLocation</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;top&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                     <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">top</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">hHeight</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_headerLocation</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;bottom&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                     <span class="ActionScriptDefault_Text">vm</span>.<span class="ActionScriptDefault_Text">bottom</span> <span class="ActionScriptOperator">+=</span> <span class="ActionScriptDefault_Text">hHeight</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+               
+
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">vm</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">measure</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_opened</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">//if this WindowShade is opened then we have to include the height of the header button
+</span>                <span class="ActionScriptComment">//measuredHeight += _headerButton.getExplicitOrMeasuredHeight();
+</span>            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">//if the WindowShade is closed then the height is only the height of the header button
+</span>                <span class="ActionScriptDefault_Text">measuredHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_headerButton</span>.<span class="ActionScriptDefault_Text">getExplicitOrMeasuredHeight</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resize</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Resize</span>;
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resizeInstance</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ResizeInstance</span>;
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resetExplicitHeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+
+
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">transitionCompleted</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">runResizeEffect</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">resize</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">resize</span>.<span class="ActionScriptDefault_Text">isPlaying</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+
+                <span class="ActionScriptComment">// The user has clicked the header button before an open or close transition has run
+</span>                <span class="ActionScriptComment">// to completion. We&apos;ll set the transitionCompleted flag to false to prevent the
+</span>                <span class="ActionScriptComment">// completion event from being dispatched in onEffectEnd.
+</span>                <span class="ActionScriptDefault_Text">transitionCompleted</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+
+                <span class="ActionScriptComment">// before the call to end() returns, the onEffectEnd method will have been called
+</span>                <span class="ActionScriptComment">// for the currently playing resize.
+</span>                <span class="ActionScriptDefault_Text">resize</span>.<span class="ActionScriptDefault_Text">end</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+
+            <span class="ActionScriptDefault_Text">transitionCompleted</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">beginEvent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_opened</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span>.<span class="ActionScriptDefault_Text">OPEN_BEGIN</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span>.<span class="ActionScriptDefault_Text">CLOSE_BEGIN</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">willTrigger</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">beginEvent</span><span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">beginEvent</span>, <span class="ActionScriptReserved">false</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">duration</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_opened</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;openDuration&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;closeDuration&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span> 
+                <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">setActualSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">getExplicitOrMeasuredWidth</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">measuredHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptDefault_Text">invalidateSize</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endEvent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_opened</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span>.<span class="ActionScriptDefault_Text">OPEN_END</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span>.<span class="ActionScriptDefault_Text">CLOSE_END</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">willTrigger</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endEvent</span><span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endEvent</span>, <span class="ActionScriptReserved">false</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">))</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+
+                <span class="ActionScriptReserved">return</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">resize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Resize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptComment">// If this WindowShade currently has no explicit height set, we want to
+</span>            <span class="ActionScriptComment">// restore that state when the resize effect is finished, in the onEffectEnd method.
+</span>            <span class="ActionScriptComment">// If it does, then the final height set by the effect will be retained.
+</span>            <span class="ActionScriptDefault_Text">resetExplicitHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">explicitHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptDefault_Text">resize</span>.<span class="ActionScriptDefault_Text">heightTo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">min</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">maxHeight</span>, <span class="ActionScriptDefault_Text">measuredHeight</span><span class="ActionScriptBracket/Brace">)</span>;
+
+            <span class="ActionScriptDefault_Text">resize</span>.<span class="ActionScriptDefault_Text">duration</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">duration</span>;
+
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">instances</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resize</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">instances</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">instances</span>.<span class="ActionScriptDefault_Text">length</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">resizeInstance</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">instances</span><span class="ActionScriptBracket/Brace">[</span>0<span class="ActionScriptBracket/Brace">]</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onEffectEnd</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">evt</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">EffectEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Make sure this is our effect ending
+</span>            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">evt</span>.<span class="ActionScriptDefault_Text">effectInstance</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">resizeInstance</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">resetExplicitHeight</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">explicitHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">NaN</span>;
+                <span class="ActionScriptDefault_Text">resizeInstance</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">null</span>;
+
+                <span class="ActionScriptComment">// the transitionCompleted flag will be false if the user clicked the headerButton
+</span>                <span class="ActionScriptComment">// twice in succession. We only want to fire events for transitions that run
+</span>                <span class="ActionScriptComment">// all the way to completion.
+</span>                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">transitionCompleted</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endEvent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_opened</span> <span class="ActionScriptOperator">?</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span>.<span class="ActionScriptDefault_Text">OPEN_END</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span>.<span class="ActionScriptDefault_Text">CLOSE_END</span>;
+                    <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">willTrigger</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endEvent</span><span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">WindowShadeEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endEvent</span>, <span class="ActionScriptReserved">false</span>, <span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">))</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">headerButton_clickHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">opened</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">_opened</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

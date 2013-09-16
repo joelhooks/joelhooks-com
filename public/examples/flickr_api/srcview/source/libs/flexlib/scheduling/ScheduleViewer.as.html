@@ -1,0 +1,771 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ScheduleViewer.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+
+Copyright (c) 2006. Adobe Systems Incorporated.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+  * Neither the name of Adobe Systems Incorporated nor the names of its
+    contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+@ignore
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">IScheduleEntry</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">LayoutScrollEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">Schedule</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">ScheduleNavigator</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">layout</span>.<span class="ActionScriptDefault_Text">IEntryLayout</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flexlib</span>.<span class="ActionScriptDefault_Text">scheduling</span>.<span class="ActionScriptDefault_Text">scheduleClasses</span>.<span class="ActionScriptDefault_Text">schedule_internal</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">MouseEvent</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">ArrayCollection</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">ICollectionView</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">IList</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">scrollClasses</span>.<span class="ActionScriptDefault_Text">ScrollBar</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">IFactory</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">ScrollControlBase</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">UIComponent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">CollectionEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">CollectionEventKind</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">ScrollEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">CSSStyleDeclaration</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">styles</span>.<span class="ActionScriptDefault_Text">StyleManager</span>;
+
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;itemScroll&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;flexlib.scheduling.scheduleClasses.LayoutScrollEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;pixelScroll&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;flexlib.scheduling.scheduleClasses.LayoutScrollEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    <span class="ActionScriptComment">//[Event(name=&quot;scroll&quot;, type=&quot;mx.events.ScrollEvent&quot;)]
+</span>    
+    <span class="ActionScriptASDoc">/**
+     *  Length of the transition when moving around the canvas.
+     *
+     *  @default 250
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;moveDuration&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Number&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Time&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptASDoc">/**
+     *  An easing function to control the canvas movment transition. Easing functions can
+     *  be used to control the acceleration and deceleration of the transition.
+     *
+     *  @default undefined
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;moveEasingFunction&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Function&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    
+    <span class="ActionScriptASDoc">/**
+     *  Name of CSS style declaration that specifies styles for the schedule entries
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;entryStyleName&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;String&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>    
+    
+    <span class="ActionScriptASDoc">/**
+     *  The color of the horizontal grid lines.
+     *  @default 0x666666
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;dottedGridLines&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Boolean&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;horizontalGridLineThickness&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Number&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Length&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>    
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;horizontalGridLineColor&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;uint&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Color&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>    
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;horizontalGridLineAlpha&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Number&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;verticalGridLineThickness&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Number&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Length&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>    
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;verticalGridLineColor&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;uint&quot;</span>, <span class="ActionScriptDefault_Text">format</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Color&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>    
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Style</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;verticalGridLineAlpha&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Number&quot;</span>, <span class="ActionScriptDefault_Text">inherit</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;yes&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptASDoc">/**
+     * ScheduleViewer is the main scheduling component. It allows you to render and manipulate 
+     * schedule entries in an efficient and very customizable way. 
+     * &lt;p&gt;
+     * &lt;p&gt;&lt;strong&gt;ScheduleViewerSample1 - Introduction&lt;/strong&gt;&lt;/p&gt;
+     * The ScheduleViewerSample1.mxml in the example section shows how to setup 
+     * a ScheduleViewer with default values and 3 entries. 
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * To render schedule entries the dataProvider property by default accepts a collection of 
+     * flexlib.scheduling.scheduleClasses.IScheduleEntry objects. 
+     * ScheduleViewerSample1 uses flexlib.scheduling.scheduleClasses.SimpleScheduleEntry, 
+     * an implementation of IScheduleEntry.
+     * &lt;p/&gt;
+     * The dataProvider item gets passed into the entryRenderer, which by default 
+     * is flexlib.scheduling.scheduleClasses.renderers.GradientScheduleEntryRenderer.mxml. 
+     * You can customize various styles of the entry renderer via the entryStyleName style of ScheduleViewer. 
+     * In ScheduleViewerSample1, we use the default styles but there is an example CSS inlcuded. 
+     * Try to assign the included myEntryStyle class selector to the entryStyleName style property 
+     * of the ScheduleViewer instance. 
+     * &lt;p/&gt;
+     * In addition, for maximum flexibility, you can provide a fully customized entry renderer 
+     * via the entryRenderer property. The entryRenderer has to implement 
+     * flexlib.scheduling.scheduleClasses.renderers.IScheduleEntryRenderer. 
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * ScheduleViewer layouts the entries according to the rules of a layout manager. You can 
+     * specify the layout manager with the entryLayout property. Furthermore, 
+     * the layout manager can handle any changes that occur to the data provider as any updates, 
+     * additions, deletions etc to the entries. 
+     * &lt;p/&gt;
+     * By default, the flexlib.scheduling.scheduleClasses.layout.BestFitLayout 
+     * is used, which assigns entries to the top most rows without causing any overlaps 
+     * between entries.
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * &lt;p&gt;&lt;strong&gt;ScheduleViewerSample2 - Layout Manager: SimpleLayout&lt;/strong&gt;&lt;/p&gt;
+     * Another supplied layout manager is the    
+     * flexlib.scheduling.scheduleClasses.layout.SimpleLayout which places entries exactly as 
+     * defined in the dataProvider. This means, that when using SimpleLayout, each item 
+     * of the dataProvider is expected to be of type mx.collection.IList since it represents a row. 
+     * Each row IList collection is expected to contain IScheduleEntry objects. 
+     * You can write your own layout manager, check the BestFitLayout and SimpleLayout and their 
+     * base classes and implemented interfaces for how to do that.
+     * &lt;p/&gt;
+     * The ScheduleViewerSample2.mxml shows how to setup 
+     * a ScheduleViewer with the supplied SimpleLayout manager. Notice the different structure of 
+     * the dataProvider, which now exactly determines how entries are being laid out. 
+     * Furthermore, SimpleLayout does not check entries for overlapping. Therefore, 
+     * in the second row of ScheduleViewerSample2 you can see one entry overlapping. 
+     * &lt;/p&gt;
+     * Notice that we use a different entry renderer in ScheduleViewerSample2. 
+     * Instead the default gradient renderer we now use 
+     * flexlib.scheduling.scheduleClasses.renderers.SolidScheduleEntryRenderer
+     * &lt;/p&gt;
+     * &lt;p&gt;&lt;strong&gt;ScheduleViewerSample3 - Adding Navigation and Zooming&lt;/strong&gt;&lt;/p&gt;
+     * The ScheduleViewerSample3 sample shows how to add a navigation and a zooming tool. 
+     * In order to achieve maximum flexibility both features are meant to be 
+     * driven by external components that talk to an API of ScheduleViewer.
+     * &lt;p&gt;&lt;em&gt;Zooming&lt;/em&gt;&lt;/p&gt;
+     * The ScheduleViewer&apos;s zoom property can be manipulated in order to achieve zooming. 
+     * You could use i.e. a mx:HSlider component that manipulates zoom on each change event 
+     * as the ScheduleViewerSample3 example shows. A zoom value of 100 always shows the complete 
+     * dataProvider on the currently visible canvas (no scrollbars have to appear). 
+     * &lt;p&gt;&lt;em&gt;Navigation&lt;/em&gt;&lt;/p&gt;
+     * The ScheduleViewer&apos;s xPosition and yPosition properties can be manipulated in order 
+     * to navigate along ScheduleViewer&apos;s content.  
+     * You could use the scroll events of the Timeline component and the pixelScroll events 
+     * of ScheduleViewer to connect both components and achieve navigation via Timeline. 
+     * &lt;p/&gt;
+     * ScheduleViewer offers APIs to navigate (and animate) to specific entries or times. 
+     * See the gotoNow and gotoSelectedEntry methods of ScheduleViewerSample3. 
+     * &lt;p/&gt;
+     * You can select single or multiple entries via the selectedItem and selectedItems property. 
+     * To switch to the multiple selection mode, set the allowMultipleSelection to true.
+     * &lt;p/&gt;
+     * Furthermore, in this example, the background color of each schedule entry shall be 
+     * data provider driven. To make this possible, we&apos;ve specified another supplied entry renderer; 
+     * flexlib.scheduling.scheduleClasses.renderers.ColoredGradientScheduleEntryRenderer. 
+     * This enry renderer accepts only flexlib.scheduling.scheduleClasses.ColoredScheduleEntry objects. 
+     * We&apos;ve extracted the creation of schedule entries (of type ColoredScheduleEntry) 
+     * into a separate class. Check out flexlib.scheduling.samples.ScheduleData in the example 
+     * section below. 
+     * &lt;p&gt;&lt;strong&gt;ScheduleViewerSample4 - Adding Background areas&lt;/strong&gt;&lt;/p&gt;
+     * You can add customized background areas to ScheduleViewer using the backgroundItems property. 
+     * backgroundItems expects an Array of BackgroundItem objects. You can specify a time range, 
+     * a color and a description. The latter will be used as a tool tip when the user mouses over 
+     * area. 
+     * &lt;p/&gt;
+     * For further customizations of the background area in ScheduleViewer, you could 
+     * create your customized version of the background layout manager via the backgroundLayout property. 
+     * Take a look into the default layout manager 
+     * flexlib.scheduling.scheduleClasses.layout.BackgroundLayout for more information. 
+     * i.e. you could add a colored current time area, which moves by the current time. 
+     * &lt;p/&gt;
+     * You can also customize the background grid via the supplied styles. See style section. 
+     * To customize further, you could define custom layout managers via the 
+     * horizontalLinesLayout and verticalLinesLayout properties. See default implementation is
+     * flexlib.scheduling.scheduleClasses.layout.HorizontalLinesLayout and 
+     * flexlib.scheduling.scheduleClasses.layout.VerticalLinesLayout. i.e. you could 
+     * add thicker horizontal lines, after certain items. 
+     * &lt;p&gt;&lt;strong&gt;ScheduleViewerSample5 - Row based schedulers&lt;/strong&gt;&lt;/p&gt;
+     * ScheduleViewerSample5 shows how you can synchronize a List control 
+     * with ScheduleViewer. The pixelScrollEnabled flag lets ScheduleViewer 
+     * scroll on rows instead of pixels. Animations are still supported for pixels. The itemScroll 
+     * and pixelScroll events allow to connect external components to ScheduleViewer such as the List 
+     * shown in this example.
+     * &lt;p&gt;&lt;strong&gt;ScheduleViewerSample6 - Customization of background lines&lt;/strong&gt;&lt;/p&gt;
+     * ScheduleViewerSample6 shows how you can customize vertical and 
+     * horizontal background lines with the exposed horizontalLinesViewer and 
+     * verticalLinesViewer properties of ScheduleViewer. The custom viewers used in this 
+     * example are 
+     * flexlib.scheduling.samples.AlternatingHorizontalLinesViewer and 
+     * flexlib.scheduling.samples.SolidVerticalLinesViewer
+     * 
+     * @see flexlib.scheduling.scheduleClasses.IScheduleEntry
+     * @see flexlib.scheduling.scheduleClasses.SimpleScheduleEntry
+     * @see flexlib.scheduling.scheduleClasses.ColoredScheduleEntry
+     * @see flexlib.scheduling.scheduleClasses.renderers.GradientScheduleEntryRenderer
+     * @flexlib.scheduling.scheduleClasses.renderers.ColoredGradientScheduleEntryRenderer
+     * @see flexlib.scheduling.scheduleClasses.renderers.SolidScheduleEntryRenderer
+     * @see flexlib.scheduling.scheduleClasses.renderers.IScheduleEntryRenderer
+     * @see flexlib.scheduling.scheduleClasses.layout.BestFitLayout
+     * @see flexlib.scheduling.scheduleClasses.layout.SimpleLayout 
+     * @see flexlib.scheduling.scheduleClasses.layout.BackgroundLayout
+     * @see flexlib.scheduling.scheduleClasses.BackgroundItem
+     * @see flexlib.scheduling.scheduleClasses.layout.HorizontalLinesLayout
+     * @see flexlib.scheduling.scheduleClasses.layout.VerticalLinesLayout  
+     * @see flexlib.scheduling.controls.Timeline
+     * @see flexlib.scheduling.util.DateUtil 
+     * 
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ScheduleViewer</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">ScrollControlBase</span>
+    <span class="ActionScriptBracket/Brace">{</span>       
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">collection</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ICollectionView</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">schedule</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Schedule</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">navigator</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ScheduleNavigator</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">content</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">UIComponent</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_timeRanges</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_minimumTimeRangeWidth</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">classConstructed</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">classConstruct</span><span class="ActionScriptBracket/Brace">()</span>;        
+        <span class="ActionScriptComment">// Define a static method to initialize the style.
+</span>        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">classConstruct</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">getStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;ScheduleViewer&quot;</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptComment">// If ScheduleViewer has no CSS definition,
+</span>                <span class="ActionScriptComment">// create one and set the default value.
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">newStyleDeclaration</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">CSSStyleDeclaration</span> <span class="ActionScriptOperator">=</span>    <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">CSSStyleDeclaration</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;moveDuration&quot;</span>, 1000 <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;dottedGridLines&quot;</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGridLineThickness&quot;</span>, 1 <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGridLineColor&quot;</span>, 0<span class="ActionScriptDefault_Text">x000000</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;horizontalGridLineAlpha&quot;</span>, .5 <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGridLineThickness&quot;</span>, 1 <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGridLineColor&quot;</span>, 0<span class="ActionScriptDefault_Text">x000000</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">newStyleDeclaration</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;verticalGridLineAlpha&quot;</span>, .5 <span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptDefault_Text">StyleManager</span>.<span class="ActionScriptDefault_Text">setStyleDeclaration</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;ScheduleViewer&quot;</span>, <span class="ActionScriptDefault_Text">newStyleDeclaration</span>, <span class="ActionScriptReserved">true</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ScheduleViewer</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Schedule</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">navigator</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ScheduleNavigator</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptReserved">this</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ScheduleNavigator</span>.<span class="ActionScriptDefault_Text">INVALIDATE_DISPLAY_LIST</span>, <span class="ActionScriptDefault_Text">onInvalidateDisplayList</span> <span class="ActionScriptBracket/Brace">)</span>;
+         
+         <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">navigator</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">navigator</span>;
+         <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">initialize</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptDefault_Text">schedule_internal</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">verticalScrollBar</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">ScrollBar</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+           <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">verticalScrollBar</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">createChildren</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">ScrollEvent</span>.<span class="ActionScriptDefault_Text">SCROLL</span>, <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">onScroll</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">LayoutScrollEvent</span>.<span class="ActionScriptDefault_Text">PIXEL_SCROLL</span>, <span class="ActionScriptDefault_Text">scrollHandler</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">content</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">UIComponent</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">content</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">content</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">content</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">mask</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">maskShape</span>;
+            
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">initializeCompileTimeViewLayers</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">backgroundViewer</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">content</span>.<span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryViewer</span> <span class="ActionScriptBracket/Brace">)</span>;
+         
+            <span class="ActionScriptDefault_Text">invalidateProperties</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">commitProperties</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">isViewlayersInitialized</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">isViewlayersInitialized</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">isNaN</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">!=</span> 0 <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">width</span>;
+                <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">initializeRuntimeViewLayers</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span> 
+            <span class="ActionScriptDefault_Text">unscaledWidth</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>, 
+            <span class="ActionScriptDefault_Text">unscaledHeight</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">updateDisplayList</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">unscaledWidth</span> , <span class="ActionScriptDefault_Text">unscaledHeight</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">//other layouters get updated by entryLayoutImpl.
+</span>            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">viewportWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledWidth</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">viewportHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">unscaledHeight</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">update</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">updateItemScroll</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">setScrollBarProperties</span><span class="ActionScriptBracket/Brace">(</span> 
+                <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">contentWidthOffset</span>, <span class="ActionScriptDefault_Text">unscaledWidth</span>, 
+                <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">contentHeight</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">contentHeightOffset</span>, <span class="ActionScriptDefault_Text">unscaledHeight</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">styleChanged</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">styleChanged</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">hasOwnProperty</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">horizontalLinesViewerImpl</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span> <span class="ActionScriptBracket/Brace">)</span>.<span class="ActionScriptDefault_Text">hasOwnProperty</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">verticalLinesViewerImpl</span><span class="ActionScriptBracket/Brace">[</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptBracket/Brace">]</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">styleProp</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">entryStyleName</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">getStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;entryStyleName&quot;</span> <span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entryStyleName</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">setStyle</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptString">&quot;entryStyleName&quot;</span>, <span class="ActionScriptDefault_Text">entryStyleName</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">modelChangedHandler</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">CollectionEvent</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">isViewlayersInitialized</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">entryLayoutImpl</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IEntryLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">IEntryLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">kind</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">CollectionEventKind</span>.<span class="ActionScriptDefault_Text">ADD</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">addItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">kind</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">CollectionEventKind</span>.<span class="ActionScriptDefault_Text">REMOVE</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">removeItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>            
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">kind</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">CollectionEventKind</span>.<span class="ActionScriptDefault_Text">REPLACE</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">replaceItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">kind</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">CollectionEventKind</span>.<span class="ActionScriptDefault_Text">UPDATE</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">updateItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">kind</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">CollectionEventKind</span>.<span class="ActionScriptDefault_Text">REFRESH</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">refreshItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">kind</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">CollectionEventKind</span>.<span class="ActionScriptDefault_Text">RESET</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">resetItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">kind</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">CollectionEventKind</span>.<span class="ActionScriptDefault_Text">MOVE</span> <span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">moveItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span>        
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">mouseWheelHandler</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">MouseEvent</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">verticalScrollBar</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">stopPropagation</span><span class="ActionScriptBracket/Brace">()</span>;
+                <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">mouseWheelHandler</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">protected</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">scrollHandler</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">scrollHandler</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Object</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">collection</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">dataProvider</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">collection</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">collection</span>.<span class="ActionScriptDefault_Text">removeEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">CollectionEvent</span>.<span class="ActionScriptDefault_Text">COLLECTION_CHANGE</span>, <span class="ActionScriptDefault_Text">modelChangedHandler</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">ICollectionView</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">collection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">ICollectionView</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span> <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">collection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ArrayCollection</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+               <span class="ActionScriptComment">// convert it to an array containing this one item
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">tmp</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">[]</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">!=</span> <span class="ActionScriptReserved">null</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptDefault_Text">tmp</span>.<span class="ActionScriptDefault_Text">push</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">collection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ArrayCollection</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">tmp</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+            <span class="ActionScriptDefault_Text">collection</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">CollectionEvent</span>.<span class="ActionScriptDefault_Text">COLLECTION_CHANGE</span>, <span class="ActionScriptDefault_Text">modelChangedHandler</span> <span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">CollectionEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">CollectionEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">CollectionEvent</span>.<span class="ActionScriptDefault_Text">COLLECTION_CHANGE</span> <span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">kind</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">CollectionEventKind</span>.<span class="ActionScriptDefault_Text">RESET</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">initializeEntryLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">modelChangedHandler</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;            
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptBracket/Brace">)</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">startDate</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Date</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">startDate</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">startDate</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">startDate</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;        
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">endDate</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Date</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">endDate</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">endDate</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Date</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">endDate</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">timeRanges</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_timeRanges</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">timeRanges</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_timeRanges</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">timeRanges</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_timeRanges</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">timeRanges</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_timeRanges</span>;
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_minimumTimeRangeWidth</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_minimumTimeRangeWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_minimumTimeRangeWidth</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">verticalLinesLayoutImpl</span>.<span class="ActionScriptDefault_Text">minimumTimeRangeWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_minimumTimeRangeWidth</span>;
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">rowHeight</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">rowHeight</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">rowHeight</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">rowHeight</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayoutImpl</span>.<span class="ActionScriptDefault_Text">createLayout</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">selectedItem</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IScheduleEntry</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">selectedItem</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">selectedItem</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IScheduleEntry</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">selectedItem</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">selectedItems</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">selectedItems</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">selectedItems</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Array</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">selectedItems</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">allowMultipleSelection</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">allowMultipleSelection</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">allowMultipleSelection</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryViewer</span>.<span class="ActionScriptDefault_Text">allowMultipleSelection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">backgroundItems</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">backgroundItems</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">backgroundItems</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IList</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">backgroundLayoutImpl</span>.<span class="ActionScriptDefault_Text">backgroundItems</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptComment">//Core--------------------------
+</span>            
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">entryLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayout</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">entryLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">entryRenderer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryRenderer</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">entryRenderer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">entryRenderer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">backgroundLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">backgroundLayout</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">backgroundLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">backgroundLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">horizontalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">horizontalLinesLayout</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">horizontalLinesLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">horizontalLinesLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">horizontalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">horizontalLinesViewer</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">horizontalLinesViewer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">horizontalLinesViewer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">verticalLinesLayout</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">verticalLinesLayout</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">verticalLinesLayout</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">verticalLinesLayout</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">verticalLinesViewer</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">verticalLinesViewer</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+       
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">verticalLinesViewer</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IFactory</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">schedule</span>.<span class="ActionScriptDefault_Text">verticalLinesViewer</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptComment">//Navigation--------------------------
+</span>        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">zoom</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">zoom</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">zoom</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">zoom</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">contentWidth</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">contentWidth</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">contentWidth</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">contentWidth</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">xPosition</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">xPosition</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">xPosition</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">xPosition</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">yPosition</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">yPosition</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">yPosition</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">yPosition</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">xPositionWithOffset</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">xPositionWithOffset</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">xPositionWithOffset</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">xPositionWithOffset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">yPositionWithOffset</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">yPositionWithOffset</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                            
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">yPositionWithOffset</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">yPositionWithOffset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">xOffset</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">xOffset</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">xOffset</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">xOffset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">yOffset</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">yOffset</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">yOffset</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">yOffset</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>    
+        
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">pixelScrollEnabled</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">pixelScrollEnabled</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">pixelScrollEnabled</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">value</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">pixelScrollEnabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">gotoTime</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">milliseconds</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">gotoTime</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">milliseconds</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">moveToTime</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">milliseconds</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">moveToTime</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">milliseconds</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">gotoEntry</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entry</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IScheduleEntry</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">gotoEntry</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entry</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">moveToEntry</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entry</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IScheduleEntry</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">navigator</span>.<span class="ActionScriptDefault_Text">moveToEntry</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">entry</span> <span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+                
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onInvalidateDisplayList</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">event</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Event</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+           <span class="ActionScriptDefault_Text">invalidateDisplayList</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

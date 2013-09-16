@@ -1,0 +1,132 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>AlertWindowHelper.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ Copyright (c) 2006 Eric J. Feminella  &lt;eric@ericfeminella.com&gt;
+ All rights reserved.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the &quot;Software&quot;), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is furnished
+ to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ @internal
+ */</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">ericfeminella</span>.<span class="ActionScriptDefault_Text">display</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">Application</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Alert</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">CloseEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptDefault_Text">Sprite</span>;
+
+    <span class="ActionScriptASDoc">/**
+     *
+     * Alert Helper class which handles displaying a Alert window
+     * which contains a custom title, message and handlers for OK,
+     * Cancel, Yes and No
+     *
+     * @example
+     *
+     * &lt;listing verison=&quot;3.0&quot;&gt;
+     *
+     * import com.ericfeminella.display.AlertWindowHelper;
+     *
+     * AlertWindowHelper.show( &quot;test&quot;, &quot;this is a test&quot;, 1, confirm, cancel )
+     *
+     * private function confirm() : void
+     * {
+     *       trace(&quot;confirm&quot;);
+     * }
+     *
+     * private function cancel() : void
+     * {
+     *     trace(evt.detail);
+     * }
+     *
+     * &lt;/listing&gt;
+     *
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">final</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">AlertWindowHelper</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">DISPLAY_YES_NO</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>     <span class="ActionScriptOperator">=</span> 1;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">DISPLAY_OK_CANCEL</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>  <span class="ActionScriptOperator">=</span> 2;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">confirm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cancel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>;
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * Displays an Alert window which contains a custom title, message and
+         * eventHandlers for OK, Cancel, Yes and No click events
+         *
+         * @param The title to display in the Alert window
+         * @param The message to display in the Alert window
+         * @param buttons which to display; DISPLAY_YES_NO or DISPLAY_OK_CANCEL
+         * @param handles click events for both OK and Yes buttons
+         * @param handles click events for both Cancel and No buttons
+         *
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">show</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">title</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>, <span class="ActionScriptDefault_Text">displayType</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">confirm</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span>, <span class="ActionScriptDefault_Text">cancel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">AlertWindowHelper</span>.<span class="ActionScriptDefault_Text">confirm</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">confirm</span>;
+            <span class="ActionScriptDefault_Text">AlertWindowHelper</span>.<span class="ActionScriptDefault_Text">cancel</span>  <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">cancel</span>;
+
+            <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">displayType</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">DISPLAY_YES_NO</span> <span class="ActionScriptOperator">:</span>
+                   <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">show</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span>, <span class="ActionScriptDefault_Text">title</span>, <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">YES</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">NO</span>, <span class="ActionScriptDefault_Text">Application</span>.<span class="ActionScriptDefault_Text">application</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Sprite</span>, <span class="ActionScriptDefault_Text">closeHandler</span> <span class="ActionScriptBracket/Brace">)</span>;
+                   <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">DISPLAY_OK_CANCEL</span> <span class="ActionScriptOperator">:</span>
+                   <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">show</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span>, <span class="ActionScriptDefault_Text">title</span>, <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">OK</span> <span class="ActionScriptOperator">|</span> <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">CANCEL</span>, <span class="ActionScriptDefault_Text">Application</span>.<span class="ActionScriptDefault_Text">application</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Sprite</span>, <span class="ActionScriptDefault_Text">closeHandler</span> <span class="ActionScriptBracket/Brace">)</span>;
+                   <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">default</span> <span class="ActionScriptOperator">:</span>
+                   <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">show</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span>, <span class="ActionScriptDefault_Text">title</span>, 0, <span class="ActionScriptDefault_Text">Application</span>.<span class="ActionScriptDefault_Text">application</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">Sprite</span>, <span class="ActionScriptDefault_Text">closeHandler</span> <span class="ActionScriptBracket/Brace">)</span>;
+                   <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+        <span class="ActionScriptASDoc">/**
+         *
+         * @private
+         *
+         * Handles the &lt;code&gt;CloseEvent&lt;/code&gt; for all &lt;code&gt;AlertWindowHelper&lt;/code&gt;
+         *
+         * @param &lt;code&gt;CloseEvent&lt;/code&gt; which is handled by the specified handler
+         *
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">closeHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">evt</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">CloseEvent</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">switch</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">evt</span>.<span class="ActionScriptDefault_Text">detail</span> <span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">YES</span> <span class="ActionScriptOperator">:</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">OK</span>  <span class="ActionScriptOperator">:</span>
+                   <span class="ActionScriptDefault_Text">confirm</span><span class="ActionScriptBracket/Brace">()</span>;
+                   <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">NO</span> <span class="ActionScriptOperator">:</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">Alert</span>.<span class="ActionScriptDefault_Text">CANCEL</span> <span class="ActionScriptOperator">:</span>
+                   <span class="ActionScriptDefault_Text">cancel</span><span class="ActionScriptBracket/Brace">()</span>;
+                   <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

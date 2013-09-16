@@ -1,0 +1,74 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>IPipeFitting.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ PureMVC AS3/MultiCore Utility – Pipes
+ Copyright (c) 2008 Cliff Hall&lt;cliff.hall@puremvc.org&gt;
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">org</span>.<span class="ActionScriptDefault_Text">puremvc</span>.<span class="ActionScriptDefault_Text">as3</span>.<span class="ActionScriptDefault_Text">multicore</span>.<span class="ActionScriptDefault_Text">utilities</span>.<span class="ActionScriptDefault_Text">pipes</span>.<span class="ActionScriptDefault_Text">interfaces</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptASDoc">/** 
+     * Pipe Fitting Interface.
+     * &lt;P&gt;
+     * An &lt;code&gt;IPipeFitting&lt;/code&gt; can be connected to other 
+     * &lt;code&gt;IPipeFitting&lt;/code&gt;s, forming a Pipeline. 
+     * &lt;code&gt;IPipeMessage&lt;/code&gt;s are written to one end of a 
+     * Pipeline by some client code. The messages are then 
+     * transfered in synchronous fashion from one fitting to 
+     * the next.&lt;/P&gt;
+     */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptinterface">interface</span> <span class="ActionScriptDefault_Text">IPipeFitting</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Connect another Pipe Fitting to the output.
+         * &lt;P&gt;
+         * Fittings connect and write to 
+         * other fittings in a one way syncrhonous
+         * chain, as water typically flows one direction 
+         * through a physical pipe.&lt;/P&gt;
+         * 
+         * @return Boolean true if no other fitting was already connected.
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">connect</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">output</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeFitting</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">Boolean</span>;
+
+        <span class="ActionScriptASDoc">/**
+         * Disconnect the Pipe Fitting connected to the output.
+         * &lt;P&gt;
+         * This disconnects the output fitting, returning a 
+         * reference to it. If you were splicing another fitting
+         * into a pipeline, you need to keep (at least briefly) 
+         * a reference to both sides of the pipeline in order to 
+         * connect them to the input and output of whatever 
+         * fiting that you&apos;re splicing in.&lt;/P&gt;
+         * 
+         * @return IPipeFitting the now disconnected output fitting
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">disconnect</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">:</span> <span class="ActionScriptDefault_Text">IPipeFitting</span>;
+
+        <span class="ActionScriptASDoc">/**
+         * Write the message to the output Pipe Fitting.
+         * &lt;P&gt;
+         * There may be subsequent filters and tees
+          * (which also implement this interface), that the 
+          * fitting is writing to, and so a message
+          * may branch and arrive in different forms at
+          * different endpoints. &lt;/P&gt;
+          * &lt;P&gt;
+          * If any fitting in the chain returns false 
+          * from this method, then the client who originally 
+          * wrote into the pipe can take action, such as 
+          * rolling back changes.&lt;/P&gt;
+          */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">write</span><span class="ActionScriptBracket/Brace">(</span> <span class="ActionScriptDefault_Text">message</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IPipeMessage</span> <span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+
+                
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>
