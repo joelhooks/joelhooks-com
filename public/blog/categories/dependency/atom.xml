@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: dependency | Joel Hooks]]></title>
+  <link href="http://joelhooks.com/blog/categories/dependency/atom.xml" rel="self"/>
+  <link href="http://joelhooks.com/"/>
+  <updated>2013-09-16T09:23:13-05:00</updated>
+  <id>http://joelhooks.com/</id>
+  <author>
+    <name><![CDATA[Joel Hooks]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[AngularJS, Dependency Injection, and when is a singleton not a Singleton?]]></title>
+    <link href="http://joelhooks.com/blog/2013/05/01/when-is-a-singleton-not-a-singleton/"/>
+    <updated>2013-05-01T17:31:00-05:00</updated>
+    <id>http://joelhooks.com/blog/2013/05/01/when-is-a-singleton-not-a-singleton</id>
+    <content type="html"><![CDATA[<p>The Singleton is the Highlander of design patterns. <strong>There can be only one</strong>.</p>
+
+<p>An example of a Singleton implementation might look something like this:</p>
+
+<p>``` javascript
+(function(global) {
+  &ldquo;use strict&rdquo;;
+  var MySingletonClass = function() {</p>
+
+<pre><code>if ( MySingletonClass.prototype._singletonInstance ) {
+  return MySingletonClass.prototype._singletonInstance;
+}
+MySingletonClass.prototype._singletonInstance = this;
+
+this.Foo = function() {
+  // ...
+};
+</code></pre>
+
+<p>  };</p>
+
+<p>var a = new MySingletonClass();
+var b = new MySingletonClass();
+global.result = a === b;</p>
+
+<p>}(window));
+```
+<a href="http://stackoverflow.com/a/6733919/87002">from Tom Roggero</a></p>
+
+<p>The above JavaScript is from an <a href="http://stackoverflow.com/questions/1635800/javascript-best-singleton-pattern">answer</a>
+from StackOverflow that seemed resonable. I&rsquo;ve never actually needed an enforced Singleton in JavaScript.
+I suspect I never will, but&hellip; know thy enemy!</p>
+
+<p>Singletons have some use cases, but it is generally considered poor form to use
+them. They are especially bothersome when you start trying to unit test your
+code. They effectively create global state, and shared state is a real pain to
+manage when you are writing unit tests.</p>
+
+<p>It <strong>is</strong> extremely handy to only have one instance of a thing within a certain
+context, so how do we gain the benefit of a Singleton, without the pain?</p>
+
+<h2>Dependency Injection (DI)</h2>
+
+<p><a href="http://en.wikipedia.org/wiki/Dependency_injection">Dependency injection</a> is a lovely thing. It can be accomplished in several ways, from simply
+passing arguments into a constructor, to full blown DI containers like
+<a href="https://code.google.com/p/google-guice/">Guice</a>,
+<a href="https://github.com/tschneidereit/SwiftSuspenders">SwiftSuspenders</a>, and
+<a href="http://angularjs.org/">AngularJS</a>. I&rsquo;m not going to go to deep in this post, but <a href="http://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/">here is one from
+the archives</a> that is still relevant (if you don&rsquo;t mind a little AS3). <a href="http://misko.hevery.com/2008/11/11/clean-code-talks-dependency-injection/">Here are a couple</a> of awesome talks from Miško Hevery that I highly recommend.</p>
+
+<p>Most containers have a mechanism for
+providing <em>context-based singletons</em>.</p>
+
+<h2>Context-Based singletons.</h2>
+
+<p>With a DI container, we have contexts. In the case of AngularJS, we have
+the application module, which provides the overall container for a given
+application. Within this container we define dependencies that can be
+liberally injected into other actors within the module, such as directives,
+controllers, and/or utility classes. The module and its sub-modules <strong>are</strong> the context.</p>
+
+<p>``` javascript
+angular.module(&ldquo;someModule&rdquo;, []).</p>
+
+<pre><code>service("mySingletonThing", MySingletonThing);
+</code></pre>
+
+<p>```</p>
+
+<p>Here&rsquo;s a very typical line of config code in an AngularJS application. This configures
+a service for <code>someModule</code> called <code>mySingletonThing</code>. <code>mySingletonThing</code> is a
+singleton, but it is not a Singleton. <code>MySingletonThing</code> does not enforce its
+singleton nature. We can create as many instances as we desire. We won&rsquo;t, but it
+is nice to have freedom. ;)</p>
+
+<p>Instead we rely on AngularJS&rsquo;s ability to inject dependencies.</p>
+
+<p>``` javascript
+angular.module(&ldquo;someModule&rdquo;).</p>
+
+<pre><code>controller("MyController", ["mySingletonThing", function(mySingletonThing) {
+    //do stuff
+};
+</code></pre>
+
+<p>angular.module(&ldquo;someModule&rdquo;).</p>
+
+<pre><code>controller("MyOtherController", ["mySingletonThing", function(mySingletonThing) {
+    var hahaTakeThat = new MySingletonThing();
+    console.log(hahaTakeThat === mySingletonThing); //false
+};
+</code></pre>
+
+<p>```</p>
+
+<p>When we talk about a context-based singleton, these defined dependencies
+are what we mean. Within a given context the <em>DI container</em> will only allow a single
+instance of the object to be injected. The object itself does not protect
+against or prevent multiple instances. You can <code>new</code>, <code>new</code>, <code>new</code> it all day long,
+and there will be no complaints. With objects managed by a DI container you
+should <em>never</em> need to use <code>new</code> for objects that are injectable.</p>
+
+<p>This provides you with all the benefits of a Singleton, with none of the
+sadness. Now when you write your units tests, you can use as many individual instances as
+you might need, without managing global state. <strong>Joy</strong>.</p>
+
+<p>With Angular&rsquo;s DI implementation, we are a bit limited. Within a given module, we only
+have access to a single context. This limits some flexibility that would
+be gained by allowing nested contexts. Consider for example a user with
+multiple accounts. What I&rsquo;d really like is for each account to represent a
+context that could have its <strong>own</strong> singleton objects. It would be <strong>very</strong>
+handy to dynamically add/remove account sub-modules from the user. The singleton
+injectables defined in the user module would cascade to sub-modules, but a
+sub-module could also define its own singleton mappings, perhaps even overriding
+the parent module&rsquo;s. I don&rsquo;t know if this is on the roadmap, but it would be awesome to
+have a more robust injector.</p>
+
+<h2>Conclusion</h2>
+
+<p>A Singleton is a singleton, but a singleton is not <strong>always</strong> a Singleton in the
+<em>formal</em> sense. The enforced Singleton is generally regarded as &ldquo;<strong>to be avoided</strong>&rdquo;, but context-based
+singletons are an extremely useful tool that play nice and
+don&rsquo;t represent hairy global state. YMMV</p>
+]]></content>
+  </entry>
+  
+</feed>

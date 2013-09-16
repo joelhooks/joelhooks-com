@@ -1,0 +1,317 @@
+
+<!DOCTYPE HTML>
+<html itemscope itemtype="http://schema.org/Article">
+<head>
+	<meta charset="utf-8">
+	<title>Learn AngularJS this Weekend - @jhooks</title>
+	<meta name="author" content="Joel Hooks">
+
+	
+	<meta name="description" content="AngularJS has a reputation for a steep learning curve. It&rsquo;s definitely complex, but follows the 80/20 rule. 20% of the features are what you &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Joel Hooks" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+
+
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+
+	<script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<meta property="og:description" content="the one where Joel discusses his trials and tribulations as a developer of fine software." />
+<meta property="og:image" content="/images/study.jpg " />
+<meta property="og:title" value="Learn AngularJS this Weekend - Joel Hooks" />
+<meta property="og:url" value="http://joelhooks.com/blog/2013/08/03/learn-angularjs-in-a-weekend/" />                    
+<meta property="og:type" content="website" />                                    
+ 
+
+<script type="text/javascript" src="//use.typekit.net/wbq6rdy.js"></script>
+<script type="text/javascript">try {
+    Typekit.load();
+} catch (e) {
+}</script>
+
+<!-- Start Visual Website Optimizer Asynchronous Code -->
+<script type='text/javascript'>
+var _vwo_code=(function(){
+var account_id=48528,
+settings_tolerance=2000,
+library_tolerance=2500,
+use_existing_jquery=false,
+// DO NOT EDIT BELOW THIS LINE
+f=false,d=document;return{use_existing_jquery:function(){return use_existing_jquery;},library_tolerance:function(){return library_tolerance;},finish:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);}},finished:function(){return f;},load:function(a){var b=d.createElement('script');b.src=a;b.type='text/javascript';b.innerText;b.onerror=function(){_vwo_code.finish();};d.getElementsByTagName('head')[0].appendChild(b);},init:function(){settings_timer=setTimeout('_vwo_code.finish()',settings_tolerance);this.load('//dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&r='+Math.random());var a=d.createElement('style'),b='body{opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;}',h=d.getElementsByTagName('head')[0];a.setAttribute('id','_vis_opt_path_hides');a.setAttribute('type','text/css');if(a.styleSheet)a.styleSheet.cssText=b;else a.appendChild(d.createTextNode(b));h.appendChild(a);return settings_timer;}};}());_vwo_settings_timer=_vwo_code.init();
+</script>
+<!-- End Visual Website Optimizer Asynchronous Code -->
+
+<script type="text/javascript">
+    if(typeof(_vis_opt_top_initialize) == "function") {
+    // Code for Custom Goal: Goal #4
+     _vis_opt_goal_conversion(200);
+    // uncomment the following line to introduce a half second pause to ensure goal always registers with the server
+    _vis_opt_pause(500);
+    }
+</script>
+
+
+
+
+</head>
+
+
+<body>
+	<div class="topbar">
+		<div class="inner">
+			<div class="form">				
+				<form name="header_signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+					<div class="text"><strong>Weekly AngularJS Content Sent Right to Your Inbox:</strong></div>
+					<div class="button-container">
+			        <input class="input" type="email" name="EMAIL" placeholder="hey@you.com"> 
+			        
+			        <a class="button"  onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } document.header_signup.submit();" href="#">Keep me Updated!</a>
+			        </div>
+			        <div class="text">(1~2 emails a week. No spam.)</div>
+		      	</form>	    
+			</div>
+
+		</div>
+
+	</div>
+	<header id="header" class="inner">
+<a href="/"><div class="myface">
+
+</div></a>
+
+
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/jhooks" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/joelhooks" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+
+</nav>
+
+</header>
+	<div id="content" class="inner"><article class="post">
+
+	<h1 itemprop="name" class="title article-title">Learn AngularJS this Weekend</h1>
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-03T23:36:00-05:00" pubdate data-updated="true">August 2013</time></div>
+
+	<div class="entry-content">
+		
+			<div class="article-image">
+			<img itemprop="image" src="/images/study.jpg" alt="Get ready to learn AngularJS - Photo Credit: Nomadic Lass">
+			</div>
+		
+		<p>AngularJS has a reputation for a steep learning curve. It&rsquo;s definitely complex, but follows the 80/20 rule. <strong>20% of the features are what you will use 80% of the time</strong>. If you are new to AngularJS and have a weekend to study, there are some very high quality resources that will let you <strong>start Monday with a strong working knowledge of AngularJS</strong>.</p>
+
+<p>Already know AngularJS? Feel free to skip ahead. These resources are excellent, and you&rsquo;re bound to learn something.</p>
+
+<h2>The Official Tutorial ~4hrs</h2>
+
+<p>Start with <a href="http://docs.angularjs.org/tutorial">the official tutorial</a>. It provides a very straight forward overview of AngularJS and walks step by step through building a simple app. When you&rsquo;re done, you should have <strong>a solid understanding of the basics</strong> and the vocabulary you will need to move on to the next step.</p>
+
+<p>The official tutorial is <em>very</em> well put together. Unfortunately it utilizes the angular-seed project as a template. The angular-seed project is fine for quickly throwing together a working AngularJS app, but it doesn&rsquo;t provide a structure that scales well in a production application.</p>
+
+<p><strong>Don&rsquo;t use the angular-seed to start your real projects!</strong> It&rsquo;s a learning tool only.</p>
+
+<h2>Kickass (<strong>free!</strong>) Video Tutorials on Egghead.io ~3hrs</h2>
+
+<div style="float: left; padding:10px;"><a class="nofancybox" href="http://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(/images/egghead_logo.png);"></div></a></div>
+
+
+<p>You&rsquo;ve done the tutorial, and should have a good grasp of the basics. Your next stop is John Lindquist&rsquo;s <a href="http://www.egghead.io/">egghead.io for free AngularJS videos</a>. This series of bite-sized videos will deliver a ton of great information. John has gone through almost all of the &ldquo;hard&rdquo; concepts, and presented them in an easy to understand way.</p>
+
+<p><em>All</em> of the videos are great, but the <strong>series on directives is extra fantastic</strong>. Transclusion? No problem. Even after using AngularJS for over a year, I was able to solidify some of the concepts that were confusing for me.</p>
+
+<p>Watch them all and <strong>take some notes</strong>. When you come out of the other side your AngularJS-fu will be starting to take shape.</p>
+
+<p><img src="/images/lemonade.jpg" alt="ahhhhhhh Learning AngularJS is refreshing - Photo Credit: chotda" /></p>
+
+<p>That will take you through Saturday evening, and you deserve a rest. <strong>Send John a donation for his hard work</strong>, pour a tall glass of lemonade, and relax as you reflect on the your new-found knowledge of an awesome framework. Nice work!</p>
+
+<h2>Things get real with angular-app ~4hrs</h2>
+
+<p>Sunday morning.</p>
+
+<p>At this point you should understand the core AngularJS concepts and terminology. Time to brew a fresh pot and get to work.</p>
+
+<p><img src="/images/french_press.jpg" alt="AngularJS Fuel - Photo Credit: Bjørn Giesenbauer" /></p>
+
+<p>If you are anything like me, by now you&rsquo;re ready to dig into a <strong>proper example application</strong>. Luckily we have the excellent <a href="https://github.com/angular-app/angular-app">angular-app</a> project to explore. This non-trivial example focuses on best practices for:</p>
+
+<ul>
+<li>Folder structure (important!)</li>
+<li>Modules (very important!)</li>
+<li><strong>Testing</strong> (super important!)</li>
+<li>RESTful services</li>
+<li>Navigation</li>
+<li>Security</li>
+</ul>
+
+
+<p>angular-app combines a solid AngularJS UI with a node.js backend. It is non-trivial, and studying this app will give you a realistic sense of a proper AngularJS app.</p>
+
+<p>One killer aspect of this example is the build system. It <strong>demonstrates a fantastic Grunt.js build with an integrated Karma Test Runner</strong>.</p>
+
+<p>Peter Bacon Darwin and Pewel Kozlowski have done a great job. Front to back, this project is worth your study time. You could spend several days investigating the nooks and crannies of this example, but we&rsquo;ve only got the weekend. Set angular-app to the side for now, but keep it handy. It will serve as valuable reference in the future.</p>
+
+<h2>Start building your own app with ng-boilerplate ~4hrs</h2>
+
+<p>At this point you should have a solid knowledge to start building something. The <a href="https://github.com/joshdmiller/ng-boilerplate">ng-boilerplate</a> project will get you started. <strong>This is the seed you should use</strong>. It takes the lessons you learned studying angular-app, and provides the foundation upon which to build something substantial.</p>
+
+<p><img src="/images/engine.jpg" alt="a strong engine for your AngularJS app" /></p>
+
+<p>ng-boilerplate, unlike the angular-seed project, is <strong>suitable as a starting point for building a production app</strong>. It&rsquo;s a solid shortcut, and worth study.</p>
+
+<p>Spend some time getting to know ng-boilerplate through its excellent README. The READMEs don&rsquo;t stop at the root of the project. Josh has sprinkled them throughout the project to help you understand what is going on.</p>
+
+<p>Once you have your head around ng-boilerplate, you can delete all of the placeholder views, and <strong>start trying things out for yourself</strong>.</p>
+
+<p>Need some ideas?</p>
+
+<ul>
+<li>PRISM:Refract &ndash; NSA Dashboard</li>
+<li>FlySwatter &ndash; A simple bug tracker</li>
+<li>GeekTalk &ndash; Multiroom Chat</li>
+<li>OctoStats &ndash; Ranked Github Users with Clever D3 Visuals</li>
+<li>1000words &ndash; Writing app that sets target of 1000 words per day and graphs your success</li>
+<li>GetItDone &ndash; Yup, a todo list.</li>
+<li>&hellip;?</li>
+</ul>
+
+
+<p>The sky is the limit. Using the reference material you&rsquo;ve studied all weekend, combined with the official AngularJS docs, you should be well on the way to AngularJS mastery. You&rsquo;ll be over the hump, having defeated that infamous curve. Build something cool and tell me about it.</p>
+
+<p>If you&rsquo;ve hit any road blocks, <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to=joelhooks@gmail.com&amp;su=Hello,%can%I%20get%20some%20help?">send me an email</a> and I&rsquo;ll help you out.</p>
+
+<h2>Congrats! You&rsquo;ve leveled up.</h2>
+
+<p>The fun isn&rsquo;t over. There is <strong>plenty left to learn</strong>. The weekend <em>is</em> over though, and you&rsquo;ve worked hard. Take a break and relax.</p>
+
+<p>You&rsquo;ve earned it.</p>
+
+<p><img src="/images/yellow_belt.jpg" alt="You've Leveled up your AngularJS! - Photo Credit: Cayusa" /></p>
+
+<p>P.S. Initial project setup is one of the most critical factors to a project&rsquo;s success. Using templates is a great way to get a head start, but using a template without solid understanding of all the moving parts can be dangerous. I&rsquo;m working on <strong>step-by-step guide to building your own best practices AngularJS project template</strong>. If you want to get notified of its progress, as well as launch-day discounts, sign up to my newsletter below.</p>
+
+<p>You might also enjoy: <a href="http://joelhooks.com/blog/2013/05/22/lessons-learned-kicking-off-an-angularjs-project/"><strong>Lessons Learned: A Year with a Large AngularJS Project</strong></a></p>
+
+	</div>
+
+	<div class="contact">Want to chat about this post? I'd love to hear from you. <br>You can find me on twitter <a href="http://twitter.com/jhooks">@jhooks</a> or via email <a href="mailto:joelhooks@gmail.com?Subject=Hello%20,%20email%20from%20joelhooks.com">joelhooks@gmail.com</a></div>
+
+	
+	<div class="cta">
+		<div class="signup">
+		    <p class="message">
+		      <a id="signup-for-updates"></a>
+              Get weekly AngularJS content and curated links. Keep up to date with the latest, <strong>sign up below</strong>:
+		    </p>
+
+		    <div>
+		      <form name="signup" action="http://joelhooks.us6.list-manage.com/subscribe/post?u=cab7a76220&amp;id=e3b711e732" method="post">
+		        <input class="input" type="email" name="EMAIL" placeholder="Email Address"> 
+		        <div class="button_container"><a class="button" onclick="if(typeof(_vis_opt_top_initialize) =='function'){ _vis_opt_goal_conversion(200); _vis_opt_pause(500); } setTimeout(function(){document.signup.submit();},500);" href="#">Send Me Updates!</a></div>
+		        <div class="arrow"></div>
+		      </form>
+		    </div>
+		    <p class="small">I will <strong>never</strong> spam you. Unsubscribe at anytime.</p>
+
+	    </div>
+    </div>
+    
+
+
+</article>
+
+</div>
+	<footer id="footer" class="inner"><p>
+you can learn more about me <a href="/about"> here.</a>
+</p>
+<p>
+  ~ Copyright &copy; 2013 - Joel Hooks -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> ~
+</p>
+
+
+</footer>
+	<script type="text/javascript" src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-246705-7']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+
+		})();
+		setTimeout(function() {
+		   window.onscroll = function() {
+		     window.onscroll = null; // Only track the event once
+		     _gaq.push(['_trackEvent', 'scroll', 'read']);
+		   }
+		 }, 5000);
+	</script>
+
+
+
+    <script type="text/javascript" src="https://gumroad.com/js/gumroad.js"></script>
+
+    <script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '51ddb932613f5d3030000126');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+</script>
+</body>
+</html>

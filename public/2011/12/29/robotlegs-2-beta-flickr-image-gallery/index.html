@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Robotlegs 2 (beta): Flickr Image Galleryjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+
+<link rel='shortlink' href='http://joelhooks.com/?p=618' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,698] -->
+<link rel="canonical" href="http://joelhooks.com/2011/12/29/robotlegs-2-beta-flickr-image-gallery/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-618 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-618" class="post-618 post type-post status-publish format-standard hentry category-uncategorized">
+					<h1>Robotlegs 2 (beta): Flickr Image Gallery</h1>
+		
+					<div class="entry-content">
+						<p>Robotlegs 2 is easy to jump in to. From a basic standpoint, the MVCS concepts of <em>how</em> to build your applications remain the same. There are some significant differences in the semantic changes with Robotlegs 2 (beta), and that is what I am going to cover here. This post will go over the changes required to port the <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robotlegs/robotlegs-demos-Bundle/tree/master/FlickrImageGallery');"  href="https://github.com/robotlegs/robotlegs-demos-Bundle/tree/master/FlickrImageGallery">Robotlegs 1 Flickr Image Gallery demo</a>. I&#8217;m not going to cover the basics of Robotlegs MVCS, so if you are looking for that, I&#8217;d recommend checking out <a onclick="javascript:pageTracker._trackPageview('/outgoing/shop.oreilly.com/product/0636920021216.do');"  href="http://shop.oreilly.com/product/0636920021216.do">the book</a>! Also keep in mind that this is covering the beta release and some of the API is likely to change for the full release, but that shouldn&#8217;t be radical either.</p>
+<p>The full source for this example can be found <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-FlickrGallery');"  href="https://github.com/joelhooks/robotlegs-examples-FlickrGallery">on Github</a>.</p>
+<h3>Building Your Context</h3>
+<p><script src="https://gist.github.com/1537177.js?file=RobotlegsFlickrGallery.mxml"></script></p>
+<p>Robotlegs 2 introduces the ContextBuilder. Instead of extending the concrete Context class, you utilize the builder that will configure your application&#8217;s bundle(s).</p>
+<p><script src="https://gist.github.com/1537177.js?file=GalleryAppBundle.as"></script></p>
+<p>Within the bundle (which is an implementation of the IContextBuilderBundle interface) you make use of the install method, which will add any additional bundles and supply any configs that go along with your bundle. Let&#8217;s take a look at the ClassicRobotlegsBundle.</p>
+<p><script src="https://gist.github.com/1537177.js?file=ClassicRobotlegsBundle.as"></script></p>
+<p>In essence, we are extending this bundle. It provides the tools we are used to seeing in Robotlegs 1 and allows us to make a composite bundle on top of it with out own configuration as you can see in GalleryAppConfig.</p>
+<p><script src="https://gist.github.com/1537177.js?file=GalleryAppConfig.as"></script></p>
+<p>The config files are fairly similar to what you might be used to seeing within the startup() method of a Robotlegs 1 Context. There is a significant advantage to this approach that you will quickly recognize if you&#8217;ve ever had to create a <strong>ModularSignalCommandCrazyAssCompositeContext</strong> in your application before. With the Builder->Bundle->Config approach you are able to <em>compose</em> your applications with specific tools and extensions.</p>
+<h3>Changes to Mediators</h3>
+<p>Mediators, for the most part, function as expected. With the supplied MediatorMapExtension, you will no longer find the onRegister() method. Instead you will overrided the initialize() method of the Mediator class.</p>
+<p><script src="https://gist.github.com/1537177.js?file=GalleryLabelMediator.as"></script></p>
+<h3>Mourning the Death of Actor</h3>
+<p>Actor was always an odd concrete class to include in the Framework by default. It is gone in Robotlegs 2. For this port, I create a BaseActor class of my own to supply the functionality that I needed for my services and models.</p>
+<p><script src="https://gist.github.com/1537177.js?file=BaseActor.as"></script></p>
+<h3>So there you have it&#8230;</h3>
+<p>Check out <a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-FlickrGallery');"  href="https://github.com/joelhooks/robotlegs-examples-FlickrGallery">the source</a> if you&#8217;d like to dig in a little deeper. It shouldn&#8217;t be a radical departure from what you&#8217;ve come to like with Robotlegs. I&#8217;m really stoked about the framework architecture that allows for complete pluggable composition of features. This is huge, and should really open up some opportunities for creating a robust ala carte framework that suits you and your team&#8217;s specific needs.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2011/12/29/robotlegs-2-beta-flickr-image-gallery/">Robotlegs 2 (beta): Flickr Image Gallery</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-876">
+        <div id="dsq-comment-header-876" class="dsq-comment-header">
+            <cite id="dsq-cite-876">
+                <span id="dsq-author-user-876">Anonymous</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-876" class="dsq-comment-body">
+            <div id="dsq-comment-message-876" class="dsq-comment-message"><p>Couldn&#8217;t be more excited to tear into this Joel. Love what you&#8217;ve done with the place.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-877">
+        <div id="dsq-comment-header-877" class="dsq-comment-header">
+            <cite id="dsq-cite-877">
+                <span id="dsq-author-user-877">Adnan Doric</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-877" class="dsq-comment-body">
+            <div id="dsq-comment-message-877" class="dsq-comment-message"><p>Thank you for this, I&#8217;m actually testing RL2 and so far it is even better then the RL1 which was already best MVCS framework <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+<p>1) In your example you have the &#8220;UpdateGalleryCommand&#8221; which is only updating the model. Is there a reason you don&#8217;t modify the model directly from the &#8220;FlickrImageService&#8221; prior to dispatching the &#8220;GalleryEvent.GALLERY_LOADED&#8221; ?</p>
+<p>2) Do you recommend using AS3Signals for the communication and if yes, is the recommended way of implementing it creating an extension &#8220;SignalCommandMapExtension&#8221; in order to be able to map commands to signals ?</p>
+<p>And happy new year of course ! <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-878">
+        <div id="dsq-comment-header-878" class="dsq-comment-header">
+            <cite id="dsq-cite-878">
+http://joelhooks.com                <span id="dsq-author-user-878">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-878" class="dsq-comment-body">
+            <div id="dsq-comment-message-878" class="dsq-comment-message"><p>This example was the first thing I ever made with Robotlegs. I didn&#8217;t update it much for this revamp. Outside of the unit tests. I couldn&#8217;t let those stand. If I rewrote it, I&#8217;d update the model directly.<br />
+I really like signals on views. The signal command map is on my short list of items to address.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-879">
+        <div id="dsq-comment-header-879" class="dsq-comment-header">
+            <cite id="dsq-cite-879">
+http://twitter.com/robpenner                <span id="dsq-author-user-879">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-879" class="dsq-comment-body">
+            <div id="dsq-comment-message-879" class="dsq-comment-message"><p>XMLImageService is so out-of-date it extends org.robotlegs.mvcs.Service. There&#8217;s a blast from the past.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-880">
+        <div id="dsq-comment-header-880" class="dsq-comment-header">
+            <cite id="dsq-cite-880">
+http://twitter.com/robpenner                <span id="dsq-author-user-880">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-880" class="dsq-comment-body">
+            <div id="dsq-comment-message-880" class="dsq-comment-message"><p>Created pull request for XMLImageService:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/robotlegs-examples-FlickrGallery/pull/3 ');"  href="https://github.com/joelhooks/robotlegs-examples-FlickrGallery/pull/3 " rel="nofollow">https://github.com/joelhooks/robotlegs-examples-FlickrGallery/pull/3 </a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-881">
+        <div id="dsq-comment-header-881" class="dsq-comment-header">
+            <cite id="dsq-cite-881">
+http://twitter.com/robpenner                <span id="dsq-author-user-881">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-881" class="dsq-comment-body">
+            <div id="dsq-comment-message-881" class="dsq-comment-message"><p>It&#8217;s a bit strange how GalleryAppConfig.configure(context:IContext) ignores the context parameter. Injecting things into an IContextConfig seems like cheating and missing the point. You could have at least used context.injector. Also, contextView is injected but not used.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-882">
+        <div id="dsq-comment-header-882" class="dsq-comment-header">
+            <cite id="dsq-cite-882">
+http://twitter.com/robpenner                <span id="dsq-author-user-882">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-882" class="dsq-comment-body">
+            <div id="dsq-comment-message-882" class="dsq-comment-message"><p>Nitpicks aside, thanks for the article; really helpful highlighting core changes in Robotlegs 2.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-883">
+        <div id="dsq-comment-header-883" class="dsq-comment-header">
+            <cite id="dsq-cite-883">
+http://joelhooks.com                <span id="dsq-author-user-883">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-883" class="dsq-comment-body">
+            <div id="dsq-comment-message-883" class="dsq-comment-message"><p>Haha, nice catch. I didn&#8217;t bother to update it ^^</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-884">
+        <div id="dsq-comment-header-884" class="dsq-comment-header">
+            <cite id="dsq-cite-884">
+http://joelhooks.com                <span id="dsq-author-user-884">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-884" class="dsq-comment-body">
+            <div id="dsq-comment-message-884" class="dsq-comment-message"><p>I don&#8217;t understand the &#8220;cheating and missing the point&#8221; comment. Configuration is composed from multiple sources. This app-specific config has dependencies that are located elsewhere, but are available for injection. Unless there is some esoteric rationale for not injecting in this fashion? It is easy and familiar; following the patterns Robotlegs uses elsewhere.</p>
+<p>Regarding ignoring the context, I don&#8217;t need the IContext. I need the injector. I don&#8217;t see why I would query the instance for a dependency when I can use the automated DI mechanism and access the dependency directly. If anything, I would call into question the need for the method injection of the IContext. The IContext is likely available for injection as well, no? This has nothing to do with my applications configuration and relates to the interface that I am required to conform to in a configuration.</p>
+<p>The contextView injection was an oversight. IntelliJ doesn&#8217;t mark vars &#8220;un-used&#8221; if they have metadata over them :/</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-885">
+        <div id="dsq-comment-header-885" class="dsq-comment-header">
+            <cite id="dsq-cite-885">
+http://twitter.com/robpenner                <span id="dsq-author-user-885">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-885" class="dsq-comment-body">
+            <div id="dsq-comment-message-885" class="dsq-comment-message"><p>&gt; <br />
+I don&#8217;t need the IContext. I need the injector.</p>
+<p>Exactly. Why then did you make it an IContextConfig? Just so Robotlegs would execute it? Better off leaving it as a command. &#8220;Cheating and missing the point&#8221; refers to GalleryAppConfig implementing an interface it promptly ignores.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-886">
+        <div id="dsq-comment-header-886" class="dsq-comment-header">
+            <cite id="dsq-cite-886">
+http://twitter.com/robpenner                <span id="dsq-author-user-886">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-886" class="dsq-comment-body">
+            <div id="dsq-comment-message-886" class="dsq-comment-message"><p>I suspect IContextConfig may need to be replaced/supplemented with something like IInjectorConfig which supplies the injector to configure().</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-887">
+        <div id="dsq-comment-header-887" class="dsq-comment-header">
+            <cite id="dsq-cite-887">
+http://joelhooks.com                <span id="dsq-author-user-887">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-887" class="dsq-comment-body">
+            <div id="dsq-comment-message-887" class="dsq-comment-message"><p>The interface isn&#8217;t ignored, the IContext injected by the method is ignored. It *is* configuring a context in the body of the method expressed by the interface. I don&#8217;t see how it is better off in command. Because in this simple contrived example the dependency isn&#8217;t used? Meh.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-888">
+        <div id="dsq-comment-header-888" class="dsq-comment-header">
+            <cite id="dsq-cite-888">
+http://joelhooks.com                <span id="dsq-author-user-888">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-888" class="dsq-comment-body">
+            <div id="dsq-comment-message-888" class="dsq-comment-message"><p>where does that lead? IMediatorMapConfig ISomeCustomCommandMapImplementationConfig? </p>
+<p>I am configuring a context. Outside of preferring not to use [Inject] for supplying dependencies, I don&#8217;t get the beef. It was easy to supply the injector, and makes sense in the context (lowercase c) of a Robotlegs application.</p>
+<p>I never once thought that IContextConfig was referring to manipulating or interacting with an instance of an IContext. I think the interface should lose the reference to the IContext and not imply that there is a need to manipulate an instance of the Context. What is the use case for that? It would be available for injection regardless&#8230;</p>
+<p>IConfig with a configure() method. It *is* essentially a command, but with a targeted purpose.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-889">
+        <div id="dsq-comment-header-889" class="dsq-comment-header">
+            <cite id="dsq-cite-889">
+http://twitter.com/robpenner                <span id="dsq-author-user-889">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-889" class="dsq-comment-body">
+            <div id="dsq-comment-message-889" class="dsq-comment-message"><p>&gt; &#8220;I am configuring a context.&#8221;</p>
+<p>You said &#8220;I don&#8217;t need the IContext. I need the injector.&#8221; Which one are you configuring?</p>
+<p>&gt; &#8220;I never once thought that IContextConfig was referring to manipulating or interacting with an instance of an IContext.&#8221;</p>
+<p>Um&#8230; what? </p>
+<p>public interface IContextConfig{	function configure(context:IContext):void;}</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-890">
+        <div id="dsq-comment-header-890" class="dsq-comment-header">
+            <cite id="dsq-cite-890">
+http://twitter.com/robpenner                <span id="dsq-author-user-890">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-890" class="dsq-comment-body">
+            <div id="dsq-comment-message-890" class="dsq-comment-message"><p>It&#8217;s about using the right tool for the job. In this example, an IContextConfig is not the right tool.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-891">
+        <div id="dsq-comment-header-891" class="dsq-comment-header">
+            <cite id="dsq-cite-891">
+http://joelhooks.com                <span id="dsq-author-user-891">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-891" class="dsq-comment-body">
+            <div id="dsq-comment-message-891" class="dsq-comment-message"><p>As a user, I want to &#8220;configure my context&#8221; &#8211; which I take to mean setting up my views, commands, and injections for a given Context.</p>
+<p>In this case I needed the injector. You suggested I throw in context.injector just because the IContext is available. I&#8217;d rather have all my dependencies lined up and provided in the same fashion and prefer to access it at the &#8220;top level&#8221; without digging into a class I&#8217;m not interested in.</p>
+<p>I&#8217;ve never had a use for manipulating a Context directly after startup().</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-892">
+        <div id="dsq-comment-header-892" class="dsq-comment-header">
+            <cite id="dsq-cite-892">
+http://joelhooks.com                <span id="dsq-author-user-892">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-892" class="dsq-comment-body">
+            <div id="dsq-comment-message-892" class="dsq-comment-message"><p>It works, it makes sense, and provides an effective approach to configuring the actors within a given Context.</p>
+<p>I&#8217;ve looked at the other configs.</p>
+<p>const mediatorMap:robotlegs.bender.extensions.mediatorMap.api.IMediatorMap = context.injector.getInstance(IMediatorMapV2);</p>
+<p>this just doesn&#8217;t make any sense to dig through the context to get at the dependency that I really want.</p>
+<p>or</p>
+<p>		public function configure(context:IContext):void		{			if (contextView)			{				context.logger.info(this, &#8216;Adding contextView to viewManager. Note: avoid this where performance is critical.&#8217;);				viewManager.addContainer(contextView);			}			else			{				context.logger.warn(this, &#8216;ContextViewListenerConfig was installed, but the contextView is null. Consider removing this config.&#8217;);			}		}</p>
+<p>in every case the IContext dependency is utilized, it is simply to attach to some other dependency of the IContext.</p>
+<p>So, in this example the tool provided is being used appropriately, but perhaps it is the tool itself that is irritating you. </p>
+<p>(code formatter failure)</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-893">
+        <div id="dsq-comment-header-893" class="dsq-comment-header">
+            <cite id="dsq-cite-893">
+                <span id="dsq-author-user-893">Stray</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-893" class="dsq-comment-body">
+            <div id="dsq-comment-message-893" class="dsq-comment-message"><p>@Robert &#8211; IConfig has a bunch of stuff like parent, logger, app domain and dispatcher which all might be useful in configuring &#8211; not just the injector. </p>
+<p>You can set as well as get some of these (eg contextView). We went with withConfig(expectsAClassThatImpsIConfig). We did um and ah about whether to simply expect people to make their own and use [PostConstruct] but prescription has been something people have liked when getting started.</p>
+<p>Maybe pick this up on the GitHub stuff around API for the context builder? I think Shaun has his head best wrapped around the deets on this issue.</p>
+<p>Good to have you back <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+<p>Stray</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-894">
+        <div id="dsq-comment-header-894" class="dsq-comment-header">
+            <cite id="dsq-cite-894">
+http://twitter.com/robpenner                <span id="dsq-author-user-894">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-894" class="dsq-comment-body">
+            <div id="dsq-comment-message-894" class="dsq-comment-message"><p>To be clear, I was never objecting to injecting the dependencies and operating on them. But in this case, a command would be a better tool for that.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-895">
+        <div id="dsq-comment-header-895" class="dsq-comment-header">
+            <cite id="dsq-cite-895">
+http://twitter.com/robpenner                <span id="dsq-author-user-895">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-895" class="dsq-comment-body">
+            <div id="dsq-comment-message-895" class="dsq-comment-message"><p>&gt; &#8220;IConfig has a bunch of stuff like parent&#8230;&#8221;</p>
+<p>Er, IContext. =) </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-896">
+        <div id="dsq-comment-header-896" class="dsq-comment-header">
+            <cite id="dsq-cite-896">
+                <span id="dsq-author-user-896">Stray</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-896" class="dsq-comment-body">
+            <div id="dsq-comment-message-896" class="dsq-comment-message"><p>Yes. Sorry &#8211; 10.30 pm here and been working on a building site most of the day. I can only grunt.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-897">
+        <div id="dsq-comment-header-897" class="dsq-comment-header">
+            <cite id="dsq-cite-897">
+http://twitter.com/robpenner                <span id="dsq-author-user-897">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-897" class="dsq-comment-body">
+            <div id="dsq-comment-message-897" class="dsq-comment-message"><p>I responded to the ContextBuilder thread here: <br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/robotlegs/robotlegs-framework/issues/32');"  href="https://github.com/robotlegs/robotlegs-framework/issues/32" rel="nofollow">https://github.com/robotlegs/robotlegs-framework/issues/32</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-898">
+        <div id="dsq-comment-header-898" class="dsq-comment-header">
+            <cite id="dsq-cite-898">
+http://joelhooks.com                <span id="dsq-author-user-898">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-898" class="dsq-comment-body">
+            <div id="dsq-comment-message-898" class="dsq-comment-message"><p>It effectively is a command, but with a distinct purpose (configuring a context). We can agree to disagree I guess. I always thought the &#8220;kick off a Command with an event to string Commands and configure the context&#8221; was clunky and obtuse. This I like.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-899">
+        <div id="dsq-comment-header-899" class="dsq-comment-header">
+            <cite id="dsq-cite-899">
+http://joelhooks.com                <span id="dsq-author-user-899">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-899" class="dsq-comment-body">
+            <div id="dsq-comment-message-899" class="dsq-comment-message"><p>Actually, I think we agree. I like using a command. I think this is a command, it just has an extraneous argument being passed in to it&#8217;s execution method.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-900">
+        <div id="dsq-comment-header-900" class="dsq-comment-header">
+            <cite id="dsq-cite-900">
+http://shaun.boyblack.co.za/blog/                <span id="dsq-author-user-900">shaun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-900" class="dsq-comment-body">
+            <div id="dsq-comment-message-900" class="dsq-comment-message"><p>Also, Commands can only be executed IF a command map extension has been installed AND the builder and context are already configured.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-901">
+        <div id="dsq-comment-header-901" class="dsq-comment-header">
+            <cite id="dsq-cite-901">
+http://shaun.boyblack.co.za/blog/                <span id="dsq-author-user-901">shaun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-901" class="dsq-comment-body">
+            <div id="dsq-comment-message-901" class="dsq-comment-message"><p>Remember that the context is not fully initialized at those points, and all dependencies have not necessarily been mapped, so automated injection into those configs is not feasible.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-902">
+        <div id="dsq-comment-header-902" class="dsq-comment-header">
+            <cite id="dsq-cite-902">
+http://shaun.boyblack.co.za/blog/                <span id="dsq-author-user-902">shaun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-902" class="dsq-comment-body">
+            <div id="dsq-comment-message-902" class="dsq-comment-message"><p>Continued over at: https://github.com/robotlegs/robotlegs-framework/issues/32</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-903">
+        <div id="dsq-comment-header-903" class="dsq-comment-header">
+            <cite id="dsq-cite-903">
+http://twitter.com/robpenner                <span id="dsq-author-user-903">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-903" class="dsq-comment-body">
+            <div id="dsq-comment-message-903" class="dsq-comment-message"><p>Or you could *gasp* execute the command manually. =) Your point is taken, though. Maybe we should make it easier to execute commands then. Or make it easier to inject into functions in general. </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-904">
+        <div id="dsq-comment-header-904" class="dsq-comment-header">
+            <cite id="dsq-cite-904">
+http://twitter.com/robpenner                <span id="dsq-author-user-904">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-904" class="dsq-comment-body">
+            <div id="dsq-comment-message-904" class="dsq-comment-message"><p>I agree with you on the last point. Obviously making custom Events is not my favourite thing, either.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-905">
+        <div id="dsq-comment-header-905" class="dsq-comment-header">
+            <cite id="dsq-cite-905">
+http://twitter.com/robpenner                <span id="dsq-author-user-905">Robert Penner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-905" class="dsq-comment-body">
+            <div id="dsq-comment-message-905" class="dsq-comment-message"><p>&gt; &#8220;this just doesn&#8217;t make any sense to dig through the context to get at the dependency that I really want.&#8221;</p>
+<p>I agree. The IContextConfigs currently in Robotlegs 2 have a lot of code like:</p>
+<p>context.injector.getInstance(IMediatorMap)</p>
+<p>Using the context to get the injector to pull out a dependency from the injector&#8211;this gets my Demeter-sense tingling. I feel it would be more straightforward to just inject the IMediatorMap into something and skip the pretext of &#8220;configuring the context&#8221;.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-913">
+        <div id="dsq-comment-header-913" class="dsq-comment-header">
+            <cite id="dsq-cite-913">
+                <span id="dsq-author-user-913">Denis</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-913" class="dsq-comment-body">
+            <div id="dsq-comment-message-913" class="dsq-comment-message"><p>Hi Joel, </p>
+<p>Is flex popup mediating properly with RL2?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-914">
+        <div id="dsq-comment-header-914" class="dsq-comment-header">
+            <cite id="dsq-cite-914">
+http://joelhooks.com                <span id="dsq-author-user-914">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-914" class="dsq-comment-body">
+            <div id="dsq-comment-message-914" class="dsq-comment-message"><p>That&#8217;s a good question. Give it a try <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-915">
+        <div id="dsq-comment-header-915" class="dsq-comment-header">
+            <cite id="dsq-cite-915">
+                <span id="dsq-author-user-915">Denis</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-915" class="dsq-comment-body">
+            <div id="dsq-comment-message-915" class="dsq-comment-message"><p>Hi Joel, </p>
+<p>I just tried and it does not work for me. <br />
+Here is wjat I am doing:<br />
+1. In the AppConfig I have added following lines:<br />
+            mediatorMap.map(TestPopupButton).toMediator(TestPopupButtonMediator); //button on popup window            mediatorMap.map(TestPopupWindow).toMediator(TestPopupWindowMediator); // and popup window itself<br />
+2. And here I open popup:<br />
+            var w:TestPopupWindow = new TestPopupWindow();            PopUpManager.addPopUp(w, FlexGlobals.topLevelApplication as DisplayObject);</p>
+<p>Am I missing something?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-916">
+        <div id="dsq-comment-header-916" class="dsq-comment-header">
+            <cite id="dsq-cite-916">
+http://joelhooks.com                <span id="dsq-author-user-916">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-916" class="dsq-comment-body">
+            <div id="dsq-comment-message-916" class="dsq-comment-message"><p>I don&#8217;t think so. I can&#8217;t investigate until this weekend. You can ask on the <a onclick="javascript:pageTracker._trackPageview('/outgoing/knowledge.robotlegs.org');"  href="http://knowledge.robotlegs.org" rel="nofollow">http://knowledge.robotlegs.org</a> and might get a faster collaborator.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2011/12/29/robotlegs-2-beta-flickr-image-gallery/';
+    var disqus_identifier = '618 http://joelhooks.com/?p=618';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Robotlegs 2 (beta): Flickr Image Gallery";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=618');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2011\/12\/29\/robotlegs-2-beta-flickr-image-gallery\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.270 seconds. Made 5 queries to database and 14 cached queries. Memory used - 16.24MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<base href="http://joelhooks.com" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>joelhooks.com &rsaquo; Log In</title>
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='wp-admin-css'  href='http://joelhooks.com/wp-admin/css/wp-admin.css?ver=20111208' type='text/css' media='all' />
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='colors-fresh-css'  href='http://joelhooks.com/wp-admin/css/colors-fresh.css?ver=20111206' type='text/css' media='all' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+<meta name='robots' content='noindex,nofollow' />
+</head>
+<body class="login">
+<div id="login"><h1><a href="http://wordpress.org/" title="Powered by WordPress">joelhooks.com</a></h1>
+
+<form name="loginform" id="loginform" action="http://joelhooks.com/wp-login.php" method="post">
+	<p>
+		<label for="user_login">Username<br />
+		<input type="text" name="log" id="user_login" class="input" value="" size="20" tabindex="10" /></label>
+	</p>
+	<p>
+		<label for="user_pass">Password<br />
+		<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" tabindex="20" /></label>
+	</p>
+	<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90" /> Remember Me</label></p>
+	<p class="submit">
+		<input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="Log In" tabindex="100" />
+		<input type="hidden" name="redirect_to" value="http://joelhooks.com/wp-admin/" />
+		<input type="hidden" name="testcookie" value="1" />
+	</p>
+</form>
+
+<p id="nav">
+<a href="http://joelhooks.com/wp-login.php?action=lostpassword" title="Password Lost and Found">Lost your password?</a>
+</p>
+
+<script type="text/javascript">
+function wp_attempt_focus(){
+setTimeout( function(){ try{
+d = document.getElementById('user_login');
+d.focus();
+d.select();
+} catch(e){}
+}, 200);
+}
+
+wp_attempt_focus();
+if(typeof wpOnload=='function')wpOnload();
+</script>
+
+	<p id="backtoblog"><a href="http://joelhooks.com/" title="Are you lost?">&larr; Back to joelhooks.com</a></p>
+	</div>
+
+
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<div class="clear"></div>
+</body>
+</html>

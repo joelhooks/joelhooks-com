@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: web | Joel Hooks]]></title>
+  <link href="http://joelhooks.com/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://joelhooks.com/"/>
+  <updated>2013-09-16T09:23:13-05:00</updated>
+  <id>http://joelhooks.com/</id>
+  <author>
+    <name><![CDATA[Joel Hooks]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The basics of using ui-router with AngularJS]]></title>
+    <link href="http://joelhooks.com/blog/2013/07/22/the-basics-of-using-ui-router-with-angularjs/"/>
+    <updated>2013-07-22T10:55:00-05:00</updated>
+    <id>http://joelhooks.com/blog/2013/07/22/the-basics-of-using-ui-router-with-angularjs</id>
+    <content type="html"><![CDATA[<p>URL routing is a popular approach to matching the contents of a URL to specific
+functionality within a web application. URL routes programatically present
+specific content to users based on the URL that they are visiting. It is a
+popular approach that has proven to be very effective.</p>
+
+<p>Something that might not be obvious is that URL routing is also a <a href="https://en.wikipedia.org/wiki/Finite-state_machine">finite state
+machine</a>. When you configure
+the routing for an app, you are laying out the various states the application
+can be in, and informing the application what to display and do when a specific
+route is encountered.</p>
+
+<p>AngularJS supplies <a href="http://docs.angularjs.org/tutorial/step_07">URL routing</a> by default.
+It is adequate, but also has some limitations.</p>
+
+<p><img src="/images/app-layout.png" alt="A resonable application structure" /></p>
+
+<h2>So what&rsquo;s the problem?</h2>
+
+<p>Looking at the structure above, imagine an application where interacting with
+items on the header or the sidebar causes the main content to load completely
+different HTML. AngularJS provides a mechanism for this with <code>ng-switch</code>. You
+can see a (very simple) example of this below.</p>
+
+<iframe width="100%" height="300"
+  164: src="http://jsfiddle.net/joelhooks/Swm48/4/embedded/result,js,html"
+  165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+
+<p>In this case, <code>ng-switch</code> is swapping out <code>div</code> elements, but you can also use
+this approach to swap out templates using <code>ng-include</code>.</p>
+
+<p>I&rsquo;m not going to explore this option. I&rsquo;m not particularly fond of it.</p>
+
+<p><strong>Why not?</strong></p>
+
+<ul>
+<li>The <code>ng-switch</code> adds markup that could be confusing</li>
+<li>The state of the main content area is captured and stored on a model</li>
+<li>It feels like &ldquo;logic in markup&rdquo;, which I try to avoid</li>
+<li>If you go down the <code>ng-include</code> road, you need to remember to always put
+single quotes around your template names. I always forget. ;&lt;</li>
+</ul>
+
+
+<h2>ui-router</h2>
+
+<p><a href="https://github.com/angular-ui/ui-router">ui-router</a> fully embraces the
+state-machine nature of a routing system. It allows you to define states, and
+transition your application to those states. The real win is that it allows you
+to decouple nested states, and do some very complicated layouts in an elegant
+way.</p>
+
+<p>You need to think about your routing a bit differently, but once you get your
+head around the state-based approach, I think you will like it.</p>
+
+<iframe width="100%" height="300"
+  164: src="http://jsfiddle.net/joelhooks/Swm48/5/embedded/result,js,html"
+  165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+
+<p>This example is functionally very similar to the <code>ng-switch</code> approach. The main
+difference is that the main content area is populated with templated HTML for
+each of the states, without using switching or <code>ng-include</code>.</p>
+
+<p>``` javascript
+angular.module(&lsquo;app&rsquo;, [&lsquo;ui.compat&rsquo;])</p>
+
+<pre><code>.config(['$stateProvider', function ($stateProvider) {
+    var home = {
+            name: 'home',
+            url: '/',
+            templateUrl: 'content.html'
+        },
+        red = {
+            name: 'red',
+            url: '/red',
+            parent: home,
+            templateUrl: 'content.red.html'
+        },
+        blue = {
+            name: 'blue',
+            url: '/blue',
+            parent: home,
+            templateUrl: 'content.blue.html'
+        },
+        green = {
+            name: 'green',
+            url: '/green',
+            parent: home,
+            templateUrl: 'content.green.html'
+        };
+
+    $stateProvider.state(home);
+    $stateProvider.state(red);
+    $stateProvider.state(green);
+    $stateProvider.state(blue);
+}])
+</code></pre>
+
+<p>```</p>
+
+<p>The above code is the configuration for the router. We are defining the <code>module</code>, but instead
+of injecting <code>$routeProvider</code> as we would with stock AngularJS, we are injecting
+a <code>$stateProvider</code> that is used to define the states. We are defining 4 states.</p>
+
+<ul>
+<li><code>home</code> is the parent state of the next 3. It defines the header, siderbar, and
+the <code>ui-view</code> element that will be populated with the child states.</li>
+<li><code>red</code> is the first child state. It references the <code>home</code> as its parent, as
+well as targeting its own template.</li>
+<li><code>blue</code> and <code>green</code> are identical to <code>red</code>, but use different templates.</li>
+</ul>
+
+
+<p>After the states are defined, they are added to the <code>$stateProvider</code>. They are
+now ready to be navigated to.</p>
+
+<p>``` javascript</p>
+
+<pre><code>.run(['$state', function ($state) {
+   $state.transitionTo('home'); 
+}])
+</code></pre>
+
+<p>```</p>
+
+<p>the <code>run</code> method is a great place to navigate to your intial state. You are able to
+inject the now-resolved <code>$state</code> object and use its <code>transitionTo</code> method to set <code>home</code>
+as the current state.</p>
+
+<p>``` javascript</p>
+
+<pre><code>.controller('SidebarCtrl', function ($scope, $state) {
+
+$scope.content = ['red', 'green', 'blue'];
+
+$scope.setPage = function (page) {
+    $state.transitionTo(page);
+};
+</code></pre>
+
+<p>```</p>
+
+<p>The <code>SidebarCtrl</code> lists contains a simple array called content on its <code>$scope</code> which
+is used in a <code>ng-repeat</code> to give us a simple menu. When one of those items is clicked
+the <code>setPage</code> function is called with the item that was clicked. In this case, the
+content items correspond to the names of the states that we&rsquo;ve defined, so we simply
+<code>transitionTo</code> the selected state to display the content of that state.</p>
+
+<h2>Next steps with ui-router</h2>
+
+<p>This only really scratches the very surface of what you can pull off with
+ui-router. There are a ton of options and the
+<a href="https://github.com/angular-ui/ui-router/wiki">wiki</a> is well put together. Some
+things I didn&rsquo;t explore, but that are available:</p>
+
+<ul>
+<li>Passing data between states</li>
+<li>Listening for state events</li>
+<li>Named views (love this, it deserves its own post)</li>
+<li>URL Routing</li>
+</ul>
+
+
+<p><strong>The ui-router README warns that the utility is still in active early
+development</strong>. The API is still subject to change, so if you choose ui-router for
+your next project, that is something to be aware of.</p>
+
+<p>Let me know if you&rsquo;d like me to explore ui-router a bit deeper in future posts.
+I think it is an excellent approach to routing, and look forward to using it
+more.</p>
+]]></content>
+  </entry>
+  
+</feed>

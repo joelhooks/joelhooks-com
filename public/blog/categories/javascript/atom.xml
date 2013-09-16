@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: javascript, | Joel Hooks]]></title>
+  <link href="http://joelhooks.com/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://joelhooks.com/"/>
+  <updated>2013-09-16T09:23:13-05:00</updated>
+  <id>http://joelhooks.com/</id>
+  <author>
+    <name><![CDATA[Joel Hooks]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Configuring Dependency Injection in AngularJS]]></title>
+    <link href="http://joelhooks.com/blog/2013/08/18/configuring-dependency-injection-in-angularjs/"/>
+    <updated>2013-08-18T12:45:00-05:00</updated>
+    <id>http://joelhooks.com/blog/2013/08/18/configuring-dependency-injection-in-angularjs</id>
+    <content type="html"><![CDATA[<p>Dependency injection is the act of supplying values or object instances (dependencies) to target objects
+from outside of the target object. In many (most?) cases this is automated
+by a framework, such as AngularJS.</p>
+
+<p>This means that a given target object does <strong>not</strong> create its own dependencies,
+through the use of the <code>new</code> keyword or other creation methods.</p>
+
+<p>By creating and managing dependencies
+outside of an object, it makes it much easier to switch out that dependency as
+needed. This is very useful when you are writing your unit tests, and can have
+many advantages in larger systems.</p>
+
+<p>There are only three ways for an object to resolve its dependencies:</p>
+
+<ul>
+<li>internally, via the <code>new</code> operator</li>
+<li>lookup via a global variable (requirejs is an example)</li>
+<li>the dependency is passed to the object</li>
+</ul>
+
+
+<p>The third option is <em>dependency injection</em>, and it is the preferred approach in
+AngularJS apps.</p>
+
+<h2>Defining your dependencies</h2>
+
+<p>Dependency injection is a core feature of AngularJS. There are 3 approaches to
+defining your dependencies, ordered by complexity from least to most:</p>
+
+<ul>
+<li>module.service</li>
+<li>module.factory</li>
+<li>module.provider</li>
+</ul>
+
+
+<p><strong>note:</strong> <em>AngularJS also provides <code>value</code> and <code>constant</code> dependencies. We aren&rsquo;t
+going to get into those two today.</em></p>
+
+<p>Both <code>service</code> and <code>factory</code> are abstractions that sit on top of <code>provider</code>.
+Using <code>factory</code> and <code>provider</code> will give you more flexibility, but are more
+verbose.</p>
+
+<p>Before we look at how to use these tools, let&rsquo;s take a look at the AngularJS
+source code and understand how they work.</p>
+
+<h3>Interlude into the AngularJS internals</h3>
+
+<p>If you&rsquo;re a geek like me, you might be curious as to what is going on under the hood
+when you declare dependencies.</p>
+
+<p>I mentioned earlier that <code>service</code> and <code>factory</code> were abstractions on top of <code>provider</code>.
+To show you exactly how that works, we need to open up <code>injector.js</code> in <code>src/auto/</code>
+folder in the AngularJS source code:</p>
+
+<p>``` javascript
+  function provider(name, provider_) {</p>
+
+<pre><code>if (isFunction(provider_) || isArray(provider_)) {
+  provider_ = providerInjector.instantiate(provider_);
+}
+if (!provider_.$get) {
+  throw $injectorMinErr('pget', "Provider '{0}' must define $get factory method.", name);
+}
+return providerCache[name + providerSuffix] = provider_;
+</code></pre>
+
+<p>  }</p>
+
+<p>  function factory(name, factoryFn) { return provider(name, { $get: factoryFn }); }</p>
+
+<p>  function service(name, constructor) {</p>
+
+<pre><code>return factory(name, ['$injector', function($injector) {
+  return $injector.instantiate(constructor);
+}]);
+</code></pre>
+
+<p>  }
+```</p>
+
+<p>As you can see at a glance, <code>service</code> calls <code>factory</code> which calls <code>provider</code>. So, when it
+gets right down to it, these three methods are the exact same thing. Convenient!</p>
+
+<p>Almost the exact same thing.</p>
+
+<p>There is a subtle difference. The AngularJS <code>service</code> uses
+<code>$injector.instantiate</code> on the constructor function that you pass in. This means
+that internally the <code>service</code> creates an instance of your function with the
+<code>new</code> operator. This will provide the resulting object a valid &lsquo;this&rsquo; scope.</p>
+
+<p>Using <strong><code>factory</code> doesn&rsquo;t call <code>new</code> on the function that is passed in</strong>.
+When using <code>factory</code>, the function that is passed in is called directly, and an
+object is expteded to be returned.</p>
+
+<p>Hat tip to
+<a href="http://twitter.com/ThomasBurleson">@ThomasBurleson</a> for pointing this
+out. This can be confusing if encountered in the wild. Now you know.
+Half the battle.</p>
+
+<p>Let&rsquo;s start with the simplest use case. The <code>service</code>.</p>
+
+<h3>Defining a service in AngularJS</h3>
+
+<p>A service instantiates a constructor function.</p>
+
+<p>``` javascript
+(function(angular) {</p>
+
+<pre><code>var module = angular.module("myApp.myModel", []);
+
+var MyModel = function MyModel(asyncService) {
+    return {
+        someApi: function() {
+            return asyncService.getStuff(); 
+        }
+    };
+}
+
+module.service('myModel', ['asyncService', MyModel]); //simple option
+</code></pre>
+
+<p>}(angular))
+```</p>
+
+<p>In this example we are creating a module that will store a model that grabs data from some asynchronous
+service. The <code>myModel</code> service will return an instance of <code>MyModel</code> when it is requested
+for injection by other objects. The instance of <code>MyModel</code> is a singleton, and only one instance will
+ever be created and used by the application.</p>
+
+<p>This example could actually be even simpler if the injectable doesn&rsquo;t require any additional
+dependencies.</p>
+
+<p><code>javascript
+module.service('myModel',  MyModel); //most simple option
+</code></p>
+
+<p><code>module.service</code> requires only two arguments. A string for its unique name, and a constructor
+to create an instance of. This approach is useful, and most of the time is probably all you need
+for your application.</p>
+
+<p>When you need more flexibility than the <code>service</code> provides, it is time to look at <code>factory</code>.</p>
+
+<h3>Defining a factory in AngularJS</h3>
+
+<p>A factory returns an object.</p>
+
+<p>``` javascript
+(function(angular) {</p>
+
+<pre><code>var module = angular.module("myApp.myModel", []);
+
+var MyModel = function MyModel(asyncService) {
+    return {
+        someApi: function() {
+            return asyncService.getStuff(); //promise?
+        }
+    }
+}
+
+module.factory('myModel', ['asyncService', function (asyncService) {
+    //could do some stuff here
+    return new MyModel(asyncService); 
+}]);
+</code></pre>
+
+<p>}(angular))
+```</p>
+
+<p>Using a <code>factory</code> provides additional flexibility. By providing a factory function
+over a straight constructor, you are provided with the opportunity to do some work
+prior to returning the object. You are also in charge of creating the
+instance that you want returned, unlike <code>service</code>, which creates the
+instance for the constructor function you provide.</p>
+
+<p>The above example is obviously not
+doing anything interesting, but when you need to do some work prior to resolving a
+dependency, a factory can be a good choice.</p>
+
+<p>In the real world, I&rsquo;ve used <code>factory</code> to provide a configurable mock data &ldquo;mode&rdquo;. The
+factory function would check to see which mode the app was in, and dynamically switch
+between mock and real data. This can be incredibly handy when you want to work with out
+depending on external services.</p>
+
+<p>Note that the factory function will be called exactly <strong>one time</strong>. Any work you do
+will only be done once, and <code>myModel</code> will be whatever your factory function returns.
+In this case, we are simply returning an instance of <code>MyModel</code>, but a factory can return
+objects <em>and</em> functions. Use that to your advantage.</p>
+
+<p>The last way to define dependencies is with <code>provider</code>. Let&rsquo;s look at that next.</p>
+
+<h3>Defining a provider with AngularJS</h3>
+
+<p>``` javascript
+(function(angular) {</p>
+
+<pre><code>var module = angular.module("myApp.myModel", []);
+
+var MyModel = function MyModel() {
+    return {
+        asyncService: null,
+        someApi: function {
+            return this.asyncService.getStuff(); //promise?
+        }
+    }
+
+}
+
+var myModelProvider = {
+    model: new MyModel();
+    $get: ['asyncService', function (asyncService) {
+        this.model.asyncService = asyncService; //"manual" dependency injection
+        return this.model; //resolved for the lifetime of app
+    }]
+};
+
+modules.provider('myModel', myModelProvider);
+</code></pre>
+
+<p>}(angular))
+```</p>
+
+<p>As you can see, <code>provider</code> is lower level. Explicit and verbose. The <code>$get</code> function
+is used by AngularJS internally for the injector. A provider is <strong>required</strong> to have a <code>$get</code>
+function. When using <code>factory</code> (and <code>service</code> as well) the <code>$get</code> function is defined for
+you.</p>
+
+<p>For all practical purposes you will likely never need to use <code>provider</code> unless you are a
+control freak. In most circumstances a <code>factory</code> or <code>service</code> will suffice, but it is nice
+to know that <code>provider</code> is there, if you needed that level of explicit control for some reason.</p>
+
+<p>One thing to note about providers is that the provider is <em>available during <strong>configuration phase</strong> of a module</em>. While I haven&rsquo;t found a specific use case for this, it is something to have in your toolbox.</p>
+
+<h3>A little trick for dynamic dependencies</h3>
+
+<p>I mentioned before that with a <code>factory</code> (or <code>provider</code>) you can return an object or a function.
+As it turns out, this can be very useful if you need to dynamically update a resolved dependency.
+Here&rsquo;s a simple example using a factory.</p>
+
+<p>``` javascript
+module.factory(&lsquo;myDynamicInjectable&rsquo;, function () {</p>
+
+<pre><code>    var count = 0;
+    return function() {
+        count = count +1;
+        return count;
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<p>This is an extremely trivial example, but now when you inject <code>myDynamicInjectable</code> and call it,
+it will return the freshly incremented <code>count</code>.</p>
+
+<p><strong>warning:</strong> <em>don&rsquo;t do this. There are two things wrong with this example. It is storing state
+with the count variable, and then it is manipulating state. This isn&rsquo;t the appropriate location
+for either of those activities! A better solution would be to create an object that stored
+that state and provided a nice API for manipulating it.</em></p>
+
+<p>A more realistic (useful) use of this might look like this:</p>
+
+<p>``` javascript
+module.factory(&lsquo;getCurrentShoppingCart&rsquo;, [&lsquo;getCurrentAccount&rsquo;, function(getCurrentAccount) {</p>
+
+<pre><code>return function() {
+    //getCurrentAccount is also a factory that returns a function
+    //perhaps a user can have multiple accounts?
+    return getCurrentAccount().shoppingCart;
+}
+</code></pre>
+
+<p>}]);
+```</p>
+
+<p>There is a ton of dynamic flexibility you can take advantage of when returning functions from
+both the <code>provider</code> and <code>factory</code> approaches. I&rsquo;d proceed with caution. You could easily abuse this
+flexibility. Don&rsquo;t use this approach to manipulate and/or store state in the providers! The
+job of these tools is to <strong>resolve dependencies</strong>, and should be used only to <strong>resolve dependencies</strong>.</p>
+
+<h2>Conclusion</h2>
+
+<p>AngularJS provides several ways to configure dependency injection. From the simple <code>service</code> to the more flexible
+<code>factory</code> and <code>provider</code> approaches. You should have a solid understanding of how these work
+under the hood, and what situations are appropriate for each method.</p>
+
+<p>P.S. This article is the expansion of the answer to a question that was emailed to me.
+If you have any questions, I&rsquo;d love to help you out. My email and twitter can be found below, and I
+answer them all.</p>
+
+<p><strong>Related:</strong></p>
+
+<ul>
+<li><a href="/blog/2013/05/01/when-is-a-singleton-not-a-singleton/">AngularJS, Dependency Injection, and When Is a Singleton Not a Singleton?</a></li>
+<li><a href="/blog/2013/04/24/modeling-data-and-state-in-your-angularjs-application/">Modeling Data and State in Your AngularJS Application</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learn AngularJS this Weekend]]></title>
+    <link href="http://joelhooks.com/blog/2013/08/03/learn-angularjs-in-a-weekend/"/>
+    <updated>2013-08-03T23:36:00-05:00</updated>
+    <id>http://joelhooks.com/blog/2013/08/03/learn-angularjs-in-a-weekend</id>
+    <content type="html"><![CDATA[<p>AngularJS has a reputation for a steep learning curve. It&rsquo;s definitely complex, but follows the 80/20 rule. <strong>20% of the features are what you will use 80% of the time</strong>. If you are new to AngularJS and have a weekend to study, there are some very high quality resources that will let you <strong>start Monday with a strong working knowledge of AngularJS</strong>.</p>
+
+<p>Already know AngularJS? Feel free to skip ahead. These resources are excellent, and you&rsquo;re bound to learn something.</p>
+
+<h2>The Official Tutorial ~4hrs</h2>
+
+<p>Start with <a href="http://docs.angularjs.org/tutorial">the official tutorial</a>. It provides a very straight forward overview of AngularJS and walks step by step through building a simple app. When you&rsquo;re done, you should have <strong>a solid understanding of the basics</strong> and the vocabulary you will need to move on to the next step.</p>
+
+<p>The official tutorial is <em>very</em> well put together. Unfortunately it utilizes the angular-seed project as a template. The angular-seed project is fine for quickly throwing together a working AngularJS app, but it doesn&rsquo;t provide a structure that scales well in a production application.</p>
+
+<p><strong>Don&rsquo;t use the angular-seed to start your real projects!</strong> It&rsquo;s a learning tool only.</p>
+
+<h2>Kickass (<strong>free!</strong>) Video Tutorials on Egghead.io ~3hrs</h2>
+
+<div style="float: left; padding:10px;"><a class="nofancybox" href="http://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(/images/egghead_logo.png);"></div></a></div>
+
+
+<p>You&rsquo;ve done the tutorial, and should have a good grasp of the basics. Your next stop is John Lindquist&rsquo;s <a href="http://www.egghead.io/">egghead.io for free AngularJS videos</a>. This series of bite-sized videos will deliver a ton of great information. John has gone through almost all of the &ldquo;hard&rdquo; concepts, and presented them in an easy to understand way.</p>
+
+<p><em>All</em> of the videos are great, but the <strong>series on directives is extra fantastic</strong>. Transclusion? No problem. Even after using AngularJS for over a year, I was able to solidify some of the concepts that were confusing for me.</p>
+
+<p>Watch them all and <strong>take some notes</strong>. When you come out of the other side your AngularJS-fu will be starting to take shape.</p>
+
+<p><img src="/images/lemonade.jpg" alt="ahhhhhhh Learning AngularJS is refreshing - Photo Credit: chotda" /></p>
+
+<p>That will take you through Saturday evening, and you deserve a rest. <strong>Send John a donation for his hard work</strong>, pour a tall glass of lemonade, and relax as you reflect on the your new-found knowledge of an awesome framework. Nice work!</p>
+
+<h2>Things get real with angular-app ~4hrs</h2>
+
+<p>Sunday morning.</p>
+
+<p>At this point you should understand the core AngularJS concepts and terminology. Time to brew a fresh pot and get to work.</p>
+
+<p><img src="/images/french_press.jpg" alt="AngularJS Fuel - Photo Credit: Bjørn Giesenbauer" /></p>
+
+<p>If you are anything like me, by now you&rsquo;re ready to dig into a <strong>proper example application</strong>. Luckily we have the excellent <a href="https://github.com/angular-app/angular-app">angular-app</a> project to explore. This non-trivial example focuses on best practices for:</p>
+
+<ul>
+<li>Folder structure (important!)</li>
+<li>Modules (very important!)</li>
+<li><strong>Testing</strong> (super important!)</li>
+<li>RESTful services</li>
+<li>Navigation</li>
+<li>Security</li>
+</ul>
+
+
+<p>angular-app combines a solid AngularJS UI with a node.js backend. It is non-trivial, and studying this app will give you a realistic sense of a proper AngularJS app.</p>
+
+<p>One killer aspect of this example is the build system. It <strong>demonstrates a fantastic Grunt.js build with an integrated Karma Test Runner</strong>.</p>
+
+<p>Peter Bacon Darwin and Pewel Kozlowski have done a great job. Front to back, this project is worth your study time. You could spend several days investigating the nooks and crannies of this example, but we&rsquo;ve only got the weekend. Set angular-app to the side for now, but keep it handy. It will serve as valuable reference in the future.</p>
+
+<h2>Start building your own app with ng-boilerplate ~4hrs</h2>
+
+<p>At this point you should have a solid knowledge to start building something. The <a href="https://github.com/joshdmiller/ng-boilerplate">ng-boilerplate</a> project will get you started. <strong>This is the seed you should use</strong>. It takes the lessons you learned studying angular-app, and provides the foundation upon which to build something substantial.</p>
+
+<p><img src="/images/engine.jpg" alt="a strong engine for your AngularJS app" /></p>
+
+<p>ng-boilerplate, unlike the angular-seed project, is <strong>suitable as a starting point for building a production app</strong>. It&rsquo;s a solid shortcut, and worth study.</p>
+
+<p>Spend some time getting to know ng-boilerplate through its excellent README. The READMEs don&rsquo;t stop at the root of the project. Josh has sprinkled them throughout the project to help you understand what is going on.</p>
+
+<p>Once you have your head around ng-boilerplate, you can delete all of the placeholder views, and <strong>start trying things out for yourself</strong>.</p>
+
+<p>Need some ideas?</p>
+
+<ul>
+<li>PRISM:Refract &ndash; NSA Dashboard</li>
+<li>FlySwatter &ndash; A simple bug tracker</li>
+<li>GeekTalk &ndash; Multiroom Chat</li>
+<li>OctoStats &ndash; Ranked Github Users with Clever D3 Visuals</li>
+<li>1000words &ndash; Writing app that sets target of 1000 words per day and graphs your success</li>
+<li>GetItDone &ndash; Yup, a todo list.</li>
+<li>&hellip;?</li>
+</ul>
+
+
+<p>The sky is the limit. Using the reference material you&rsquo;ve studied all weekend, combined with the official AngularJS docs, you should be well on the way to AngularJS mastery. You&rsquo;ll be over the hump, having defeated that infamous curve. Build something cool and tell me about it.</p>
+
+<p>If you&rsquo;ve hit any road blocks, <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to=joelhooks@gmail.com&amp;su=Hello,%can%I%20get%20some%20help?">send me an email</a> and I&rsquo;ll help you out.</p>
+
+<h2>Congrats! You&rsquo;ve leveled up.</h2>
+
+<p>The fun isn&rsquo;t over. There is <strong>plenty left to learn</strong>. The weekend <em>is</em> over though, and you&rsquo;ve worked hard. Take a break and relax.</p>
+
+<p>You&rsquo;ve earned it.</p>
+
+<p><img src="/images/yellow_belt.jpg" alt="You've Leveled up your AngularJS! - Photo Credit: Cayusa" /></p>
+
+<p>P.S. Initial project setup is one of the most critical factors to a project&rsquo;s success. Using templates is a great way to get a head start, but using a template without solid understanding of all the moving parts can be dangerous. I&rsquo;m working on <strong>step-by-step guide to building your own best practices AngularJS project template</strong>. If you want to get notified of its progress, as well as launch-day discounts, sign up to my newsletter below.</p>
+
+<p>You might also enjoy: <a href="http://joelhooks.com/blog/2013/05/22/lessons-learned-kicking-off-an-angularjs-project/"><strong>Lessons Learned: A Year with a Large AngularJS Project</strong></a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The basics of using ui-router with AngularJS]]></title>
+    <link href="http://joelhooks.com/blog/2013/07/22/the-basics-of-using-ui-router-with-angularjs/"/>
+    <updated>2013-07-22T10:55:00-05:00</updated>
+    <id>http://joelhooks.com/blog/2013/07/22/the-basics-of-using-ui-router-with-angularjs</id>
+    <content type="html"><![CDATA[<p>URL routing is a popular approach to matching the contents of a URL to specific
+functionality within a web application. URL routes programatically present
+specific content to users based on the URL that they are visiting. It is a
+popular approach that has proven to be very effective.</p>
+
+<p>Something that might not be obvious is that URL routing is also a <a href="https://en.wikipedia.org/wiki/Finite-state_machine">finite state
+machine</a>. When you configure
+the routing for an app, you are laying out the various states the application
+can be in, and informing the application what to display and do when a specific
+route is encountered.</p>
+
+<p>AngularJS supplies <a href="http://docs.angularjs.org/tutorial/step_07">URL routing</a> by default.
+It is adequate, but also has some limitations.</p>
+
+<p><img src="/images/app-layout.png" alt="A resonable application structure" /></p>
+
+<h2>So what&rsquo;s the problem?</h2>
+
+<p>Looking at the structure above, imagine an application where interacting with
+items on the header or the sidebar causes the main content to load completely
+different HTML. AngularJS provides a mechanism for this with <code>ng-switch</code>. You
+can see a (very simple) example of this below.</p>
+
+<iframe width="100%" height="300"
+  164: src="http://jsfiddle.net/joelhooks/Swm48/4/embedded/result,js,html"
+  165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+
+<p>In this case, <code>ng-switch</code> is swapping out <code>div</code> elements, but you can also use
+this approach to swap out templates using <code>ng-include</code>.</p>
+
+<p>I&rsquo;m not going to explore this option. I&rsquo;m not particularly fond of it.</p>
+
+<p><strong>Why not?</strong></p>
+
+<ul>
+<li>The <code>ng-switch</code> adds markup that could be confusing</li>
+<li>The state of the main content area is captured and stored on a model</li>
+<li>It feels like &ldquo;logic in markup&rdquo;, which I try to avoid</li>
+<li>If you go down the <code>ng-include</code> road, you need to remember to always put
+single quotes around your template names. I always forget. ;&lt;</li>
+</ul>
+
+
+<h2>ui-router</h2>
+
+<p><a href="https://github.com/angular-ui/ui-router">ui-router</a> fully embraces the
+state-machine nature of a routing system. It allows you to define states, and
+transition your application to those states. The real win is that it allows you
+to decouple nested states, and do some very complicated layouts in an elegant
+way.</p>
+
+<p>You need to think about your routing a bit differently, but once you get your
+head around the state-based approach, I think you will like it.</p>
+
+<iframe width="100%" height="300"
+  164: src="http://jsfiddle.net/joelhooks/Swm48/5/embedded/result,js,html"
+  165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+
+<p>This example is functionally very similar to the <code>ng-switch</code> approach. The main
+difference is that the main content area is populated with templated HTML for
+each of the states, without using switching or <code>ng-include</code>.</p>
+
+<p>``` javascript
+angular.module(&lsquo;app&rsquo;, [&lsquo;ui.compat&rsquo;])</p>
+
+<pre><code>.config(['$stateProvider', function ($stateProvider) {
+    var home = {
+            name: 'home',
+            url: '/',
+            templateUrl: 'content.html'
+        },
+        red = {
+            name: 'red',
+            url: '/red',
+            parent: home,
+            templateUrl: 'content.red.html'
+        },
+        blue = {
+            name: 'blue',
+            url: '/blue',
+            parent: home,
+            templateUrl: 'content.blue.html'
+        },
+        green = {
+            name: 'green',
+            url: '/green',
+            parent: home,
+            templateUrl: 'content.green.html'
+        };
+
+    $stateProvider.state(home);
+    $stateProvider.state(red);
+    $stateProvider.state(green);
+    $stateProvider.state(blue);
+}])
+</code></pre>
+
+<p>```</p>
+
+<p>The above code is the configuration for the router. We are defining the <code>module</code>, but instead
+of injecting <code>$routeProvider</code> as we would with stock AngularJS, we are injecting
+a <code>$stateProvider</code> that is used to define the states. We are defining 4 states.</p>
+
+<ul>
+<li><code>home</code> is the parent state of the next 3. It defines the header, siderbar, and
+the <code>ui-view</code> element that will be populated with the child states.</li>
+<li><code>red</code> is the first child state. It references the <code>home</code> as its parent, as
+well as targeting its own template.</li>
+<li><code>blue</code> and <code>green</code> are identical to <code>red</code>, but use different templates.</li>
+</ul>
+
+
+<p>After the states are defined, they are added to the <code>$stateProvider</code>. They are
+now ready to be navigated to.</p>
+
+<p>``` javascript</p>
+
+<pre><code>.run(['$state', function ($state) {
+   $state.transitionTo('home'); 
+}])
+</code></pre>
+
+<p>```</p>
+
+<p>the <code>run</code> method is a great place to navigate to your intial state. You are able to
+inject the now-resolved <code>$state</code> object and use its <code>transitionTo</code> method to set <code>home</code>
+as the current state.</p>
+
+<p>``` javascript</p>
+
+<pre><code>.controller('SidebarCtrl', function ($scope, $state) {
+
+$scope.content = ['red', 'green', 'blue'];
+
+$scope.setPage = function (page) {
+    $state.transitionTo(page);
+};
+</code></pre>
+
+<p>```</p>
+
+<p>The <code>SidebarCtrl</code> lists contains a simple array called content on its <code>$scope</code> which
+is used in a <code>ng-repeat</code> to give us a simple menu. When one of those items is clicked
+the <code>setPage</code> function is called with the item that was clicked. In this case, the
+content items correspond to the names of the states that we&rsquo;ve defined, so we simply
+<code>transitionTo</code> the selected state to display the content of that state.</p>
+
+<h2>Next steps with ui-router</h2>
+
+<p>This only really scratches the very surface of what you can pull off with
+ui-router. There are a ton of options and the
+<a href="https://github.com/angular-ui/ui-router/wiki">wiki</a> is well put together. Some
+things I didn&rsquo;t explore, but that are available:</p>
+
+<ul>
+<li>Passing data between states</li>
+<li>Listening for state events</li>
+<li>Named views (love this, it deserves its own post)</li>
+<li>URL Routing</li>
+</ul>
+
+
+<p><strong>The ui-router README warns that the utility is still in active early
+development</strong>. The API is still subject to change, so if you choose ui-router for
+your next project, that is something to be aware of.</p>
+
+<p>Let me know if you&rsquo;d like me to explore ui-router a bit deeper in future posts.
+I think it is an excellent approach to routing, and look forward to using it
+more.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: tools | Joel Hooks]]></title>
+  <link href="http://joelhooks.com/blog/categories/tools/atom.xml" rel="self"/>
+  <link href="http://joelhooks.com/"/>
+  <updated>2013-09-16T09:23:13-05:00</updated>
+  <id>http://joelhooks.com/</id>
+  <author>
+    <name><![CDATA[Joel Hooks]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[5 Essential VIM Plugins That Greatly Increase my Productivity]]></title>
+    <link href="http://joelhooks.com/blog/2013/04/23/5-essential-vim-plugins/"/>
+    <updated>2013-04-23T09:05:00-05:00</updated>
+    <id>http://joelhooks.com/blog/2013/04/23/5-essential-vim-plugins</id>
+    <content type="html"><![CDATA[<p>There are <strong>a lot</strong> of VIM plugins to choose from. An individual&rsquo;s list of what
+would be considered &ldquo;essential&rdquo; is largely a personal matter. For any given
+plugin, there is also probably going to be an excellent alternative plugin that does the
+same basic thing in a slightly different way. I&rsquo;m just starting to use VIM for
+more than just quick edits of files on a server, and the plugins below are
+solving very specific workflow issues that I&rsquo;ve encountered while learning to be
+productive in VIM.</p>
+
+<p><strong>warning:</strong> watch out for plugins, generally. For many (some included in my
+list of favorites here) might hamper your ability to understand the core
+functionality of VIM. Many times the problem is best solved by understanding how
+you can accomplish the task with just VIM, and not a plugin. One of the biggest
+barriers I had with getting over the initial learning curve was over-saturation
+with plugins, as I <a href="http://joelhooks.com/blog/2013/04/09/getting-to-know-vim/">wrote
+here</a>.</p>
+
+<h2>Vundle</h2>
+
+<p>If any of these plugins had an &ldquo;absolutely&rdquo; in front of its &ldquo;essential&rdquo;
+descriptor, it would be <a href="https://github.com/gmarik/vundle">Vundle</a>.</p>
+
+<p>Vundle is short for VIM Bundle. It is spiritually alike to
+<a href="http://gembundler.com/">Bundler</a>, and provides a clean easy way to manage
+plugins that you install. In past VIM efforts, I didn&rsquo;t use any sort of scheme
+for managing plugins, and it was allways a complete <strong>mess</strong>. Vundle has solved
+this for me completely.</p>
+
+<p>Vundle also allows me to rapidly reconfigure my setup across multiple machines,
+which can be a real boost. It isn&rsquo;t really a day-to-day productivity booster,
+but when you need it, it is great to have it configured.</p>
+
+<h2>NERDTree</h2>
+
+<p>One of the first walls I hit was &ldquo;how the heck do I navigate files in a
+project?&rdquo;</p>
+
+<p>The solution is multi-pronged, and starts with
+<a href="https://github.com/scrooloose/nerdtree">NERDTree</a>. The NERD Tree is a
+filesystem explorer that looks something like this:</p>
+
+<p><img src="/images/nerdtree.png" alt="NERDTree" /></p>
+
+<p>It opens to your current directory, and allows you to drill down into folders.
+This allows you to traverse your project and open files. It also has file
+management capabilities for creating, deleting, and other common tasks.</p>
+
+<p>NERDTree is fantastic for hunting something down, but there are other tools that
+help solve this problem in different ways.</p>
+
+<p><strong>note</strong>: I was chastised a bit for this one on <a href="https://news.ycombinator.com/item?id=5597939">Hacker
+News</a>. NERDTree <strong>is</strong> big, and
+you might have better luck with <code>netrw</code> as suggested. I plan on digging in to
+<code>:h netrw</code> to see if I can drop NERDTree off this list of (my) essentials.</p>
+
+<h2>ctrlp</h2>
+
+<blockquote><p>Full path fuzzy file, buffer, mru, tag, &hellip; finder for Vim.</p></blockquote>
+
+<p><a href="https://github.com/kien/ctrlp.vim">ctrlp</a> is <strong>rad</strong>. It really lets you fly
+around your project&rsquo;s files. After a quick <code>let g:ctrlp_map = '&lt;c-p&gt;'</code> to map it
+to a hotkey, you are off to the races. It has different modes that allow you to
+jump to files, buffers, most recently used, as well as tags.</p>
+
+<p>With no fault to ctrlp, I&rsquo;ve had issues with tags and JavaScript. ctags is
+behind the times, and DoctorJS lost its maintainer. Tern looks to have some
+promise in this regard, and the VIM plugin is under heavy development. Having
+solid JS tags would turbo-charge ctrlp for me, so I&rsquo;m paying close attention to
+ongoing development.</p>
+
+<h2>Syntastic</h2>
+
+<p><a href="https://github.com/scrooloose">scrooloose</a> has several awesome VIM plugins,
+including NERDTree above. I also get a lot of mileage out of
+<a href="https://github.com/scrooloose/syntastic">Syntastic</a>. It is a simple linter that
+highlights problems with syntax in a file. It works on <code>save</code>, and provides
+meaningful feedback about warnings and errors.</p>
+
+<h2>EasyMotion</h2>
+
+<p>Last, but in absolutely no way least, is the elegent
+<a href="https://github.com/Lokaltog/vim-easymotion">EasyMotion</a>. This plugin is all
+about navigating in the file you are currently editing.</p>
+
+<p><img src="/images/easymotion.png" alt="EasyMotion" /></p>
+
+<p>When activated with the <code>word</code> motion, EasyMotion assigns the first letter of
+every word after the cursor with a letter-based hotkey. After the first 26
+letters are used up, it switches to capitals. Those soon change to sections that
+allow you to &ldquo;drill in&rdquo; and get very fine-grained movement across large
+distances in your file. As your finger muscles get trained, the motion really is
+<strong>easy</strong>.</p>
+
+<p>This list isn&rsquo;t exhaustive, by any means. I also have several &ldquo;essential&rdquo;
+plugins that I used specifically related to languages and file types that are
+common for me. Vundle is probably the most essential out of this list. It has
+been a huge help over the previous cut-n-paste horrid approach I&rsquo;ve used in the
+past. Running <code>:BundleUpdate</code> and watching Vundle march down my installed plugin
+list, looking at the github repository for each plugin I&rsquo;ve installed, and
+updating them without any hassle at all is hugely satisfying.</p>
+
+<p>If you are interested, my <a href="https://github.com/joelhooks/dotfiles">dotfiles are stored
+here</a>. They are an ongoing process, but
+there are some interesting things going on.</p>
+
+<p>I&rsquo;d love the hear about your essential VIM plugins. I&rsquo;m always on the hunt for
+new and interesting additions to my workflow.</p>
+
+<p><div class="buybox">
+  <span class="buyhead">Want to make more money and love what you do? If you
+  answered "Yes!" then you will enjoy my Consultancy Masterclass Sketchnotes.</span><br><p class="text">Brennan charges <strong>$1,799</strong>
+ for <a href="http://doubleyourfreelancingrate.com/build-a-consultancy">his masterclass</a>
+and it is worth every penny. If you are on the fence about the class, or would
+like to look at the "essence" of the class in <strong>10 pages of lovingly illustrated sketchnotes</strong>, click below and
+they are yours for <strong>$9.99</strong>.</p>
+  <p class="quote">"Awesome! I love these." - Brennan Dunn</p>
+  <a class="button" href="http://gum.co/consultancyclass">Buy Sketchnotes Now</a>
+  <p><a class="small" href="http://gum.co/consultancyclass">Buy Sketchnotes Now</a><p>
+  <p class="small"><strong>100% satisfaction gurantee</strong>. If you aren't happy with these
+  notes, for <strong>any</strong> reason, just let me know and I will refund your money!</p>
+</div></p>
+]]></content>
+  </entry>
+  
+</feed>
