@@ -116,7 +116,7 @@ Along with the transcripts we've been going through the backlog of videos adding
 
 The donation model in open-source software is flawed. It is not charity. It takes a lot of **work** to build high quality open source software. It takes a lot of **work** to write documentation and provide training.
 
-![Ain't to proud to beg.](/images/programmer.jpg)
+![Ain't too proud to beg.](/images/programmer.jpg)
 
 We can do better than asking for hand-outs.
 
