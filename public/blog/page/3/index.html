@@ -7,9 +7,9 @@
 	<meta name="author" content="Joel Hooks">
 
 	
-	<meta name="description" content="Using Custom Jasmine Matchers to Make Unit Tests More Readable
-November 2012 Practical Object Oriented Design is Excellent
-August 2012 On &hellip;">
+	<meta name="description" content="Getting to Know VIM
+April 2013 Using Custom Jasmine Matchers to Make Unit Tests More Readable
+November 2012 Practical Object Oriented Design is &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -118,6 +118,16 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
     <article class="post"><div class="content">
 
 <div class="post-info">
+<h1 class="title article-title"><a href="/blog/2013/04/09/getting-to-know-vim/">Getting to Know VIM</a></h1>
+<div class="date">April 2013</div>
+</div>
+</div>
+</article>
+
+
+    <article class="post"><div class="content">
+
+<div class="post-info">
 <h1 class="title article-title"><a href="/blog/2012/11/17/using-custom-jasmine-matchers-to-make-unit-tests-more-readable/">Using Custom Jasmine Matchers to Make Unit Tests More Readable</a></h1>
 <div class="date">November 2012</div>
 </div>
@@ -200,14 +210,12 @@ you can learn more about me <a href="/about"> here.</a>
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 
 		})();
-	  (function (tos) {
-    	window.setInterval(function () {
-	      	tos = (function (t) {
-		        return t[0] == 50 ? (parseInt(t[1]) + 1) + ':00' : (t[1] || '0') + ':' + (parseInt(t[0]) + 10);
-		    })(tos.split(':').reverse());	    
-	      	_gaq.push(['_trackEvent', 'Time', 'Log', tos]);
-	   	}, 10000);
-  		})('00');
+		setTimeout(function() {
+		   window.onscroll = function() {
+		     window.onscroll = null; // Only track the event once
+		     _gaq.push(['_trackEvent', 'scroll', 'read']);
+		   }
+		 }, 5000);
 	</script>
 
 

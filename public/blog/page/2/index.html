@@ -7,9 +7,9 @@
 	<meta name="author" content="Joel Hooks">
 
 	
-	<meta name="description" content="My Sketchnotes and Thoughts from BaconBizConf 2013
-June 2013 Lessons Learned: A Year with a Large AngularJS Project
-May 2013 Size and Composition of &hellip;">
+	<meta name="description" content="What I Learned From Brennan Dunn&#8217;s Consultancy Masterclass
+June 2013 My Sketchnotes and Thoughts from BaconBizConf 2013
+June 2013 Lessons &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -118,6 +118,20 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
     <article class="post"><div class="content">
 
 	<div class="image-container"> 
+	<a href="/blog/2013/06/07/what-i-learned-from-brennan-dunns-consultancy-masterclass-w-slash-sketchnotes/"><img class="index-img" src="/images/t_consultancy_notes_banner.jpg" alt="Consultancy Masterclass Sketchnotes"></a>
+	</div>
+
+<div class="post-info">
+<h1 class="title article-title"><a href="/blog/2013/06/07/what-i-learned-from-brennan-dunns-consultancy-masterclass-w-slash-sketchnotes/">What I Learned From Brennan Dunn&#8217;s Consultancy Masterclass</a></h1>
+<div class="date">June 2013</div>
+</div>
+</div>
+</article>
+
+
+    <article class="post"><div class="content">
+
+	<div class="image-container"> 
 	<a href="/blog/2013/06/06/my-sketchnotes-and-thoughts-from-baconbizconf-2013/"><img class="index-img" src="/images/t_bacon_biz_2013-0.jpg" alt="Bacony"></a>
 	</div>
 
@@ -220,16 +234,6 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </div>
 </article>
 
-
-    <article class="post"><div class="content">
-
-<div class="post-info">
-<h1 class="title article-title"><a href="/blog/2013/04/09/getting-to-know-vim/">Getting to Know VIM</a></h1>
-<div class="date">April 2013</div>
-</div>
-</div>
-</article>
-
 <nav id="pagenavi">
     
         <a href="/" class="prev">Prev</a>
@@ -268,14 +272,12 @@ you can learn more about me <a href="/about"> here.</a>
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 
 		})();
-	  (function (tos) {
-    	window.setInterval(function () {
-	      	tos = (function (t) {
-		        return t[0] == 50 ? (parseInt(t[1]) + 1) + ':00' : (t[1] || '0') + ':' + (parseInt(t[0]) + 10);
-		    })(tos.split(':').reverse());	    
-	      	_gaq.push(['_trackEvent', 'Time', 'Log', tos]);
-	   	}, 10000);
-  		})('00');
+		setTimeout(function() {
+		   window.onscroll = function() {
+		     window.onscroll = null; // Only track the event once
+		     _gaq.push(['_trackEvent', 'scroll', 'read']);
+		   }
+		 }, 5000);
 	</script>
 
 
