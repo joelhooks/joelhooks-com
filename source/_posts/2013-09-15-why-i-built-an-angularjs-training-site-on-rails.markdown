@@ -139,3 +139,5 @@ We aren't running a charity, and asking for donations is a habit I'd like to see
 Working on the relaunch of egghead.io has been a lot of fun. It has allowed me to put to use a lot of the things I've been learning over the last year in regards to SEO, conversion rate optimization, and generally building a modern web page. It is **extremely awesome** to have a project that I care deeply about, and can work on lovingly in my free time. I love my enterprise clients, but having a little techno proto-baby to feed and care for fills my heart with joy. Again, I might be a nerd ;)
 
 Now I'm looking forward to publishing my first screencast to the site! It should be soon, so be on the lookout :>
+
+P.S. If you're looking to build an AngularJS site **on** Rails, I highly recommend [this book](http://www.fullstack.io/edu/angular/rails/).
