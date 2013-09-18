@@ -17,3 +17,8 @@ group :development do
 end
 
 gem 'sinatra', '~> 1.4.2'
+gem 'dalli'
+gem 'rack-cache'
+gem 'memcachier'
+gem 'unicorn'
+gem 'newrelic_rpm'
