@@ -159,3 +159,5 @@ your next project, that is something to be aware of.
 Let me know if you'd like me to explore ui-router a bit deeper in future posts.
 I think it is an excellent approach to routing, and look forward to using it
 more.
+
+**Update:** I've recorded a [screencast about ui-router](http://egghead.io/lessons/angularjs-introduction-ui-router) for egghead.io.
