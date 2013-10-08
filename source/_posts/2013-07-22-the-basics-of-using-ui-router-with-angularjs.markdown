@@ -60,7 +60,7 @@ You need to think about your routing a bit differently, but once you get your
 head around the state-based approach, I think you will like it.
 
 <iframe width="100%" height="300"
-  164: src="http://jsfiddle.net/joelhooks/Swm48/5/embedded/result,js,html"
+  164: src="http://jsfiddle.net/joelhooks/SvUjA/1/embedded/result,js,html"
   165  allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 This example is functionally very similar to the `ng-switch` approach. The main
