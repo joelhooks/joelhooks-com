@@ -45,7 +45,8 @@ to use, and has a metric shit-ton of resources for building this type of thing.
 
 It is also astonishingly easy to deploy Rails apps to Heroku. This has been a
 huge win. Using the free Heroku tier has allowed me to have a production and
-staging environment a few keystrokes away.
+staging environment a few keystrokes away. For production, Heroku quickly becomes not free as you add in background workers, SSL, and other essential pieces, but you can go a **long** way with free.
+
 
 ### ZOMG There is so much to learn!
 
