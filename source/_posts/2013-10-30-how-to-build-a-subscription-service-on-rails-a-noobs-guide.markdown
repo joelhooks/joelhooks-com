@@ -23,14 +23,14 @@ internet" can be a chore. If you're just selling one off digital things, it is
 fairly straight forward, but if you are looking to build out a website, allow
 users to register, and charge them on a recurring basis it can be anything but.
 
-As it happens, I'm very interested in these problem. For the last couple of
+As it happens, I'm very interested in these problems. For the last couple of
 years I've been [taking
 classes](http://www.joelhooks.com/blog/2013/06/07/what-i-learned-from-brennan-dunns-consultancy-masterclass-w-slash-sketchnotes/)
 and [going to
 conferences](http://www.joelhooks.com/blog/2013/06/06/my-sketchnotes-and-thoughts-from-baconbizconf-2013/)
 that boil down to selling things on the internet. Recurring revenue is alluring.
 My gurus are **all about** finding pain and providing immense value to people in
-exchange for money.
+exchange for money. This is what I want to do too.
 
 Wonder Twin powers; activate!
 
@@ -82,7 +82,7 @@ Disservice](http://gilesbowkett.blogspot.com/2013/10/new-ebook-software-as-disse
 is a direct critique of RailsApp. It is harsh, but constructive. It addresses
 code smells that I had noticed, enforced some of what I learned in Pete's book,
 and lays out some solid practices that a Rails noob like me won't learn in 1000
-searches that result in a Stack Overflow asnwer. It's an opinionated style and
+searches that result in a Stack Overflow answer. It's an opinionated style and
 practices guide. *note: RailsApp has its flaws, and it was extremely useful to
 me. Daniel is passionate and has put out a lot of excellent material, but
 charging people real money for a product or service is terrifying. I **needed**
