@@ -4,7 +4,7 @@
   <title><![CDATA[Joel Hooks]]></title>
   <link href="http://joelhooks.com/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2013-10-08T09:03:52-05:00</updated>
+  <updated>2013-10-30T13:19:35-05:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -12,6 +12,171 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to Build a Subscription Service on Rails: A Noob's Guide]]></title>
+    <link href="http://joelhooks.com/blog/2013/10/30/how-to-build-a-subscription-service-on-rails-a-noobs-guide/"/>
+    <updated>2013-10-30T11:19:00-05:00</updated>
+    <id>http://joelhooks.com/blog/2013/10/30/how-to-build-a-subscription-service-on-rails-a-noobs-guide</id>
+    <content type="html"><![CDATA[<p>There are few things as nerve-wracking as pushing your first subscription
+website into production. Am I covering all the bases? Will everything break and
+leave me in a pit of customer support sadness? How do I even take payments? Are
+they just going to laugh at me?</p>
+
+<h3>Some Background</h3>
+
+<p>My friend John makes <a href="http://egghead.io">awesome AngularJS training videos</a>. They are short, topical, and
+presented clearly. He loves making training videos, but has very little interest
+in building out a website and marketing the content. &ldquo;Selling things on the
+internet&rdquo; can be a chore. If you&rsquo;re just selling one off digital things, it is
+fairly straight forward, but if you are looking to build out a website, allow
+users to register, and charge them on a recurring basis it can be anything but.</p>
+
+<p>As it happens, I&rsquo;m very interested in these problem. For the last couple of
+years I&rsquo;ve been <a href="http://www.joelhooks.com/blog/2013/06/07/what-i-learned-from-brennan-dunns-consultancy-masterclass-w-slash-sketchnotes/">taking
+classes</a>
+and <a href="http://www.joelhooks.com/blog/2013/06/06/my-sketchnotes-and-thoughts-from-baconbizconf-2013/">going to
+conferences</a>
+that boil down to selling things on the internet. Recurring revenue is alluring.
+My gurus are <strong>all about</strong> finding pain and providing immense value to people in
+exchange for money.</p>
+
+<p>Wonder Twin powers; activate!</p>
+
+<h3>Digging in: The Stack</h3>
+
+<p>We have content, traffic, and a solid reputation. What&rsquo;s the next step?</p>
+
+<p>To actually build something, of course. <a href="http://www.joelhooks.com/blog/2013/09/15/why-i-built-an-angularjs-training-site-on-rails/">Rails was the clear
+choice</a>
+when it came time to decide what framework to use. It is mature, easy (enough)
+to use, and has a metric shit-ton of resources for building this type of thing.</p>
+
+<p>It is also astonishingly easy to deploy Rails apps to Heroku. This has been a
+huge win. Using the free Heroku tier has allowed me to have a production and
+staging environment a few keystrokes away.</p>
+
+<h3>ZOMG There is so much to learn!</h3>
+
+<p>I&rsquo;ve been developing software professionally for a few years. My roles are
+primarily on the UI side of things, but I&rsquo;ve built a few full-stack solutions in
+the past with Django. Over the years I&rsquo;ve always <em>wanted</em> to learn Rails, I just
+never had anything real to build. Tutorials and books can be boring, especially
+with no context of something &ldquo;real&rdquo; that you actually care about to build. That
+said, there were a few excellent resources that helped me on the way:</p>
+
+<p><a href="http://ruby.railstutorial.org/">Michael Hartl&rsquo;s Rub on Rails Tutorial</a>: Outside
+of basic Ruby syntax, this is where you want to start. The web version is free,
+and he guides you through building a &ldquo;real&rdquo; app with Rails in a clear, easy to
+understand manner.</p>
+
+<p><a href="http://railsapps.github.io/">Daniel Kehoe&rsquo;s RailsApp Project</a>: This was a huge
+boost for me. It covered all the bases. I wanted to build an app with Rails.
+Check. I wanted to use Twitter Boostrap with Rails. Check. I wanted to have
+authentication and authorization in the app. Check. I wanted to integrate
+recurring subscription payments. Check.</p>
+
+<p><a href="http://www.petekeen.net/mastering-modern-payments">Peter Keen&rsquo;s Mastering Modern
+Payments</a>: If you are going
+to sell stuff via a Rails app, <strong>buy this book today</strong>. It saved me <strong>so much
+time</strong> and instilled a confidence that I might never have had without it.
+RailsApp is pretty good, but for me it started to break down when I wanted to
+add payment. I needed deeper understanding and control, and Pete&rsquo;s book
+delivered the knowledge I needed in a concise 120 page guide. I&rsquo;d recommend
+getting the verion with the code, because it was a huge help to me.</p>
+
+<p><a href="http://gilesbowkett.blogspot.com/2013/10/new-ebook-software-as-disservice-fixing.html">Giles Bowkett&rsquo;s Software as a
+Disservice</a>
+is a direct critique of RailsApp. It is harsh, but constructive. It addresses
+code smells that I had noticed, enforced some of what I learned in Pete&rsquo;s book,
+and lays out some solid practices that a Rails noob like me won&rsquo;t learn in 1000
+searches that result in a Stack Overflow asnwer. It&rsquo;s an opinionated style and
+practices guide. <em>note: RailsApp has its flaws, and it was extremely useful to
+me. Daniel is passionate and has put out a lot of excellent material, but
+charging people real money for a product or service is terrifying. I <strong>needed</strong>
+this critique to plug some serious holes in the implementation. It is important
+to recognize that Giles is critiquing the <strong>code</strong> and not the developer that
+wrote it.</em></p>
+
+<p>These four sources were keys to the successful launch of egghead.io&rsquo;s Pro
+subscription service. Along with countless posts, Stack Overflow answers, and
+documentation written by the Ruby/Rails community. It is amazing. Now is a
+<strong>very</strong> good time to be a nerd.</p>
+
+<h3>Taking Payments: *scared face*</h3>
+
+<p>It really is terrifying. Maybe it isn&rsquo;t as scary if you&rsquo;ve done it before and
+know what you are doing. I didn&rsquo;t qualify.</p>
+
+<p>Luckily we live in a fantastic age of modern convenience.</p>
+
+<p><strong>Stripe</strong>.</p>
+
+<p>What an amazing service.</p>
+
+<ul>
+<li>No complicated merchant accounts or setup</li>
+<li>By developers, for developers</li>
+<li>Wonderful API</li>
+<li>Excellent resources for testing</li>
+<li>Solid documentation</li>
+<li>Easy integration</li>
+</ul>
+
+
+<p>They handle a huge amount of the drudgery invloved with taking payments from
+people on the internet. They remove the horrors of PCI compliance by providing
+an implementation that allows you to take credit cards without ever actually
+having the actual credit card numbers touch your system. They travel over
+secure-socket-layer directly to Stripe, who responds with a token that allows
+you to initiate an authorized charge. It is beautiful. Once you&rsquo;ve authorized a
+subscription, Stripe manages the recurring billing for you.</p>
+
+<p>To help with the subscriptions, I found the <a href="https://github.com/andrewculver/koudoku">Koudoku
+gem</a> to be a great resource. While I
+had to fork it and manipulate it to some extent for my specific needs, it does a
+lot of the heavy lifting. I&rsquo;m on the fence about using a gem to handle all of
+this. On one hand, it is <strong>very</strong> easy. On the other, having your subscription
+implementation tucked away in a &ldquo;black box&rdquo; can bite you when the shit hits the
+fan. Give and take.</p>
+
+<h3>What would I do differently?</h3>
+
+<p><strong>Testing</strong></p>
+
+<p><strong>Testing</strong></p>
+
+<p><strong>Testing</strong></p>
+
+<p>It is tough, as a noob, to get in and write proper tests. <strong>All</strong> of the
+resources I listed above discuss testing. I skipped it. You know what is
+<strong>really hard</strong>? Going back through a non-trivial system and writing a solid
+test suite.</p>
+
+<p>This can&rsquo;t be said enough. Tests should <strong>guide design of code</strong> and when they
+are tacked on later, they lose a big chunk of value. This isn&rsquo;t to say they
+don&rsquo;t still provide immense value, but &ldquo;test later&rdquo; often means &ldquo;test never&rdquo; and
+this isn&rsquo;t a good situation to be in.</p>
+
+<p>I&rsquo;m working on retrofitting tests, but it is a chore. Test early, test often.</p>
+
+<h3>Summary</h3>
+
+<p>Building a subscription service is scary. Luckily the internet is stuffed full
+of open source projects, examples, and helpful people sharing knowledge. Some of
+it is free, but some of the best resources cost a few dollars. Worth every
+penny.</p>
+
+<p>Rails is a great framework for this sort of thing. I&rsquo;d recommend it highly, if
+you are trying to build an application that requires recurring billing for your
+users.</p>
+
+<p><strong>Test early, test often</strong>. It&rsquo;s an additional thing to learn and understand if
+you are just starting out, but it is worth the effort. If I could go back and do
+anything differently, it would be to write solid tests along the way. Don&rsquo;t make
+the same mistake with your apps!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Why I Built an AngularJS Training Site on Rails]]></title>
@@ -2833,20 +2998,6 @@ wrong with the Air. I&rsquo;m impressed.</p>
 but it is so cool to have a basic configuration version controlled. I can
 literally go from fresh install of OS X to working in under an hour now. I plan
 on writing my thoughts on that and will post it here soon.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[VIM Adventures: A Fun Way to Pick up Some Basic Skills]]></title>
-    <link href="http://joelhooks.com/blog/2013/04/09/vim-adventures-a-fun-way-to-pick-up-some-basic-skills/"/>
-    <updated>2013-04-09T15:51:00-05:00</updated>
-    <id>http://joelhooks.com/blog/2013/04/09/vim-adventures-a-fun-way-to-pick-up-some-basic-skills</id>
-    <content type="html"><![CDATA[<p><img src="http://joelhooks.com/images/vim_adventures.jpg" alt="Vim Adventures" /></p>
-
-<p><a href="http://vim-adventures.com/">Vim Adventures</a> is a fun browser based game that
-teaches basic VIM skills while adventuring. It is kind of silly, and can be a
-bit&hellip; frustrating&hellip; but that is the point. This is VIM after all! No pain, no
-gain ;)</p>
 ]]></content>
   </entry>
   
