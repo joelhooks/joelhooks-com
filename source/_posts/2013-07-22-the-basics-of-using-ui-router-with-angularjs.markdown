@@ -161,3 +161,5 @@ I think it is an excellent approach to routing, and look forward to using it
 more.
 
 **Update:** I've recorded a [screencast about ui-router](http://egghead.io/lessons/angularjs-introduction-ui-router) for egghead.io.
+
+**Update 2:** Here's a [screencast about ui-router's named views](https://egghead.io/lessons/angularjs-ui-router-named-views) that I recorded for egghead.io. (note: it is paid/subscription content)
