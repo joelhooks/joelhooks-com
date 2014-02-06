@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: underscorejs | Joel Hooks]]></title>
+  <link href="http://joelhooks.com/blog/categories/underscorejs/atom.xml" rel="self"/>
+  <link href="http://joelhooks.com/"/>
+  <updated>2014-02-06T00:38:47-06:00</updated>
+  <id>http://joelhooks.com/</id>
+  <author>
+    <name><![CDATA[Joel Hooks]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Stop writing For loops. Start using underscorejs.]]></title>
+    <link href="http://joelhooks.com/blog/2014/02/06/stop-writing-for-loops-start-using-underscorejs/"/>
+    <updated>2014-02-06T00:33:00-06:00</updated>
+    <id>http://joelhooks.com/blog/2014/02/06/stop-writing-for-loops-start-using-underscorejs</id>
+    <content type="html"><![CDATA[<p>How many for loops did you write today? This week?</p>
+
+<p>``` javascript
+var i;</p>
+
+<p>for(i = 0; i &lt; someArray.length; i++) {</p>
+
+<pre><code>var someThing = someArray[i];
+doSomeWorkOn(someThing);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Sure. That&rsquo;s harmless enough. Ugly and weird, but not something to really complain about. But this is all too common:</p>
+
+<p>``` javascript
+var i,</p>
+
+<pre><code>j;
+</code></pre>
+
+<p>for(i = 0; i &lt; someArray.length; i++) {</p>
+
+<pre><code>var someThing = someArray[i];
+for(j = 0; j &lt; someThing.stuff.length; j++) {
+    doSomeWorkOn(someThing.stuff[j]);
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Which on the scale of bad code, isn&rsquo;t even <strong>that</strong> bad, but you start throwing some <code>if</code>s in there and the insanity really starts.</p>
+
+<h2>I haven&rsquo;t written a For loop in two years.</h2>
+
+<p>&ldquo;The hell you say?&rdquo;</p>
+
+<p>It&rsquo;s true. Cold turkey. Not a single one, and my code is easier to understand because of my abstinence.</p>
+
+<p>How&rsquo;s I do it?</p>
+
+<p>``` javascript
+_.each(someArray, function(someThing) {</p>
+
+<pre><code>doSomeWorkOn(someThing);
+</code></pre>
+
+<p>})
+```</p>
+
+<p>That&rsquo;s <a href="http://underscorejs.org/">underscorejs</a> in action. Clean, easy to read, short, no variables, stacks of semi-colons&hellip; just plain nice.</p>
+
+<p>Here&rsquo;s another example:</p>
+
+<p>``` javascript
+var i,</p>
+
+<pre><code>result = [];
+</code></pre>
+
+<p>for(i = 0; i &lt; someArray.length; i++) {</p>
+
+<pre><code>var someThing = someArray[i];
+// my hand already hurts from all this damn typing
+if(someThing.isAwesome === true) {
+    result.push(someArray[i]);
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Again, a typical use case for the time honored <code>for</code> loop. Meh. Like an ex-smoker or a recently converted vegan, even the site of the thing fills me with righteous indignation.</p>
+
+<p>``` javascript
+var result = _.filter(someArray, function(someThing) {</p>
+
+<pre><code>return someThing.isAwesome === true;
+</code></pre>
+
+<p>})
+```</p>
+
+<p>As the underscore method name <code>filter</code> suggests, this handy 3 lines of easy to parse code gives me a new array of <strong>awesome things</strong>.</p>
+
+<p>Or maybe I&rsquo;d like to do some work on the things and get a new array of the results?</p>
+
+<p>``` javascript
+var result = _.map(someArray, function(someThing) {</p>
+
+<pre><code>return trasformTheThing(someThing);
+</code></pre>
+
+<p>})
+```</p>
+
+<p>Those three functions are insanely useful on a daily basis, and don&rsquo;t even scratch the surface of what underscore brings to the table.</p>
+
+<p>``` javascript
+var grandTotal = 0,</p>
+
+<pre><code>somePercentage = 1.07,
+severalNumbers = [33, 54, 42],
+i; // don't forget to hoist those indices;
+</code></pre>
+
+<p>for(i = 0; i &lt; severalNumbers.length; i++) {</p>
+
+<pre><code>var aNumber = severalNumbers[i];
+grandTotal += aNumber * somePercentage;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Oy.</p>
+
+<p>``` javascript
+var somePercentage = 1.07,</p>
+
+<pre><code>severalNumbers = [33, 54, 42],
+grandTotal; 
+</code></pre>
+
+<p>grandTotal = _.reduce(severalNumbers, function(runningTotal, aNumber) {</p>
+
+<pre><code>return runningTotal + (aNumber * somePercentage);
+</code></pre>
+
+<p>}, 0)
+```</p>
+
+<p>It seems a little weird at first, and I <strong>still</strong> hit the docs for methods like <strong>reduce</strong> above. Knowing they exist, and a flat refusal to use for loops is my primary weapon. The above methods are really just scratching the surface. The underscorejs library is filled with awesome utilities like this that can be combined together to create new and wonderful things.</p>
+
+<h2>The 30 day no-loop challenge</h2>
+
+<p>Stop.</p>
+
+<p>For the next 30 days, don&rsquo;t write any for loops. If you see a nasty pile of those gnarly things, replace them with an <strong>each</strong> or a <strong>map</strong>. Do a little <strong>reducing</strong>. And let me know how it goes!</p>
+
+<p>Beware. Underscore is the gateway to functional programming. What has been seen, can&rsquo;t be unseen. In a good way!</p>
+
+<p>If you&rsquo;re wanting to dig a little deeper, you should jump over to this tutorial on <a href="http://reactive-extensions.github.io/learnrx/">functional programming in javascript</a>. It&rsquo;s great and only takes about &frac12; hour to work through. It is &ldquo;how the sausage is made&rdquo; fundamentals for the underscore functions I used above. Lot&rsquo;s of wholesome nerd fun!</p>
+]]></content>
+  </entry>
+  
+</feed>
