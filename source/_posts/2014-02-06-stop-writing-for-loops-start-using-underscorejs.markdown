@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Stop writing For loops. Start using underscorejs."
+title: "Stop writing For loops. Start using underscore."
 date: 2014-02-06 00:33
 comments: true
 categories: programming, underscorejs
@@ -42,7 +42,7 @@ Which on the scale of bad code, isn't even **that** bad, but you start throwing 
 
 It's true. Cold turkey. Not a single one, and my code is easier to understand because of my abstinence.
 
-How's I do it?
+How'd I do it?
 
 ``` javascript
 _.each(someArray, function(someThing) {
