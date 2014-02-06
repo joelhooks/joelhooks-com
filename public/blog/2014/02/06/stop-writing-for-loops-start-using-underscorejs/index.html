@@ -314,13 +314,13 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <p><strong>note</strong>: <em>it should also be noted that modern browsers support the above methods natively. <code>Array.forEach</code>, <code>Array.reduce</code>, and <code>Array.map</code> exist, but to use them you likely need to create shims to fallback for cases when they don&rsquo;t exist. For me, having the consistent underscore (lodash) API is much more convenient. YMMV</em></p>
 
-<p><strong>note</strong>: *Yes, for loops <strong>are</strong> faster. I optimize for readability and ease of use for my team before squeezing performance out of CPUs. I don&rsquo;t write games, or rich animated consumer experiences. Big projects, 10s of developers, code that already trends towards sprawling and messy.</p>
+<p><strong>note</strong>: <em>Yes, for loops <strong>are</strong> faster. I optimize for readability and ease of use for my team before squeezing performance out of CPUs. I don&rsquo;t write games, or rich animated consumer experiences. Big projects, 10s of developers, code that already trends towards sprawling and messy.</p>
 
 <p>The &ldquo;clean readable code&rdquo; optimization pays huge dividends, even if it comes at the cost of (very) marginal performance hits.</p>
 
 <p>Now, if we are doing a big list of items in Angular, we focus on performance in terms of CPU, but even then, the only time we hit a wall with an unoptimized datagrid was on last-gen Android phones.</p>
 
-<p>Clean first! ;)*</p>
+<p>Clean first! ;)</em></p>
 
 	</div>
 

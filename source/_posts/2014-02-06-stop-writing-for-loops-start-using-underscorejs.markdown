@@ -133,11 +133,11 @@ If you're wanting to dig a little deeper, you should jump over to this tutorial 
 
 **note**: *it should also be noted that modern browsers support the above methods natively. `Array.forEach`, `Array.reduce`, and `Array.map` exist, but to use them you likely need to create shims to fallback for cases when they don't exist. For me, having the consistent underscore (lodash) API is much more convenient. YMMV*
 
-**note**: *Yes, for loops **are** faster. I optimize for readability and ease of use for my team before squeezing performance out of CPUs. I don't write games, or rich animated consumer experiences. Big projects, 10s of developers, code that already trends towards sprawling and messy.
+**note**: <em>Yes, for loops **are** faster. I optimize for readability and ease of use for my team before squeezing performance out of CPUs. I don't write games, or rich animated consumer experiences. Big projects, 10s of developers, code that already trends towards sprawling and messy.
 
 The "clean readable code" optimization pays huge dividends, even if it comes at the cost of (very) marginal performance hits.
 
 Now, if we are doing a big list of items in Angular, we focus on performance in terms of CPU, but even then, the only time we hit a wall with an unoptimized datagrid was on last-gen Android phones.
 
-Clean first! ;)*
+Clean first! ;)</em>
 
