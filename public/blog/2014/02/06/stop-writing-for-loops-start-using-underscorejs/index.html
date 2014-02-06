@@ -198,6 +198,13 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Or, even better:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">someArray</span><span class="p">,</span> <span class="nx">doSomeWorkOn</span><span class="p">});</span> <span class="c1">//thanks paulmcpazzi!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>That&rsquo;s <a href="http://underscorejs.org/">underscorejs</a> in action. Clean, easy to read, short, no variables, stacks of semi-colons&hellip; just plain nice.</p>
 
 <p>Here&rsquo;s another example:</p>
@@ -303,7 +310,17 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <p>If you&rsquo;re wanting to dig a little deeper, you should jump over to this tutorial on <a href="http://reactive-extensions.github.io/learnrx/">functional programming in javascript</a>. It&rsquo;s great and only takes about &frac12; hour to work through. It is &ldquo;how the sausage is made&rdquo; fundamentals for the underscore functions I used above. Lot&rsquo;s of wholesome nerd fun!</p>
 
-<p><strong>note</strong>: As a more performant alternative to underscore, you might check out <a href="http://lodash.com/benchmarks">lodash</a></p>
+<p><strong>note</strong>: <em>As a more performant alternative to underscore, you might check out <a href="http://lodash.com/benchmarks">lodash</a></em></p>
+
+<p><strong>note</strong>: <em>it should also be noted that modern browsers support the above methods natively. <code>Array.forEach</code>, <code>Array.reduce</code>, and <code>Array.map</code> exist, but to use them you likely need to create shims to fallback for cases when they don&rsquo;t exist. For me, having the consistent underscore (lodash) API is much more convenient. YMMV</em></p>
+
+<p><strong>note</strong>: *Yes, for loops <strong>are</strong> faster. I optimize for readability and ease of use for my team before squeezing performance out of CPUs. I don&rsquo;t write games, or rich animated consumer experiences. Big projects, 10s of developers, code that already trends towards sprawling and messy.</p>
+
+<p>The &ldquo;clean readable code&rdquo; optimization pays huge dividends, even if it comes at the cost of (very) marginal performance hits.</p>
+
+<p>Now, if we are doing a big list of items in Angular, we focus on performance in terms of CPU, but even then, the only time we hit a wall with an unoptimized datagrid was on last-gen Android phones.</p>
+
+<p>Clean first! ;)*</p>
 
 	</div>
 

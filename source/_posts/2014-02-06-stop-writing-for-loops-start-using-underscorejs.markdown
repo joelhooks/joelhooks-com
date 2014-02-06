@@ -50,6 +50,12 @@ _.each(someArray, function(someThing) {
 })
 ```
 
+Or, even better:
+
+``` javascript
+_.each(someArray, doSomeWorkOn}); //thanks paulmcpazzi!
+```
+
 That's [underscorejs](http://underscorejs.org/) in action. Clean, easy to read, short, no variables, stacks of semi-colons... just plain nice.
 
 Here's another example:
@@ -123,6 +129,15 @@ Beware. Underscore is the gateway to functional programming. What has been seen,
 
 If you're wanting to dig a little deeper, you should jump over to this tutorial on [functional programming in javascript](http://reactive-extensions.github.io/learnrx/). It's great and only takes about 1/2 hour to work through. It is "how the sausage is made" fundamentals for the underscore functions I used above. Lot's of wholesome nerd fun!
 
-**note**: As a more performant alternative to underscore, you might check out [lodash](http://lodash.com/benchmarks)
+**note**: *As a more performant alternative to underscore, you might check out [lodash](http://lodash.com/benchmarks)*
 
+**note**: *it should also be noted that modern browsers support the above methods natively. `Array.forEach`, `Array.reduce`, and `Array.map` exist, but to use them you likely need to create shims to fallback for cases when they don't exist. For me, having the consistent underscore (lodash) API is much more convenient. YMMV*
+
+**note**: *Yes, for loops **are** faster. I optimize for readability and ease of use for my team before squeezing performance out of CPUs. I don't write games, or rich animated consumer experiences. Big projects, 10s of developers, code that already trends towards sprawling and messy.
+
+The "clean readable code" optimization pays huge dividends, even if it comes at the cost of (very) marginal performance hits.
+
+Now, if we are doing a big list of items in Angular, we focus on performance in terms of CPU, but even then, the only time we hit a wall with an unoptimized datagrid was on last-gen Android phones.
+
+Clean first! ;)*
 
