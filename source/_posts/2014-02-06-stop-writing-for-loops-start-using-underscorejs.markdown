@@ -123,4 +123,6 @@ Beware. Underscore is the gateway to functional programming. What has been seen,
 
 If you're wanting to dig a little deeper, you should jump over to this tutorial on [functional programming in javascript](http://reactive-extensions.github.io/learnrx/). It's great and only takes about 1/2 hour to work through. It is "how the sausage is made" fundamentals for the underscore functions I used above. Lot's of wholesome nerd fun!
 
+**note**: As a more performant alternative to underscore, you might check out [lodash](http://lodash.com/benchmarks)
+
 
