@@ -40,7 +40,7 @@ Which on the scale of bad code, isn't even **that** bad, but you start throwing 
 
 "The hell you say?"
 
-It's true. Cold turkey. Not a single one, and my code is easier to understand because of my abstinence.
+It's true. Cold turkey. Not a single one (ok, you caught me, I just wrote a couple above), and my code is easier to understand because of my abstinence.
 
 How'd I do it?
 
@@ -53,7 +53,7 @@ _.each(someArray, function(someThing) {
 Or, even better:
 
 ``` javascript
-_.each(someArray, doSomeWorkOn}); //thanks paulmcpazzi!
+_.each(someArray, doSomeWorkOn); //thanks paulmcpazzi!
 ```
 
 That's [underscorejs](http://underscorejs.org/) in action. Clean, easy to read, short, no variables, stacks of semi-colons... just plain nice.
