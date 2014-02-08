@@ -73,7 +73,7 @@ for(i = 0; i < someArray.length; i++) {
 }
 ```
 
-Again, a typical use case for the time honored `for` loop. Meh. Like an ex-smoker or a recently converted vegan, even the site of the thing fills me with righteous indignation.
+Again, a typical use case for the time honored `for` loop. Meh. Like an ex-smoker or a recently converted vegan, even the sight of the thing fills me with righteous indignation.
 
 ``` javascript
 var result = _.filter(someArray, function(someThing) {
