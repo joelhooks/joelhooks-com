@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Lets Make Full-Ass AngularJS Directives"
+title: "Let's Make Full-Ass AngularJS Directives"
 date: 2014-02-11 15:45
 comments: true
 categories: angularjs, directives, javascript
