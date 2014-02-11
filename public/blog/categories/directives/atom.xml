@@ -4,7 +4,7 @@
   <title><![CDATA[Category: directives, | Joel Hooks]]></title>
   <link href="http://joelhooks.com/blog/categories/directives/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2014-02-11T01:59:28-06:00</updated>
+  <updated>2014-02-11T15:47:50-06:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -12,6 +12,219 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Lets Make Full-Ass AngularJS Directives]]></title>
+    <link href="http://joelhooks.com/blog/2014/02/11/lets-make-full-ass-angularjs-directives/"/>
+    <updated>2014-02-11T15:45:00-06:00</updated>
+    <id>http://joelhooks.com/blog/2014/02/11/lets-make-full-ass-angularjs-directives</id>
+    <content type="html"><![CDATA[<p><em>With best intentions we set forth to create the mighty directive. The steepest slope of the dreaded AngularJS learning curve.</em></p>
+
+<h3>The &ldquo;place where the jQuery goes.&rdquo;</h3>
+
+<p>So what is a directive? We&rsquo;ve <a href="http://www.joelhooks.com/blog/2013/07/27/using-angularjs-stop-using-jquery-as-a-crutch/">talked about this before</a>, and decided that they are <strong>not</strong> where the jQuery goes&hellip; usually&hellip; if you <strong>are</strong> going to use jQuery, directives are <strong>definitely</strong> where it should go.</p>
+
+<p>It&rsquo;s easy to say &ldquo;OMG, NO JQUERY&rdquo; &ndash; but what does that actually mean? What does a <strong>really kickass directive</strong> look like?</p>
+
+<h3>The Anatomy of a Good Directive.</h3>
+
+<p>The <a href="https://github.com/angular-ui/bootstrap">ui-bootstrap</a> library is the best singular resource on what a good directive should look like. They are solving multiple common problems in varied ways, with generally solid patterns and practices. It&rsquo;s a robust open-source project, with a constant flurry of activity.</p>
+
+<p>When you start to dig through the library&rsquo;s src, you can see how many different styles and solutions have solved the various problem. Some are extremely complex, while some are relatively simple.</p>
+
+<p>While the solutions <strong>are</strong> varied, there are also some common traits the ui-boostrap directives share across the library.</p>
+
+<h4>Minimal use of the link function</h4>
+
+<p>How many of your project&rsquo;s link functions contain <strong>all the things</strong>?</p>
+
+<p><em>me: raises guilt hand sheepishly</em></p>
+
+<p>Down and dirty, just toss it in the <code>link</code> function.</p>
+
+<p>When you start to browse the ui-bootstrap code, pay attention to the <code>link</code> functions on the directives themselves.</p>
+
+<h5>dropdown</h5>
+
+<p>``` javascript
+.directive(&lsquo;dropdown&rsquo;, function() {
+  return {</p>
+
+<pre><code>restrict: 'CA',
+controller: 'DropdownController',
+scope: {
+  isOpen: '=?',
+  onToggle: '&amp;'
+},
+link: function(scope, element, attrs, dropdownCtrl) {
+  dropdownCtrl.init( element );
+}
+</code></pre>
+
+<p>  };
+})
+```</p>
+
+<p>The <strong>Dropdown</strong> directive has a link function, but its sole purpose in life is to associate the directive with a controller.</p>
+
+<p><strong>This is a good thing</strong></p>
+
+<p>Why? Well, to be honest, directives can be a real pain in the ass to unit test. How do you make a directive easy to unit test? Don&rsquo;t give it any functionality.</p>
+
+<p>Controllers, on the other hand, are easy to unit test, so we can avoid the headache of even thinking about unit testing a directive by offloading the logical bits to a controller.</p>
+
+<h4>The directive&rsquo;s controller</h4>
+
+<p>What does it look like? Basically, it looks like a normal controller.</p>
+
+<h5>DropdownController</h5>
+
+<p>``` javascript
+.controller(&lsquo;DropdownController&rsquo;, function($scope, $attrs, dropdownConfig, dropdownService, $animate) {
+  var self = this, openClass = dropdownConfig.openClass;</p>
+
+<p>  this.init = function( element ) {</p>
+
+<pre><code>self.$element = element;
+$scope.isOpen = angular.isDefined($attrs.isOpen) ? $scope.$parent.$eval($attrs.isOpen) : false;
+</code></pre>
+
+<p>  };</p>
+
+<p>  this.toggle = function( open ) {</p>
+
+<pre><code>return $scope.isOpen = arguments.length ? !!open : !$scope.isOpen;
+</code></pre>
+
+<p>  };</p>
+
+<p>  // Allow other directives to watch status
+  this.isOpen = function() {</p>
+
+<pre><code>return $scope.isOpen;
+</code></pre>
+
+<p>  };</p>
+
+<p>  $scope.$watch(&lsquo;isOpen&rsquo;, function( value ) {</p>
+
+<pre><code>$animate[value ? 'addClass' : 'removeClass'](self.$element, openClass);
+
+if ( value ) {
+  dropdownService.open( $scope );
+} else {
+  dropdownService.close( $scope );
+}
+
+$scope.onToggle({ open: !!value });
+</code></pre>
+
+<p>  });</p>
+
+<p>  $scope.$on(&lsquo;$locationChangeSuccess&rsquo;, function() {</p>
+
+<pre><code>$scope.isOpen = false;
+</code></pre>
+
+<p>  });
+})
+```</p>
+
+<p>It&rsquo;s obviously <strong>much</strong> bulkier than the actual directive, but it&rsquo;s also crystal clear what the controller is doing. Normal controller stuff!</p>
+
+<p>One particular item of note is the <code>init</code> function. In the directive above, you probably noticed that the link function did exactly one thing:</p>
+
+<p><code>javascript
+dropdownCtrl.init( element );
+</code></p>
+
+<p>Since you can&rsquo;t get at the element in the controller, this allows us to still have access to the element, but in a clean, testable, injected way.</p>
+
+<p>If we were going to critique the controller, it might be about its access to <code>$element</code> at all. Is the controller the right place to be doing <em>any</em> DOM manipulation, even if it is ever so slight? Where else would we do that if we aren&rsquo;t going to do it in the <code>link</code> function or the controller?</p>
+
+<p>It needs to go someplace, and pedantic nitpicking is just a hobby.</p>
+
+<h4>Out at the boundaries</h4>
+
+<p>This facet of this clean gem of a directive sparkles bright:</p>
+
+<h5>dropdownService</h5>
+
+<p>``` javascript
+.service(&lsquo;dropdownService&rsquo;, function($document) {
+  var self = this, openScope = null;</p>
+
+<p>  this.open = function( dropdownScope ) {</p>
+
+<pre><code>if ( !openScope ) {
+  $document.bind('click', closeDropdown);
+  $document.bind('keydown', escapeKeyBind);
+}
+
+if ( openScope &amp;&amp; openScope !== dropdownScope ) {
+    openScope.isOpen = false;
+}
+
+openScope = dropdownScope;
+</code></pre>
+
+<p>  };</p>
+
+<p>  this.close = function( dropdownScope ) {</p>
+
+<pre><code>if ( openScope === dropdownScope ) {
+  openScope = null;
+  $document.unbind('click', closeDropdown);
+  $document.unbind('keydown', escapeKeyBind);
+}
+</code></pre>
+
+<p>  };</p>
+
+<p>  var closeDropdown = function() {</p>
+
+<pre><code>openScope.$apply(function() {
+  openScope.isOpen = false;
+});
+</code></pre>
+
+<p>  };</p>
+
+<p>  var escapeKeyBind = function( evt ) {</p>
+
+<pre><code>if ( evt.which === 27 ) {
+  closeDropdown();
+}
+</code></pre>
+
+<p>  };
+})
+```</p>
+
+<p>The AngularJS &lsquo;service&rsquo; is where the boundaries of our applications live.</p>
+
+<ul>
+<li>connections to the outside world</li>
+<li>domain/data models</li>
+<li>core logic</li>
+<li>&hellip;</li>
+<li>the DOM?</li>
+</ul>
+
+
+<p>This actor is wonderful. It connects <strong>all the dropdowns</strong> and manages their shared state. In this case, we can only have one open drop down on the page. <code>dropdownService</code> keeps track of who that is, and if another drop down is opened, it snaps the current one shut before allowing the next to open.</p>
+
+<p>Additionally, the service listens for events on the <code>document</code> to close the open drop down if the user clicks the page or hits the <code>esc</code> key.</p>
+
+<p>One central place to encapsulate what would otherwise be confusing spaghetti logic on line 342 of a typical directive&rsquo;s <code>link</code> function.</p>
+
+<h3>Pause and study</h3>
+
+<p>It really pays to take pause and review a little code when you sit down to write a complex directive. For one, ui-bootstrap covers a lot of ground. The entire point of Bootstrap (proper) is to provide a robust set of <em>typical</em> components. Meaning, odds are the component you are building (at least the soul of it) is likely covered by the Boostrap component set.</p>
+
+<p>ui-bootstrap conveniently provides this world class reference implementation of the most common web application components&hellip; the Angular Way™.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AngularJS Directives That Override Standard HTML Tags]]></title>

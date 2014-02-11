@@ -4,7 +4,7 @@
   <title><![CDATA[Joel Hooks]]></title>
   <link href="http://joelhooks.com/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2014-02-11T01:59:28-06:00</updated>
+  <updated>2014-02-11T15:47:50-06:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -12,6 +12,272 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Lets Make Full-Ass AngularJS Directives]]></title>
+    <link href="http://joelhooks.com/blog/2014/02/11/lets-make-full-ass-angularjs-directives/"/>
+    <updated>2014-02-11T15:45:00-06:00</updated>
+    <id>http://joelhooks.com/blog/2014/02/11/lets-make-full-ass-angularjs-directives</id>
+    <content type="html"><![CDATA[<p><em>With best intentions we set forth to create the mighty directive. The steepest slope of the dreaded AngularJS learning curve.</em></p>
+
+<h3>The &ldquo;place where the jQuery goes.&rdquo;</h3>
+
+<p>So what is a directive? We&rsquo;ve <a href="http://www.joelhooks.com/blog/2013/07/27/using-angularjs-stop-using-jquery-as-a-crutch/">talked about this before</a>, and decided that they are <strong>not</strong> where the jQuery goes&hellip; usually&hellip; if you <strong>are</strong> going to use jQuery, directives are <strong>definitely</strong> where it should go.</p>
+
+<p>It&rsquo;s easy to say &ldquo;OMG, NO JQUERY&rdquo; &ndash; but what does that actually mean? What does a <strong>really kickass directive</strong> look like?</p>
+
+<h3>The Anatomy of a Good Directive.</h3>
+
+<p>The <a href="https://github.com/angular-ui/bootstrap">ui-bootstrap</a> library is the best singular resource on what a good directive should look like. They are solving multiple common problems in varied ways, with generally solid patterns and practices. It&rsquo;s a robust open-source project, with a constant flurry of activity.</p>
+
+<p>When you start to dig through the library&rsquo;s src, you can see how many different styles and solutions have solved the various problem. Some are extremely complex, while some are relatively simple.</p>
+
+<p>While the solutions <strong>are</strong> varied, there are also some common traits the ui-boostrap directives share across the library.</p>
+
+<h4>Minimal use of the link function</h4>
+
+<p>How many of your project&rsquo;s link functions contain <strong>all the things</strong>?</p>
+
+<p><em>me: raises guilt hand sheepishly</em></p>
+
+<p>Down and dirty, just toss it in the <code>link</code> function.</p>
+
+<p>When you start to browse the ui-bootstrap code, pay attention to the <code>link</code> functions on the directives themselves.</p>
+
+<h5>dropdown</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;dropdown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;DropdownController&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">isOpen</span><span class="o">:</span> <span class="s1">&#39;=?&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">onToggle</span><span class="o">:</span> <span class="s1">&#39;&amp;&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">,</span> <span class="nx">dropdownCtrl</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">dropdownCtrl</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span> <span class="nx">element</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <strong>Dropdown</strong> directive has a link function, but its sole purpose in life is to associate the directive with a controller.</p>
+
+<p><strong>This is a good thing</strong></p>
+
+<p>Why? Well, to be honest, directives can be a real pain in the ass to unit test. How do you make a directive easy to unit test? Don&rsquo;t give it any functionality.</p>
+
+<p>Controllers, on the other hand, are easy to unit test, so we can avoid the headache of even thinking about unit testing a directive by offloading the logical bits to a controller.</p>
+
+<h4>The directive&rsquo;s controller</h4>
+
+<p>What does it look like? Basically, it looks like a normal controller.</p>
+
+<h5>DropdownController</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;DropdownController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$attrs</span><span class="p">,</span> <span class="nx">dropdownConfig</span><span class="p">,</span> <span class="nx">dropdownService</span><span class="p">,</span> <span class="nx">$animate</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span> <span class="nx">openClass</span> <span class="o">=</span> <span class="nx">dropdownConfig</span><span class="p">.</span><span class="nx">openClass</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">element</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">self</span><span class="p">.</span><span class="nx">$element</span> <span class="o">=</span> <span class="nx">element</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">isDefined</span><span class="p">(</span><span class="nx">$attrs</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">)</span> <span class="o">?</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">$parent</span><span class="p">.</span><span class="nx">$eval</span><span class="p">(</span><span class="nx">$attrs</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">)</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">toggle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">open</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">?</span> <span class="o">!!</span><span class="nx">open</span> <span class="o">:</span> <span class="o">!</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Allow other directives to watch status</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">$watch</span><span class="p">(</span><span class="s1">&#39;isOpen&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">value</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$animate</span><span class="p">[</span><span class="nx">value</span> <span class="o">?</span> <span class="s1">&#39;addClass&#39;</span> <span class="o">:</span> <span class="s1">&#39;removeClass&#39;</span><span class="p">](</span><span class="nx">self</span><span class="p">.</span><span class="nx">$element</span><span class="p">,</span> <span class="nx">openClass</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nx">value</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">dropdownService</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span> <span class="nx">$scope</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">dropdownService</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span> <span class="nx">$scope</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">onToggle</span><span class="p">({</span> <span class="nx">open</span><span class="o">:</span> <span class="o">!!</span><span class="nx">value</span> <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">$on</span><span class="p">(</span><span class="s1">&#39;$locationChangeSuccess&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s obviously <strong>much</strong> bulkier than the actual directive, but it&rsquo;s also crystal clear what the controller is doing. Normal controller stuff!</p>
+
+<p>One particular item of note is the <code>init</code> function. In the directive above, you probably noticed that the link function did exactly one thing:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">dropdownCtrl</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span> <span class="nx">element</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since you can&rsquo;t get at the element in the controller, this allows us to still have access to the element, but in a clean, testable, injected way.</p>
+
+<p>If we were going to critique the controller, it might be about its access to <code>$element</code> at all. Is the controller the right place to be doing <em>any</em> DOM manipulation, even if it is ever so slight? Where else would we do that if we aren&rsquo;t going to do it in the <code>link</code> function or the controller?</p>
+
+<p>It needs to go someplace, and pedantic nitpicking is just a hobby.</p>
+
+<h4>Out at the boundaries</h4>
+
+<p>This facet of this clean gem of a directive sparkles bright:</p>
+
+<h5>dropdownService</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;dropdownService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$document</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span> <span class="nx">openScope</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">open</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">dropdownScope</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">openScope</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">$document</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">closeDropdown</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">$document</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="nx">escapeKeyBind</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nx">openScope</span> <span class="o">&amp;&amp;</span> <span class="nx">openScope</span> <span class="o">!==</span> <span class="nx">dropdownScope</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">openScope</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">openScope</span> <span class="o">=</span> <span class="nx">dropdownScope</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">close</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">dropdownScope</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nx">openScope</span> <span class="o">===</span> <span class="nx">dropdownScope</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">openScope</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">$document</span><span class="p">.</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">closeDropdown</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">$document</span><span class="p">.</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;keydown&#39;</span><span class="p">,</span> <span class="nx">escapeKeyBind</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">closeDropdown</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">openScope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">openScope</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">escapeKeyBind</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">evt</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">which</span> <span class="o">===</span> <span class="mi">27</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">closeDropdown</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The AngularJS &lsquo;service&rsquo; is where the boundaries of our applications live.</p>
+
+<ul>
+<li>connections to the outside world</li>
+<li>domain/data models</li>
+<li>core logic</li>
+<li>&hellip;</li>
+<li>the DOM?</li>
+</ul>
+
+
+<p>This actor is wonderful. It connects <strong>all the dropdowns</strong> and manages their shared state. In this case, we can only have one open drop down on the page. <code>dropdownService</code> keeps track of who that is, and if another drop down is opened, it snaps the current one shut before allowing the next to open.</p>
+
+<p>Additionally, the service listens for events on the <code>document</code> to close the open drop down if the user clicks the page or hits the <code>esc</code> key.</p>
+
+<p>One central place to encapsulate what would otherwise be confusing spaghetti logic on line 342 of a typical directive&rsquo;s <code>link</code> function.</p>
+
+<h3>Pause and study</h3>
+
+<p>It really pays to take pause and review a little code when you sit down to write a complex directive. For one, ui-bootstrap covers a lot of ground. The entire point of Bootstrap (proper) is to provide a robust set of <em>typical</em> components. Meaning, odds are the component you are building (at least the soul of it) is likely covered by the Boostrap component set.</p>
+
+<p>ui-bootstrap conveniently provides this world class reference implementation of the most common web application components&hellip; the Angular Way™.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Stop writing For loops. Start using underscore.]]></title>
@@ -2979,135 +3245,6 @@ egghead.io</a> is. If you haven&rsquo;t already, go there now.</p>
 
 <p>Join the conversation on <a href="http://redd.it/1d31fh">Reddit</a> and <a href="https://news.ycombinator.com/item?id=5607330">Hacker
 News</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[5 Essential VIM Plugins That Greatly Increase my Productivity]]></title>
-    <link href="http://joelhooks.com/blog/2013/04/23/5-essential-vim-plugins/"/>
-    <updated>2013-04-23T09:05:00-05:00</updated>
-    <id>http://joelhooks.com/blog/2013/04/23/5-essential-vim-plugins</id>
-    <content type="html"><![CDATA[<p>There are <strong>a lot</strong> of VIM plugins to choose from. An individual&rsquo;s list of what
-would be considered &ldquo;essential&rdquo; is largely a personal matter. For any given
-plugin, there is also probably going to be an excellent alternative plugin that does the
-same basic thing in a slightly different way. I&rsquo;m just starting to use VIM for
-more than just quick edits of files on a server, and the plugins below are
-solving very specific workflow issues that I&rsquo;ve encountered while learning to be
-productive in VIM.</p>
-
-<p><strong>warning:</strong> watch out for plugins, generally. For many (some included in my
-list of favorites here) might hamper your ability to understand the core
-functionality of VIM. Many times the problem is best solved by understanding how
-you can accomplish the task with just VIM, and not a plugin. One of the biggest
-barriers I had with getting over the initial learning curve was over-saturation
-with plugins, as I <a href="http://joelhooks.com/blog/2013/04/09/getting-to-know-vim/">wrote
-here</a>.</p>
-
-<h2>Vundle</h2>
-
-<p>If any of these plugins had an &ldquo;absolutely&rdquo; in front of its &ldquo;essential&rdquo;
-descriptor, it would be <a href="https://github.com/gmarik/vundle">Vundle</a>.</p>
-
-<p>Vundle is short for VIM Bundle. It is spiritually alike to
-<a href="http://gembundler.com/">Bundler</a>, and provides a clean easy way to manage
-plugins that you install. In past VIM efforts, I didn&rsquo;t use any sort of scheme
-for managing plugins, and it was allways a complete <strong>mess</strong>. Vundle has solved
-this for me completely.</p>
-
-<p>Vundle also allows me to rapidly reconfigure my setup across multiple machines,
-which can be a real boost. It isn&rsquo;t really a day-to-day productivity booster,
-but when you need it, it is great to have it configured.</p>
-
-<h2>NERDTree</h2>
-
-<p>One of the first walls I hit was &ldquo;how the heck do I navigate files in a
-project?&rdquo;</p>
-
-<p>The solution is multi-pronged, and starts with
-<a href="https://github.com/scrooloose/nerdtree">NERDTree</a>. The NERD Tree is a
-filesystem explorer that looks something like this:</p>
-
-<p><img src="http://joelhooks.com/images/nerdtree.png" alt="NERDTree" /></p>
-
-<p>It opens to your current directory, and allows you to drill down into folders.
-This allows you to traverse your project and open files. It also has file
-management capabilities for creating, deleting, and other common tasks.</p>
-
-<p>NERDTree is fantastic for hunting something down, but there are other tools that
-help solve this problem in different ways.</p>
-
-<p><strong>note</strong>: I was chastised a bit for this one on <a href="https://news.ycombinator.com/item?id=5597939">Hacker
-News</a>. NERDTree <strong>is</strong> big, and
-you might have better luck with <code>netrw</code> as suggested. I plan on digging in to
-<code>:h netrw</code> to see if I can drop NERDTree off this list of (my) essentials.</p>
-
-<h2>ctrlp</h2>
-
-<blockquote><p>Full path fuzzy file, buffer, mru, tag, &hellip; finder for Vim.</p></blockquote>
-
-<p><a href="https://github.com/kien/ctrlp.vim">ctrlp</a> is <strong>rad</strong>. It really lets you fly
-around your project&rsquo;s files. After a quick <code>let g:ctrlp_map = '&lt;c-p&gt;'</code> to map it
-to a hotkey, you are off to the races. It has different modes that allow you to
-jump to files, buffers, most recently used, as well as tags.</p>
-
-<p>With no fault to ctrlp, I&rsquo;ve had issues with tags and JavaScript. ctags is
-behind the times, and DoctorJS lost its maintainer. Tern looks to have some
-promise in this regard, and the VIM plugin is under heavy development. Having
-solid JS tags would turbo-charge ctrlp for me, so I&rsquo;m paying close attention to
-ongoing development.</p>
-
-<h2>Syntastic</h2>
-
-<p><a href="https://github.com/scrooloose">scrooloose</a> has several awesome VIM plugins,
-including NERDTree above. I also get a lot of mileage out of
-<a href="https://github.com/scrooloose/syntastic">Syntastic</a>. It is a simple linter that
-highlights problems with syntax in a file. It works on <code>save</code>, and provides
-meaningful feedback about warnings and errors.</p>
-
-<h2>EasyMotion</h2>
-
-<p>Last, but in absolutely no way least, is the elegent
-<a href="https://github.com/Lokaltog/vim-easymotion">EasyMotion</a>. This plugin is all
-about navigating in the file you are currently editing.</p>
-
-<p><img src="http://joelhooks.com/images/easymotion.png" alt="EasyMotion" /></p>
-
-<p>When activated with the <code>word</code> motion, EasyMotion assigns the first letter of
-every word after the cursor with a letter-based hotkey. After the first 26
-letters are used up, it switches to capitals. Those soon change to sections that
-allow you to &ldquo;drill in&rdquo; and get very fine-grained movement across large
-distances in your file. As your finger muscles get trained, the motion really is
-<strong>easy</strong>.</p>
-
-<p>This list isn&rsquo;t exhaustive, by any means. I also have several &ldquo;essential&rdquo;
-plugins that I used specifically related to languages and file types that are
-common for me. Vundle is probably the most essential out of this list. It has
-been a huge help over the previous cut-n-paste horrid approach I&rsquo;ve used in the
-past. Running <code>:BundleUpdate</code> and watching Vundle march down my installed plugin
-list, looking at the github repository for each plugin I&rsquo;ve installed, and
-updating them without any hassle at all is hugely satisfying.</p>
-
-<p>If you are interested, my <a href="https://github.com/joelhooks/dotfiles">dotfiles are stored
-here</a>. They are an ongoing process, but
-there are some interesting things going on.</p>
-
-<p>I&rsquo;d love the hear about your essential VIM plugins. I&rsquo;m always on the hunt for
-new and interesting additions to my workflow.</p>
-
-<div class="buybox">
-  <span class="buyhead">Want to make more money and love what you do? If you
-  answered &#8220;Yes!&#8221; then you will enjoy my Consultancy Masterclass Sketchnotes.</span><br><p class="text">Brennan charges <strong>$1,799</strong>
- for <a href="http://doubleyourfreelancingrate.com/build-a-consultancy">his masterclass</a>
-and it is worth every penny. If you are on the fence about the class, or would
-like to look at the &#8220;essence&#8221; of the class in <strong>10 pages of lovingly illustrated sketchnotes</strong>, click below and
-they are yours for <strong>$9.99</strong>.</p>
-  <p class="quote">&#8220;Awesome! I love these.&#8221; - Brennan Dunn</p>
-  <a class="button" href="http://gum.co/consultancyclass">Buy Sketchnotes Now</a>
-  <p><a class="small" href="http://gum.co/consultancyclass">Buy Sketchnotes Now</a><p>
-  <p class="small"><strong>100% satisfaction gurantee</strong>. If you aren&#8217;t happy with these
-  notes, for <strong>any</strong> reason, just let me know and I will refund your money!</p>
-</div>
-
 ]]></content>
   </entry>
   
