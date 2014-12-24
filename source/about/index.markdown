@@ -15,7 +15,7 @@ release, I spend my time with my lovely wife Kristina and our 4 children.
 
 If you'd like to reach me by email: [joelhooks@gmail.com](mailto:joelhooks@gmail.com)
 
-I'm also on [twitter](https://twitter.com/jhooks) and [google+](https://plus.google.com/+JoelHooks?rel=author).
+I'm also on <a href="https://twitter.com/jhooks" rel="me"></a> and <a href="https://plus.google.com/+JoelHooks?rel=author" rel="me"></a>.
 
 <div align="center">
 <blockquote class="twitter-tweet"><p>“What’s your job?” Programming.“What’s your
