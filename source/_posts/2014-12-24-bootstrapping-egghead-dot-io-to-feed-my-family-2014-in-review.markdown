@@ -70,13 +70,15 @@ Writing is something I enjoy, so I will get back at it. I'm in a weird middle sp
 
 ## Travel
 
-I was all over the US in 2015 for the training. My favorite trips were probably to San Francisco. Love the energy and concentrated intelligence in that city.
+I was all over the US in 2014 for the training. My favorite trips were probably to San Francisco. Love the energy and concentrated intelligence in that city.
 
 John and I got to deliver workshops in Paris for ng-europe. This was very exciting for me, as I've never been to France. Paris is amazing, and I will definitely go back. The highlight was a culinary tour by the awesome [Ute Biefang](http://www.uteinparis.com/WELCOME.html). If you like food and are heading to Paris, you should book a tour. It was **fantastic**.
 
 ![best meal of 2015, hands down](/images/best_meal_2015.jpg)
 
 This summer we went on a cross-country road trip with our 4 children. It was an epic journey to Vermont via Tennesee, NYC, and Boston.
+
+![apparently a cricket lives here](/images/times_square.jpg)
 
 In NYC my 7 year old daughter saw a "family" of rats in Central Park and exclaimed, "It's a dream come true!"
 
@@ -98,7 +100,7 @@ It was very challenging to drive into corners at speeds your mind **knows** are 
 
 I've had a love hate relationships with nicotine for many years. It's done. No vaping, no gum, no sneaking, just done. If you want to quit, I highly recommend [Allen Carrs Easy Way to Stop Smoking](http://www.amazon.com/exec/obidos/ASIN/0718194551/joehoobuiblo-20/ref=nosim/). It is a great book that uses cognitive behavior therapy in an effective way.
 
-Fuck you cigarettes.
+**Fuck you cigarettes.**
 
 ## Lost 50 pounds...
 
