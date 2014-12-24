@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Bootstrapping egghead.io to feed my family: 2015 in Review"
+title: "Bootstrapping egghead.io to feed my family: 2014 in Review"
 date: 2014-12-24 11:12
 comments: true
 categories: 
