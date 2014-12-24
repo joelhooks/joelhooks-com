@@ -42,11 +42,13 @@ While my initial "design" for egghead was OK, it was plain-old-boostrap, and gen
 
 As revenues have increased, I've been able to slowly build a team. This has been wonderful, because building something by yourself gets very very lonely.
 
-Our team is modular. We hire consultants, and pay them monthly retainers for blocks of work. The first was the wonderful Jane Portman to start refreshing the overall design. 
+Our team is modular. We hire consultants, and pay them monthly retainers for blocks of work. The first was the wonderful [Jane Portman](http://uibreakfast.com/) to start refreshing the overall design. 
 
 Because I'm terrible at it, and hate it, we hired Evgeniy Nagalskiy to take Jane's designs and convert them to HTML and SCSS for me. This has allowed the designs to actually see the light of day, instead of being a constant source of dread for me. 
 
-We've also been able to engage Pete Keen, who wrote the book that saved my ass when building the initial Stripe integration. He's been a huge help on the Rails side, considering I have no idea what I'm doing most of the time ;)
+We've also been able to engage Pete Keen, who wrote the book on [Stripe payments with Rails](https://www.masteringmodernpayments.com/) that saved my ass when building the initial Stripe integration. He's been a huge help on the Rails side, considering I have no idea what I'm doing most of the time ;)
+
+We also got some help from Matt Jaynes, who built a killer [Vagrant/Ansible VM](https://devopsu.com/) for egghead local development.
 
 This is fun and exciting, and 2015 is going to be awesome.
 
