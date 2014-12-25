@@ -62,7 +62,7 @@ It is hard work, and I'll likely wind it down through 2015 as I focus on egghead
 
 ## Writing...
 
-For most of the year I've been slowly writing a book on AngularJS Automation with Grunt. By the end of this year it will be complete, and I will start on the Gulp version.
+For most of the year I've been slowly writing a book on [AngularJS Automation with Grunt](https://egghead.io/essential-angularjs-grunt-build). By the end of this year it will be complete, and I will start on the Gulp version.
 
 For the most part, it serves as a source of guilt. Something I should be working on, but I'm not. I should take this as a sign?
 
