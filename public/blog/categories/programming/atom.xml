@@ -4,7 +4,7 @@
   <title><![CDATA[Category: programming, | Joel Hooks]]></title>
   <link href="http://joelhooks.com/blog/categories/programming/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2015-12-31T00:48:11-06:00</updated>
+  <updated>2015-12-31T01:04:18-06:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -181,6 +181,91 @@ grandTotal;
 <p>Now, if we are doing a big list of items in Angular, we focus on performance in terms of CPU, but even then, the only time we hit a wall with an unoptimized datagrid was on last-gen Android phones.</p>
 
 <p>Clean first! ;)</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AngularJS End to End (E2E) Testing With Protractor]]></title>
+    <link href="http://joelhooks.com/blog/2013/07/17/angularjs-end-to-end-e2e-testing-with-protractor/"/>
+    <updated>2013-07-17T16:59:00-05:00</updated>
+    <id>http://joelhooks.com/blog/2013/07/17/angularjs-end-to-end-e2e-testing-with-protractor</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/juliemr/protractor">https://github.com/juliemr/protractor</a></p>
+
+<p>Angular 1.2 and Beyond <a href="http://www.youtube.com/watch?v=W13qDdJDHp8&amp;feature=player_detailpage#t=2921s">http://www.youtube.com/watch?v=W13qDdJDHp8&amp;feature=player_detailpage#t=2921s</a></p>
+
+<p>ptor.findElement(protractor.By.x(‘&hellip;’));
+ptor.findElements(protractor.By.x(‘&hellip;’));</p>
+
+<p>protractor.By.className(&lsquo;redBtn&rsquo;)
+protractor.By.css(&lsquo;.redBtn&rsquo;)
+protractor.By.id(&lsquo;loginButton&rsquo;)
+protractor.By.linkText(&lsquo;Go Home&rsquo;)
+protractor.By.partialLinkText(&lsquo;home&rsquo;)
+protractor.By.name(&lsquo;email&rsquo;)
+protractor.By.tagName(&lsquo;h2&rsquo;)
+protractor.By.xpath
+protractor.By.binding(&ldquo;&rdquo;)
+protractor.By.select(&ldquo;user&rdquo;)
+protractor.By.selectedOption(&ldquo;red&rdquo;)
+protractor.By.input(&ldquo;email&rdquo;)
+protractor.By.repeater(&ldquo;cat in pets&rdquo;)
+protractor.By.(&ldquo;cat in pets&rdquo;).row(1).column(&ldquo;&rdquo;)</p>
+
+<p>clear()
+If this element is a text entry element, this will clear the value.
+click()
+Click this element.
+getAttribute(name)
+Get the value of a the given attribute of the element.
+getCssValue(propertyName)
+Get the value of a given CSS property.
+getLocation()
+Where on the page is the top left-hand corner of the rendered element?
+getSize()
+What is the width and height of the rendered element?
+getTagName()
+Get the tag name of this element.
+getText()
+Get the visible (i.e. not hidden by CSS) innerText of this element, including sub-elements, without any leading or trailing whitespace.
+isDisplayed()
+Is this element displayed or not? This method avoids the problem of having to parse an element&rsquo;s &ldquo;style&rdquo; attribute.
+isEnabled()
+Is the element currently enabled or not? This will generally return true for everything but disabled input elements.
+isSelected()
+Determine whether or not this element is selected or not.
+sendKeys(keysToSend)
+Use this method to simulate typing into an element, which may set its value.</p>
+
+<p>browser().navigateTo(url)
+ptor.get(url)
+browser().location().url()
+ptor.getCurrentUrl()
+binding(name)
+ptor.findElement(protractor.By.binding(&lsquo;&rsquo;)).getText()
+input(name).enter(value)
+ptor.findElement(protractor.By.input(&ldquo;user&rdquo;)).sendKeys(value)
+input(name).check()
+ptor.findElement(protractor.By.input(&ldquo;user&rdquo;)).click();
+input(name).select(value)
+See Select below.
+input(name).val()
+ptor.findElement(protractor.By.input(&ldquo;user&rdquo;)).getText()
+repeater(selector, label).count()
+ptor.findElements(protractor.By.repeater(&ldquo;cat in pets&rdquo;)).length()
+repeater(selector, label).row(index)
+ptor.findElements(protractor.By.repeater(&ldquo;cat in pets&rdquo;)).row(index)
+repeater(selector, label).column(binding)
+ptor.findElements(protractor.By.repeater(&ldquo;cat in pets&rdquo;)).row(index)..column(binding)
+select(name).option(value)
+ptor.findElement(protractor.By.id(‘selectId’).click();
+ptor.findElement(protractor.By.css(‘option [value=”0”]’’).click();
+select(name).options(value1, value2&hellip;)
+ptor.findElement(protractor.By.id(‘selectId’).click();
+ptor.findElement(protractor.By.css(‘option [value=”0”]’’).click();
+ptor.findElement(protractor.By.css(‘option [value=”2”]’’).click();
+ptor.findElement(protractor.By.css(‘option [value=”4”]’’).click();
+element(selector, label)
+See WebElement Methods Mentioned Earlier</p>
 ]]></content>
   </entry>
   
