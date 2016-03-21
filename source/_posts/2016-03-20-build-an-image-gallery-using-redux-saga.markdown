@@ -7,16 +7,9 @@ categories:
 image_url: "saga.jpg"
 ---
 
-Redux is an amazing library built to help us manage the circular flow of user input and state in our applications. With redux, we are supplied with a single atom state, or one (typically immutable) object that represents the state of our application. It is **THE** source of truth for a redux application. If you want a deeper understanding of redux:
+# Building an Image Gallery
 
-* [A Cartoon Intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6#.7cra4lukv) (amazing!)
-* [Getting Started With Redux](https://egghead.io/series/getting-started-with-redux) (complete introduction to Redux from its author Dan Abramov)
-
-Let's build a simple redux application that loads images from the Flickr API. We're going to use React and Redux, and take a look at redux-sagas for wrangling the async aspects of the application.
-
-# Building the Image Gallery
-
-The gallery is a simple application that displays an array of image URLs and allows the user to select them individually.
+The image gallery we will build is a simple application that displays an array of image URLs and allows the user to select them individually.
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/3v0l00410J1Z1j310b24/Screen%20Shot%202016-03-20%20at%203.42.17%20PM.png?v=1b32daca)
 
