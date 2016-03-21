@@ -19,7 +19,7 @@ We will write the gallery in ES6 (arrow functions, modules, and template strings
 
 ## Project Setup and Automation
 
-There is an significant array of options when it comes to getting started with a React application. For this simple app, we want to keep it as minimal as possible. We are going to use Babel to transpile ES6 into good ol’ ES5 for the browser, budo/browserify to serve it locally, and tape to test.
+There is a significant array of options when it comes to getting started with a React application. For this simple app, we want to keep it as minimal as possible. We are going to use Babel to transpile ES6 into good ol’ ES5 for the browser, budo/browserify to serve it locally, and tape to test.
 
 Create a file called `package.json` in a new project folder and add the following contents to it:
 
