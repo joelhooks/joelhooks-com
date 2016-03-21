@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clean code | Joel Hooks]]></title>
   <link href="http://joelhooks.com/blog/categories/clean-code/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2016-03-20T23:07:43-05:00</updated>
+  <updated>2016-03-20T23:07:58-05:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -28,19 +28,82 @@
 
 <p>Consider the following:</p>
 
-<p>{% gist 4097691 BloatedDateTest.js %}</p>
+<p><div><script src='https://gist.github.com/4097691.js?file=BloatedDateTest.js'></script>
+<noscript><pre><code>it(&quot;convertToDate should turn a splitDate into a Date object&quot;, function() {
+    var splitDate = {year: 2012, month: 11, day: 17},
+        date = dateUtil.splitDateToDate(splitDate);
+    
+    expect(date instanceof Date).toBe(true);
+    expect(date.getFullYear()).toBe(splitDate.year);
+    expect(date.getMonth()).toBe(splitDate.month - 1);
+    expect(date.getDate()).toBe(splitDate.day);
+});
+</code></pre></noscript></div>
+</p>
 
 <p>In our app, we recieve a &ldquo;split date&rdquo; object from our service. It returns a value in the <code>{year: 2012, month: 11, day: 17}</code> format. We have some functionality that will convert the format back and for to a JavaScript <code>Date</code>.</p>
 
 <p>This seems straight forward enough, but as it turns out we need to go the other direction as well:</p>
 
-<p>{% gist 4097691 AnotherBloatedDateTest.js %}</p>
+<p><div><script src='https://gist.github.com/4097691.js?file=AnotherBloatedDateTest.js'></script>
+<noscript><pre><code>it(&quot;convertToSplitDate should turen a Date into a split date&quot;, function() {
+    var date = new Date(2012, 10, 17),
+        splitDate = dateUtil.convertDateToSplitDate(date);
+
+    expect(splitDate).toBeDefined();
+    expect(splitDate.year).toBe(date.year);
+    expect(splitDate.month - 1).toBe(date.month);
+    expect(splitDate.day).toBe(date.day);
+});</code></pre></noscript></div>
+</p>
 
 <p>This is bothersome. We have two stacks of <code>expect</code> calls that are very similar, but different enough to require a bit more than a helper method. We definitely want to verify all of the properties of the results, but do we really need to do this individually? The short answer is &lsquo;no.&rsquo;</p>
 
 <h2>Enter the Custom Matcher</h2>
 
-<p>{% gist 4097691 CustomMatchers.js %}</p>
+<p><div><script src='https://gist.github.com/4097691.js?file=CustomMatchers.js'></script>
+<noscript><pre><code>//Jasmine will call this before EVERY spec.
+beforeEach(function () {
+    function isValidSplitDate(splitDate) {
+        return splitDate &amp;&amp; !isNaN(splitDate.year) &amp;&amp; !isNaN(splitDate.month) &amp;&amp; !isNaN(splitDate.day);
+    }
+
+    function convertSplitDateToDate(splitDate) {
+        if (isValidSplitDate(splitDate)) {
+            splitDate = new Date(splitDate.year, splitDate.month - 1, splitDate.day);
+        }
+        return splitDate;
+    }
+   
+    //addMatchers() is a method that Jasmine will see and understand to 
+    //make the custom matchers within easy to understand.
+    this.addMatchers({
+        toEqualDate: function (expectedDate) {
+            var areDates;
+
+            expectedDate = convertSplitDateToDate(expectedDate);
+            this.actual = convertSplitDateToDate(this.actual);
+
+            areDates = this.actual instanceof Date &amp;&amp; expectedDate instanceof Date;
+
+            //Jasmine will look for this function and utilize it for custom error messages
+            this.message = function () {
+                if (areDates) {
+                    return &quot;Expected date of &quot; + this.actual + &quot; to be &quot; + expectedDate;
+                }
+                return &quot;Expected &quot; + this.actual + &quot; and &quot; + expectedDate + &quot; to be valid Date/SplitDate objects. They were not.&quot;;
+            };
+
+            if (areDates) {
+                //Ultimately Jasmine expects a matcher to return true or false
+                return (this.actual.getTime() === expectedDate.getTime());
+            }
+
+            return false;
+        }
+    });
+});</code></pre></noscript></div>
+</p>
 
 <p>A custom matcher is nestled in a <code>beforeEach</code> function. This will cause Jasmine to load the matcher prior to EVERY <code>describe</code> and <code>it</code> in your test suite.</p>
 
@@ -56,7 +119,21 @@
 
 <h2>Keeping it Clean and DRY</h2>
 
-<p>{% gist 4097691 CleanTests.js %}</p>
+<p><div><script src='https://gist.github.com/4097691.js?file=CleanTests.js'></script>
+<noscript><pre><code>it(&quot;convertToDate should turn a splitDate into a Date object&quot;, function() {
+    var splitDate = {year: 2012, month: 11, day: 17},
+        date = dateUtil.splitDateToDate(splitDate);
+    
+    expect(date).toEqualDate(splitDate);
+});
+
+it(&quot;convertToSplitDate should turen a Date into a split date&quot;, function() {
+    var date = new Date(2012, 10, 17),
+        splitDate = dateUtil.convertDateToSplitDate(date);
+
+    expect(splitDate).toEqualDate(date);
+});</code></pre></noscript></div>
+</p>
 
 <p>I don&rsquo;t know about you, but these tests look a <strong>lot</strong> better to me. While the overall lines of code may have increased, we&rsquo;ve created a reusable solution that can be used over and over again while not repeating ourselves. Our tests now have a single <code>expect</code> that is easy to understand and clearly expresses the intent of the test in an easy to read way.</p>
 
