@@ -1432,3 +1432,5 @@ If you wanted to expand the example a bit, you might:
 * allow the user to select what APIs to search 
 
 We've only touched the surface of generators, but even at this level, hopefully you can see how useful they can be when coupled with the redux-saga library, redux, and React. 
+
+![](https://s3.amazonaws.com/f.cl.ly/items/2s2q3B3x0Q04131p3V0C/jhooks_2016-Mar-20.jpg?v=db21427c)
