@@ -3,11 +3,11 @@
 <html itemscope itemtype="http://schema.org/Article">
 <head>
 	<meta charset="utf-8">
-	<title>Build an Image Gallery using redux-saga - @jhooks</title>
+	<title>Build an Image Gallery Using React, Redux and redux-saga - @jhooks</title>
 	<meta name="author" content="Joel Hooks">
 
 	
-	<meta name="description" content="Building an Image Gallery The image gallery we will build is a simple application that displays an array of image URLs and allows the user to select &hellip;">
+	<meta name="description" content="Building an Image Gallery The image gallery we will build is a simple application that displays an array of image URLs loaded from a service (Flickr &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -27,7 +27,7 @@
 
 <meta property="og:description" content="the one where Joel discusses his trials and tribulations as a developer of fine software." />
 <meta property="og:image" content="/images/saga.jpg " />
-<meta property="og:title" value="Build an Image Gallery using redux-saga - Joel Hooks" />
+<meta property="og:title" value="Build an Image Gallery Using React, Redux and redux-saga - Joel Hooks" />
 <meta property="og:url" value="http://joelhooks.com/blog/2016/03/20/build-an-image-gallery-using-redux-saga/" />                    
 <meta property="og:type" content="website" />                                    
  
@@ -112,7 +112,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </header>
 	<div id="content" class="inner"><article class="post">
 
-	<h1 itemprop="name" class="title article-title">Build an Image Gallery using redux-saga</h1>
+	<h1 itemprop="name" class="title article-title">Build an Image Gallery Using React, Redux and redux-saga</h1>
 	<div class="date">
 
 
@@ -135,15 +135,17 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 		
 		<h1>Building an Image Gallery</h1>
 
-<p>The image gallery we will build is a simple application that displays an array of image URLs and allows the user to select them individually.</p>
+<p>The image gallery we will build is a simple application that displays an array of image URLs loaded from a service (Flickr), and allows the user to select them individually.</p>
 
 <p><img src="https://s3.amazonaws.com/f.cl.ly/items/3v0l00410J1Z1j310b24/Screen%20Shot%202016-03-20%20at%203.42.17%20PM.png?v=1b32daca" alt="" /></p>
 
-<p>Write the gallery in ES6 (arrow functions, modules, and template strings!), so we will need to do a bit of project setup to get going.</p>
+<p>It will be built with React, using Redux and redux-saga. React is being used as the core framework to take advantage of its virtual-dom implementation. Redux will handle the management of state within the application. Finally, we will use redux-saga to handle the complexity of asynchronous sequences.</p>
+
+<p>We will write the gallery in ES6 (arrow functions, modules, and template strings!), so we will need to do a bit of project setup to get going.</p>
 
 <h2>Project Setup and Automation</h2>
 
-<p>There is an array of options when it comes to getting started with a React application. For this simple app, we want to keep it as minimal as possible. We are going to use Babel to transpile ES6 into good ol’ ES5 for the browser, budo/browserify to serve it locally, and tape to test.</p>
+<p>There is an significant array of options when it comes to getting started with a React application. For this simple app, we want to keep it as minimal as possible. We are going to use Babel to transpile ES6 into good ol’ ES5 for the browser, budo/browserify to serve it locally, and tape to test.</p>
 
 <p>Create a file called <code>package.json</code> in a new project folder and add the following contents to it:</p>
 
@@ -189,7 +191,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span><span class='line'>  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;egghead-react-redux-image-gallery&quot;</span><span class="p">,</span>
 </span><span class='line'>  <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
 </span><span class='line'>  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;Redux Saga beginner tutorial&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s2">&quot;main&quot;</span><span class="o">:</span> <span class="s2">&quot;src/main.js.js&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;main&quot;</span><span class="o">:</span> <span class="s2">&quot;src/main.js&quot;</span><span class="p">,</span>
 </span><span class='line'>  <span class="s2">&quot;scripts&quot;</span><span class="o">:</span> <span class="p">{</span>
 </span><span class='line'>    <span class="s2">&quot;test&quot;</span><span class="o">:</span> <span class="s2">&quot;babel-node ./src/saga.spec.js | tap-spec&quot;</span><span class="p">,</span>
 </span><span class='line'>    <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="s2">&quot;budo ./src/main.js:build.js --dir ./src --verbose  --live -- -t babelify&quot;</span>
@@ -238,6 +240,8 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>This file tells babel that we will be using ES2015 (ES6), React, and stage-2 features of the emerging ECMAScript standard (ES2016).</p>
 
 <p>The <code>package.json</code> has two standard scripts configured called <code>start</code> and <code>test</code>. For right now, we want to get <code>start</code> working so we can load the application. The <code>start</code> script is currently configured to look inside of a folder called <code>src</code> so <em>create a folder called <code>src</code></em> in the project directory and add the following files:</p>
 
@@ -410,7 +414,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <p><img src="https://s3.amazonaws.com/f.cl.ly/items/2I1V0o2c1d281f3i3408/Screen%20Shot%202016-03-20%20at%204.31.06%20PM.png?v=1720e99d" alt="" /></p>
 
-<p>Now we can work on the <code>Gallery</code> component.</p>
+<p>Now we will build the base <code>Gallery</code> React component.</p>
 
 <h2>Displaying some images in the gallery.</h2>
 
@@ -497,6 +501,8 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>We&rsquo;ve hard coded an array of data into this component, which is a great way to start working quickly. The <code>Gallery</code> extends <code>Component</code>, and in its constructor we set the initial state of the component. Finally, we render a basic structure with some styled markup. The <code>image-scroller</code> element uses the images array to produce multiple elements using <code>map</code>.</p>
+
 <p>With the <code>Gallery</code> created, we can update <code>main.js</code> to load the gallery:</p>
 
 <h3>main.js</h3>
@@ -528,7 +534,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>For now, we are using hard coded images (via the <code>flickrImages</code> array), and displaying the first image url as the <code>selectedImage</code>. We&rsquo;re accessing these properties by setting a default initial state within the <code>Gallery</code> component class constructor.</p>
+<p>For now, we are using the hard-coded image URLs (via the <code>flickrImages</code> array), and displaying the first image url as the <code>selectedImage</code>. We&rsquo;re accessing these properties by setting a default initial state within the <code>Gallery</code> component class constructor.</p>
 
 <p><img src="https://s3.amazonaws.com/f.cl.ly/items/1T3G3p3T2q2H00472T1C/Screen%20Shot%202016-03-20%20at%204.51.14%20PM.png?v=afdd9bf7" alt="" /></p>
 
@@ -592,10 +598,10 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span><span class='line'>            &lt;img src={selectedImage} /&gt;
 </span><span class='line'>          &lt;/div&gt;
 </span><span class='line'>        &lt;/div&gt;
-</span><span class='line'><span class="gd">-        &lt;div className=&quot;image-scroller&quot;&gt;</span>
-</span><span class='line'><span class="gi">+        &lt;div key={index} onClick={this.handleThumbClick.bind(this,image)}&gt;</span>
+</span><span class='line'>        &lt;div className=&quot;image-scroller&quot;&gt;
 </span><span class='line'>          {images.map((image, index) =&gt; (
-</span><span class='line'>            &lt;div key={index}&gt;
+</span><span class='line'><span class="gd">-            &lt;div key={index}&gt;</span>
+</span><span class='line'><span class="gi">+            &lt;div key={index} onClick={this.handleThumbClick.bind(this,image)}&gt;</span>
 </span><span class='line'>              &lt;img src={image}/&gt;
 </span><span class='line'>            &lt;/div&gt;
 </span><span class='line'>          ))}
@@ -606,6 +612,8 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span><span class='line'>}
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>By adding <code>handleThumbClick</code> to the <code>Gallery</code> component class, we can access it in any elements <code>onClick</code> method. Note that we are using <code>bind(this,image)</code> in the <code>onClick</code>. By passing <code>image</code> as the second argument, it is sent as the first argument to <code>handleThumbClick</code>. This use of bind is an extermely handy way to pass <em>context</em> to an event handler.</p>
 
 <p>Looking good! Now we have some interaction, and something that resembles an &ldquo;app&rdquo;. Now that we&rsquo;ve dealt with getting the application running and displaying data, we can consider loading some remote data. The most obvious place to do that is one of the React component lifecycle methods. We will use <code>componentDidMount</code> and make a call to the Flickr API and load some images:</p>
 
@@ -660,7 +668,9 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This is using the <code>fetch</code> browser API to make a request to Flickr. Fetch returns a promise that resolves with <code>response</code> object. Calling <code>response.json()</code> gives us another promise, which is the actual JSON result we are looking for. We&rsquo;ll map over the photos to create an array of Flickr image urls.</p>
+<p>We&rsquo;ve added a new method to the Gallery class. We are using React&rsquo;s <code>componentDidMount</code> lifecycle method to trigger the loading of data from Flickr. Lifecycle methods are called by React at specific times in a component&rsquo;s lifecycle. In this case, the method will be called whenever the component is added to the DOM. Note that the Gallery component is only added to the DOM once, so this will give us our initial load of images. For a more dynamic component that is loaded and unloaded over an application&rsquo;s lifecycle, this might cause excessive service calls or other unforeseen results.</p>
+
+<p>We are using the <code>fetch</code> browser API to make a request to Flickr. Fetch returns a promise that resolves with <code>response</code> object. Calling <code>response.json()</code> gives us another promise, which is the actual JSON result we are looking for. We&rsquo;ll map over the photos to create an array of Flickr image urls.</p>
 
 <blockquote><p>Let&rsquo;s be honest. This application is simple. We could stop right here and we&rsquo;d have the basic requirements done. Maybe we add an error handler in the fetch promise chain, some logic to see if there are images and <em>DONE!</em> At this point you really have to stop and use your imagination a bit. Simple requirements rarely last in the real world. Soon the application will grow as feature requests roll in. Authentication, a slide show, the ability to load different galleries and images sets&hellip; This <strong>is not</strong> good enough.</p></blockquote>
 
@@ -670,38 +680,48 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <h2>Using Redux to manage state</h2>
 
-<p>Anytime you use <code>setState</code> in your application you&rsquo;ve allowed the Component to become stateful. While this isn&rsquo;t always bad, it can lead to some confusing application code over time, with state management spread from top to bottom in your application.</p>
+<p>Anytime you use <code>setState</code> in your application <em>you&rsquo;ve allowed the Component to become stateful</em>. While this isn&rsquo;t always bad, it can lead to some confusing application code over time, with state management spread from top to bottom in your application.</p>
 
 <p>The Flux architecture is one solution that was introduced to help alleviate this. Flux moves logic and state into Stores. Stores are updated when Actions are dispatched in the application. Updates to Stores will trigger Views to be rendered with the new state.</p>
 
-<p>So why not just drop in Flux? It&rsquo;s &ldquo;official&rdquo; architecture!</p>
+<p>So why not just drop in Flux? It&rsquo;s &ldquo;official&rdquo; architecture after all.</p>
 
-<p>Well, Redux is basically Flux, but with some distinct advantages. Here&rsquo;s what <a href="http://stackoverflow.com/a/32920459/87002">Dan Abramov (the creator of Redux) has to say</a>:</p>
+<p>Well, <strong>Redux is basically Flux</strong>, but with some distinct advantages. Here&rsquo;s what <a href="http://stackoverflow.com/a/32920459/87002">Dan Abramov (the creator of Redux) has to say</a>:</p>
 
 <blockquote><p>Redux is not that different from Flux. Overall it&rsquo;s the same architecture, but Redux is able to cut some complexity corners by using functional composition where Flux uses callback registration.</p>
 
 <p>It&rsquo;s not fundamentally different, but I find it that Redux makes certain abstractions easier, or at least possible to implement, that would be hard or impossible to implement in Flux.</p></blockquote>
 
-<p>The <a href="http://redux.js.org/">redux documentation</a> is great. Dan is a truly gracious and inspiring individual. If you haven&rsquo;t <a href="https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6#.7cra4lukv">read the code cartoons</a> or watched <a href="https://egghead.io/series/getting-started-with-redux">Dan&rsquo;s egghead series</a>, now is the time!</p>
+<p>The <a href="http://redux.js.org/">Redux documentation</a> is great. Dan is a truly gracious and inspiring individual. If you haven&rsquo;t <a href="https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6#.7cra4lukv">read the code cartoons</a> or watched <a href="https://egghead.io/series/getting-started-with-redux">Dan&rsquo;s free egghead.io series</a>, now is the time!</p>
 
-<h3>Bootstrapping redux</h3>
+<h3>Bootstrapping Redux</h3>
 
-<p>The first thing we need to do is get redux setup in our gallery application. We don&rsquo;t have to install anything, that was all taken care of when we ran <code>npm install</code>, but we do need to import and configure redux.</p>
+<p>The first thing we need to do is get Redux bootstrapped and running in our application. We don&rsquo;t have to install anything, that was all taken care of when we ran <code>npm install</code>, but we do need to import and configure Redux.</p>
 
-<p>The reducer function is the brain of redux. When an action is dispatched by the application, the reducer receives the action and creates the piece of application state that the reducer owns. Since reducers are pure functions, they can be composed together to create the complete state of the application. Let&rsquo;s create a simple reducer in the <code>src</code> folder:</p>
+<p><strong>The reducer function is the brain of Redux</strong>. When an action is dispatched by the application, the reducer receives the action and creates the piece of application state that the reducer owns. Since <strong>reducers are pure functions</strong>, they can be composed together to create the complete state of the application. Let&rsquo;s create a simple reducer in the <code>src</code> folder:</p>
 
 <h3>reducer.js</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
+<span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nx">images</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">state</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>For right now, we&rsquo;re just going to log to the console while we get it set up. To use the reducer we need to configure redux in <code>main.js</code>:</p>
+<p>A reducer function is a function that takes two arguments.</p>
+
+<ul>
+<li><code>state</code> &ndash; this is the data that represents the state of the application. The reducer function will use this state to construct the new state. If no state has changed as result of the action, the reducer will simply return the state input.</li>
+<li><code>action</code> &ndash; the event that has triggered the reducer. Actions are dispatched by the store, and handled by reducers. The action is required to have a <code>type</code> property that the reducer uses to apply changes to the new application state.</li>
+</ul>
+
+
+<p>For right now, the <code>images</code> reducer will log to the console to prove that it is connected and ready for work. To use the reducer we need to configure redux in <code>main.js</code>:</p>
 
 <h3>main.js</h3>
 
@@ -748,25 +768,27 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We are going to import the <code>createStore</code> function from the redux library. <code>createStore</code> is used to create the redux store. For the most part, we don&rsquo;t interact directly with the store, it is something that redux manages for us behind the scenes.</p>
+<p>We are going to import the <code>createStore</code> function from the Redux library. <code>createStore</code> is used to create the Redux store. For the most part, we don&rsquo;t interact directly with the store, it is something that Redux manages for us behind the scenes.</p>
 
 <p>We also need to import the reducer function that we&rsquo;ve just created so that it can be delivered to the store.</p>
 
 <p>We will use <code>createStore(reducer)</code> to configure the store with our application&rsquo;s reducer. This example only has a single reducer, but <code>createStore</code> can take multiple reducers arguments. More on that a bit later!</p>
 
-<p>Finally we import the higher-order <code>Provider</code> component from <code>react-redux</code>. This will wrap our <code>Gallery</code> so that we can make easy use of redux. We need to pass the store we just created to the <code>Provider</code> so that it can use it for us. You could use redux without <code>Provider</code>, and in fact, React isn&rsquo;t required to use redux at all! That&rsquo;s wonderful, but we are going to use <code>Provider</code> because it is very convenient.</p>
+<p>Finally we import the higher-order <code>Provider</code> component from <code>react-Redux</code>. This will wrap our <code>Gallery</code> so that we can make easy use of Redux. We need to pass the store we just created to the <code>Provider</code> so that it can use it for us. You could use Redux without <code>Provider</code>, and in fact, React isn&rsquo;t required to use Redux at all! That&rsquo;s wonderful, but we are going to use <code>Provider</code> because it is very convenient.</p>
 
 <p>If you open your developer tools console, you should see a message!</p>
 
 <p><img src="https://s3.amazonaws.com/f.cl.ly/items/2R3b143J1Y3T400i2c0w/Screen%20Shot%202016-03-20%20at%206.32.23%20PM.png?v=ba488b8e" alt="" /></p>
 
-<p>It may be a bit mysterious, but shows off an interesting point of redux. All reducers receive all actions that are dispatched in the application. In this case we are seeing an action that redux itself dispatches.</p>
+<p>It may be a bit mysterious, but shows off an interesting point of Redux. <em>All reducers receive all actions that are dispatched in the application.</em> In this case we are seeing an action that Redux itself dispatches.</p>
 
 <h3>Connecting the gallery component</h3>
 
-<p>With redux, and specifically with react-redux we will use the concept of &ldquo;connected&rdquo; and &ldquo;un-connected&rdquo; components. A connected component is wired into the store, and coordinates and controls action events and the store. Usually a connected component will have children that are &ldquo;pure components&rdquo; that take data as input, and render when that data is updated.</p>
+<p>With Redux, we will use the concept of &ldquo;connected&rdquo; and &ldquo;un-connected&rdquo; components. A connected component is wired into the store, and coordinates and controls action events and the store. Usually a connected component will have children that are &ldquo;pure components&rdquo; that take data as input, and render when that data is updated. These children are unconnected components.</p>
 
-<p>react-redux provides a convenient wrapper for react components that does most of the heavy lifting required to connect a react component to a redux store. We will add that to <code>Gallery</code> and make it our primary connected component:</p>
+<blockquote><p><strong>note:</strong> While React and Redux play very well together, React is <em>not</em> required for Redux. You can use Redux without React!</p></blockquote>
+
+<p>react-redux provides a convenient wrapper for React components that does most of the heavy lifting required to connect a React component to a Redux store. We will add that to <code>Gallery</code> and make it our primary connected component:</p>
 
 <h3>Gallery.js</h3>
 
@@ -879,11 +901,13 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Importing the <code>connect</code> function from react-redux lets us export <code>Gallery</code> by wrapping it in the connect component. Notice that <code>connect()(Gallery)</code> puts <code>Gallery</code> in a second set of parentheses. This is because <code>connect()</code> returns a function that expects a react component as an argument. The call to <code>connect()</code> configures that function. Soon we&rsquo;ll pass in arguments to <code>connect</code> to configure it for our applications specific actions and state structure.</p>
+<p>Importing the <code>connect</code> function from react-redux lets us export <code>Gallery</code> by wrapping it in the connect component. Notice that <code>connect()(Gallery)</code> puts <code>Gallery</code> in a second set of parentheses. This is because <code>connect()</code> returns a function that expects a React component as an argument. The call to <code>connect()</code> configures that function. Soon we&rsquo;ll pass in arguments to <code>connect</code> to configure it for our applications specific actions and state structure.</p>
+
+<p>We are also exporting the <code>connect</code> call as the <code>default</code> for this module. This is important! Now, when we <code>import Gallery</code> it will import the connected component and not the basic class.</p>
 
 <p><img src="https://s3.amazonaws.com/f.cl.ly/items/2k1Y1h3g1b0l1m0w212R/Screen%20Shot%202016-03-20%20at%206.42.19%20PM.png?v=bc54291d" alt="" /></p>
 
-<p>If you look at the console log that we&rsquo;ve added to the constructor, you will see that the <code>Gallery</code> component&rsquo;s properties now include a <code>dispatch</code> function. This is part of what <code>connect</code> has modified for us, and gives us the ability to dispatch out own action objects to the applications reducers.</p>
+<p>If you look at the console log that we&rsquo;ve added to the constructor, you will see that the <code>Gallery</code> component&rsquo;s properties now include a <code>dispatch</code> function. This is part of what <code>connect</code> has modified for us, and gives us the ability to dispatch our own action objects to the applications reducers.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -906,7 +930,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We can test it out by calling <code>this.props.dispatch({type: 'TEST'});</code>. You should see a log statement from our reducer in your developer console. We&rsquo;ve dispatched our first action! Actions are plain old javascript objects that have a <code>type</code> property. They can have any number of other properties as well, but the <code>type</code> property allows reducers to listen for specific actions that they are interested in.</p>
+<p>We can test it out by calling dispatch in the constructor. You should see a log statement from our reducer in your developer console. We&rsquo;ve dispatched our first action! <em>Actions are plain old javascript objects</em> that have a required <code>type</code> property. They can have any number of other properties as well to pass along to the reducer, but the <code>type</code> property allows reducers to listen for specific actions that they are interested in.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -915,23 +939,25 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
+<span class='line-number'>8</span>
 </pre></td><td class='code'><pre><code class='diff'><span class='line'>export default function images(state, action) {
 </span><span class='line'><span class="gd">-  console.log(state, action)</span>
 </span><span class='line'><span class="gi">+  switch(action.type) {</span>
 </span><span class='line'><span class="gi">+    case &#39;TEST&#39;:</span>
 </span><span class='line'><span class="gi">+      console.log(&#39;THIS IS ONLY A TEST&#39;)</span>
 </span><span class='line'><span class="gi">+  }</span>
+</span><span class='line'>  return state;
 </span><span class='line'>}
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>Generally reducers use a <code>switch</code> block to filter messages they are interested in. The <code>switch</code> uses the action&rsquo;s type, and the reducer does its work when it gets an action that matches one of the <code>case</code>s of the <code>switch</code>.</p>
 
-<p>Our application is now wired to receive actions. Now we need to connect it to the state provided by the redux store.</p>
+<p>Our application is now wired to receive actions. Now we need to connect it to the state provided by the Redux store.</p>
 
 <h3>Default application state</h3>
 
-<p>Because we are using <code>connect</code>, we don&rsquo;t need to interact with the redux store directly. We are going to configure a default application state to provide the redux store.</p>
+<p>Because we are using <code>connect</code>, we don&rsquo;t need to interact with the Redux store directly. We are going to configure a default application state to provide the Redux store.</p>
 
 <h3>reducer.js</h3>
 
@@ -949,6 +975,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
+<span class='line-number'>15</span>
 </pre></td><td class='code'><pre><code class='diff'><span class='line'>const defaultState = {
 </span><span class='line'>  images: []
 </span><span class='line'>}
@@ -962,6 +989,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span><span class='line'><span class="gi">+    default:</span>
 </span><span class='line'><span class="gi">+      return state;</span>
 </span><span class='line'>  }
+</span><span class='line'><span class="gd">-  return state;</span>
 </span><span class='line'>}
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1099,7 +1127,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We are going to go ahead and remove all of the image loading and interaction for now. If you look towards the bottom og <code>Gallery</code> you will notice that we created a function called <code>mapStateToProps</code> that takes a <code>state</code> argument and returns an object that puts <code>state.images</code> into a property called <code>images</code>.  <code>mapStateToProps</code> is then passed as an argument to <code>connect</code>.</p>
+<p>We are going to remove all of the image loading and interaction in the connected component for now. If you look towards the bottom of <code>Gallery</code> you will notice that we created a function called <code>mapStateToProps</code> that takes a <code>state</code> argument and returns an object that puts <code>state.images</code> into a property called <code>images</code>.  <code>mapStateToProps</code> is then passed as an argument to <code>connect</code>.</p>
 
 <p>As the name suggests <code>mapStateToProps</code> is a function that takes the current state, and assigns it to properties of the component. If you <code>console.log(props)</code> in the constructor, you will see that we now have access to the images array that we set as the default state in our reducer!</p>
 
@@ -1148,7 +1176,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>If you update the <code>images</code> array in the <code>defaultState</code> you should see some images reappear in the gallery! Now we need to get image selection wired back up with an action.</p>
+<p>If you update the <code>images</code> array in the <code>defaultState</code> you should see some images reappear in the gallery! Now we need to get image selection wired back up with an action that is dispatched when the user clicks a thumbnail.</p>
 
 <h3>Updating the state</h3>
 
@@ -1201,7 +1229,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Now the reducer is ready to receive the <code>IMAGE_SELECTED</code> action should it be dispatched! Inside of the case, we are returning a <strong>new state object</strong> by &ldquo;spreading&rdquo; the existing state and overwriting the <code>selectedImage</code> property. Checkout more on the <code>...state</code> technique in <a href="https://egghead.io/lessons/javascript-redux-avoiding-array-mutations-with-concat-slice-and-spread">this video</a>.</p>
+<p>Now the reducer is ready to receive the <code>IMAGE_SELECTED</code> action should it be dispatched! Inside of the case, we are returning a <strong>new state object</strong> by &ldquo;spreading&rdquo; the existing state and overwriting the <code>selectedImage</code> property. Checkout more on the <code>...state</code> object spread technique in <a href="https://egghead.io/lessons/javascript-redux-avoiding-array-mutations-with-concat-slice-and-spread">this video</a>. It&rsquo;s excellent.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1288,7 +1316,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In the <code>Gallery</code>, we will use the dispatch function by calling it <em>inside of the body</em> of the <code>onClick</code> handler function. For now we are just writing it inline for convenience, but once we make that change, we can now click a thumbnail, and it will update the selected image via the reducer!</p>
+<p>In the <code>Gallery</code>, we will use the <code>dispatch</code> function in the component props by calling it <em>inside of the body</em> of the <code>onClick</code> handler function. For now we are just writing it inline for convenience, but once we make that change, we can now click a thumbnail, and it will update the selected image via the reducer!</p>
 
 <p>Using dispatch can be convenient way to quickly create generic actions, but soon we will want to make reusable actions that are well named. To do this, we will make use of &ldquo;action creators&rdquo;.</p>
 
@@ -1317,7 +1345,9 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This could now be imported directly into any file tht needed to create a <code>selectImage</code> action! <code>selectImage</code> is a pure function that only returns data. It takes an image as an argument, and adds that to the action object it creates and returns.</p>
+<p>This could now be imported directly into any file that needed to create a <code>selectImage</code> action! <code>selectImage</code> is a pure function that only returns data. It takes an image as an argument, and adds that to the action object it creates and returns.</p>
+
+<blockquote><p><strong>note:</strong> We are returning a plain JavaScript object, but the second property <code>image</code> might be weird if you haven&rsquo;t encountered this style before. Basically, in ES6, if you pass a property to an object like this it expands to <code>image: 'whatever value was held by image'</code> in the resulting object. Super handy.</p></blockquote>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1328,7 +1358,9 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Luckily for us, this pattern is so common, redux provides a much nicer way to do this with the <code>bindActionCreators</code> function.</p>
+<p>This isn&rsquo;t much nicer than just using <code>dispatch</code> though.</p>
+
+<p>Luckily for us, this pattern is so common, Redux provides a much nicer way to do this with the <code>bindActionCreators</code> function.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1441,11 +1473,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <p>We&rsquo;ve added a <code>mapActionCreatorsToProps</code> function that takes the <code>dispatch</code> function as an argument. It returns the result of a call to <code>bindActionCreators</code> with our <code>GalleryActions</code> provided as an argument. Now if you log the props, you&rsquo;ll see that <code>Gallery</code> <em>no longer gets passed the <code>dispatch</code> function</em>, and instead has a function called <code>selectImage</code> that we can use directly!</p>
 
-<p>Under the hood, redux has given us a well named shortcut for <code>dispatch(GalleryActions.selectImage(image))</code></p>
-
-<p>So!</p>
-
-<p>We&rsquo;ve done several things:</p>
+<p>To review, we&rsquo;ve done several things:</p>
 
 <ul>
 <li>created a reducer that contains the initial (default) state of our application and listens for actions</li>
@@ -1464,11 +1492,11 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <p>You may hear the term &ldquo;side effects&rdquo; used when discussing a functional style of programming. Side effects are things that occur outside the boundaries of the application. Within our cozy bubble, side effects aren&rsquo;t really a problem, but when we reach out to a remote service the bubble is pierced. We lose some control, and we have to accept that fact.</p>
 
-<p>In redux, <strong>reducers don&rsquo;t have side effects</strong>. This means that <strong>reducers don&rsquo;t handle async activity in our application</strong>. We can&rsquo;t use them to load our remote data because <strong>reducers are pure functions with no side effects</strong>.</p>
+<p>In Redux, <strong>reducers don&rsquo;t have side effects</strong>. This means that <strong>reducers don&rsquo;t handle async activity in our application</strong>. We can&rsquo;t use them to load our remote data because <strong>reducers are pure functions with no side effects</strong>.</p>
 
 <p>Redux is wonderful, and if you don’t have and side-effects like asynchronous activity you could stop right here. If you’re creating more than the most trivial example, it is likely that you are loading data from a service, and this is of course async.</p>
 
-<blockquote><p><strong>note:</strong> one of the coolest aspects of redux is how tiny it is. It does so very little! It is intended to solve a very limited problem scope. Most applications will need to solve <strong>lots</strong> of problems! Luckily redux provides the concept of &ldquo;middleware&rdquo;, which are basically bits of code that sit in the midel of the action &ndash;> reducer &ndash;> store triangle and provide a mechanism for introducing side effects like async calls to remote servers</p></blockquote>
+<blockquote><p><strong>note:</strong> one of the coolest aspects of Redux is how tiny it is. It does so very little! It is intended to solve a very limited problem scope. Most applications will need to solve <strong>lots</strong> of problems! Luckily Redux provides the concept of &ldquo;middleware&rdquo;, which are basically bits of code that sit in the midel of the action &ndash;> reducer &ndash;> store triangle and provide a mechanism for introducing side effects like async calls to remote servers</p></blockquote>
 
 <p>One approach is to use <strong><a href="https://en.wikipedia.org/wiki/Thunk">thunks</a></strong> with the <a href="https://github.com/gaearon/redux-thunk">redux-thunk</a> middleware. Thunks work great, but can get confusing for sequences of actions and can be challenging to test effectively.</p>
 
@@ -1515,16 +1543,16 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">export</span> <span class="kd">function</span><span class="o">*</span> <span class="nx">loadImages</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>  <span class="k">try</span> <span class="p">{</span>
 </span><span class='line'>    <span class="kr">const</span> <span class="nx">images</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">call</span><span class="p">(</span><span class="nx">fetchImages</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">yield</span> <span class="nx">put</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="err">‘</span><span class="nx">IMAGES_RECEIVED</span><span class="err">’</span><span class="p">,</span> <span class="nx">images</span><span class="p">});</span>
-</span><span class='line'>    <span class="nx">yield</span> <span class="nx">put</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="err">‘</span><span class="nx">SELECT_IMAGE</span><span class="err">’</span><span class="p">,</span> <span class="nx">image</span><span class="o">:</span> <span class="nx">images</span><span class="p">[</span><span class="mi">0</span><span class="p">]})</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">yield</span> <span class="nx">put</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="err">‘</span><span class="nx">LOAD_IMAGES_FAILURE</span><span class="err">’</span><span class="p">,</span> <span class="nx">error</span><span class="p">})</span>
+</span><span class='line'>    <span class="nx">yield</span> <span class="nx">put</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;IMAGES_LOADED&#39;</span><span class="p">,</span> <span class="nx">images</span><span class="p">})</span>
+</span><span class='line'>    <span class="nx">yield</span> <span class="nx">put</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;IMAGE_SELECTED&#39;</span><span class="p">,</span> <span class="nx">image</span><span class="o">:</span> <span class="nx">images</span><span class="p">[</span><span class="mi">0</span><span class="p">]})</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">yield</span> <span class="nx">put</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;IMAGE_LOAD_FAILURE&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">})</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="kr">export</span> <span class="kd">function</span><span class="o">*</span> <span class="nx">watchLoadImages</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">yield</span> <span class="nx">take</span><span class="p">(</span><span class="err">‘</span><span class="nx">LOAD_IMAGES</span><span class="err">’</span><span class="p">);</span>
+</span><span class='line'><span class="kr">export</span> <span class="kd">function</span><span class="o">*</span> <span class="nx">watchForLoadImages</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">yield</span> <span class="nx">take</span><span class="p">(</span><span class="s1">&#39;LOAD_IMAGES&#39;</span><span class="p">);</span>
 </span><span class='line'>    <span class="nx">yield</span> <span class="nx">call</span><span class="p">(</span><span class="nx">loadImages</span><span class="p">);</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
@@ -1533,7 +1561,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <h3>The first saga</h3>
 
-<p>We&rsquo;ll start with a simple example of a saga, and then we will configure redux-sage to connect it to our application. Create a file called <code>saga.js</code> in the source folder and add the following:</p>
+<p>We&rsquo;ll start with a simple example of a saga, and then we will configure redux-saga to connect it to our application. Create a file called <code>saga.js</code> in the source folder and add the following:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1597,7 +1625,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <p>No matter how long you stare at the console, your &ldquo;hello&rdquo; will never arrive <i class='emoji cry'></i></p>
 
-<p>This is because <code>sayHello</code> is a <strong>generator</strong>! Generators don&rsquo;t execute immediately. If you changed the line to <code>sayHello().next();</code> your greating will appear. Don&rsquo;t worry, we won&rsquo;t call <code>next</code> all the time. Like redux, redux-saga is built to remove pain and bolierplate and make our development experience more pleasurable.</p>
+<p>This is because <code>sayHello</code> is a <strong>generator</strong>! Generators don&rsquo;t execute immediately. If you changed the line to <code>sayHello().next();</code> your greating will appear. Don&rsquo;t worry, we won&rsquo;t call <code>next</code> all the time. Like Redux, redux-saga is built to remove pain and bolierplate and make our development experience more pleasurable.</p>
 
 <h2>Configure redux-saga</h2>
 
@@ -1660,7 +1688,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We&rsquo;ve imported the <code>applyMiddleware</code> function from redux, and the  <code>createSagaMiddleware</code> from <code>redux-saga</code>. When we create the store, we need to supply redux with the middleware that we want to use. In this case we call <code>applyMiddleware</code> and send it the result of <code>createSagaMiddleware(sayHello)</code>. Behind the scenes redux-saga loads in the <code>sayHello</code> function, and politely calls the initial <code>next</code> for us.</p>
+<p>We&rsquo;ve imported the <code>applyMiddleware</code> function from Redux, and the  <code>createSagaMiddleware</code> from <code>redux-saga</code>. When we create the store, we need to supply Redux with the middleware that we want to use. In this case we call <code>applyMiddleware</code> and send it the result of <code>createSagaMiddleware(sayHello)</code>. Behind the scenes redux-saga loads in the <code>sayHello</code> function, and politely calls the initial <code>next</code> for us.</p>
 
 <p>It should greet you in the console!</p>
 
@@ -1903,7 +1931,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <h3>Triggering saga workflows with actions</h3>
 
-<p>Sagas become much more useful if we have the ability to trigger their workflows with redux actions. When we do this, we can leverage the power of sagas from any component in our app. First we will create a new saga called <code>watchForLoadImages</code>.</p>
+<p>Sagas become much more useful if we have the ability to trigger their workflows with Redux actions. When we do this, we can leverage the power of sagas from any component in our app. First we will create a new saga called <code>watchForLoadImages</code>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -2133,7 +2161,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 
 <h2>Testing Sagas</h2>
 
-<p>Using redux makes testing most of our app a breeze. Check out <a href="https://egghead.io/series/react-testing-cookbook">this egghead course</a> for lots of techniques for testing React in general.</p>
+<p>Using Redux makes testing most of our app a breeze. Check out <a href="https://egghead.io/series/react-testing-cookbook">this egghead course</a> for lots of techniques for testing React in general.</p>
 
 <p>One of the awesome aspects of redux-saga is how easy it makes testing these bits of asynchronous code. Testing async javascript can be a real chore. With sagas, we don&rsquo;t need to jump through hoops to test this core functionality of our application.  Sagas take the pain out of aync tests! Which means we will write more tests. Right?</p>
 
@@ -2327,7 +2355,9 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Hmm, { _invoke: [Function: invoke] } is <em>definitely</em> not as obvious as the simple object that we got when yeilding <code>take</code>. In fact, this is a problem. Luckily it&rsquo;s one that redux-saga has saolved in a nice way with another effect called <code>call</code>. Like <code>take</code>, the <code>call</code> method returns and easily testable object, and redux-saga makes sure that the call goes through.</p>
+<p>Hmm, <code>{ _invoke: [Function: invoke] }</code> is <em>definitely</em> not as obvious as the simple object that we got when yeilding <code>take</code>.</p>
+
+<p>This is a problem. Luckily it&rsquo;s one that redux-saga has saolved in a nice way with another effect called <code>call</code>. Like <code>take</code>, the <code>call</code> method returns and easily testable object, and redux-saga makes sure that the call goes through.</p>
 
 <p>Let&rsquo;s update the saga to use <code>call</code>:</p>
 
@@ -2376,7 +2406,9 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We need to import <code>call</code>, of course, and then in <code>watchForLoadImages</code> we will <code>yield call(loadImages)</code> instead of loadImages directly. Run <code>npm test</code> again:</p>
+<p>We need to import <code>call</code>, and then in <code>watchForLoadImages</code> we will <code>yield call(loadImages)</code> instead of yielding <code>loadImages</code> directly. Note that we aren&rsquo;t executing <code>loadImages</code>. Instead we are <em>passing the function <code>loadImages</code> as an argument to <code>call</code></em></p>
+
+<p>Run <code>npm test</code> again:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -2395,7 +2427,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This is familiar! Instead of a function invocation, we get a plain object. That object has the <code>loadImages</code> function embedded in it. The application loads exactly the same in the browser, but now we can easily test this step in the saga workflow.</p>
+<p>Instead of a function invocation, we get a plain object. That object has the <code>loadImages</code> function embedded in it. The application loads exactly the same in the browser, but now we can easily test this step in the saga workflow.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -2535,7 +2567,7 @@ f=false,d=document;return{use_existing_jquery:function(){return use_existing_jqu
 </ul>
 
 
-<p>We&rsquo;ve only touched the surface of generators, but even at this level, hopefully you can see how useful they can be when coupled with the redux-saga library, redux, and React.</p>
+<p>We&rsquo;ve only touched the surface of generators, but even at this level, hopefully you can see how useful they can be when coupled with the redux-saga library, Redux, and React.</p>
 
 <p><img src="https://s3.amazonaws.com/f.cl.ly/items/2s2q3B3x0Q04131p3V0C/jhooks_2016-Mar-20.jpg?v=db21427c" alt="" /></p>
 

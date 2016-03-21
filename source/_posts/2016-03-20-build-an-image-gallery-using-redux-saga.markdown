@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Build an Image Gallery using redux-saga"
+title: "Build an Image Gallery Using React, Redux and redux-saga"
 date: 2016-03-20 15:57
 comments: true
 categories: 
@@ -9,15 +9,17 @@ image_url: "saga.jpg"
 
 # Building an Image Gallery
 
-The image gallery we will build is a simple application that displays an array of image URLs and allows the user to select them individually.
+The image gallery we will build is a simple application that displays an array of image URLs loaded from a service (Flickr), and allows the user to select them individually. 
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/3v0l00410J1Z1j310b24/Screen%20Shot%202016-03-20%20at%203.42.17%20PM.png?v=1b32daca)
 
-Write the gallery in ES6 (arrow functions, modules, and template strings!), so we will need to do a bit of project setup to get going.
+It will be built with React, using Redux and redux-saga. React is being used as the core framework to take advantage of its virtual-dom implementation. Redux will handle the management of state within the application. Finally, we will use redux-saga to handle the complexity of asynchronous sequences. 
+
+We will write the gallery in ES6 (arrow functions, modules, and template strings!), so we will need to do a bit of project setup to get going.
 
 ## Project Setup and Automation
 
-There is an array of options when it comes to getting started with a React application. For this simple app, we want to keep it as minimal as possible. We are going to use Babel to transpile ES6 into good ol’ ES5 for the browser, budo/browserify to serve it locally, and tape to test.
+There is an significant array of options when it comes to getting started with a React application. For this simple app, we want to keep it as minimal as possible. We are going to use Babel to transpile ES6 into good ol’ ES5 for the browser, budo/browserify to serve it locally, and tape to test.
 
 Create a file called `package.json` in a new project folder and add the following contents to it:
 
@@ -27,7 +29,7 @@ Create a file called `package.json` in a new project folder and add the followin
   "name": "egghead-react-redux-image-gallery",
   "version": "0.0.1",
   "description": "Redux Saga beginner tutorial",
-  "main": "src/main.js.js",
+  "main": "src/main.js",
   "scripts": {
     "test": "babel-node ./src/saga.spec.js | tap-spec",
     "start": "budo ./src/main.js:build.js --dir ./src --verbose  --live -- -t babelify"
@@ -71,6 +73,8 @@ We're also going to need to configure Babel with a `.babelrc` file in the projec
   "presets": ["es2015", "react", "stage-2"]
 }
 ```
+
+This file tells babel that we will be using ES2015 (ES6), React, and stage-2 features of the emerging ECMAScript standard (ES2016).
 
 The `package.json` has two standard scripts configured called `start` and `test`. For right now, we want to get `start` working so we can load the application. The `start` script is currently configured to look inside of a folder called `src` so *create a folder called `src`* in the project directory and add the following files:
 
@@ -165,7 +169,7 @@ The `index.html` loads the `styles.css` to give us some basic styling/layout. It
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/2I1V0o2c1d281f3i3408/Screen%20Shot%202016-03-20%20at%204.31.06%20PM.png?v=1720e99d)
 
-Now we can work on the `Gallery` component.
+Now we will build the base `Gallery` React component.
 
 ## Displaying some images in the gallery.
 
@@ -213,6 +217,8 @@ export default class Gallery extends Component {
 }
 ```
 
+We've hard coded an array of data into this component, which is a great way to start working quickly. The `Gallery` extends `Component`, and in its constructor we set the initial state of the component. Finally, we render a basic structure with some styled markup. The `image-scroller` element uses the images array to produce multiple elements using `map`.
+
 With the `Gallery` created, we can update `main.js` to load the gallery:
 
 ### main.js
@@ -231,7 +237,7 @@ ReactDOM.render(
 );
 ```
 
-For now, we are using hard coded images (via the `flickrImages` array), and displaying the first image url as the `selectedImage`. We're accessing these properties by setting a default initial state within the `Gallery` component class constructor.
+For now, we are using the hard-coded image URLs (via the `flickrImages` array), and displaying the first image url as the `selectedImage`. We're accessing these properties by setting a default initial state within the `Gallery` component class constructor.
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/1T3G3p3T2q2H00472T1C/Screen%20Shot%202016-03-20%20at%204.51.14%20PM.png?v=afdd9bf7)
 
@@ -261,10 +267,10 @@ export default class Gallery extends Component {
             <img src={selectedImage} />
           </div>
         </div>
--        <div className="image-scroller">
-+        <div key={index} onClick={this.handleThumbClick.bind(this,image)}>
+        <div className="image-scroller">
           {images.map((image, index) => (
-            <div key={index}>
+-            <div key={index}>
++            <div key={index} onClick={this.handleThumbClick.bind(this,image)}>
               <img src={image}/>
             </div>
           ))}
@@ -274,6 +280,8 @@ export default class Gallery extends Component {
   }
 }
 ```
+
+By adding `handleThumbClick` to the `Gallery` component class, we can access it in any elements `onClick` method. Note that we are using `bind(this,image)` in the `onClick`. By passing `image` as the second argument, it is sent as the first argument to `handleThumbClick`. This use of bind is an extermely handy way to pass *context* to an event handler.
 
 Looking good! Now we have some interaction, and something that resembles an "app". Now that we've dealt with getting the application running and displaying data, we can consider loading some remote data. The most obvious place to do that is one of the React component lifecycle methods. We will use `componentDidMount` and make a call to the Flickr API and load some images:
 
@@ -304,7 +312,9 @@ export default class Gallery extends Component {
 [...]
 ```
 
-This is using the `fetch` browser API to make a request to Flickr. Fetch returns a promise that resolves with `response` object. Calling `response.json()` gives us another promise, which is the actual JSON result we are looking for. We'll map over the photos to create an array of Flickr image urls.
+We've added a new method to the Gallery class. We are using React's `componentDidMount` lifecycle method to trigger the loading of data from Flickr. Lifecycle methods are called by React at specific times in a component's lifecycle. In this case, the method will be called whenever the component is added to the DOM. Note that the Gallery component is only added to the DOM once, so this will give us our initial load of images. For a more dynamic component that is loaded and unloaded over an application's lifecycle, this might cause excessive service calls or other unforeseen results. 
+
+We are using the `fetch` browser API to make a request to Flickr. Fetch returns a promise that resolves with `response` object. Calling `response.json()` gives us another promise, which is the actual JSON result we are looking for. We'll map over the photos to create an array of Flickr image urls.
 
 > Let's be honest. This application is simple. We could stop right here and we'd have the basic requirements done. Maybe we add an error handler in the fetch promise chain, some logic to see if there are images and *DONE!* At this point you really have to stop and use your imagination a bit. Simple requirements rarely last in the real world. Soon the application will grow as feature requests roll in. Authentication, a slide show, the ability to load different galleries and images sets... This **is not** good enough.
 
@@ -314,34 +324,40 @@ We are going to introduce Redux to manage state instead, so let's get that setup
 
 ## Using Redux to manage state
 
-Anytime you use `setState` in your application you've allowed the Component to become stateful. While this isn't always bad, it can lead to some confusing application code over time, with state management spread from top to bottom in your application.
+Anytime you use `setState` in your application *you've allowed the Component to become stateful*. While this isn't always bad, it can lead to some confusing application code over time, with state management spread from top to bottom in your application.
 
 The Flux architecture is one solution that was introduced to help alleviate this. Flux moves logic and state into Stores. Stores are updated when Actions are dispatched in the application. Updates to Stores will trigger Views to be rendered with the new state.
 
-So why not just drop in Flux? It's "official" architecture!
+So why not just drop in Flux? It's "official" architecture after all. 
 
-Well, Redux is basically Flux, but with some distinct advantages. Here's what [Dan Abramov (the creator of Redux) has to say](http://stackoverflow.com/a/32920459/87002):
+Well, **Redux is basically Flux**, but with some distinct advantages. Here's what [Dan Abramov (the creator of Redux) has to say](http://stackoverflow.com/a/32920459/87002):
 
 > Redux is not that different from Flux. Overall it's the same architecture, but Redux is able to cut some complexity corners by using functional composition where Flux uses callback registration.
 
 > It's not fundamentally different, but I find it that Redux makes certain abstractions easier, or at least possible to implement, that would be hard or impossible to implement in Flux.
 
-The [redux documentation](http://redux.js.org/) is great. Dan is a truly gracious and inspiring individual. If you haven't [read the code cartoons](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6#.7cra4lukv) or watched [Dan's egghead series](https://egghead.io/series/getting-started-with-redux), now is the time!
+The [Redux documentation](http://redux.js.org/) is great. Dan is a truly gracious and inspiring individual. If you haven't [read the code cartoons](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6#.7cra4lukv) or watched [Dan's free egghead.io series](https://egghead.io/series/getting-started-with-redux), now is the time! 
 
-### Bootstrapping redux
+### Bootstrapping Redux
 
-The first thing we need to do is get redux setup in our gallery application. We don't have to install anything, that was all taken care of when we ran `npm install`, but we do need to import and configure redux.
+The first thing we need to do is get Redux bootstrapped and running in our application. We don't have to install anything, that was all taken care of when we ran `npm install`, but we do need to import and configure Redux.
 
-The reducer function is the brain of redux. When an action is dispatched by the application, the reducer receives the action and creates the piece of application state that the reducer owns. Since reducers are pure functions, they can be composed together to create the complete state of the application. Let's create a simple reducer in the `src` folder:
+**The reducer function is the brain of Redux**. When an action is dispatched by the application, the reducer receives the action and creates the piece of application state that the reducer owns. Since **reducers are pure functions**, they can be composed together to create the complete state of the application. Let's create a simple reducer in the `src` folder:
 
 ### reducer.js
 ```javascript
 export default function images(state, action) {
   console.log(state, action)
+  return state;
 }
 ```
 
-For right now, we're just going to log to the console while we get it set up. To use the reducer we need to configure redux in `main.js`:
+A reducer function is a function that takes two arguments. 
+
+* `state` - this is the data that represents the state of the application. The reducer function will use this state to construct the new state. If no state has changed as result of the action, the reducer will simply return the state input.
+* `action` - the event that has triggered the reducer. Actions are dispatched by the store, and handled by reducers. The action is required to have a `type` property that the reducer uses to apply changes to the new application state. 
+
+For right now, the `images` reducer will log to the console to prove that it is connected and ready for work. To use the reducer we need to configure redux in `main.js`:
 
 ### main.js
 ```diff
@@ -366,25 +382,27 @@ ReactDOM.render(
   document.getElementById('root')
 );
 ```
-We are going to import the `createStore` function from the redux library. `createStore` is used to create the redux store. For the most part, we don't interact directly with the store, it is something that redux manages for us behind the scenes. 
+We are going to import the `createStore` function from the Redux library. `createStore` is used to create the Redux store. For the most part, we don't interact directly with the store, it is something that Redux manages for us behind the scenes. 
 
 We also need to import the reducer function that we've just created so that it can be delivered to the store.
 
 We will use `createStore(reducer)` to configure the store with our application's reducer. This example only has a single reducer, but `createStore` can take multiple reducers arguments. More on that a bit later!
 
-Finally we import the higher-order `Provider` component from `react-redux`. This will wrap our `Gallery` so that we can make easy use of redux. We need to pass the store we just created to the `Provider` so that it can use it for us. You could use redux without `Provider`, and in fact, React isn't required to use redux at all! That's wonderful, but we are going to use `Provider` because it is very convenient.
+Finally we import the higher-order `Provider` component from `react-Redux`. This will wrap our `Gallery` so that we can make easy use of Redux. We need to pass the store we just created to the `Provider` so that it can use it for us. You could use Redux without `Provider`, and in fact, React isn't required to use Redux at all! That's wonderful, but we are going to use `Provider` because it is very convenient.
 
 If you open your developer tools console, you should see a message!
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/2R3b143J1Y3T400i2c0w/Screen%20Shot%202016-03-20%20at%206.32.23%20PM.png?v=ba488b8e)
 
-It may be a bit mysterious, but shows off an interesting point of redux. All reducers receive all actions that are dispatched in the application. In this case we are seeing an action that redux itself dispatches.
+It may be a bit mysterious, but shows off an interesting point of Redux. *All reducers receive all actions that are dispatched in the application.* In this case we are seeing an action that Redux itself dispatches.
 
 ### Connecting the gallery component
 
-With redux, and specifically with react-redux we will use the concept of "connected" and "un-connected" components. A connected component is wired into the store, and coordinates and controls action events and the store. Usually a connected component will have children that are "pure components" that take data as input, and render when that data is updated.
+With Redux, we will use the concept of "connected" and "un-connected" components. A connected component is wired into the store, and coordinates and controls action events and the store. Usually a connected component will have children that are "pure components" that take data as input, and render when that data is updated. These children are unconnected components.
 
-react-redux provides a convenient wrapper for react components that does most of the heavy lifting required to connect a react component to a redux store. We will add that to `Gallery` and make it our primary connected component:
+> **note:** While React and Redux play very well together, React is *not* required for Redux. You can use Redux without React! 
+
+react-redux provides a convenient wrapper for React components that does most of the heavy lifting required to connect a React component to a Redux store. We will add that to `Gallery` and make it our primary connected component:
 
 ### Gallery.js
 ```diff
@@ -444,11 +462,13 @@ import React, {Component} from 'react'
 
 ```
 
-Importing the `connect` function from react-redux lets us export `Gallery` by wrapping it in the connect component. Notice that `connect()(Gallery)` puts `Gallery` in a second set of parentheses. This is because `connect()` returns a function that expects a react component as an argument. The call to `connect()` configures that function. Soon we'll pass in arguments to `connect` to configure it for our applications specific actions and state structure.
+Importing the `connect` function from react-redux lets us export `Gallery` by wrapping it in the connect component. Notice that `connect()(Gallery)` puts `Gallery` in a second set of parentheses. This is because `connect()` returns a function that expects a React component as an argument. The call to `connect()` configures that function. Soon we'll pass in arguments to `connect` to configure it for our applications specific actions and state structure.
+
+We are also exporting the `connect` call as the `default` for this module. This is important! Now, when we `import Gallery` it will import the connected component and not the basic class.
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/2k1Y1h3g1b0l1m0w212R/Screen%20Shot%202016-03-20%20at%206.42.19%20PM.png?v=bc54291d)
 
-If you look at the console log that we've added to the constructor, you will see that the `Gallery` component's properties now include a `dispatch` function. This is part of what `connect` has modified for us, and gives us the ability to dispatch out own action objects to the applications reducers.
+If you look at the console log that we've added to the constructor, you will see that the `Gallery` component's properties now include a `dispatch` function. This is part of what `connect` has modified for us, and gives us the ability to dispatch our own action objects to the applications reducers.
 
 ```diff
 export class Gallery extends Component {
@@ -462,7 +482,7 @@ export class Gallery extends Component {
 [...]  
 ```
 
-We can test it out by calling `this.props.dispatch({type: 'TEST'});`. You should see a log statement from our reducer in your developer console. We've dispatched our first action! Actions are plain old javascript objects that have a `type` property. They can have any number of other properties as well, but the `type` property allows reducers to listen for specific actions that they are interested in.
+We can test it out by calling dispatch in the constructor. You should see a log statement from our reducer in your developer console. We've dispatched our first action! *Actions are plain old javascript objects* that have a required `type` property. They can have any number of other properties as well to pass along to the reducer, but the `type` property allows reducers to listen for specific actions that they are interested in.
 
 ```diff
 export default function images(state, action) {
@@ -471,16 +491,17 @@ export default function images(state, action) {
 +    case 'TEST':
 +      console.log('THIS IS ONLY A TEST')
 +  }
+  return state;
 }
 ```
 
 Generally reducers use a `switch` block to filter messages they are interested in. The `switch` uses the action's type, and the reducer does its work when it gets an action that matches one of the `case`s of the `switch`.
 
-Our application is now wired to receive actions. Now we need to connect it to the state provided by the redux store. 
+Our application is now wired to receive actions. Now we need to connect it to the state provided by the Redux store. 
 
 ### Default application state
 
-Because we are using `connect`, we don't need to interact with the redux store directly. We are going to configure a default application state to provide the redux store. 
+Because we are using `connect`, we don't need to interact with the Redux store directly. We are going to configure a default application state to provide the Redux store. 
 
 ### reducer.js
 ```diff
@@ -497,6 +518,7 @@ export default function images(state = defaultState, action) {
 +    default:
 +      return state;
   }
+-  return state;
 }
 ```
 
@@ -570,7 +592,7 @@ export class Gallery extends Component {
 +export default connect(mapStateToProps)(Gallery)
 ```
 
-We are going to go ahead and remove all of the image loading and interaction for now. If you look towards the bottom og `Gallery` you will notice that we created a function called `mapStateToProps` that takes a `state` argument and returns an object that puts `state.images` into a property called `images`.  `mapStateToProps` is then passed as an argument to `connect`.
+We are going to remove all of the image loading and interaction in the connected component for now. If you look towards the bottom of `Gallery` you will notice that we created a function called `mapStateToProps` that takes a `state` argument and returns an object that puts `state.images` into a property called `images`.  `mapStateToProps` is then passed as an argument to `connect`.
 
 As the name suggests `mapStateToProps` is a function that takes the current state, and assigns it to properties of the component. If you `console.log(props)` in the constructor, you will see that we now have access to the images array that we set as the default state in our reducer!
 
@@ -598,7 +620,7 @@ export default function images(state = defaultState, action) {
 }
 ```
 
-If you update the `images` array in the `defaultState` you should see some images reappear in the gallery! Now we need to get image selection wired back up with an action.
+If you update the `images` array in the `defaultState` you should see some images reappear in the gallery! Now we need to get image selection wired back up with an action that is dispatched when the user clicks a thumbnail.
 
 ### Updating the state
 
@@ -630,7 +652,7 @@ export default function images(state = defaultState, action) {
 }
 ```
 
-Now the reducer is ready to receive the `IMAGE_SELECTED` action should it be dispatched! Inside of the case, we are returning a **new state object** by "spreading" the existing state and overwriting the `selectedImage` property. Checkout more on the `...state` technique in [this video](https://egghead.io/lessons/javascript-redux-avoiding-array-mutations-with-concat-slice-and-spread).
+Now the reducer is ready to receive the `IMAGE_SELECTED` action should it be dispatched! Inside of the case, we are returning a **new state object** by "spreading" the existing state and overwriting the `selectedImage` property. Checkout more on the `...state` object spread technique in [this video](https://egghead.io/lessons/javascript-redux-avoiding-array-mutations-with-concat-slice-and-spread). It's excellent.
 
 ```diff
 import React, {Component} from 'react'
@@ -676,7 +698,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(Gallery)
 ```
 
-In the `Gallery`, we will use the dispatch function by calling it *inside of the body* of the `onClick` handler function. For now we are just writing it inline for convenience, but once we make that change, we can now click a thumbnail, and it will update the selected image via the reducer!
+In the `Gallery`, we will use the `dispatch` function in the component props by calling it *inside of the body* of the `onClick` handler function. For now we are just writing it inline for convenience, but once we make that change, we can now click a thumbnail, and it will update the selected image via the reducer!
 
 Using dispatch can be convenient way to quickly create generic actions, but soon we will want to make reusable actions that are well named. To do this, we will make use of "action creators".
 
@@ -696,7 +718,9 @@ export function selectImage(image) {
 }
 ```
 
-This could now be imported directly into any file tht needed to create a `selectImage` action! `selectImage` is a pure function that only returns data. It takes an image as an argument, and adds that to the action object it creates and returns.
+This could now be imported directly into any file that needed to create a `selectImage` action! `selectImage` is a pure function that only returns data. It takes an image as an argument, and adds that to the action object it creates and returns.
+
+> **note:** We are returning a plain JavaScript object, but the second property `image` might be weird if you haven't encountered this style before. Basically, in ES6, if you pass a property to an object like this it expands to `image: 'whatever value was held by image'` in the resulting object. Super handy.
 
 ```
 import  * as GalleryActions from './actions.js';
@@ -704,7 +728,9 @@ import  * as GalleryActions from './actions.js';
 onClick={() => dispatch(GalleryActions.selectImage(image))}
 ```
 
-Luckily for us, this pattern is so common, redux provides a much nicer way to do this with the `bindActionCreators` function.
+This isn't much nicer than just using `dispatch` though.
+
+Luckily for us, this pattern is so common, Redux provides a much nicer way to do this with the `bindActionCreators` function.
 
 ```diff
 import React, {Component} from 'react'
@@ -764,11 +790,7 @@ function mapStateToProps(state) {
 
 We've added a `mapActionCreatorsToProps` function that takes the `dispatch` function as an argument. It returns the result of a call to `bindActionCreators` with our `GalleryActions` provided as an argument. Now if you log the props, you'll see that `Gallery` *no longer gets passed the `dispatch` function*, and instead has a function called `selectImage` that we can use directly!
 
-Under the hood, redux has given us a well named shortcut for `dispatch(GalleryActions.selectImage(image))`
-
-So!
-
-We've done several things:
+To review, we've done several things:
 
 * created a reducer that contains the initial (default) state of our application and listens for actions
 * created a store that consumes the reducer and provides a dispatcher that we can use to dispatch actions
@@ -784,11 +806,11 @@ This is where it gets interesting! {% emoji wink %}
 
 You may hear the term "side effects" used when discussing a functional style of programming. Side effects are things that occur outside the boundaries of the application. Within our cozy bubble, side effects aren't really a problem, but when we reach out to a remote service the bubble is pierced. We lose some control, and we have to accept that fact.
 
-In redux, **reducers don't have side effects**. This means that **reducers don't handle async activity in our application**. We can't use them to load our remote data because **reducers are pure functions with no side effects**.
+In Redux, **reducers don't have side effects**. This means that **reducers don't handle async activity in our application**. We can't use them to load our remote data because **reducers are pure functions with no side effects**.
 
 Redux is wonderful, and if you don’t have and side-effects like asynchronous activity you could stop right here. If you’re creating more than the most trivial example, it is likely that you are loading data from a service, and this is of course async.
 
-> **note:** one of the coolest aspects of redux is how tiny it is. It does so very little! It is intended to solve a very limited problem scope. Most applications will need to solve **lots** of problems! Luckily redux provides the concept of "middleware", which are basically bits of code that sit in the midel of the action -> reducer -> store triangle and provide a mechanism for introducing side effects like async calls to remote servers
+> **note:** one of the coolest aspects of Redux is how tiny it is. It does so very little! It is intended to solve a very limited problem scope. Most applications will need to solve **lots** of problems! Luckily Redux provides the concept of "middleware", which are basically bits of code that sit in the midel of the action -> reducer -> store triangle and provide a mechanism for introducing side effects like async calls to remote servers
 
 One approach is to use **[thunks](https://en.wikipedia.org/wiki/Thunk)** with the [redux-thunk](https://github.com/gaearon/redux-thunk) middleware. Thunks work great, but can get confusing for sequences of actions and can be challenging to test effectively.
 
@@ -817,16 +839,16 @@ Because of the way generators work, we are able to create flat sequences of comm
 export function* loadImages() {
   try {
     const images = yield call(fetchImages);
-    yield put({type: ‘IMAGES_RECEIVED’, images});
-    yield put({type: ‘SELECT_IMAGE’, image: images[0]})
-  } catch (error) {
-    yield put({type: ‘LOAD_IMAGES_FAILURE’, error})
+    yield put({type: 'IMAGES_LOADED', images})
+    yield put({type: 'IMAGE_SELECTED', image: images[0]})
+  } catch(error) {
+    yield put({type: 'IMAGE_LOAD_FAILURE', error})
   }
 }
 
-export function* watchLoadImages() {
-  while (true) {
-    yield take(‘LOAD_IMAGES’);
+export function* watchForLoadImages() {
+  while(true) {
+    yield take('LOAD_IMAGES');
     yield call(loadImages);
   }
 }
@@ -834,7 +856,7 @@ export function* watchLoadImages() {
 
 ### The first saga
 
-We'll start with a simple example of a saga, and then we will configure redux-sage to connect it to our application. Create a file called `saga.js` in the source folder and add the following:
+We'll start with a simple example of a saga, and then we will configure redux-saga to connect it to our application. Create a file called `saga.js` in the source folder and add the following:
 
 ```javascript
 export function* sayHello() {
@@ -873,7 +895,7 @@ ReactDOM.render(
 
 No matter how long you stare at the console, your "hello" will never arrive {% emoji cry %}
 
-This is because `sayHello` is a **generator**! Generators don't execute immediately. If you changed the line to `sayHello().next();` your greating will appear. Don't worry, we won't call `next` all the time. Like redux, redux-saga is built to remove pain and bolierplate and make our development experience more pleasurable.
+This is because `sayHello` is a **generator**! Generators don't execute immediately. If you changed the line to `sayHello().next();` your greating will appear. Don't worry, we won't call `next` all the time. Like Redux, redux-saga is built to remove pain and bolierplate and make our development experience more pleasurable.
 
 ## Configure redux-saga
 
@@ -908,7 +930,7 @@ ReactDOM.render(
 );
 ```
 
-We've imported the `applyMiddleware` function from redux, and the  `createSagaMiddleware` from `redux-saga`. When we create the store, we need to supply redux with the middleware that we want to use. In this case we call `applyMiddleware` and send it the result of `createSagaMiddleware(sayHello)`. Behind the scenes redux-saga loads in the `sayHello` function, and politely calls the initial `next` for us.
+We've imported the `applyMiddleware` function from Redux, and the  `createSagaMiddleware` from `redux-saga`. When we create the store, we need to supply Redux with the middleware that we want to use. In this case we call `applyMiddleware` and send it the result of `createSagaMiddleware(sayHello)`. Behind the scenes redux-saga loads in the `sayHello` function, and politely calls the initial `next` for us.
 
 It should greet you in the console!
 
@@ -1061,7 +1083,7 @@ What if we don't want to loadImages implicitly like this, simply because we have
 
 ### Triggering saga workflows with actions
 
-Sagas become much more useful if we have the ability to trigger their workflows with redux actions. When we do this, we can leverage the power of sagas from any component in our app. First we will create a new saga called `watchForLoadImages`.
+Sagas become much more useful if we have the ability to trigger their workflows with Redux actions. When we do this, we can leverage the power of sagas from any component in our app. First we will create a new saga called `watchForLoadImages`.
 
 ```diff
 import {fetchImages} from './flickr';
@@ -1195,7 +1217,7 @@ export function* watchForLoadImages() {
 
 ## Testing Sagas
 
-Using redux makes testing most of our app a breeze. Check out [this egghead course](https://egghead.io/series/react-testing-cookbook) for lots of techniques for testing React in general.
+Using Redux makes testing most of our app a breeze. Check out [this egghead course](https://egghead.io/series/react-testing-cookbook) for lots of techniques for testing React in general.
 
 One of the awesome aspects of redux-saga is how easy it makes testing these bits of asynchronous code. Testing async javascript can be a real chore. With sagas, we don't need to jump through hoops to test this core functionality of our application.  Sagas take the pain out of aync tests! Which means we will write more tests. Right?
 
@@ -1310,7 +1332,9 @@ Our next test makes sure that the `loadImages` saga is called as the next step i
     { _invoke: [Function: invoke] }
 ```
 
-Hmm, { _invoke: [Function: invoke] } is *definitely* not as obvious as the simple object that we got when yeilding `take`. In fact, this is a problem. Luckily it's one that redux-saga has saolved in a nice way with another effect called `call`. Like `take`, the `call` method returns and easily testable object, and redux-saga makes sure that the call goes through.
+Hmm, `{ _invoke: [Function: invoke] }` is *definitely* not as obvious as the simple object that we got when yeilding `take`. 
+
+This is a problem. Luckily it's one that redux-saga has saolved in a nice way with another effect called `call`. Like `take`, the `call` method returns and easily testable object, and redux-saga makes sure that the call goes through.
 
 Let's update the saga to use `call`:
 
@@ -1338,7 +1362,9 @@ export function* watchForLoadImages() {
 }
 ```
 
-We need to import `call`, of course, and then in `watchForLoadImages` we will `yield call(loadImages)` instead of loadImages directly. Run `npm test` again:
+We need to import `call`, and then in `watchForLoadImages` we will `yield call(loadImages)` instead of yielding `loadImages` directly. Note that we aren't executing `loadImages`. Instead we are *passing the function `loadImages` as an argument to `call`*
+
+Run `npm test` again:
 
 ```
 ✖ watchForLoadImages should call loadImages after LOAD_IMAGES action is received
@@ -1350,7 +1376,7 @@ We need to import `call`, of course, and then in `watchForLoadImages` we will `y
     { CALL: { args: [], context: null, fn: [Function: loadImages] } }
 ```
 
-This is familiar! Instead of a function invocation, we get a plain object. That object has the `loadImages` function embedded in it. The application loads exactly the same in the browser, but now we can easily test this step in the saga workflow.
+Instead of a function invocation, we get a plain object. That object has the `loadImages` function embedded in it. The application loads exactly the same in the browser, but now we can easily test this step in the saga workflow.
 
 ```diff
 import test from 'tape';
@@ -1431,6 +1457,6 @@ If you wanted to expand the example a bit, you might:
 * drop in another API that delivers images
 * allow the user to select what APIs to search 
 
-We've only touched the surface of generators, but even at this level, hopefully you can see how useful they can be when coupled with the redux-saga library, redux, and React. 
+We've only touched the surface of generators, but even at this level, hopefully you can see how useful they can be when coupled with the redux-saga library, Redux, and React. 
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/2s2q3B3x0Q04131p3V0C/jhooks_2016-Mar-20.jpg?v=db21427c)
