@@ -1165,13 +1165,29 @@ export class Gallery extends Component {
   render() {
 ```
 
+### Blocking and non-blocking effects
+
+This works fine for our application, but there is a broader issue that we should be concerned with. The `watchForLoadImages` sage contains **blocking** effects. What does that mean? Well, it means that we can only execute a single `LOAD_IMAGES` workflow at a time! It isn't obvious with a simple example like this, because we actually only load images once, but it is definitely a consideration. In fact, the general practice when listening for action evens is to use the `fork` effect instead of `yield loadImages()`.
+
+```diff
+export function* watchForLoadImages() {
+  while(true) {
+    yield take('LOAD_IMAGES');
+-    yield loadImages();
++    yield fork(loadImages); //be sure to import it!
+  }
+}
+```
+
+Using the `fork` helper will convert our `watchForLoadImages` into a non-blocking saga that can be executed regardless of whether or not a previous call is in progress. redux-saga [provides two helpers](http://yelouafi.github.io/redux-saga/docs/basics/UsingSagaHelpers.html), `takeEvery` and `takeLatest` that assist in these situations.
+
 ### Selecting the default image
 
 Sagas are sequences of actions, so we can add more aspects to a saga easily.
 
 ```diff
 import {fetchImages} from './flickr';
-import {put, take} from 'redux-saga/effects';
+import {put, take, fork} from 'redux-saga/effects';
 
 export function* loadImages() {
   const images = yield fetchImages();
@@ -1182,7 +1198,7 @@ export function* loadImages() {
 export function* watchForLoadImages() {
   while(true) {
     yield take('LOAD_IMAGES');
-    yield loadImages();
+    yield fork(loadImages);
   }
 }
 ```
@@ -1195,7 +1211,7 @@ If something goes wrong inside of the saga, we might want to notify the applicat
 
 ```
 import {fetchImages} from './flickr';
-import {put, take} from 'redux-saga/effects';
+import {put, take, fork} from 'redux-saga/effects';
 
 export function* loadImages() {
 +  try {
@@ -1210,7 +1226,7 @@ export function* loadImages() {
 export function* watchForLoadImages() {
   while(true) {
     yield take('LOAD_IMAGES');
-    yield loadImages();
+    yield fork(loadImages);
   }
 }
 ```
@@ -1322,6 +1338,20 @@ test('watchForLoadImages', assert => {
 
 Our next test makes sure that the `loadImages` saga is called as the next step in the workflow. We'll add a false value here to see the result.
 
+For a brief moment, let's update our saga code to yield the `loadImages` saga:
+
+```diff
+export function* watchForLoadImages() {
+  while(true) {
+    yield take('LOAD_IMAGES');
++    yield loadImages();
+-    yield fork(loadImages); //be sure to import it!
+  }
+}
+```
+
+Now when you run the tests, you will see.
+
 ```
 ✖ watchForLoadImages should call loadImages after LOAD_IMAGES action is received
 ---------------------------------------------------------------------------------
@@ -1334,35 +1364,21 @@ Our next test makes sure that the `loadImages` saga is called as the next step i
 
 Hmm, `{ _invoke: [Function: invoke] }` is *definitely* not as obvious as the simple object that we got when yeilding `take`. 
 
-This is a problem. Luckily it's one that redux-saga has saolved in a nice way with another effect called `call`. Like `take`, the `call` method returns and easily testable object, and redux-saga makes sure that the call goes through.
+This is a problem. Luckily it's one that redux-saga has solved in a nice way with effects like `fork`. `take`, `fork`, and other effect methods return and easily testable simple object. The object is a *set of instructions* for redux-saga to execute. This is beautiful for testing because we don't have to worry about the actual side effects (like remote service calls). All we care about are the commands we are requesting to be executed.
 
-Let's update the saga to use `call`:
+Let's update the saga to use `fork` again:
 
 ```diff
-import {fetchImages} from './flickr';
--import {put, take} from 'redux-saga/effects';
-+import {put, take, call} from 'redux-saga/effects';
-
-export function* loadImages() {
-  try {
-    const images = yield fetchImages();
-    yield put({type: 'IMAGES_LOADED', images})
-    yield put({type: 'IMAGE_SELECTED', image: images[0]})
-  } catch(error) {
-    yield put({type: 'IMAGE_LOAD_FAILURE', error})
-  }
-}
-
 export function* watchForLoadImages() {
   while(true) {
     yield take('LOAD_IMAGES');
 -    yield loadImages();
-+    yield call(loadImages);
++    yield fork(loadImages);
   }
 }
 ```
 
-We need to import `call`, and then in `watchForLoadImages` we will `yield call(loadImages)` instead of yielding `loadImages` directly. Note that we aren't executing `loadImages`. Instead we are *passing the function `loadImages` as an argument to `call`*
+We will go back to `yield fork(loadImages)` instead of yielding `loadImages` directly. Note that we aren't executing `loadImages`. Instead we are *passing the function `loadImages` as an argument to `fork`
 
 Run `npm test` again:
 
@@ -1373,7 +1389,7 @@ Run `npm test` again:
   expected: |-
     false
   actual: |-
-    { CALL: { args: [], context: null, fn: [Function: loadImages] } }
+    { FORK: { args: [], context: null, fn: [Function: loadImages] } }
 ```
 
 Instead of a function invocation, we get a plain object. That object has the `loadImages` function embedded in it. The application loads exactly the same in the browser, but now we can easily test this step in the saga workflow.
@@ -1396,7 +1412,7 @@ test('watchForLoadImages', assert => {
   assert.deepEqual(
     generator.next().value,
 -    false,
-+    yield call(loadImages),
++    yield fork(loadImages),
     'watchForLoadImages should call loadImages after LOAD_IMAGES action is received'
   );
 
@@ -1404,7 +1420,7 @@ test('watchForLoadImages', assert => {
 });
 ```
 
-Testing the `loadImages` saga is similar. We need to update `yield fetchImages` to `yield call(fetchImages)`.
+Testing the `loadImages` saga is similar. We need to update `yield fetchImages` to `yield fork(fetchImages)`.
 
 ```javascript
 test('loadImages', assert => {

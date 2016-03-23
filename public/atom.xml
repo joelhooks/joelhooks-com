@@ -4,7 +4,7 @@
   <title><![CDATA[Joel Hooks]]></title>
   <link href="http://joelhooks.com/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2016-03-21T10:58:20-05:00</updated>
+  <updated>2016-03-23T16:50:24-05:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -1960,6 +1960,29 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<h3>Blocking and non-blocking effects</h3>
+
+<p>This works fine for our application, but there is a broader issue that we should be concerned with. The <code>watchForLoadImages</code> sage contains <strong>blocking</strong> effects. What does that mean? Well, it means that we can only execute a single <code>LOAD_IMAGES</code> workflow at a time! It isn&rsquo;t obvious with a simple example like this, because we actually only load images once, but it is definitely a consideration. In fact, the general practice when listening for action evens is to use the <code>fork</code> effect instead of <code>yield loadImages()</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>export function* watchForLoadImages() {
+</span><span class='line'>  while(true) {
+</span><span class='line'>    yield take(&#39;LOAD_IMAGES&#39;);
+</span><span class='line'><span class="gd">-    yield loadImages();</span>
+</span><span class='line'><span class="gi">+    yield fork(loadImages); //be sure to import it!</span>
+</span><span class='line'>  }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using the <code>fork</code> helper will convert our <code>watchForLoadImages</code> into a non-blocking saga that can be executed regardless of whether or not a previous call is in progress. redux-saga <a href="http://yelouafi.github.io/redux-saga/docs/basics/UsingSagaHelpers.html">provides two helpers</a>, <code>takeEvery</code> and <code>takeLatest</code> that assist in these situations.</p>
+
 <h3>Selecting the default image</h3>
 
 <p>Sagas are sequences of actions, so we can add more aspects to a saga easily.</p>
@@ -1980,7 +2003,7 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 </pre></td><td class='code'><pre><code class='diff'><span class='line'>import {fetchImages} from &#39;./flickr&#39;;
-</span><span class='line'>import {put, take} from &#39;redux-saga/effects&#39;;
+</span><span class='line'>import {put, take, fork} from &#39;redux-saga/effects&#39;;
 </span><span class='line'>
 </span><span class='line'>export function* loadImages() {
 </span><span class='line'>  const images = yield fetchImages();
@@ -1991,7 +2014,7 @@
 </span><span class='line'>export function* watchForLoadImages() {
 </span><span class='line'>  while(true) {
 </span><span class='line'>    yield take(&#39;LOAD_IMAGES&#39;);
-</span><span class='line'>    yield loadImages();
+</span><span class='line'>    yield fork(loadImages);
 </span><span class='line'>  }
 </span><span class='line'>}
 </span></code></pre></td></tr></table></div></figure>
@@ -2023,7 +2046,7 @@
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
 </pre></td><td class='code'><pre><code class='diff'><span class='line'>import {fetchImages} from &#39;./flickr&#39;;
-</span><span class='line'>import {put, take} from &#39;redux-saga/effects&#39;;
+</span><span class='line'>import {put, take, fork} from &#39;redux-saga/effects&#39;;
 </span><span class='line'>
 </span><span class='line'>export function* loadImages() {
 </span><span class='line'><span class="gi">+  try {</span>
@@ -2038,7 +2061,7 @@
 </span><span class='line'>export function* watchForLoadImages() {
 </span><span class='line'>  while(true) {
 </span><span class='line'>    yield take(&#39;LOAD_IMAGES&#39;);
-</span><span class='line'>    yield loadImages();
+</span><span class='line'>    yield fork(loadImages);
 </span><span class='line'>  }
 </span><span class='line'>}
 </span></code></pre></td></tr></table></div></figure>
@@ -2223,6 +2246,27 @@
 
 <p>Our next test makes sure that the <code>loadImages</code> saga is called as the next step in the workflow. We&rsquo;ll add a false value here to see the result.</p>
 
+<p>For a brief moment, let&rsquo;s update our saga code to yield the <code>loadImages</code> saga:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>export function* watchForLoadImages() {
+</span><span class='line'>  while(true) {
+</span><span class='line'>    yield take(&#39;LOAD_IMAGES&#39;);
+</span><span class='line'><span class="gi">+    yield loadImages();</span>
+</span><span class='line'><span class="gd">-    yield fork(loadImages); //be sure to import it!</span>
+</span><span class='line'>  }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now when you run the tests, you will see.</p>
+
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -2242,9 +2286,9 @@
 
 <p>Hmm, <code>{ _invoke: [Function: invoke] }</code> is <em>definitely</em> not as obvious as the simple object that we got when yeilding <code>take</code>.</p>
 
-<p>This is a problem. Luckily it&rsquo;s one that redux-saga has saolved in a nice way with another effect called <code>call</code>. Like <code>take</code>, the <code>call</code> method returns and easily testable object, and redux-saga makes sure that the call goes through.</p>
+<p>This is a problem. Luckily it&rsquo;s one that redux-saga has solved in a nice way with effects like <code>fork</code>. <code>take</code>, <code>fork</code>, and other effect methods return and easily testable simple object. The object is a <em>set of instructions</em> for redux-saga to execute. This is beautiful for testing because we don&rsquo;t have to worry about the actual side effects (like remote service calls). All we care about are the commands we are requesting to be executed.</p>
 
-<p>Let&rsquo;s update the saga to use <code>call</code>:</p>
+<p>Let&rsquo;s update the saga to use <code>fork</code> again:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -2253,45 +2297,17 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>import {fetchImages} from &#39;./flickr&#39;;
-</span><span class='line'><span class="gd">-import {put, take} from &#39;redux-saga/effects&#39;;</span>
-</span><span class='line'><span class="gi">+import {put, take, call} from &#39;redux-saga/effects&#39;;</span>
-</span><span class='line'>
-</span><span class='line'>export function* loadImages() {
-</span><span class='line'>  try {
-</span><span class='line'>    const images = yield fetchImages();
-</span><span class='line'>    yield put({type: &#39;IMAGES_LOADED&#39;, images})
-</span><span class='line'>    yield put({type: &#39;IMAGE_SELECTED&#39;, image: images[0]})
-</span><span class='line'>  } catch(error) {
-</span><span class='line'>    yield put({type: &#39;IMAGE_LOAD_FAILURE&#39;, error})
-</span><span class='line'>  }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>export function* watchForLoadImages() {
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>export function* watchForLoadImages() {
 </span><span class='line'>  while(true) {
 </span><span class='line'>    yield take(&#39;LOAD_IMAGES&#39;);
 </span><span class='line'><span class="gd">-    yield loadImages();</span>
-</span><span class='line'><span class="gi">+    yield call(loadImages);</span>
+</span><span class='line'><span class="gi">+    yield fork(loadImages);</span>
 </span><span class='line'>  }
 </span><span class='line'>}
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We need to import <code>call</code>, and then in <code>watchForLoadImages</code> we will <code>yield call(loadImages)</code> instead of yielding <code>loadImages</code> directly. Note that we aren&rsquo;t executing <code>loadImages</code>. Instead we are <em>passing the function <code>loadImages</code> as an argument to <code>call</code></em></p>
+<p>We will go back to <code>yield fork(loadImages)</code> instead of yielding <code>loadImages</code> directly. Note that we aren&rsquo;t executing <code>loadImages</code>. Instead we are *passing the function <code>loadImages</code> as an argument to <code>fork</code></p>
 
 <p>Run <code>npm test</code> again:</p>
 
@@ -2308,7 +2324,7 @@
 </span><span class='line'>  expected: |-
 </span><span class='line'>    false
 </span><span class='line'>  actual: |-
-</span><span class='line'>    { CALL: { args: [], context: null, fn: [Function: loadImages] } }
+</span><span class='line'>    { FORK: { args: [], context: null, fn: [Function: loadImages] } }
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -2354,7 +2370,7 @@
 </span><span class='line'>  assert.deepEqual(
 </span><span class='line'>    generator.next().value,
 </span><span class='line'><span class="gd">-    false,</span>
-</span><span class='line'><span class="gi">+    yield call(loadImages),</span>
+</span><span class='line'><span class="gi">+    yield fork(loadImages),</span>
 </span><span class='line'>    &#39;watchForLoadImages should call loadImages after LOAD_IMAGES action is received&#39;
 </span><span class='line'>  );
 </span><span class='line'>
@@ -2363,7 +2379,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Testing the <code>loadImages</code> saga is similar. We need to update <code>yield fetchImages</code> to <code>yield call(fetchImages)</code>.</p>
+<p>Testing the <code>loadImages</code> saga is similar. We need to update <code>yield fetchImages</code> to <code>yield fork(fetchImages)</code>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
