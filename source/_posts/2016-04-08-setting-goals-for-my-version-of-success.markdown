@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Setting goals for my version success."
+title: "Setting goals for (my version of) success."
 date: 2016-04-08 14:35
 comments: true
 categories: 
