@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The road to success. Setting goals for myself."
+title: "Setting goals for my version success."
 date: 2016-04-08 14:35
 comments: true
 categories: 
