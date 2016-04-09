@@ -23,7 +23,7 @@ The talk has made me consider the factors contributing to the idea of what a suc
 
 ### What metric determines success?
 
-There are many paths to success, and for me that path doesn't involve the typical trappings one might envision as required to be successful. Yachts, cars, mansions, a private island, a private party with Kanye... none of these hold my interest. For me, success means that I look forward to my day, and don't dread tomorrow. Success is being able to spend weeks doing absolutely nothing, and not feeling stressed or guilty about it. My success is directly related to the amount of **free time** that I have to spend with my family and friends, enjoying those relationships for the very brief time I'm allotted on this planet.
+There are many paths to success, and for me that path doesn't involve the typical trappings one might envision as required to be successful. Yachts, cars, mansions, a private island, a private party with Kanye... none of these hold my interest. For me, success means that I look forward to my day, and don't dread tomorrow. Success is being able to spend weeks doing absolutely nothing, and not feeling stressed or guilty about it. My success is directly related to the amount of **free time** that I have to spend with my family and friends.
 
 I love nice things! Don't get me wrong, but the primary success indicator for me, however, is not **maximizing revenue**. My success metric is **maximizing free time**. The ability to do **whatever the fuck I want**.
 
