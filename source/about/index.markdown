@@ -4,18 +4,20 @@ title: "About Me..."
 date: 2013-05-24 10:36
 comments: true
 sharing: true
-image_url: 'family.jpg'
-image_alt: "I'm the big one."
+image_url: 'family2.jpg'
+image_alt: "I'm the one in the hat."
 footer: true
 ---
 
 Hi. My name is Joel Hooks. I'm a software developer by trade, currently residing
-in Fort Worth, TX. Outside of lovingly shepherding high quality software to
+in Vancouver, WA. I'm a co-founder of [egghead.io](https://egghead.io). Outside of lovingly shepherding software to
 release, I spend my time with my lovely wife Kristina and our 4 children.
 
-If you'd like to reach me by email: [joelhooks@gmail.com](mailto:joelhooks@gmail.com)
+If you'd like to reach me by email: [joelhooks@gmail.com](mailto:joelhooks@gmail.com). I answer most of it!
 
-I'm also on <a href="https://twitter.com/jhooks" rel="me"></a> and <a href="https://plus.google.com/+JoelHooks?rel=author" rel="me"></a>.
+I'm also on <a href="https://twitter.com/jhooks" rel="me">Twitter</a>.
+
+If you want to ask me a specific question, literally [ask me anything on Github](https://github.com/joelhooks/ama)!
 
 <div align="center">
 <blockquote class="twitter-tweet"><p>“What’s your job?” Programming.“What’s your
@@ -146,10 +148,36 @@ platforms isn't some sort of impossible feat that would take years.
 
 ## Full-on Neckbeard.
 
-Which basically comes to now. I've gone full-on neckbeard with my technology. I
+I've went full-on neckbeard with my technology choices. I
 have no interest in investing heavily in proprietary closed commercial
 platforms. I want to contribute and work in the *open web*. It is such a
 wonderful space, with so many brilliant people working together to advance the
 state of the art.
 
-I'm excited.
+## egghead.io
+
+In 2013, I convinced my friend John Lindquist to take his YouTube videos that he had been making them for years and turn it into a business. He was skeptical, to say the least, but over the years since we've grown egghead from a stack of free lessons to well over a thousand individual lessons coming from more than 50 instructors. It's been an amazing ride!
+
+I handle the technical and business aspects of egghead. In the past, I used to say "I suck at marketing", but it turns out I don't. In fact, it can be fun, especially when you are selling a product that you believe in. Our general mission at egghead is to **make the web a better place**. We don't want to change the world, but we can do our small part to make it a bit better.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
