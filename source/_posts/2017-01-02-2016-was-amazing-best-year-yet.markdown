@@ -46,7 +46,7 @@ I broke the short sleeve barrier and got a new tattoo from Joby Cummings in Dall
 
 ## Lost a homie...
 
-One of my oldest and best friends past this year. Pete Davidson was like a brother to me. In my teen years, I had a hard time, and he was always there. We saw the Beastie Boys together on the Licensed to Ill tour, and were constant companions through high school.
+One of my oldest and best friends passed away this year. Pete Davidson was like a brother to me. In my teen years, I had a hard time, and he was always there. We saw the Beastie Boys together on the Licensed to Ill tour, and were constant companions through high school.
 
 Over the last few years work has afforded me the opportunity to travel a bit, and a frequent destination was Denver, where Pete loved living for the past two decades. It was really great to have the opportunity to reconnect with my good friend, and his sudden loss was a huge blow.
 
