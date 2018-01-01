@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "What I learned and did in 2017"
+title: "Living and learning in 2017"
 date: 2018-01-01 09:38
 comments: true
 image_url: "partner_beach.jpg"
