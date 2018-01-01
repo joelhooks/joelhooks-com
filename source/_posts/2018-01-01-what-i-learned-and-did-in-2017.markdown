@@ -262,7 +262,17 @@ Holy shit. Total solar eclipse is really really amazing. If you've got the oppor
 
 ![total eclipse of the sun](/images/2017_review/IMG_0212.jpg)
 
+# 2018 Plans
 
+More of the same, really. We are going to keep doing what we are doing, incrementing, improving. Small changes. Nothing radical.
+
+For the first time we've got a solid 1 year plan for the business based on research.
+
+We aren't going to have any more kids, or move across the country. We might get to travel a bit.
+
+It should be nice.
+
+![](/images/2017_review/IMG_0316.PNG)
 
 
 
