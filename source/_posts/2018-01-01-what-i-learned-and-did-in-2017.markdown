@@ -236,7 +236,7 @@ For the first time in 30+ years I don't have to wear corrective lenses! I got LA
 
 egghead is 100% remote. That means we don't see each other in person very much. This summer we got together in Utah with most of the team.
 
-![](/images/2017_review/IMG_0991.JPG)
+![](/images/2017_review/IMG_0991.jpg)
 
 Living near Portland is nice because people actually visit here, unlike Fort Worth.
 
