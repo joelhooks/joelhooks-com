@@ -14,7 +14,8 @@ In 2016 we moved our family of 6 out of our home of 15 years across the country 
 
 It's hard to even begin to describe the level of trust and commitment that this amazing human has given to me. ❤️
 
-![Our backyard.](/images/2017_review/20258444_1583018338389007_5030645407557176293_n.jpg)
+
+![Our backyard.](/images/2017_review/2C0AF686-AC7C-415F-9ADC-6ACA3FC53C6C.jpg)
 
 Shortly after arriving in the Pacific Wonderland, we made another decision, and on Feb 10th, 2017 she arrived. Our little Romi π.
 
@@ -32,7 +33,7 @@ They don't say this, because it is a lot. At this point I can't even recommend t
 
 I wouldn't change a thing though, and this little firecracker of a baby girl makes me smile every time I see her.
 
-![](/images/2017_review/IMG_0316.PNG)
+![The fam.](/images/2017_review/20258444_1583018338389007_5030645407557176293_n.jpg)
 
 ## They say the Lord giveth...
 
