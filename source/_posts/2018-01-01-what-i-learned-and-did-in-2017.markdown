@@ -17,7 +17,7 @@ It's hard to even begin to describe the level of trust and commitment that this 
 
 ![Our backyard.](/images/2017_review/2C0AF686-AC7C-415F-9ADC-6ACA3FC53C6C.jpg)
 
-Shortly after arriving in the Pacific Wonderland, we made another decision, and on Feb 10th, 2017 she arrived. Our little Romi π.
+Shortly after arriving in the Pacific Wonderland, we made another decision, and on Feb 9th, 2017 she arrived. Our little Romi π.
 
 ![A baby?!](/images/2017_review/romi_born.jpg)
 
@@ -44,7 +44,7 @@ It was wonderful. We looked forward to doing it year after year.
 
 ![I miss you so much.](/images/2017_review/lizzie.jpg)
 
-On Tuesday, March 28th 2017 Lizzie was killed in a sudden and random car crash.
+On March 2017 Lizzie was killed in a sudden and random car crash.
 
 Aunt Mary, Uncle Dave, Sarah, Jim, Luke, Andrew, Mable, Theo, and all the other people that cherished Lizzie and her love of life...
 
