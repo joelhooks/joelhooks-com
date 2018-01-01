@@ -14,7 +14,7 @@ In 2016 we moved our family of 6 out of our home of 15 years across the country 
 
 It's hard to even begin to describe the level of trust and commitment that this amazing human has given to me. ❤️
 
-![Our backyard.](/images/2017_review/2C0AF686-AC7C-415F-9ADC-6ACA3FC53C6C.jpg)
+![Our backyard.](/images/2017_review/20258444_1583018338389007_5030645407557176293_n.jpg)
 
 Shortly after arriving in the Pacific Wonderland, we made another decision, and on Feb 10th, 2017 she arrived. Our little Romi π.
 
@@ -197,7 +197,7 @@ The intent originally was to hit the track more often, but after the one and onl
 
 So, I got a Jeep.
 
-![wheelin](/images/2017_review/IMG_0370.JPG)
+![wheelin](/images/2017_review/IMG_0370.jpg)
 
 I'll be honest, driving the jeep around town isn't much fun. It's a truck. It's heavy. It's slow.
 
@@ -205,7 +205,7 @@ I'll be honest, driving the jeep around town isn't much fun. It's a truck. It's 
 
 **But**, it's a shit load of fun driving on the trails.
 
-![at the top of the world with my boys](/images/2017_review/IMG_0469.JPG)
+![at the top of the world with my boys](/images/2017_review/IMG_0469.jpg)
 
 We are able to explore the backwoods that this wonderful region has to offer. We can go places that are hard to get to and see spectacular sights.
 
@@ -217,7 +217,7 @@ Good times.
 
 Working with wood is fascinating. From a tree to a useful object. It's something I've wanted to do for a long time, and in 2017 I was able to try it out. I took a class at a local maker space in Portland (ADX), and built a small table. 
 
-![hammer of justice](/images/2017_review/IMG_0594.JPG)
+![hammer of justice](/images/2017_review/IMG_0594.jpg)
 
 I finished the table early so I spent the last night of class constructing this joiner's mallet.
 
@@ -253,13 +253,13 @@ Next year we are going to gather in Prague. Can't wait!
 
 For the last several summers I've gone to Aspen to Anderson Ranch to have Joshua Davis, the Dark Wizard of computer generated art, school me in his craft. In 2017 we worked on Arduinos, and I learned a ton. In 2018 we are going to do computer vision. Can't wait.
 
-![art is life](/images/2017_review/IMG_0161.JPG)
+![art is life](/images/2017_review/IMG_0161.jpg)
 
 ### THE PATH OF TOTALITY
 
 Holy shit. Total solar eclipse is really really amazing. If you've got the opportunity to see it, do it. Fuck the traffic. Sit your ass in the long line of cars and witness this event. 
 
-![total eclipse of the sun](/images/2017_review/IMG_0212.JPG)
+![total eclipse of the sun](/images/2017_review/IMG_0212.jpg)
 
 
 
