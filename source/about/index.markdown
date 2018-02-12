@@ -4,7 +4,7 @@ title: "About Me..."
 date: 2013-05-24 10:36
 comments: true
 sharing: true
-image_url: 'family2.jpg'
+image_url: 'family6.jpg'
 image_alt: "I'm the one in the hat."
 footer: true
 ---
