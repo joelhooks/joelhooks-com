@@ -11,7 +11,7 @@ footer: true
 
 Hi. My name is Joel Hooks. I'm a software developer by trade, currently residing
 in Vancouver, WA. I'm a co-founder of [egghead.io](https://egghead.io). Outside of lovingly shepherding software to
-release, I spend my time with my lovely wife Kristina and our 4 children.
+release, I spend my time with my lovely wife Kristina and our 5 children.
 
 If you'd like to reach me by email: [joelhooks@gmail.com](mailto:joelhooks@gmail.com). I answer most of it!
 

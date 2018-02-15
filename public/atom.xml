@@ -4,7 +4,7 @@
   <title><![CDATA[Joel Hooks]]></title>
   <link href="http://joelhooks.com/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2018-02-12T12:10:43-08:00</updated>
+  <updated>2018-02-15T14:37:26-08:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -12,6 +12,106 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[how we work at egghead.io]]></title>
+    <link href="http://joelhooks.com/blog/2018/02/15/how-we-work-at-egghead-dot-io/"/>
+    <updated>2018-02-15T13:30:00-08:00</updated>
+    <id>http://joelhooks.com/blog/2018/02/15/how-we-work-at-egghead-dot-io</id>
+    <content type="html"><![CDATA[<p>egghead.io is a platform to empower humans, built to challenge the status quo of how we work and learn new skills.</p>
+
+<p>We produce high quality, concise web development screencasts created by expert open-source contributors and other talented professionals. While we offer a lot of this content for free, there is a membership fee to access exclusive content.</p>
+
+<p>As a business, egghead.io serves as accounting, marketing, and delivery platform for technically minded content creators. We enable creators to distribute short-format educational videos and various supplemental materials. We pay instructors monthly royalties that are a percentage of membership dues collected and the relative time spent by members viewing their lesson videos.
+To accomplish this, we build software with two primary goals:</p>
+
+<ul>
+<li><strong>Create badass content</strong> with <em>egghead instructors</em> to help them focus on the creation of content so that they can earn royalties and not worry about the rest of the process.</li>
+<li><strong>Deliver badass content</strong> to <em>egghead members</em> to improve their technical skills and stay up to date with the latest and greatest the web development world has to offer.</li>
+</ul>
+
+
+<p>The two are related and overlap quite a bit, but are also very different business tasks with two distinct groups of customers.</p>
+
+<p>We are confident that our best work has yet to come.</p>
+
+<p>We know this because we are <em>agile</em>.</p>
+
+<p>For us, agile means &ldquo;incremental, iterative, and collaborative&#8221;– not Agile™ Certified Scrum Master.
+Our goal is to make sure everybody building egghead is well challenged and interested while growing value for our customers (members &amp; instructors).</p>
+
+<p>We believe that process evolves through discussion, experimentation, and lightweight documentation.</p>
+
+<p>The idea of <strong>small improvements applied consistently over time</strong> is etched into the foundations of our business model. From the videos that we create to the software we deploy.</p>
+
+<p>We <strong>work remotely</strong>. Official business hours are 9ish-5ish Pacific.</p>
+
+<p><strong>Written communication is</strong> <strong><em>vital</em></strong> <strong>for a remote business</strong>, which means both reading and writing. Everybody works whenever and wherever so we end up typing at one another quite a lot.</p>
+
+<p>Tone, context, intent are essential when we write. We have to respect one another as humans, give people the benefit of the doubt, and also respect everybody’s finite amount of time and attention.
+We don’t have standing meetings or follow a strict process for checking in. We have a devoted channel in Slack that we regularly share what we are currently working on.</p>
+
+<p>Slack is <a href="https://m.signalvnoise.com/is-group-chat-making-you-sweat-744659addf7d">instant</a>, but transient. Slack is a great tool for at the moment collaboration. It’s the water cooler, or often like knocking on somebody’s office door. Conversations in passing and the moment. It’s often a very real distraction. Almost a hindrance.</p>
+
+<p>Email is often better when you need something. It’s asynchronous, and a well-titled email can be the start of valuable threaded conversations that persist and are easy to find later. Email is immutable, searchable, and functions well as an <strong>extension of our brains</strong>.</p>
+
+<p>Code reviews on Github, documents in Dropbox Paper, and InVision comment conversations continue alongside the work that we are creating. Persistent, well maintained, living documents that describe the work that we are doing in detail.</p>
+
+<p>The <strong>component</strong> is our fundamental “unit of work” that we focus on for both design and development. We are building complex structures out of modular components. The component first approach is heavily inspired by “<a href="https://facebook.github.io/react/docs/thinking-in-react.html">Thinking in React</a>.” Often this means we are working with related sets of components, which we often refer to as <em>pages</em> or <em>screens</em>.</p>
+
+<p>We try to get our work into the hands of our users, both paying members and instructors, as <strong>early as possible</strong>. We intentionally avoid big releases with a lot of fanfare, instead of pushing early and often as close to continuously as possible.</p>
+
+<p>We are <strong>not a</strong> <a href="https://hackernoon.com/12-signs-youre-working-in-a-feature-factory-44a5b938d6a2#.8pwdwur1t"><strong>feature factory</strong></a>.</p>
+
+<p>We want to measure impact. We don’t mind “throwing away” work or admitting “failure.” We work using themes, and we aren’t obsessed with deadlines or estimates. In fact, we don’t use either timetables or forecasts as a development tool.</p>
+
+<p>We tweak what is there, and try not to use the past as a significant constraint of the future. We take time to improve work that is “done” because it is never “done” and we can always get better.
+The mechanics of how we accomplish this will evolve to meet the needs of the team. The designer/developer workflow is always a challenge, and we will attempt to bridge that gap and keep agile principles at heart. That workflow might look something like this:</p>
+
+<ol>
+<li>handful of current themes are identified and agreed upon</li>
+<li>user stories are created to describe the functionality and impact of improvements based on those themes</li>
+<li>Initial constraints and goals get established</li>
+<li>Low fidelity wireframes are shaped to define structure and feature set</li>
+<li>Development begins using the wireframes as reference</li>
+<li>Higher fidelity comps get designed, generally using the essential established components</li>
+<li>Components that aren&rsquo;t created yet get identified and receive design focus</li>
+<li>Individual components are developed and deployed as soon as viable</li>
+<li>We stop, take a breath, consider thoughtfully before returning to step 1 above</li>
+</ol>
+
+
+<p>When work has commenced, we continue to discuss the design work. The design remains open to enhance and iterate as development exposes questions or edge cases.</p>
+
+<p>During work, we identify major/primary components. Important “linchpin” components will receive attention and become part of the overall inventory of components assets.</p>
+
+<p>Design begins with simple wire-frames that represent the structure of screens and components. These UX focused wires are presented and discussed before being implemented.</p>
+
+<p>The wires make the process of designing components more focused on behavior, and less on visual aesthetic. We can quickly “make the designs go” to gain an understanding of how they feel to use.</p>
+
+<p>The functional wires can them then be deployed to share, test, and discuss before high fidelity finished design work occurs.</p>
+
+<p>The finished designs are implemented in code on top of the functional wires, adding consistent style and interactive flourish.</p>
+
+<p>We want to experiment and play. Keeping it our work small reduces risk and allows us to try more things. Most of the time this works great, but sometimes we will admit when something isn’t working, learn our lessons, and move on.</p>
+
+<p>Code review is a requirement for (most) code that deploys to production.</p>
+
+<p>We embrace that the value of code review is sharing knowledge.</p>
+
+<p><strong>The code creator is the first person to review the code,</strong> adding comments that inform the rest of the team of the “what, how, and why” of the code they have written<strong>.</strong></p>
+
+<p>Reviewers ask questions so that they can understand the work. Code review is a form of critique, but the goal is to learn.</p>
+
+<p><strong>“Done for now” is perfectly fine.</strong></p>
+
+<p>Finishing is important. If things are going well, we will never be “done,” but we aren’t seeking perfection. It’s better to release our creations than it is to hold them back until they are utterly polished. Continuously publishing our work helps to ensure that we build the right things that match what people expect and need instead of guessing.</p>
+
+<p>We are still putting out excellent work, but just that we understand that as a business we are here for the long haul and that working small gives us the ultimate flexibility to create something spectacular over time.</p>
+
+<p>Like everything we do, this approach documented here is subject to change as the business changes. Opportunities appear and disappear all of the time, and we want to be open to exploration.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Living and learning in 2017]]></title>
@@ -5505,64 +5605,6 @@ enterprise developer, and I use JavaScript. Enterprise JavaScript.</p>
 
 <p>[1] <a href="http://enterprise-js.com/">http://enterprise-js.com/</a> is hilarious. Hint:
 don&rsquo;t follow its advice!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Paralyzing Grip of Fear]]></title>
-    <link href="http://joelhooks.com/blog/2013/06/10/the-paralyzing-grip-of-fear/"/>
-    <updated>2013-06-10T17:21:00-07:00</updated>
-    <id>http://joelhooks.com/blog/2013/06/10/the-paralyzing-grip-of-fear</id>
-    <content type="html"><![CDATA[<p>My sons love playing basketball. After a certain age
-(around 12), youth sports change. The court or field is no longer filled with
-kids that were dragged to the game by their parents. These kids are here because
-they love playing the game. So what do you do if your kid loves the game, but
-just isn&rsquo;t very good? What if he just can&rsquo;t make the team?</p>
-
-<p>Being a &ldquo;best practices&rdquo; loving software developer, I started scouring the
-internet for the best ways to train. We hired a coach to work with him one on
-one. We found the &ldquo;gurus&rdquo; on the internet and bought their materials. The boy
-<strong>put in the work</strong>, practicing and working out on a daily basis.</p>
-
-<p>He made the team.</p>
-
-<p>Another year passes, and more training ensues. He&rsquo;s gotten <strong>strong</strong> through
-consistent exercise and training. He is doing ridiculously
-complicated two-ball dribbling drills in the driveway. He&rsquo;s sinking 3s, and even
-dunked a women&rsquo;s regulation ball.</p>
-
-<p>In the driveway.</p>
-
-<p>Then comes game time. He won&rsquo;t dribble. He won&rsquo;t shoot a three. <strong>He won&rsquo;t
-dribble</strong>.</p>
-
-<p>What&rsquo;s going on?</p>
-
-<p>Fear. The fear of messing up. The fear of shame. This horrible, crippling
-paralysis that comes when it is time to execute. This memory of the 9 year old
-you, that couldn&rsquo;t do anything right, and spent most of your time on the bench.</p>
-
-<p>Don&rsquo;t get me wrong, there has been improvement. Massive improvement, but this
-fear of messing up on the dribble persists. It persists through hours of weekly
-practice. It persists through objectivity. It is the <strong>lizard brain</strong> disallowing
-us to open up to the vulnerability of potential failure.</p>
-
-<p>No amount of coaching is going to break through this wall. This is something
-that we humans have to dig deep and overcome. We have to go ahead. We have to
-expose ourselves to the potential for failure. We have to fail, and learn that
-failing isn&rsquo;t the end. Failing is <strong>the beginning</strong>.</p>
-
-<p>The quickest way to ensure continued failure is to never make the attempt in the
-first place. Abstinence is safety. When we let go of the fear of failure, and
-open our minds to the vulnerability that comes along with <strong>doing</strong>, we start to
-chisel away at the paralysis. Every attempt becomes slightly easier. Fear can be
-pushed aside, and replaced with the muscle memory that comes from practice. We
-can have a chance for success.</p>
-
-<p><strong>JFDI</strong> &ndash; Just F&#8217;n Do it.</p>
-
-<p><img src="http://farm5.staticflickr.com/4124/5050135544_97d67cd23c_o.png" alt="Alex Hillman's Awesome
-Tattoo" /></p>
 ]]></content>
   </entry>
   
