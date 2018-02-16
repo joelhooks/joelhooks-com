@@ -3,7 +3,7 @@ layout: post
 title: "Why we hire consultants to help build egghead.io"
 date: 2017-10-26 13:09
 comments: true
-image_url: "funtimes2.jpg"
+image_url: "funtimes2.png"
 categories: 
 ---
 
