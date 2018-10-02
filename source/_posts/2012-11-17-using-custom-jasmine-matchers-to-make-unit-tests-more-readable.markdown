@@ -1,10 +1,11 @@
 ---
 layout: post
-title: "Using Custom Jasmine Matchers to Make Unit Tests More Readable"
+title: 'Using Custom Jasmine Matchers to Make Unit Tests More Readable'
 date: 2012-11-17 10:55
 comments: true
 categories: [Jasmine, unit testing, clean code]
 ---
+
 ![Clean and Dry](/images/clean_and_dry.jpg)
 
 [Image from purplemattfish](http://www.flickr.com/photos/29601732@N06/3969905051/)
@@ -15,19 +16,13 @@ I'm a stickler for the "single assertion per test" guideline. One of the pillars
 
 Consider the following:
 
-{% gist 4097691 BloatedDateTest.js %} 
-
-In our app, we recieve a "split date" object from our service. It returns a value in the `{year: 2012, month: 11, day: 17}` format. We have some functionality that will convert the format back and for to a JavaScript `Date`. 
+In our app, we recieve a "split date" object from our service. It returns a value in the `{year: 2012, month: 11, day: 17}` format. We have some functionality that will convert the format back and for to a JavaScript `Date`.
 
 This seems straight forward enough, but as it turns out we need to go the other direction as well:
 
-{% gist 4097691 AnotherBloatedDateTest.js %} 
-
-This is bothersome. We have two stacks of `expect` calls that are very similar, but different enough to require a bit more than a helper method. We definitely want to verify all of the properties of the results, but do we really need to do this individually? The short answer is 'no.' 
+This is bothersome. We have two stacks of `expect` calls that are very similar, but different enough to require a bit more than a helper method. We definitely want to verify all of the properties of the results, but do we really need to do this individually? The short answer is 'no.'
 
 ## Enter the Custom Matcher
-
-{% gist 4097691 CustomMatchers.js %} 
 
 A custom matcher is nestled in a `beforeEach` function. This will cause Jasmine to load the matcher prior to EVERY `describe` and `it` in your test suite.
 
@@ -43,8 +38,6 @@ At the top of the `beforeEach` we also have two utility methods to clean up our 
 
 ## Keeping it Clean and DRY
 
-{% gist 4097691 CleanTests.js %} 
-
 I don't know about you, but these tests look a **lot** better to me. While the overall lines of code may have increased, we've created a reusable solution that can be used over and over again while not repeating ourselves. Our tests now have a single `expect` that is easy to understand and clearly expresses the intent of the test in an easy to read way.
 
 ## Additional Reading
@@ -54,9 +47,3 @@ I don't know about you, but these tests look a **lot** better to me. While the o
 [Custom Jasmine Matchers For Clarity In Testing Backbone.js Models](http://lostechies.com/derickbailey/2011/09/03/custom-jasmine-matchers-for-clarity-in-testing-backbone-js-models/)
 
 [Custom jQuery matchers in Jasmine](http://testdrivenwebsites.com/2010/08/04/custom-jquery-matchers-in-jasmine/)
-
-
-
-
-
-

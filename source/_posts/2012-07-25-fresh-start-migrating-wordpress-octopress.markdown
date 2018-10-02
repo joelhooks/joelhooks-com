@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Fresh Start: Migrating from Wordpress to Octopress"
+title: 'Fresh Start: Migrating from Wordpress to Octopress'
 date: 2012-07-25 14:21
 comments: true
 categories: [bloggin, octopress, wordpress]
@@ -25,27 +25,25 @@ With the theme stripped an all non-essential plugins disabled, I tweaked the the
 
 All that was left was extracting all of the [individual posts into static pages](http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/). [The WP Static HTML Output](http://wordpress.org/extend/plugins/static-html-output-plugin/) plugin is excellent. It spit out a zip with the proper folder structure to ensure that my links would not be broken. The only flaw was that the Archive Utility on OS X wouldn't unzip the output. I had to use the command line unzip utility. It gave me all of the resources for each page, including the SWFs and other media that they linked to. This was perfect.
 
-There are other options for this too. [exitWP](https://github.com/thomasf/exitwp/) looks like a solid way to extract posts and create markdown that could potentially be used with [Jekyll](https://github.com/mojombo/jekyll) (and subsequently [Octopress](http://octopress.org/)), but I liked the flat file structure of the straight brute force HTML output. 
+There are other options for this too. [exitWP](https://github.com/thomasf/exitwp/) looks like a solid way to extract posts and create markdown that could potentially be used with [Jekyll](https://github.com/mojombo/jekyll) (and subsequently [Octopress](http://octopress.org/)), but I liked the flat file structure of the straight brute force HTML output.
 
 ##Enter Octopress
 
 Octopress is a wicked open-source blogging platform that leverages a hosted git repository to deliver my words. It hooks up to Github and Heroku, depending on your preference for platform. I've got mine working through Github.
 
-What I like about Octopress is that **everything is version controlled**. I can start a draft, work, commit, come back later to work some more, and finally deploy it when it is ready. It allows my blog to *feel* like a proper software project, and I like that.
+What I like about Octopress is that **everything is version controlled**. I can start a draft, work, commit, come back later to work some more, and finally deploy it when it is ready. It allows my blog to _feel_ like a proper software project, and I like that.
 
 There is a handful of themes, and I haven't got into customization yet, but it looks a lot nicer to modify than Wordpress PHP. It feels like the type of system that **I** like to work on and tinker with.
 
-Octopress is ***dead simple*** to get up and running with. The documentation is first rate, and the steps are clear and concise. You can literally have something public facing in 10 minutes via Github or Heroku.
+Octopress is **_dead simple_** to get up and running with. The documentation is first rate, and the steps are clear and concise. You can literally have something public facing in 10 minutes via Github or Heroku.
 
 To get my static pages integrated, I simply dropped the files and folders into the source folder within the Octopress structure. The next time I generated and deployed, all of my links were working. Fantastic.
 
-One item that I didn't really think about was the ```sitemap.xml```. I stripped all the navigation from the archived pages, and I didn't leave crawlers any way to navigate my content. I grabbed the sitemap from and added some awful code to the sitemap generator plugin that Octopress uses.
-
-{% gist 3179101 sitemap_generator.rb %}
+One item that I didn't really think about was the `sitemap.xml`. I stripped all the navigation from the archived pages, and I didn't leave crawlers any way to navigate my content. I grabbed the sitemap from and added some awful code to the sitemap generator plugin that Octopress uses.
 
 It isn't pretty, but it got all of my post page links wedged into the sitemap. Hopefully this appeases the robots.
 
-Another cool tool that works well with Octopress is [Pow](http://pow.cx/). Octopress is a rack app, and once to point Pow at your Octopress folder, it serves the page up locally at ```http://foldername.dev```. Then it's just a matter of running ```rake watch``` and going to town.
+Another cool tool that works well with Octopress is [Pow](http://pow.cx/). Octopress is a rack app, and once to point Pow at your Octopress folder, it serves the page up locally at `http://foldername.dev`. Then it's just a matter of running `rake watch` and going to town.
 
 ##Conclusion
 

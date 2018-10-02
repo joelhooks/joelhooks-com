@@ -4,7 +4,7 @@
   <title><![CDATA[Category: bloggin | Joel Hooks]]></title>
   <link href="http://joelhooks.com/blog/categories/bloggin/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2018-02-16T10:54:49-08:00</updated>
+  <updated>2018-10-02T09:09:27-07:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -54,44 +54,6 @@
 <p>To get my static pages integrated, I simply dropped the files and folders into the source folder within the Octopress structure. The next time I generated and deployed, all of my links were working. Fantastic.</p>
 
 <p>One item that I didn&rsquo;t really think about was the <code>sitemap.xml</code>. I stripped all the navigation from the archived pages, and I didn&rsquo;t leave crawlers any way to navigate my content. I grabbed the sitemap from and added some awful code to the sitemap generator plugin that Octopress uses.</p>
-
-<p><div><script src='https://gist.github.com/3179101.js?file=sitemap_generator.rb'></script>
-<noscript><pre><code>fill_pages(site, urlset)
-fill_legacy(urlset)
-sitemap.add_element(urlset)
-
-# File I/O: create sitemap.xml file and write out pretty-printed XML
-unless File.exists?(site.dest)
-  FileUtils.mkdir_p(site.dest)
-end
-file = File.new(File.join(site.dest, SITEMAP_FILE_NAME), &quot;w&quot;)
-formatter = REXML::Formatters::Pretty.new(4)
-formatter.compact = true
-formatter.write(sitemap, file)
-file.close
-
-# Keep the sitemap.xml file from being cleaned by Jekyll
-site.static_files &lt;&lt; Jekyll::SitemapFile.new(site, site.dest, &quot;/&quot;, SITEMAP_FILE_NAME)
-end
-
-#this is a hack addition to push in my legacy content
-def fill_legacy(urlset)
-file = File.new(&quot;/Volumes/Gonzales/Users/joel/Code/octopress/plugins/sitemapx.xml&quot;)
-doc = REXML::Document.new(file)
-root = doc.root
-root.elements.each do |post|
-  urlset.add_element(post)
-end
-end
-
-# Create url elements for all the posts and find the date of the latest one
-#
-# Returns last_modified_date of latest post
-def fill_posts(site, urlset)
-last_modified_date = nil
-site.posts.each do |post|
-  if !excluded?(post.name)</code></pre></noscript></div>
-</p>
 
 <p>It isn&rsquo;t pretty, but it got all of my post page links wedged into the sitemap. Hopefully this appeases the robots.</p>
 

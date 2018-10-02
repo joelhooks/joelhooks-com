@@ -4,7 +4,7 @@
   <title><![CDATA[Joel Hooks]]></title>
   <link href="http://joelhooks.com/atom.xml" rel="self"/>
   <link href="http://joelhooks.com/"/>
-  <updated>2018-02-16T10:54:49-08:00</updated>
+  <updated>2018-10-02T09:09:27-07:00</updated>
   <id>http://joelhooks.com/</id>
   <author>
     <name><![CDATA[Joel Hooks]]></name>
@@ -12,6 +12,51 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[I've got a confession to make 😭]]></title>
+    <link href="http://joelhooks.com/blog/2018/10/02/ive-got-a-confession-to-make/"/>
+    <updated>2018-10-02T09:02:00-07:00</updated>
+    <id>http://joelhooks.com/blog/2018/10/02/ive-got-a-confession-to-make</id>
+    <content type="html"><![CDATA[<p>We don’t have a <em>single</em> test covering our front-end/UI for egghead.io.</p>
+
+<p>It’s <strong>embarrassing.</strong></p>
+
+<p>You know how it is. Testing is a good idea. It’s objectively better than the opposite, which in our case is click testing, twitter notifications, and relying on our user base to “smoke test” the application for us.</p>
+
+<p>It’s barely professional, but our current situation isn’t unique.</p>
+
+<p>The decision to write tests or not is often a matter of economics. Before egghead, working as a consultant building websites for other businesses, I was a testing zealot. At every opportunity I insisted that we absolutely, no excuses, 100% <strong>had</strong> to have automated tests in place if we were going to build a high quality product.</p>
+
+<p>This is still true. I still believe this.</p>
+
+<p>But when I started building egghead, it was heads down, get shit done, features as fast as possible eff tests mode.</p>
+
+<p><img src="https://cdn.drawception.com/images/panels/2017/5-8/2QDBp9Qm6t-8.png" alt="NO reGERTS by TrenchcoatCat" /></p>
+
+<p>Sometimes those early decisions come back to bite you. The system grows. Small choices take root and grow. That’s often good, but when it’s not the weeds creep through your entire project, setting choking out the good ideas and making the entire garden hard to maintain.</p>
+
+<p>So we started writing tests for critical aspects of the business. Our accounting backend has excellent test coverage and it <em>helps me sleep at night</em> knowing that or life blood flows through a quality system that we can count on. And it’s not just us. egghead instructors get paid royalties for their work. They rely on us, and put their trust in us.</p>
+
+<p>When that trust is broken, it is so hard to regain.</p>
+
+<p>Over the past two years we’ve been migrating our front-end from Rails erb server templates to React. It’s been a great project. A monsterous project in many ways, but worth the effort.</p>
+
+<p>Once again, I chose to forge ahead with no tests.</p>
+
+<p>I’m here to admit that I regret this decision, and want to start making changes. It’s embarrassing. It makes us look bad when something obviously broken ships to production. It’s particularly exacerbating when that something could have been easily prevented with some light automation, a couple integration tests, and a handful of unit tests!</p>
+
+<p>The tools are out there. React applications are super testable. There are no excuses for it.</p>
+
+<p>We have to make sure our users trust us. Their <em>trust</em> is our lifeblood.</p>
+
+<p>We are going to figure it out, and start making testing a priority.</p>
+
+<p>Cheers,</p>
+
+<p>Joel</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[how we work at egghead.io]]></title>
@@ -5470,141 +5515,6 @@ click through, exactly <strong>0%</strong> actually convert to paying customers.
 try to understand why we are getting these results on Google, and attempt to
 identify ways of improving them. As part of the series, Visual Empathy is going
 to get a complete web makeover. Top to bottom, back to front.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Coming to Terms With Enterprise JavaScript]]></title>
-    <link href="http://joelhooks.com/blog/2013/06/17/coming-to-terms-with-enterprise-javascript/"/>
-    <updated>2013-06-17T13:19:00-07:00</updated>
-    <id>http://joelhooks.com/blog/2013/06/17/coming-to-terms-with-enterprise-javascript</id>
-    <content type="html"><![CDATA[<h2>What is enterprise javascript?</h2>
-
-<p>Good question. One that might even make you chuckle[1] a little bit on the inside.
-The word &ldquo;enterprise&rdquo; is definitely a loaded term. It could be considered by
-some to be a buzzword. Others might say &ldquo;Why are we talking about starships?&rdquo;</p>
-
-<p>When I use the term &ldquo;enterprise&rdquo; to describe software, I typically mean
-&ldquo;software that helps people get work done more efficiently.&rdquo; In this sense,
-Angry Birds and your favorite Twitter client are not enterprise applications. A
-Twitter client that has additional features to facilitate and track a company&rsquo;s
-social engagement, on the other hand, might fall into the enterprise category.</p>
-
-<p>An application that is used in a call center to track incoming support requests
-is definitely &ldquo;enterprise&rdquo;. A system that connects several &ldquo;legacy&rdquo; systems and
-presents employees with a unified interface and saves 1000s of man-years every
-month of application context switching? Enterprise.</p>
-
-<p>Enterprise software is software that is sold to a business or government agency,
-and not to individuals. Content management, billing, point of sale, payment
-processing, customer relations, help desk, project management, enterprise
-application integrations, time tracking, business intelligence&hellip; you get the
-idea.</p>
-
-<p>This is software for <strong>getting things done</strong>. This is software that <strong>makes a business
-money</strong>. Because of this, it is software that businesses will invest heavily in.</p>
-
-<h2>Enterprise isn&rsquo;t cool.</h2>
-
-<p>Maybe. It certainly evokes thoughts of ugly user interfaces with huge J2EE
-backends. Developers working on Saturdays to get their TPS reports filed.
-Enterprise software certainly can be that. It doesn&rsquo;t have to be.</p>
-
-<p>Today&rsquo;s software users, even enterprise software users, are more sophisticated.
-They are used to using applications like Facebook and Gmail on a daily basis.
-They have iPhones that present beautiful easy to use interfaces and excellent
-user experience (UX). They want more.</p>
-
-<p>More importantly, perhaps, is that software that provides excellent UX makes it
-easier to get work done. Using software that sucks, is slow, is ugly, or
-generally misbehaves is counter-productive. Bad software represents lost revenue
-and increased overhead. Employees that are forced into bad software are forced
-to focus their energy on wrestling the software. Not only does this make them
-miserable, but it saps a business&rsquo;s most valuable resource &ndash; the brain-power and
-energy of their employees.</p>
-
-<h2>Enterprise can be cool.</h2>
-
-<p>It can! It largely depends on how you define &ldquo;cool.&rdquo; For me, my biggest thrill
-in software development is eliminating cognitive overhead for people that are
-trying to get work done. I want to make their working lives better. I want them
-to be mentally free to concentrate on harder problems. I want their businesses
-to make more money. I want them to see real value in their software, so that
-they will keep hiring developers to build more software. Achieving these goals
-is definitely cool.</p>
-
-<h2>Where does JavaScript fit in?</h2>
-
-<p>In today&rsquo;s world, savvy enterprise customers demand rich experiences. They want
-to be able to access their data anytime and anywhere. They carry smart phones
-and tablets and expect their software to function on these devices as well as it
-does on their desktop computers.
-Arguably the quickest way to achieve this multi-screen approach is through web
-applications. Applications that run, and run well, in any modern browser. You
-don&rsquo;t have negotiate walled-garden app stores to deploy a web app.</p>
-
-<p>HTML pages originated as a format for linking scientific documents. This was a
-great achievement, but soon users wanted more interactivity. JavaScript was
-introduced, and now we could begin to see richer experiences, right in the
-browser. This eventually brought us to DHTML, or dynamic HTML. The next
-evolution in web pages was AJAX, or asynchronous JavaScript and XML. This is a
-huge step, allowing us to hit the server for additional data without moving to
-an entirely new page.</p>
-
-<p>These days we&rsquo;ve gone a step further with single-page web applications. A
-single-page app isn&rsquo;t a brochure-like web page for strictly delivering content.
-It is a real application, built to do work. A single-page application is a
-&ldquo;thick&rdquo; client that is more similar to a desktop application than a web page.</p>
-
-<p>JavaScript has matured. HTML has matured. CSS has matured. All of these
-technologies continue to see growth as their standards are updated to match
-modern technology, and the demands of users.</p>
-
-<p>Enterprises want to leverage these advances and build robust applications to
-facilitate commerce. JavaScript is uniquely qualified as a programming language
-to help with this. It allows us to harness the the computing power of modern
-computers directly in the browser. In the past, we were forced to offload much
-of the work for displaying a web page on to the server. A request was made and
-the server generated a page that was displayed in the browser.</p>
-
-<p>With modern JavaScript we are able to query the server for data via its
-application programming interface (API) and use that data to dynamically update
-content in the browser without actually changing URLs or reloading a page. The
-client side application has its own templates and logic and can manage itself
-tidily. The server is now a caretaker for data, while the application running in
-the browser is entirely in charge of presentation and interaction with the data
-that is provided.</p>
-
-<p>JavaScript has been used in enterprise applications for many years. It is almost
-as if we&rsquo;ve come full circle. The major difference in modern applications is
-that presentation concerns can now be completely offloaded to the client. We
-aren&rsquo;t beholden to a JSP or other server-side page template for rendering
-content for our users. After the initial payload of the web application is
-delivered, the server&rsquo;s job is now reduced to handling requests for data. This
-is still a big job, but the separation of concerns opens up a lot of
-opportunity. Because the server&rsquo;s boundaries are clearly separated from
-presentation and focused on data, we are able to build APIs that can support
-infinite possibilities in terms of how we present and interact with the data
-that is flowing from the server.
-This is awesome. This is opportunity. We are going to take advantage of this.</p>
-
-<h2>So what is enterprise JavaScript?</h2>
-
-<p>Enterprise JavaScript is used for building web applications that facilitate
-commerce is some form or another. Enterprise JavaScript is likely going to be
-larger and more complicated than a simple web page. Enterprise JavaScript is
-probably going to be developed by a team, perhaps a large team or even several
-teams, and will require stronger standards and practices than smaller
-non-enterprise use cases.</p>
-
-<p>Is it useful to tack on this &ldquo;enterprise&rdquo; label to JavaScript? Sometimes. When
-you say that you are building an enterprise application, it definitely evokes a
-mental image of what you are dealing with. Good or bad. You could say
-&ldquo;large-scale&rdquo; JavaScript instead, but it wouldn&rsquo;t be as specific. I&rsquo;m an
-enterprise developer, and I use JavaScript. Enterprise JavaScript.</p>
-
-<p>[1] <a href="http://enterprise-js.com/">http://enterprise-js.com/</a> is hilarious. Hint:
-don&rsquo;t follow its advice!</p>
 ]]></content>
   </entry>
   
