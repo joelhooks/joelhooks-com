@@ -19,8 +19,6 @@ This is still true. I still believe this.
 
 But when I started building egghead, it was heads down, get shit done, features as fast as possible eff tests mode.
 
-![NO reGERTS by TrenchcoatCat](https://cdn.drawception.com/images/panels/2017/5-8/2QDBp9Qm6t-8.png)
-
 Sometimes those early decisions come back to bite you. The system grows. Small choices take root and grow. That’s often good, but when it’s not the weeds creep through your entire project, setting choking out the good ideas and making the entire garden hard to maintain.
 
 So we started writing tests for critical aspects of the business. Our accounting backend has excellent test coverage and it _helps me sleep at night_ knowing that or life blood flows through a quality system that we can count on. And it’s not just us. egghead instructors get paid royalties for their work. They rely on us, and put their trust in us.
