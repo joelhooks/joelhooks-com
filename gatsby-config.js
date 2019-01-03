@@ -47,7 +47,7 @@ module.exports = {
     },
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
-    'gatsby-plugin-styled-components',
+    'gatsby-plugin-emotion',
     'gatsby-plugin-catch-links',
     'gatsby-plugin-react-helmet',
     {
@@ -60,6 +60,12 @@ module.exports = {
         theme_color: '#525dce',
         display: 'standalone',
         icon: 'assets/logo.png',
+      },
+    },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: `UA-93349937-2`,
       },
     },
     'gatsby-plugin-offline',

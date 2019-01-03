@@ -2,24 +2,24 @@ import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'gatsby';
 import { MDXProvider } from '@mdx-js/tag';
-import { injectGlobal } from 'styled-components';
+
+import { css, Global } from '@emotion/core';
 
 import 'prismjs/themes/prism-okaidia.css';
 
 import Link from './Link';
 import mdxComponents from './mdx';
 
-injectGlobal`
-  html, body {
+const globalStyles = css`
+  html,
+  body {
     margin: 0;
     padding: 0;
   }
 
   ${() => {
     /* Override PrismJS Defaults */ return null;
-  }}
-
-  pre {
+  }} pre {
     background-color: #2f1e2e !important;
     border-radius: 4px;
     font-size: 14px;
@@ -61,7 +61,7 @@ export default ({ site, frontmatter = {}, children }) => {
       >
         <html lang="en" />
       </Helmet>
-
+      <Global styles={globalStyles} />
       <MDXProvider components={mdxComponents}>
         <Fragment>{children}</Fragment>
       </MDXProvider>
