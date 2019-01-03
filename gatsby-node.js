@@ -1,6 +1,7 @@
 const path = require('path');
 const componentWithMDXScope = require('gatsby-mdx/component-with-mdx-scope');
 const slugify = require('slug');
+const _ = require('lodash');
 
 const createPosts = (createPage, edges) => {
   edges.forEach(({ node }, i) => {
@@ -78,15 +79,17 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 
   if (node.internal.type === `Mdx`) {
     const parent = getNode(node.parent);
+    const titleSlugged = _.join(
+      _.drop(parent.name.split('-'), 3),
+      '-',
+    );
+
     const slug =
       parent.sourceInstanceName === 'legacy'
-        ? `${node.frontmatter.date
+        ? `blog/${node.frontmatter.date
             .split(' ')[0]
-            .replace(/-/g, '/')}/${slugify(
-            node.frontmatter.title,
-          ).toLowerCase()}`
-        : node.frontmatter.slug ||
-          slugify(node.frontmatter.title).toLowerCase();
+            .replace(/-/g, '/')}/${titleSlugged}`
+        : node.frontmatter.slug || titleSlugged;
 
     createNodeField({
       name: 'id',
