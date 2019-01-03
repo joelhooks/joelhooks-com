@@ -1,6 +1,5 @@
 const path = require('path');
 const componentWithMDXScope = require('gatsby-mdx/component-with-mdx-scope');
-const slugify = require('slug');
 const _ = require('lodash');
 
 const createPosts = (createPage, edges) => {
@@ -57,9 +56,6 @@ exports.createPages = ({ actions, graphql }) =>
     }
 
     const { edges } = data.allMdx;
-    // edges.forEach(({ node }) => {
-    //   console.log(node.parent.sourceInstanceName, node.parent.name);
-    // });
     createPosts(actions.createPage, edges);
   });
 
@@ -118,7 +114,9 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     createNodeField({
       name: 'date',
       node,
-      value: node.frontmatter.date || '',
+      value: node.frontmatter.date
+        ? node.frontmatter.date.split(' ')[0]
+        : '',
     });
 
     createNodeField({
