@@ -82,8 +82,11 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       parent.sourceInstanceName === 'legacy'
         ? `${node.frontmatter.date
             .split(' ')[0]
-            .replace(/-/g, '/')}/${slugify(node.frontmatter.title)}`
-        : node.frontmatter.slug || slugify(node.frontmatter.title);
+            .replace(/-/g, '/')}/${slugify(
+            node.frontmatter.title,
+          ).toLowerCase()}`
+        : node.frontmatter.slug ||
+          slugify(node.frontmatter.title).toLowerCase();
 
     createNodeField({
       name: 'id',
