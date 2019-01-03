@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Continuous scrolling image thumbnail and slideshow component for Flex.joelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Refactoring: Improving the Design of Existing Code' href='http://joelhooks.com/2008/05/24/refactoring-improving-the-design-of-existing-code/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=47' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,728] -->
+<link rel="canonical" href="http://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Registering Statically Published SWFs
+			swfobject.registerObject("fm_VESlideShow_1455910998","8.0.0");
+		} catch(e) {}
+	})();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-47 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-47" class="post-47 post type-post status-publish format-standard hentry category-actionscript category-components category-flex">
+					<h1>Continuous scrolling image thumbnail and slideshow component for Flex.</h1>
+		
+					<div class="entry-content">
+						<div class="note-block">I&#8217;ve updated this to a proper component implementation that can be found <a href="http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/">here</a>.</div>
+
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="fm_VESlideShow_1455910998"
+			class="flashmovie"
+			width="500"
+			height="530">
+	<param name="movie" value="http://joelhooks.com/examples/slideShow/VESlideShow.swf" />
+	<!--[if !IE]>-->
+	<object	type="application/x-shockwave-flash"
+			data="http://joelhooks.com/examples/slideShow/VESlideShow.swf"
+			name="fm_VESlideShow_1455910998"
+			width="500"
+			height="530">
+	<!--<![endif]-->
+		
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object>
+<p>I&#8217;ve been working on improvements for this thumbnail/slideshow component. The way the continuous scroll flows is very nice. It provides a very fluid feel. I have it reading XML from SlideShowPro director. SSPD simply gives a structure of albums and images, so the component should work from essentially any XML source as long as it follows the same schema:</p>
+
+<div class="wp_codebox"><table><tr id="p471"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code" id="p47code1"><pre class="xml" style="font-family:monospace;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;gallery<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+     <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;album</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;0&quot;</span> <span style="color: #000066;">description</span>=<span style="color: #ff0000;">&quot;DESCRIPTION&quot;</span> <span style="color: #000066;">title</span>=<span style="color: #ff0000;">&quot;TITLE&quot;</span> <span style="color: #000066;">tn</span>=<span style="color: #ff0000;">&quot;PATH&quot;</span> <span style="color: #000066;">lgpath</span>=<span style="color: #ff0000;">&quot;PATH&quot;</span> <span style="color: #000066;">tnpath</span>=<span style="color: #ff0000;">&quot;PATH&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
+          <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;img</span> <span style="color: #000066;">src</span>=<span style="color: #ff0000;">&quot;FILENAME&quot;</span> <span style="color: #000000; font-weight: bold;">/&gt;</span></span>
+          ...
+     <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/album<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>
+<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/gallery<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></pre></td></tr></table></div>
+
+<p>There is still a good bit of work to do. Right now the slideshow is coupled with the thumbnail container. I think that should be seperated, because I can see various uses for thumbnails outside of a slideshow. It needs style and event metadata so that it will function as a proper Flex component. I am also going to roll it into mediated PureMVC components for inclusion in <a onclick="javascript:pageTracker._trackPageview('/outgoing/vesession.com');"  href="http://vesession.com">VE:Session</a>.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/">Continuous scrolling image thumbnail and slideshow component for Flex.</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+            <div class="navigation">
+                <div class="nav-previous"><a href="http://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/comment-page-1/#comments" ><span class="meta-nav">&larr;</span> Older Comments</a></div>
+                <div class="nav-next"></div>
+            </div> <!-- .navigation -->
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-128">
+        <div id="dsq-comment-header-128" class="dsq-comment-header">
+            <cite id="dsq-cite-128">
+                <span id="dsq-author-user-128">Mike</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-128" class="dsq-comment-body">
+            <div id="dsq-comment-message-128" class="dsq-comment-message"><p>This is great.  It helps me out quite a bit as a starting point.  The are a few problems I see with this code (or it could just be me).  I&#8217;m trying to fix it all myself, but wanted to point them out in case you were interested:</p>
+<p>1) change the background from black to white and you see the canvases.  I&#8217;m not sure yet why each picture has a smaller frame around it which is not visible when it is black.</p>
+<p>2) If I try to restrict this to a boundary like a canvas which is 800 wide, it still renders the images outside of that region when a thumbnail is selected.  Again, not sure why, but trying to fix this.</p>
+<p>Any plans on posting an update version of this?  If not, that&#8217;s OK, was just curious to see your own progress on this and again, thanks for posting this to begin with!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-129">
+        <div id="dsq-comment-header-129" class="dsq-comment-header">
+            <cite id="dsq-cite-129">
+                <span id="dsq-author-user-129">Joel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-129" class="dsq-comment-body">
+            <div id="dsq-comment-message-129" class="dsq-comment-message"><p>@Mike &#8211; at some point I really want to get in and make this a proper component, but it is a time issue and it works great in my application so the motivation is in short supply <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+<p>The image display portion is just for representation of what it can do. Without looking at the code I&#8217;d say I put a border on the actual Image components just to offset it from the background a bit. Hopefully it is easy to discover and change for your needs :&gt;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-130">
+        <div id="dsq-comment-header-130" class="dsq-comment-header">
+            <cite id="dsq-cite-130">
+http://lancetsoftware.com                <span id="dsq-author-user-130">George</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-130" class="dsq-comment-body">
+            <div id="dsq-comment-message-130" class="dsq-comment-message"><p>I am getting a java.lang.NullPointerException any ideas? I am guessing it is not finding the images. I am using Flex 3.0. Thanks George</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-131">
+        <div id="dsq-comment-header-131" class="dsq-comment-header">
+            <cite id="dsq-cite-131">
+                <span id="dsq-author-user-131">wpageiii</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-131" class="dsq-comment-body">
+            <div id="dsq-comment-message-131" class="dsq-comment-message"><p>Has anyone solved the flicker when using only a few images between 3-9 images&#8230;I changed the &#8220;swap&#8221; function and that fixed the constant movement after loadup&#8230;But now the last image flickers for about 3 seconds then disappears after changing images&#8230;I noticed the comment above that talks about this problem&#8230;Is there a fix out there?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-132">
+        <div id="dsq-comment-header-132" class="dsq-comment-header">
+            <cite id="dsq-cite-132">
+                <span id="dsq-author-user-132">Big Bam</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-132" class="dsq-comment-body">
+            <div id="dsq-comment-message-132" class="dsq-comment-message"><p>Much thanks to you for providing such a useful function,  I do a lot of photography and I was seeking out an effective solution for showcasing it using flex.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-133">
+        <div id="dsq-comment-header-133" class="dsq-comment-header">
+            <cite id="dsq-cite-133">
+                <span id="dsq-author-user-133">L&#8217;Ollonais</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-133" class="dsq-comment-body">
+            <div id="dsq-comment-message-133" class="dsq-comment-message"><p>Hi there,<br />
+This looks great. Any chance that a url can be added to the large image, say, to take you to another site?<br />
+Thanks</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-134">
+        <div id="dsq-comment-header-134" class="dsq-comment-header">
+            <cite id="dsq-cite-134">
+                <span id="dsq-author-user-134">Adrian</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-134" class="dsq-comment-body">
+            <div id="dsq-comment-message-134" class="dsq-comment-message"><p>Great Component!<br />
+Couple of questions though, is it possible to add a white border to each thumbnail image and fix the width of the thumbnail, regardless of the actually image height?</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-135">
+        <div id="dsq-comment-header-135" class="dsq-comment-header">
+            <cite id="dsq-cite-135">
+                <span id="dsq-author-user-135">joelhooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-135" class="dsq-comment-body">
+            <div id="dsq-comment-message-135" class="dsq-comment-message"><p>This was because the source was pointed at an XML datasource that was invalid. It is proper in the current version of the source.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-446">
+        <div id="dsq-comment-header-446" class="dsq-comment-header">
+            <cite id="dsq-cite-446">
+http://joelhooks.com                <span id="dsq-author-user-446">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-446" class="dsq-comment-body">
+            <div id="dsq-comment-message-446" class="dsq-comment-message"><p>This was because the source was pointed at an XML datasource that was invalid. It is proper in the current version of the source.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-138">
+        <div id="dsq-comment-header-138" class="dsq-comment-header">
+            <cite id="dsq-cite-138">
+                <span id="dsq-author-user-138">Dan Bucholtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-138" class="dsq-comment-body">
+            <div id="dsq-comment-message-138" class="dsq-comment-message"><p>Thanks mate this is very nice!  I&#39;m going to extend it a bit, and if it turns out to be decent I will shoot you back the source so you can compile and check it out.  Thanks again!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-139">
+        <div id="dsq-comment-header-139" class="dsq-comment-header">
+            <cite id="dsq-cite-139">
+http://joelhooks.com                <span id="dsq-author-user-139">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-139" class="dsq-comment-body">
+            <div id="dsq-comment-message-139" class="dsq-comment-message"><p>I&#39;d love to see what you can improve upon, I know there is a lot of room for improvement. Fork it on Github, that way any beneficial modifications can be moved into the master repository. Cheers.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-447">
+        <div id="dsq-comment-header-447" class="dsq-comment-header">
+            <cite id="dsq-cite-447">
+                <span id="dsq-author-user-447">Dan Bucholtz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-447" class="dsq-comment-body">
+            <div id="dsq-comment-message-447" class="dsq-comment-message"><p>Thanks mate this is very nice!  I&#39;m going to extend it a bit, and if it turns out to be decent I will shoot you back the source so you can compile and check it out.  Thanks again!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-448">
+        <div id="dsq-comment-header-448" class="dsq-comment-header">
+            <cite id="dsq-cite-448">
+http://joelhooks.com                <span id="dsq-author-user-448">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-448" class="dsq-comment-body">
+            <div id="dsq-comment-message-448" class="dsq-comment-message"><p>I&#39;d love to see what you can improve upon, I know there is a lot of room for improvement. Fork it on Github, that way any beneficial modifications can be moved into the master repository. Cheers.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-140">
+        <div id="dsq-comment-header-140" class="dsq-comment-header">
+            <cite id="dsq-cite-140">
+http://wilianfiabani.wordpress.com/                <span id="dsq-author-user-140">Wilian Fiabani</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-140" class="dsq-comment-body">
+            <div id="dsq-comment-message-140" class="dsq-comment-message"><p>bautifull!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-141">
+        <div id="dsq-comment-header-141" class="dsq-comment-header">
+            <cite id="dsq-cite-141">
+                <span id="dsq-author-user-141">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-141" class="dsq-comment-body">
+            <div id="dsq-comment-message-141" class="dsq-comment-message"><p>Hi Joel,<br />Thanks for the component and its a great work!!<br />I have created a link bar with different galleries and based on the gallery selected, I am trying to load the thumbnail. It works fine except for one problem. I am not able to reset the thumbnail images. When I select a different gallery, the thumbnail is getting updated with new images but at the background the previous thumbnail images appears transparent. Can you please help me to fix this issue.<br />Thanks a lot.<br />-Shoba c</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-142">
+        <div id="dsq-comment-header-142" class="dsq-comment-header">
+            <cite id="dsq-cite-142">
+                <span id="dsq-author-user-142">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-142" class="dsq-comment-body">
+            <div id="dsq-comment-message-142" class="dsq-comment-message"><p>Hi Marcin,<br />I am having this problem as well. When I load the thumbnail with different galleries, they do not refresh properly (the old thumbnails remain transparent behind the new thumbnail images).</p>
+<p> Please let me know how u fixed this problem.</p>
+<p>Thanks a lot.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-143">
+        <div id="dsq-comment-header-143" class="dsq-comment-header">
+            <cite id="dsq-cite-143">
+http://joelhooks.com                <span id="dsq-author-user-143">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-143" class="dsq-comment-body">
+            <div id="dsq-comment-message-143" class="dsq-comment-message"><p>I will look into this. The demo gallery wasn&#39;t written with multiple  <br />galleries in mind, but my production implementation supports it so I  <br />will see if I can fix it easily and put a new version up on Github.</p>
+<p>Cheers</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-438">
+        <div id="dsq-comment-header-438" class="dsq-comment-header">
+            <cite id="dsq-cite-438">
+                <span id="dsq-author-user-438">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-438" class="dsq-comment-body">
+            <div id="dsq-comment-message-438" class="dsq-comment-message"><p>Hi Joel,<br />Thanks for the component and its a great work!!<br />I have created a link bar with different galleries and based on the gallery selected, I am trying to load the thumbnail. It works fine except for one problem. I am not able to reset the thumbnail images. When I select a different gallery, the thumbnail is getting updated with new images but at the background the previous thumbnail images appears transparent. Can you please help me to fix this issue.<br />Thanks a lot.<br />-Shoba c</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-449">
+        <div id="dsq-comment-header-449" class="dsq-comment-header">
+            <cite id="dsq-cite-449">
+                <span id="dsq-author-user-449">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-449" class="dsq-comment-body">
+            <div id="dsq-comment-message-449" class="dsq-comment-message"><p>Hi Marcin,<br />I am having this problem as well. When I load the thumbnail with different galleries, they do not refresh properly (the old thumbnails remain transparent behind the new thumbnail images).</p>
+<p> Please let me know how u fixed this problem.</p>
+<p>Thanks a lot.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-439">
+        <div id="dsq-comment-header-439" class="dsq-comment-header">
+            <cite id="dsq-cite-439">
+http://joelhooks.com                <span id="dsq-author-user-439">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-439" class="dsq-comment-body">
+            <div id="dsq-comment-message-439" class="dsq-comment-message"><p>I will look into this. The demo gallery wasn&#39;t written with multiple  <br />galleries in mind, but my production implementation supports it so I  <br />will see if I can fix it easily and put a new version up on Github.</p>
+<p>Cheers</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-144">
+        <div id="dsq-comment-header-144" class="dsq-comment-header">
+            <cite id="dsq-cite-144">
+                <span id="dsq-author-user-144">shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-144" class="dsq-comment-body">
+            <div id="dsq-comment-message-144" class="dsq-comment-message"><p>Thank you very much Joel.</p>
+<p>I think, every time I load a new gallery, a new instance of Navigator component is being created. So I think I have to make sure only one instance of Navigator is created and update it with the new gallery. I am working on it and will update you if I am able to fix it.</p>
+<p>Once again,Thanks a lot!!!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-145">
+        <div id="dsq-comment-header-145" class="dsq-comment-header">
+            <cite id="dsq-cite-145">
+                <span id="dsq-author-user-145">shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-145" class="dsq-comment-body">
+            <div id="dsq-comment-message-145" class="dsq-comment-message"><p>I was trying to implement singleton pattern using static initializers to create just one instance of Navigator and using the single instance I was trying to initialize the thumbnails for different galleries but it doesn&#39;t seem to work.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-440">
+        <div id="dsq-comment-header-440" class="dsq-comment-header">
+            <cite id="dsq-cite-440">
+                <span id="dsq-author-user-440">shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-440" class="dsq-comment-body">
+            <div id="dsq-comment-message-440" class="dsq-comment-message"><p>Thank you very much Joel.</p>
+<p>I think, every time I load a new gallery, a new instance of Navigator component is being created. So I think I have to make sure only one instance of Navigator is created and update it with the new gallery. I am working on it and will update you if I am able to fix it.</p>
+<p>Once again,Thanks a lot!!!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-441">
+        <div id="dsq-comment-header-441" class="dsq-comment-header">
+            <cite id="dsq-cite-441">
+                <span id="dsq-author-user-441">shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-441" class="dsq-comment-body">
+            <div id="dsq-comment-message-441" class="dsq-comment-message"><p>I was trying to implement singleton pattern using static initializers to create just one instance of Navigator and using the single instance I was trying to initialize the thumbnails for different galleries but it doesn&#39;t seem to work.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-146">
+        <div id="dsq-comment-header-146" class="dsq-comment-header">
+            <cite id="dsq-cite-146">
+                <span id="dsq-author-user-146">abhishekchess1</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-146" class="dsq-comment-body">
+            <div id="dsq-comment-message-146" class="dsq-comment-message"><p>how can we show title of image below image,<br />could we do same  vertically image gallery<br /> <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-437">
+        <div id="dsq-comment-header-437" class="dsq-comment-header">
+            <cite id="dsq-cite-437">
+                <span id="dsq-author-user-437">abhishekchess1</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-437" class="dsq-comment-body">
+            <div id="dsq-comment-message-437" class="dsq-comment-message"><p>how can we show title of image below image,<br />could we do same  vertically image gallery<br /> <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-147">
+        <div id="dsq-comment-header-147" class="dsq-comment-header">
+            <cite id="dsq-cite-147">
+                <span id="dsq-author-user-147">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-147" class="dsq-comment-body">
+            <div id="dsq-comment-message-147" class="dsq-comment-message"><p>I have fixed this problem. All we have to do is when loadGalleryXML (in Imagescroll.mxml)  is called I check if nav is null.If its not null then I remove the nav and  make it null.</p>
+<p>public function loadGalleryXML(xml_base_url:String):void<br />			{	<br />				if(nav!=null){<br />					canv.removeChild(nav);<br />					nav=null;<br />				}	<br />				var ssp_xml_base_url:String = xml_base_url;<br />				var myXMLURL:URLRequest = new URLRequest(ssp_xml_base_url);<br />				var myLoader:URLLoader = new URLLoader(myXMLURL);<br />				myLoader.addEventListener(&#8220;complete&#8221;, galleryXmlLoaded);<br />				//addEventListener(Navigator.INIT_COMPLETE, onNavInit);<br />			}</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-148">
+        <div id="dsq-comment-header-148" class="dsq-comment-header">
+            <cite id="dsq-cite-148">
+http://joelhooks.com                <span id="dsq-author-user-148">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-148" class="dsq-comment-body">
+            <div id="dsq-comment-message-148" class="dsq-comment-message"><p>Thank you so much Shoba. I really wanted to get to this, but didn&#39;t  <br />have the time. I will apply your patch to the project. Cheers.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-442">
+        <div id="dsq-comment-header-442" class="dsq-comment-header">
+            <cite id="dsq-cite-442">
+                <span id="dsq-author-user-442">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-442" class="dsq-comment-body">
+            <div id="dsq-comment-message-442" class="dsq-comment-message"><p>I have fixed this problem. All we have to do is when loadGalleryXML (in Imagescroll.mxml)  is called I check if nav is null.If its not null then I remove the nav and  make it null.</p>
+<p>public function loadGalleryXML(xml_base_url:String):void<br />			{	<br />				if(nav!=null){<br />					canv.removeChild(nav);<br />					nav=null;<br />				}	<br />				var ssp_xml_base_url:String = xml_base_url;<br />				var myXMLURL:URLRequest = new URLRequest(ssp_xml_base_url);<br />				var myLoader:URLLoader = new URLLoader(myXMLURL);<br />				myLoader.addEventListener(&#8220;complete&#8221;, galleryXmlLoaded);<br />				//addEventListener(Navigator.INIT_COMPLETE, onNavInit);<br />			}</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-443">
+        <div id="dsq-comment-header-443" class="dsq-comment-header">
+            <cite id="dsq-cite-443">
+http://joelhooks.com                <span id="dsq-author-user-443">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-443" class="dsq-comment-body">
+            <div id="dsq-comment-message-443" class="dsq-comment-message"><p>Thank you so much Shoba. I really wanted to get to this, but didn&#39;t  <br />have the time. I will apply your patch to the project. Cheers.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-149">
+        <div id="dsq-comment-header-149" class="dsq-comment-header">
+            <cite id="dsq-cite-149">
+                <span id="dsq-author-user-149">turlockshubh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-149" class="dsq-comment-body">
+            <div id="dsq-comment-message-149" class="dsq-comment-message"><p>Hi, Firstly great application looks real good, I loved it so much I wanted to have a slide show in my website too, I Downloaded the source code and the project created nicely.<br />It compiles and everything is good. I am using Flex Builder 3.</p>
+<p>I get an error when I try to run the VESlideshow on my PC I get  a windows pop up message which states the following</p>
+<p>&#8220;File not found: file:/C:/Documents%20and%20Settings/shubht/My%20Documents/Flex%20Builder%203/VESlideshow/bin-debug/VESlideshow.html&#8221; </p>
+<p>I dont know how this file is generated it was not in the zip file I downloaded.<br />Any pointers would be great<br />Thanks<br />Turlock</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-436">
+        <div id="dsq-comment-header-436" class="dsq-comment-header">
+            <cite id="dsq-cite-436">
+                <span id="dsq-author-user-436">turlockshubh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-436" class="dsq-comment-body">
+            <div id="dsq-comment-message-436" class="dsq-comment-message"><p>Hi, Firstly great application looks real good, I loved it so much I wanted to have a slide show in my website too, I Downloaded the source code and the project created nicely.<br />It compiles and everything is good. I am using Flex Builder 3.</p>
+<p>I get an error when I try to run the VESlideshow on my PC I get  a windows pop up message which states the following</p>
+<p>&#8220;File not found: file:/C:/Documents%20and%20Settings/shubht/My%20Documents/Flex%20Builder%203/VESlideshow/bin-debug/VESlideshow.html&#8221; </p>
+<p>I dont know how this file is generated it was not in the zip file I downloaded.<br />Any pointers would be great<br />Thanks<br />Turlock</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-150">
+        <div id="dsq-comment-header-150" class="dsq-comment-header">
+            <cite id="dsq-cite-150">
+                <span id="dsq-author-user-150">Vardan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-150" class="dsq-comment-body">
+            <div id="dsq-comment-message-150" class="dsq-comment-message"><p>Hi,</p>
+<p>I have created the xml locally and stored under assets directory but when I run the application I get :<br />Error #2044: Unhandled IOErrorEvent:. text=Error #2036: Load Never Completed.<br />When I close the debug message photos work fine but it doesn&#39;t work on different machines at all.</p>
+<p>Any idea how can I solve the problem?</p>
+<p>Thanks.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-435">
+        <div id="dsq-comment-header-435" class="dsq-comment-header">
+            <cite id="dsq-cite-435">
+                <span id="dsq-author-user-435">Vardan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-435" class="dsq-comment-body">
+            <div id="dsq-comment-message-435" class="dsq-comment-message"><p>Hi,</p>
+<p>I have created the xml locally and stored under assets directory but when I run the application I get :<br />Error #2044: Unhandled IOErrorEvent:. text=Error #2036: Load Never Completed.<br />When I close the debug message photos work fine but it doesn&#39;t work on different machines at all.</p>
+<p>Any idea how can I solve the problem?</p>
+<p>Thanks.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-151">
+        <div id="dsq-comment-header-151" class="dsq-comment-header">
+            <cite id="dsq-cite-151">
+                <span id="dsq-author-user-151">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-151" class="dsq-comment-body">
+            <div id="dsq-comment-message-151" class="dsq-comment-message"><p>I found a simple fix for this last thumbnail image flickering issue. We calculate the total width of the thumbnails by adding the individual thumbnail widths. This we do it in initializeThumbnails() method in Navigator.as class. We have to increase the total width so that if there are 5 images, the total width should be equal to 6 images. SO at the end of for loop, I have included the following.</p>
+<p>     for each( var image:ImageVO in album.images )<br />    {<br />	&#8230;<br />        &#8230;<br />	totalWidth+=navItem.width;<br />	count = count + 1;<br />    }<br />    totalWidth+=navItem.width;  // this is the additional line to be added to fix the last  <br />                                                   thumbnail flickering issue.</p>
+<p>Hope it helps.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-152">
+        <div id="dsq-comment-header-152" class="dsq-comment-header">
+            <cite id="dsq-cite-152">
+http://joelhooks.com                <span id="dsq-author-user-152">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-152" class="dsq-comment-body">
+            <div id="dsq-comment-message-152" class="dsq-comment-message"><p>Awesome Shoba. I committed it to the repository:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/Continuous-Scrolling-Slideshow-/commit/e1ec8edc8cb6dae3f1ac80e8f9f46a7604065ca1');"  href="http://github.com/joelhooks/Continuous-Scrolling-Slideshow-/commit/e1ec8edc8cb6dae3f1ac80e8f9f46a7604065ca1" rel="nofollow">http://github.com/joelhooks/Continuous-Scrollin&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-444">
+        <div id="dsq-comment-header-444" class="dsq-comment-header">
+            <cite id="dsq-cite-444">
+                <span id="dsq-author-user-444">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-444" class="dsq-comment-body">
+            <div id="dsq-comment-message-444" class="dsq-comment-message"><p>I found a simple fix for this last thumbnail image flickering issue. We calculate the total width of the thumbnails by adding the individual thumbnail widths. This we do it in initializeThumbnails() method in Navigator.as class. We have to increase the total width so that if there are 5 images, the total width should be equal to 6 images. SO at the end of for loop, I have included the following.</p>
+<p>     for each( var image:ImageVO in album.images )<br />    {<br />	&#8230;<br />        &#8230;<br />	totalWidth+=navItem.width;<br />	count = count + 1;<br />    }<br />    totalWidth+=navItem.width;  // this is the additional line to be added to fix the last  <br />                                                   thumbnail flickering issue.</p>
+<p>Hope it helps.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-445">
+        <div id="dsq-comment-header-445" class="dsq-comment-header">
+            <cite id="dsq-cite-445">
+http://joelhooks.com                <span id="dsq-author-user-445">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-445" class="dsq-comment-body">
+            <div id="dsq-comment-message-445" class="dsq-comment-message"><p>Awesome Shoba. I committed it to the repository:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/Continuous-Scrolling-Slideshow-/commit/e1ec8edc8cb6dae3f1ac80e8f9f46a7604065ca1');"  href="http://github.com/joelhooks/Continuous-Scrolling-Slideshow-/commit/e1ec8edc8cb6dae3f1ac80e8f9f46a7604065ca1" rel="nofollow">http://github.com/joelhooks/Continuous-Scrollin&#8230;</a></p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-153">
+        <div id="dsq-comment-header-153" class="dsq-comment-header">
+            <cite id="dsq-cite-153">
+                <span id="dsq-author-user-153">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-153" class="dsq-comment-body">
+            <div id="dsq-comment-message-153" class="dsq-comment-message"><p>I am trying to move the selected image by 1 position instead of moving it to the center of navigator. I am not sure how to do it? Please help me!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-434">
+        <div id="dsq-comment-header-434" class="dsq-comment-header">
+            <cite id="dsq-cite-434">
+                <span id="dsq-author-user-434">Shoba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-434" class="dsq-comment-body">
+            <div id="dsq-comment-message-434" class="dsq-comment-message"><p>I am trying to move the selected image by 1 position instead of moving it to the center of navigator. I am not sure how to do it? Please help me!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="post pingback">
+        <p>Pingback: <a href='http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/' rel='external nofollow' class='url'>Continuous Scrolling Thumbnail Component for Flex | Building Blocks</a></p>
+    </li>
+    </li>
+            </ul>
+
+            <div class="navigation">
+                <div class="nav-previous"><a href="http://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/comment-page-1/#comments" ><span class="meta-nav">&larr;</span> Older Comments</a></div>
+                <div class="nav-next"></div>
+            </div><!-- .navigation -->
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/';
+    var disqus_identifier = '47 http://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Continuous scrolling image thumbnail and slideshow component for Flex.";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=47');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+            {
+                'author_name':    "Flex做的连续滚动的相册缩略图组件（附源代码） - 全文检索博客",
+                'author_url':    "http:\/\/blog.minidx.com\/2008\/05\/13\/846.html",
+                'date':            "05\/13\/2008 09:51 AM",
+                'excerpt':        "[...] 代码在这里下载&#160;&#160;&#160;&#160;&#160;&#160; Demo [...] ",
+                'type':            "pingback"            }
+,            {
+                'author_name':    "Flex做的连续滚动的相册缩略图组件（附源代码） - 懒猪学IT",
+                'author_url':    "http:\/\/www.egstyle.cn\/blog\/?p=24",
+                'date':            "05\/15\/2008 06:54 AM",
+                'excerpt':        "[...] Demo [...] ",
+                'type':            "pingback"            }
+,            {
+                'author_name':    "Updated: Continuous scrolling image thumbnail and slideshow component for Flex. at building blocks",
+                'author_url':    "http:\/\/joelhooks.com\/2008\/05\/24\/updated-continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex\/",
+                'date':            "05\/24\/2008 11:33 AM",
+                'excerpt':        "[...] Here is the original post. [...] ",
+                'type':            "pingback"            }
+,            {
+                'author_name':    "ActionScript 3.0 Image Galleries &laquo; Bauhouse",
+                'author_url':    "http:\/\/bauhouse.wordpress.com\/2008\/07\/12\/actionscript-30-image-galleries\/",
+                'date':            "07\/12\/2008 11:02 PM",
+                'excerpt':        "[...] Continuous Scrolling Thumbnail Slideshow    Posted in ActionScript. [...] ",
+                'type':            "pingback"            }
+,            {
+                'author_name':    "Continuous scrolling image thumbnail component for Flex. | building blocks",
+                'author_url':    "http:\/\/joelhooks.com\/2008\/04\/21\/continuous-scrolling-image-thumbnail-component-for-flex\/",
+                'date':            "10\/15\/2008 10:32 AM",
+                'excerpt':        "[...] [Here is an update for this] [...] ",
+                'type':            "pingback"            }
+,            {
+                'author_name':    "ImageSwap (crossfade) Flex Component | building blocks",
+                'author_url':    "http:\/\/joelhooks.com\/2008\/12\/06\/imageswap-crossfade-flex-component\/",
+                'date':            "12\/07\/2008 12:24 AM",
+                'excerpt':        "[...] needed a component that would work in my slideshow component and give a decent crossfade while letting the user ...",
+                'type':            "pingback"            }
+,            {
+                'author_name':    "Continuous Scrolling Thumbnail Component for Flex | Building Blocks",
+                'author_url':    "http:\/\/joelhooks.com\/2009\/12\/24\/continuous-scrolling-thumbnail-component-for-flex\/",
+                'date':            "06\/17\/2010 03:49 PM",
+                'excerpt':        "[...] This post continues to be the most popular on this space after a year and a half. I&#039;ve never ...",
+                'type':            "pingback"            }
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2008\/05\/11\/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.279 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.51MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

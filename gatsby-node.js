@@ -1,5 +1,6 @@
 const path = require('path');
 const componentWithMDXScope = require('gatsby-mdx/component-with-mdx-scope');
+const slugify = require('slug');
 
 const createPosts = (createPage, edges) => {
   edges.forEach(({ node }, i) => {
@@ -29,11 +30,18 @@ exports.createPages = ({ actions, graphql }) =>
         edges {
           node {
             id
+            parent {
+              ... on File {
+                name
+                sourceInstanceName
+              }
+            }
             excerpt(pruneLength: 250)
             fields {
               title
               slug
               categories
+              date
             }
             code {
               scope
@@ -48,7 +56,9 @@ exports.createPages = ({ actions, graphql }) =>
     }
 
     const { edges } = data.allMdx;
-
+    // edges.forEach(({ node }) => {
+    //   console.log(node.parent.sourceInstanceName, node.parent.name);
+    // });
     createPosts(actions.createPage, edges);
   });
 
@@ -68,6 +78,12 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 
   if (node.internal.type === `Mdx`) {
     const parent = getNode(node.parent);
+    const slug =
+      parent.sourceInstanceName === 'legacy'
+        ? `${node.frontmatter.date
+            .split(' ')[0]
+            .replace(/-/g, '/')}/${slugify(node.frontmatter.title)}`
+        : node.frontmatter.slug || slugify(node.frontmatter.title);
 
     createNodeField({
       name: 'id',
@@ -90,7 +106,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     createNodeField({
       name: 'slug',
       node,
-      value: node.frontmatter.slug,
+      value: slug,
     });
 
     createNodeField({

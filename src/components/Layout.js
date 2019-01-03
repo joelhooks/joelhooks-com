@@ -35,12 +35,6 @@ injectGlobal`
   }
 `;
 
-const NAVIGATION = [
-  { to: '/', label: 'About' },
-  { to: '/blog', label: 'Blog' },
-  { to: 'https://roadtoreact.com', label: 'Courses' },
-];
-
 export default ({ site, frontmatter = {}, children }) => {
   const {
     title,
@@ -69,17 +63,7 @@ export default ({ site, frontmatter = {}, children }) => {
       </Helmet>
 
       <MDXProvider components={mdxComponents}>
-        <Fragment>
-          <ul>
-            {NAVIGATION.map(navigation => (
-              <li key={navigation.label}>
-                <Link to={navigation.to}>{navigation.label}</Link>
-              </li>
-            ))}
-          </ul>
-
-          {children}
-        </Fragment>
+        <Fragment>{children}</Fragment>
       </MDXProvider>
     </Fragment>
   );

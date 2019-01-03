@@ -36,25 +36,6 @@ export default function Post({
       )}
 
       <MDXRenderer>{mdx.code.body}</MDXRenderer>
-
-      <div>
-        <CategoryList list={mdx.frontmatter.categories} />
-
-        <hr />
-
-        {prev && (
-          <span>
-            Previous{' '}
-            <Link to={prev.fields.slug}>{prev.fields.title}</Link>
-          </span>
-        )}
-        {next && (
-          <span>
-            Next{' '}
-            <Link to={next.fields.slug}>{next.fields.title}</Link>
-          </span>
-        )}
-      </div>
     </Layout>
   );
 }

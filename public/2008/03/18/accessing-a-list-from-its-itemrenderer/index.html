@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Accessing a List from its itemRendererjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Animated collision of two crane trucks.' href='http://joelhooks.com/2008/03/20/animated-collision-of-two-crane-trucks/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=34' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,696] -->
+<link rel="canonical" href="http://joelhooks.com/2008/03/18/accessing-a-list-from-its-itemrenderer/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-34 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-34" class="post-34 post type-post status-publish format-standard hentry category-actionscript category-flex">
+					<h1>Accessing a List from its itemRenderer</h1>
+		
+					<div class="entry-content">
+						<p>This was really throwing me off tonight. I could not figure out how to get at the List from its itemRenderer. this.parent&#8230; no this.owner&#8230; no</p>
+<p>So I started The Search™, trying to hunt down The Answer™. This is one of those things that doesn&#8217;t just jump out of the manual at you. Luckily, Peter Ent is running an <a href="could">extremely informative series on itemRenders</a>. He says to get at the List, we need to simply access the <strong>listData</strong> property. But there&#8217;s a catch:</p>
+<blockquote><p>Most controls such as Text, Label, Button, CheckBox, and so forth, implement IDropInListItemRenderer. Most containers, such as HBox, Canvas, etc. <strong>do not</strong> implement that interface. If you want to use listData in an itemRenderer that extends a Container you will have to implement IDropInListItemRenderer yourself &#8211; I&#8217;ll cover that in the next article.</p></blockquote>
+<p>Luckily for us, it is a simple process:</p>
+
+<div class="wp_codebox"><table><tr id="p341"><td class="line_numbers"><pre>1
+</pre></td><td class="code" id="p34code1"><pre class="actionscript" style="font-family:monospace;"><span style="color: #66cc66;">&lt;</span>mx:hbox xmlns:mx=<span style="color: #ff0000;">&quot;http://www.adobe.com/2006/mxml&quot;</span> <span style="color: #0066CC;">implements</span>=<span style="color: #ff0000;">&quot;mx.controls.listClasses.IDropInListItemRenderer&quot;</span><span style="color: #66cc66;">&gt;&lt;/</span>mx:hbox<span style="color: #66cc66;">&gt;</span></pre></td></tr></table></div>
+
+<p>We will need to implement the appropriate methods in the itemRenderer&#8217;s Script tag also:</p>
+
+<div class="wp_codebox"><table><tr id="p342"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code" id="p34code2"><pre class="actionscript" style="font-family:monospace;"><span style="color: #0066CC;">import</span> mx.<span style="color: #006600;">controls</span>.<span style="color: #006600;">listClasses</span>.<span style="color: #006600;">BaseListData</span>;
+&nbsp;
+<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> _listData:BaseListData;
+<span style="color: #0066CC;">private</span> <span style="color: #000000; font-weight: bold;">var</span> <span style="color: #0066CC;">list</span>:<span style="color: #0066CC;">List</span>;
+&nbsp;
+<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">get</span> listData<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> : BaseListData
+<span style="color: #66cc66;">&#123;</span>
+	<span style="color: #b1b100;">return</span> _listData;
+<span style="color: #66cc66;">&#125;</span>
+<span style="color: #0066CC;">public</span> <span style="color: #000000; font-weight: bold;">function</span> <span style="color: #0066CC;">set</span> listData<span style="color: #66cc66;">&#40;</span> value:BaseListData <span style="color: #66cc66;">&#41;</span> : <span style="color: #0066CC;">void</span>
+<span style="color: #66cc66;">&#123;</span>
+	_listData = value;
+	<span style="color: #0066CC;">list</span> = listData.<span style="color: #006600;">owner</span> as <span style="color: #0066CC;">List</span>
+	<span style="color: #0066CC;">list</span>.<span style="color: #006600;">addEventListener</span><span style="color: #66cc66;">&#40;</span> ListEvent.<span style="color: #006600;">CHANGE</span>, onListChange, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #cc66cc;">0</span>, <span style="color: #000000; font-weight: bold;">true</span> <span style="color: #66cc66;">&#41;</span>
+<span style="color: #66cc66;">&#125;</span></pre></td></tr></table></div>
+
+<p>In my case, I wanted to listen for changes so that I could set one of the itemRenderer sub-component&#8217;s properties whenever the list had changed. Now to access the List:</p>
+<pre sang="actionscript">if ( list.selectedItem == data ) doSomeStuff();</pre>
+<p>Easy as that.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2008/03/18/accessing-a-list-from-its-itemrenderer/">Accessing a List from its itemRenderer</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-44">
+        <div id="dsq-comment-header-44" class="dsq-comment-header">
+            <cite id="dsq-cite-44">
+http://brickner.brixel.org                <span id="dsq-author-user-44">Brixel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-44" class="dsq-comment-body">
+            <div id="dsq-comment-message-44" class="dsq-comment-message"><p>Hello there. I&#8217;ve been searching for a solution to a similar problem. I have a custom MXML component, which is a tree. It has some public properties in it, etc. It points to an AS class as it&#8217;s itemRenderer.</p>
+<p>What is escaping me is the ability to target the public properties of that component from with in the AS class. I can get to the instance of the tree, but not the stuff inside the component container itself.</p>
+<p>Now calling something like &#8220;document.myCustomTreeComponent.myPublicProperty&#8221; will work, but I shouldn&#8217;t have to go all the way out and back in just to get what should be in my &#8220;parent&#8221; container, should I?</p>
+<p>Hoping for any help, thanks.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-45">
+        <div id="dsq-comment-header-45" class="dsq-comment-header">
+            <cite id="dsq-cite-45">
+                <span id="dsq-author-user-45">Paul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-45" class="dsq-comment-body">
+            <div id="dsq-comment-message-45" class="dsq-comment-message"><p>thanks so much for posting this, you concisely made clear what the Flex manual fails to, helped me a lot</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-608">
+        <div id="dsq-comment-header-608" class="dsq-comment-header">
+            <cite id="dsq-cite-608">
+                <span id="dsq-author-user-608">Mike </span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-608" class="dsq-comment-body">
+            <div id="dsq-comment-message-608" class="dsq-comment-message"><p>Thanksfor this. But how do you access your item renderer&#39;s list  from its parent??</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-872">
+        <div id="dsq-comment-header-872" class="dsq-comment-header">
+            <cite id="dsq-cite-872">
+                <span id="dsq-author-user-872">Chad T Fraser</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-872" class="dsq-comment-body">
+            <div id="dsq-comment-message-872" class="dsq-comment-message"><p>you can reference the list from its renderer using this.parentDocument</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2008/03/18/accessing-a-list-from-its-itemrenderer/';
+    var disqus_identifier = '34 http://joelhooks.com/2008/03/18/accessing-a-list-from-its-itemrenderer/';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Accessing a List from its itemRenderer";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=34');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2008\/03\/18\/accessing-a-list-from-its-itemrenderer\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.250 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.09MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

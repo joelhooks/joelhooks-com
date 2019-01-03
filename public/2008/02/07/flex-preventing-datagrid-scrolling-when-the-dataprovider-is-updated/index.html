@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Flex &#8211; Preventing DataGrid scrolling when the dataprovider is updated.joelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Regular Expression resources and utilities.' href='http://joelhooks.com/2008/02/09/regular-expression-resources-and-utilities/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=19' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,734] -->
+<link rel="canonical" href="http://joelhooks.com/2008/02/07/flex-preventing-datagrid-scrolling-when-the-dataprovider-is-updated/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-19 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-19" class="post-19 post type-post status-publish format-standard hentry category-actionscript category-flex">
+					<h1>Flex &#8211; Preventing DataGrid scrolling when the dataprovider is updated.</h1>
+		
+					<div class="entry-content">
+						<p>I was having issues with my DataGrid scrolling to the top when my grid updated from the server. It is very aggravating as a user when you are milling about and <strong>*BAM*</strong> it scrolls away.</p>
+<p>This worked:</p>
+
+<div class="wp_codebox"><table><tr id="p191"><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code" id="p19code1"><pre class="actionscript" style="font-family:monospace;"><span style="color: #000000; font-weight: bold;">var</span> storeItemForUpdate:ItemVO = grid.<span style="color: #006600;">selectedItem</span>;;
+<span style="color: #000000; font-weight: bold;">var</span> vScroll:<span style="color: #0066CC;">int</span> = grid.<span style="color: #006600;">verticalScrollPosition</span>;
+arrayCollection.<span style="color: #006600;">source</span> = updatedDataArray
+grid.<span style="color: #006600;">validateNow</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;
+grid.<span style="color: #006600;">verticalScrollPosition</span> = vScroll;
+grid.<span style="color: #006600;">selectedItem</span> = storeItemForUpdate;</pre></td></tr></table></div>
+
+<p>The current selection is stored, the scroll position is stored, the grid is updated, validated, and then the stored variables are applied without so much as a flicker on the screen for the user. Much better.</p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2008/02/07/flex-preventing-datagrid-scrolling-when-the-dataprovider-is-updated/">Flex &#8211; Preventing DataGrid scrolling when the dataprovider is updated.</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-10">
+        <div id="dsq-comment-header-10" class="dsq-comment-header">
+            <cite id="dsq-cite-10">
+                <span id="dsq-author-user-10">Joel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-10" class="dsq-comment-body">
+            <div id="dsq-comment-message-10" class="dsq-comment-message"><p>I found that it is easier to update the dataProvider with itemUpdated and make proper use of collections in Flex. This is still a solution if that isn&#8217;t possible, for whatever reason, but I&#8217;d say it is far from a best practice.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-11">
+        <div id="dsq-comment-header-11" class="dsq-comment-header">
+            <cite id="dsq-cite-11">
+                <span id="dsq-author-user-11">Hari</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11" class="dsq-comment-body">
+            <div id="dsq-comment-message-11" class="dsq-comment-message"><p>Hi, my datagrid is bound to an ArrayCollection which is the dataprovider. When I remove items from Arraycollection, the focus on the datagrid moves to the bottom of the grid which deiplays a blank row. I want the focus to be remained always at the top. Please let me know any way to solve this.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-12">
+        <div id="dsq-comment-header-12" class="dsq-comment-header">
+            <cite id="dsq-cite-12">
+                <span id="dsq-author-user-12">Joel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-12" class="dsq-comment-body">
+            <div id="dsq-comment-message-12" class="dsq-comment-message"><p>I&#8217;ve never seen it go to the bottom like that!</p>
+<p>If you want it to go to the top, do this:</p>
+<p>myDataGrid.selectedIndex = 0<br />
+myDataGrid.scrollToIndex(0)</p>
+<p>That will reposition and select the first entry. To make it &#8216;smart&#8217; you want to record the position of the item you are deleting, and have it select/scroll there.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-13">
+        <div id="dsq-comment-header-13" class="dsq-comment-header">
+            <cite id="dsq-cite-13">
+                <span id="dsq-author-user-13">Chris</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-13" class="dsq-comment-body">
+            <div id="dsq-comment-message-13" class="dsq-comment-message"><p>Joel,</p>
+<p>could you post the code where this is implemented?  This is something I have been looking for. Thanks for the help!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-14">
+        <div id="dsq-comment-header-14" class="dsq-comment-header">
+            <cite id="dsq-cite-14">
+http://www.sousgarden.com                <span id="dsq-author-user-14">tsedeke</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14" class="dsq-comment-body">
+            <div id="dsq-comment-message-14" class="dsq-comment-message"><p>Joel,<br />
+in some cases you are right, but if you have an application getting data from database where also many people work on, it is important to read all records after changing, cause not only your record may change.<br />
+In this situation you have no other chance, you have to remember your key of your record and after refresh find and select it again.<br />
+Cause today we are not able to make a specific record update in a Arraycollection from a database.<br />
+Ok you can do it, but it is not save and cause an overhead.</p>
+<p>Thorsten</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-15">
+        <div id="dsq-comment-header-15" class="dsq-comment-header">
+            <cite id="dsq-cite-15">
+                <span id="dsq-author-user-15">dj brikz</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-15" class="dsq-comment-body">
+            <div id="dsq-comment-message-15" class="dsq-comment-message"><p>hi&#8230;thanks for the post&#8230;it works well in the application that i&#8217;m doing now.  my application is fetching entries from the database and updates the datagrid every 1 second.</p>
+<p>Wrap up solution:</p>
+<p>1. Before updating the data provider of the datagrid, retrieve first the verticalScrollPosition and selectedItem properties of the datagrid.<br />
+2. Update the data provider of the datagrid.<br />
+3. Set again the datagrid verticalScrollPosition and selectedItem properties using the values you stored in step 1.<br />
+4. That&#8217;s all and enjoy.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-16">
+        <div id="dsq-comment-header-16" class="dsq-comment-header">
+            <cite id="dsq-cite-16">
+                <span id="dsq-author-user-16">Matt</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-16" class="dsq-comment-body">
+            <div id="dsq-comment-message-16" class="dsq-comment-message"><p>Thhhhhhhhhhhhaaaaaaaankkkk you!!!</p>
+<p>My god, this saved me about 3 days work!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-17">
+        <div id="dsq-comment-header-17" class="dsq-comment-header">
+            <cite id="dsq-cite-17">
+                <span id="dsq-author-user-17">joelhooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17" class="dsq-comment-body">
+            <div id="dsq-comment-message-17" class="dsq-comment-message"><p>Glad it saved you some hassle. It drove me crazy too <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-463">
+        <div id="dsq-comment-header-463" class="dsq-comment-header">
+            <cite id="dsq-cite-463">
+                <span id="dsq-author-user-463">Matt</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-463" class="dsq-comment-body">
+            <div id="dsq-comment-message-463" class="dsq-comment-message"><p>Thhhhhhhhhhhhaaaaaaaankkkk you!!!</p>
+<p>My god, this saved me about 3 days work!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-464">
+        <div id="dsq-comment-header-464" class="dsq-comment-header">
+            <cite id="dsq-cite-464">
+http://joelhooks.com                <span id="dsq-author-user-464">Joel Hooks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-464" class="dsq-comment-body">
+            <div id="dsq-comment-message-464" class="dsq-comment-message"><p>Glad it saved you some hassle. It drove me crazy too <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-18">
+        <div id="dsq-comment-header-18" class="dsq-comment-header">
+            <cite id="dsq-cite-18">
+http://www.pesse.de/                <span id="dsq-author-user-18">Pesse</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-18" class="dsq-comment-body">
+            <div id="dsq-comment-message-18" class="dsq-comment-message"><p>Hi, <br />Thanks for this snippet <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> <br />Can you give me a hint how you use itemUpdated instead of this?<br />Would really appreciate it!</p>
+<p>Greetings,<br />Pesse</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-462">
+        <div id="dsq-comment-header-462" class="dsq-comment-header">
+            <cite id="dsq-cite-462">
+http://www.pesse.de/                <span id="dsq-author-user-462">Pesse</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-462" class="dsq-comment-body">
+            <div id="dsq-comment-message-462" class="dsq-comment-message"><p>Hi, <br />Thanks for this snippet <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> <br />Can you give me a hint how you use itemUpdated instead of this?<br />Would really appreciate it!</p>
+<p>Greetings,<br />Pesse</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-19">
+        <div id="dsq-comment-header-19" class="dsq-comment-header">
+            <cite id="dsq-cite-19">
+http://unlikelyteacher.com/                <span id="dsq-author-user-19">Paul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-19" class="dsq-comment-body">
+            <div id="dsq-comment-message-19" class="dsq-comment-message"><p>Thanks, this is exactly what I was looking for. I&#39;ll give it a try.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-461">
+        <div id="dsq-comment-header-461" class="dsq-comment-header">
+            <cite id="dsq-cite-461">
+http://unlikelyteacher.com/                <span id="dsq-author-user-461">Paul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-461" class="dsq-comment-body">
+            <div id="dsq-comment-message-461" class="dsq-comment-message"><p>Thanks, this is exactly what I was looking for. I&#39;ll give it a try.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-20">
+        <div id="dsq-comment-header-20" class="dsq-comment-header">
+            <cite id="dsq-cite-20">
+http://twitter.com/omer72                <span id="dsq-author-user-20">Omer Etrog</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-20" class="dsq-comment-body">
+            <div id="dsq-comment-message-20" class="dsq-comment-message"><p>Thank you, I have 3 bugs (well, for every datagrid is have different bug) on this issue</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-460">
+        <div id="dsq-comment-header-460" class="dsq-comment-header">
+            <cite id="dsq-cite-460">
+http://twitter.com/omer72                <span id="dsq-author-user-460">Omer Etrog</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-460" class="dsq-comment-body">
+            <div id="dsq-comment-message-460" class="dsq-comment-message"><p>Thank you, I have 3 bugs (well, for every datagrid is have different bug) on this issue</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-575">
+        <div id="dsq-comment-header-575" class="dsq-comment-header">
+            <cite id="dsq-cite-575">
+                <span id="dsq-author-user-575">Aroldo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-575" class="dsq-comment-body">
+            <div id="dsq-comment-message-575" class="dsq-comment-message"><p>Joel,</p>
+<p>Thanks for your help, this is exactly what I need.</p>
+<p>Greetings,<br />Aroldo (Brasil)</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-576">
+        <div id="dsq-comment-header-576" class="dsq-comment-header">
+            <cite id="dsq-cite-576">
+                <span id="dsq-author-user-576">JUANABREU</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-576" class="dsq-comment-body">
+            <div id="dsq-comment-message-576" class="dsq-comment-message"><p>DUDE YOU ARE MY HERO!!! THANK YOU!!!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-592">
+        <div id="dsq-comment-header-592" class="dsq-comment-header">
+            <cite id="dsq-cite-592">
+                <span id="dsq-author-user-592">Ricardo Aguilar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-592" class="dsq-comment-body">
+            <div id="dsq-comment-message-592" class="dsq-comment-message"><p>A lot of thanks!</p>
+<p>Ricardo (Colombia)</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-661">
+        <div id="dsq-comment-header-661" class="dsq-comment-header">
+            <cite id="dsq-cite-661">
+                <span id="dsq-author-user-661">Pradeep</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-661" class="dsq-comment-body">
+            <div id="dsq-comment-message-661" class="dsq-comment-message"><p>Hi, i was using your code it works great!</p>
+<p>I just found a small problem with it. I think these two lines must be reversed.<br />&#8220;grid.verticalScrollPosition = vScroll;<br />grid.selectedItem = storeItemForUpdate;&#8221;</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-660">
+        <div id="dsq-comment-header-660" class="dsq-comment-header">
+            <cite id="dsq-cite-660">
+                <span id="dsq-author-user-660">Pradeep</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-660" class="dsq-comment-body">
+            <div id="dsq-comment-message-660" class="dsq-comment-message"><p>correct order is:<br />&#8220;grid.selectedItem = storeItemForUpdate;<br />grid.verticalScrollPosition = vScroll;&#8221; <br />try testing your code with a datagrid having long scroll. It doesn&#39;t selects the correct item. However changing this order <br />gives correct results.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-662">
+        <div id="dsq-comment-header-662" class="dsq-comment-header">
+            <cite id="dsq-cite-662">
+                <span id="dsq-author-user-662">the_new_mr</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-662" class="dsq-comment-body">
+            <div id="dsq-comment-message-662" class="dsq-comment-message"><p>Thanks man!</p>
+<p>EXACTLY what I needed! <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-852">
+        <div id="dsq-comment-header-852" class="dsq-comment-header">
+            <cite id="dsq-cite-852">
+                <span id="dsq-author-user-852">Sagar Jadhav</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-852" class="dsq-comment-body">
+            <div id="dsq-comment-message-852" class="dsq-comment-message"><p>You have saved me day and I cannot thank you enough man. God bless you</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-855">
+        <div id="dsq-comment-header-855" class="dsq-comment-header">
+            <cite id="dsq-cite-855">
+                <span id="dsq-author-user-855">Vikram Bhatla83</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-855" class="dsq-comment-body">
+            <div id="dsq-comment-message-855" class="dsq-comment-message"><p>This solution is not working for me.<br />
+verticalScrollPosition depends on the rowHeight and maxVerticalScrollPosition.<br />
+I am calculating it using:<br />
+  var vScroll:int = Math.ceil((grid.verticalScrollPosition/gridmaxVerticalScrollPosition)*grid.rowHeight);<br />
+This will return the approx correct vScroll. But still its not doing correct behavior.<br />
+ </p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment even thread-even depth-1" id="dsq-comment-870">
+        <div id="dsq-comment-header-870" class="dsq-comment-header">
+            <cite id="dsq-cite-870">
+                <span id="dsq-author-user-870">Dasun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-870" class="dsq-comment-body">
+            <div id="dsq-comment-message-870" class="dsq-comment-message"><p>Thanks Buddy. Thank you very much. Good luck brother&#8230;.</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-875">
+        <div id="dsq-comment-header-875" class="dsq-comment-header">
+            <cite id="dsq-cite-875">
+                <span id="dsq-author-user-875">Keithlee2010</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-875" class="dsq-comment-body">
+            <div id="dsq-comment-message-875" class="dsq-comment-message"><p>Nice work!</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2008/02/07/flex-preventing-datagrid-scrolling-when-the-dataprovider-is-updated/';
+    var disqus_identifier = '19 http://joelhooks.com/2008/02/07/flex-preventing-datagrid-scrolling-when-the-dataprovider-is-updated/';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Flex &#8211; Preventing DataGrid scrolling when the dataprovider is updated.";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=19');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2008\/02\/07\/flex-preventing-datagrid-scrolling-when-the-dataprovider-is-updated\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.253 seconds. Made 6 queries to database and 13 cached queries. Memory used - 16.2MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

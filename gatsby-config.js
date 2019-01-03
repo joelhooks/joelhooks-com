@@ -1,16 +1,11 @@
 module.exports = {
   pathPrefix: '/',
   siteMetadata: {
-    siteUrl: 'https://www.robinwieruch.de/',
-    author: 'Robin Wieruch',
-    title: 'Gatsby MDX Starter Project',
-    description: 'My Gatsby MDX Starter Project',
-    keywords: [
-      'Software Engineer',
-      'Web Developer',
-      'Consultant',
-      'Freelancer',
-    ],
+    siteUrl: 'https://joelhooks.com/',
+    author: 'Joel Hooks',
+    title: 'The blog of Joel Hooks',
+    description: 'This is where I post my things.',
+    keywords: ['Video Blogger'],
   },
   plugins: [
     {
@@ -21,9 +16,16 @@ module.exports = {
       },
     },
     {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        path: `${__dirname}/content/legacy_blog`,
+        name: 'legacy',
+      },
+    },
+    {
       resolve: `gatsby-mdx`,
       options: {
-        extensions: ['.mdx', '.md'],
+        extensions: ['.mdx', '.md', '.markdown'],
         gatsbyRemarkPlugins: [
           {
             resolve: 'gatsby-remark-images',
@@ -51,8 +53,8 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        name: 'A learning, teaching and writing software engineer',
-        short_name: 'RWieruch',
+        name: 'Video Blogger',
+        short_name: 'JHooks',
         start_url: '/',
         background_color: '#fff',
         theme_color: '#525dce',
