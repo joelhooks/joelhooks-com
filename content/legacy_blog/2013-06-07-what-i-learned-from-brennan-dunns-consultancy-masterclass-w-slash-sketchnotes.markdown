@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "What I Learned From Brennan Dunn's Consultancy Masterclass"
-date: 2013-06-07 12:53
+date: 2013-06-07
 ---
 
 Consulting is something that I truly love. Helping businesses succeed, helping

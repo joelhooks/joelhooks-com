@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Learn AngularJS this Weekend'
-date: 2013-08-03 23:36
+date: 2013-08-03
 ---
 
 AngularJS has a reputation for a steep learning curve. It's definitely complex, but follows the 80/20 rule. **20% of the features are what you will use 80% of the time**. If you are new to AngularJS and have a weekend to study, there are some very high quality resources that will let you **start Monday with a strong working knowledge of AngularJS**.

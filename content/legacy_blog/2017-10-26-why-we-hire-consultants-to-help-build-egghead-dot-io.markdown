@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Why we hire consultants to help build egghead.io'
-date: 2017-10-26 13:09
+date: 2017-10-26
 ---
 
 Over the past few years we have built egghead.io from a relatively simple “video blog” and into a full blown platform for developers to publish their knowledge about software development as screencasts and get paid for it. The process has been intense! Every step of the way was a new road block labeled “NOW LEARN THIS”. Often with multiple new skills to learn at the same time. If you stop for a minute and consider what it takes to build an online business from scratch, your list would be similar to:

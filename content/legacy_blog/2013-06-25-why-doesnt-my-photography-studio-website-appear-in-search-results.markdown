@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Why Doesn't My Photography Studio Website Appear in Search Results?"
-date: 2013-06-25 20:04
+date: 2013-06-25
 ---
 
 This is a series of post examining why our [Fort Worth photography
@@ -76,7 +76,7 @@ pin, like, and share their pictures with family and friends.
 I'll use the latest post at the time of this writing that highlights some
 beautiful wedding photos. The title is _J&J Wedding- Dallas/ Fort Worth Wedding
 Photographer_. Looking down the page, they all follow this pattern. _Client
-Name- Dallas/ Fort Worth ****\_**** Photographer_. This is where we start to see
+Name- Dallas/ Fort Worth \***\*\_\*\*** Photographer_. This is where we start to see
 the origins of the image search results we talked about above. The post titles
 are definitely affecting search results, but not a way that is useful for the
 site's SEO. I suspect the repeated use of the exact same _Dallas/ Fort Worth

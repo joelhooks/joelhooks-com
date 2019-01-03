@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Why I Built an AngularJS Training Site on Rails'
-date: 2013-09-15 11:24
+date: 2013-09-15
 ---
 
 If you're into AngularJS at all, you are probably familiar with the kickass [AngularJS video training](http://egghead.io/) from egghead.io. If you haven't seen egghead.io, it is a collection of 50+ short "bite-sized" training videos, largely focused on the AngularJS framework. <div style="float: right; padding:5px;"><a class="nofancybox" href="http://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(/images/egghead_logo.png);"></div></a></div>The videos are created by (and feature) my friend [John Lindquist](https://twitter.com/johnlindquist) playing Webstorm like a violin while explaining basic AngularJS concepts.

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'A rose by any other name?'
-date: 2013-04-26 02:15
+date: 2013-04-26
 ---
 
 I posted [an

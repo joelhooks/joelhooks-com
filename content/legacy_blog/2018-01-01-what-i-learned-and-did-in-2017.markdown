@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Living and learning in 2017'
-date: 2018-01-01 09:38
+date: 2018-01-01
 ---
 
 # Make all the big life changes at once...

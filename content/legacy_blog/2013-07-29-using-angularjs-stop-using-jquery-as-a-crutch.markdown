@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Using AngularJS? Stop using jQuery as a crutch.'
-date: 2013-07-27 11:30
+date: 2013-07-27
 ---
 
 Have you ever heard (or said!) this:

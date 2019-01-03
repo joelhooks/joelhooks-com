@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Bootstrapping egghead.io to feed my family: 2014 in Review'
-date: 2014-12-24 11:12
+date: 2014-12-24
 ---
 
 # 2014 Year in Review

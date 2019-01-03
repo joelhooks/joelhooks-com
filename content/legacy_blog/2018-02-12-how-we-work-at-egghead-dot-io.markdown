@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'how we work at egghead.io'
-date: 2018-02-15 13:30
+date: 2018-02-15
 ---
 
 egghead.io is a platform to empower humans, built to challenge the status quo of how we work and learn new skills.

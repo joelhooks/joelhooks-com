@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Setting goals for (my version of) success.'
-date: 2016-04-08 14:35
+date: 2016-04-08
 ---
 
 There is this amazing conference in Las Vegas once a year called MicroConf. It's a gathering of like-minded entrepreneurs that (for the most part) are boot-strapping their business. This means that they aren't taking outside investment, specifically of the venture capital variety. It's a spectacular event, with interesting talks, fun parties, and amazing conversations.

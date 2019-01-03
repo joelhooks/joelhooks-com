@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Lessons Learned: A Year with a Large AngularJS Project'
-date: 2013-05-22 15:08
+date: 2013-05-22
 ---
 
 After a year of working with a large AngularJS project, I thought I'd share a

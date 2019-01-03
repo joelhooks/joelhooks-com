@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'How to Record a High Quality Screencast'
-date: 2013-09-23 18:49
+date: 2013-09-23
 ---
 
 Audio:

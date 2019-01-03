@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Code Review: How to Make Friends and Influence Developers'
-date: 2012-08-01 16:28
+date: 2012-08-01
 comments: true
 ---
 

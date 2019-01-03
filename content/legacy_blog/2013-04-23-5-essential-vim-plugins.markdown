@@ -1,7 +1,7 @@
 ---
 layout: post
 title: '5 Essential VIM Plugins That Greatly Increase my Productivity'
-date: 2013-04-23 09:05
+date: 2013-04-23
 comments: true
 ---
 

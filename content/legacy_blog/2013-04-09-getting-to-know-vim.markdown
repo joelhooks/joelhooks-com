@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Getting to Know VIM'
-date: 2013-04-09 14:04
+date: 2013-04-09
 comments: true
 ---
 

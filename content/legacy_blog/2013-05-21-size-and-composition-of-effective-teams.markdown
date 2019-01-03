@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Size and Composition of Effective Software Teams'
-date: 2013-05-21 09:01
+date: 2013-05-21
 ---
 
 The success or failure of _any_ project is based on the team or teams working on

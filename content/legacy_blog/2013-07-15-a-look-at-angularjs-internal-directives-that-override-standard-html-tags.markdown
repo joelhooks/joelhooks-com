@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'AngularJS Directives That Override Standard HTML Tags'
-date: 2013-07-15 13:22
+date: 2013-07-15
 ---
 
 Directives are the heart and soul of AngularJS. They are incredibly powerful.

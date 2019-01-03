@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'On Transitioning to JavaScript From AS3/Flex'
-date: 2012-08-27 10:12
+date: 2012-08-27
 comments: true
 ---
 

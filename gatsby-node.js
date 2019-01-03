@@ -6,7 +6,6 @@ const createPosts = (createPage, edges) => {
   edges.forEach(({ node }, i) => {
     const prev = i === 0 ? null : edges[i - 1].node;
     const next = i === edges.length - 1 ? null : edges[i + 1].node;
-
     createPage({
       path: node.fields.slug,
       component: componentWithMDXScope(
@@ -40,7 +39,6 @@ exports.createPages = ({ actions, graphql }) =>
             fields {
               title
               slug
-              categories
               date
             }
             code {
@@ -83,7 +81,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     const slug =
       parent.sourceInstanceName === 'legacy'
         ? `blog/${node.frontmatter.date
-            .split(' ')[0]
+            .split('T')[0]
             .replace(/-/g, '/')}/${titleSlugged}`
         : node.frontmatter.slug || titleSlugged;
 
@@ -91,6 +89,12 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       name: 'id',
       node,
       value: node.id,
+    });
+
+    createNodeField({
+      name: 'published',
+      node,
+      value: node.frontmatter.published,
     });
 
     createNodeField({

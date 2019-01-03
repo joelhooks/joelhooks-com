@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'VIM Adventures: A Fun Way to Pick up Some Basic Skills'
-date: 2013-04-09 15:51
+date: 2013-04-09
 comments: true
 ---
 

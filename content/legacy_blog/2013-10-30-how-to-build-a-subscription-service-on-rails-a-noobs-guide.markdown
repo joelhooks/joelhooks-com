@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How to Build a Subscription Service on Rails: A Noob's Guide"
-date: 2013-10-30 11:19
+date: 2013-10-30
 ---
 
 There are few things as nerve-wracking as pushing your first subscription

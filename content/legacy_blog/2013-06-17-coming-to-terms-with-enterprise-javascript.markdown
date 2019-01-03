@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Coming to Terms With Enterprise JavaScript'
-date: 2013-06-17 13:19
+date: 2013-06-17
 ---
 
 ## What is enterprise javascript?

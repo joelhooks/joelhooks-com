@@ -1,7 +1,7 @@
 ---
 layout: post
 title: '2016 was amazing. Best year yet.'
-date: 2017-01-02 11:59
+date: 2017-01-02
 ---
 
 2016 as a year took a lot of criticism as a year. Beloved celebrities died in a seemingly endless parade of "noooooooo". We were subjected to a painful and divisive US federal election cycle, which resulted in another shameless ass-clown getting elected to the highest office in the land. The entire internet appears to be on fire with rage and hate.

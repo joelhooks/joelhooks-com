@@ -1,14 +1,14 @@
 ---
 layout: post
 title: 'AngularJS, Dependency Injection, and when is a singleton not a Singleton?'
-date: 2013-05-01 17:31
+date: 2013-05-01
 ---
 
 The Singleton is the Highlander of design patterns. **There can be only one**.
 
 An example of a Singleton implementation might look something like this:
 
-```javascript
+```js
 (function(global) {
   'use strict';
   var MySingletonClass = function() {

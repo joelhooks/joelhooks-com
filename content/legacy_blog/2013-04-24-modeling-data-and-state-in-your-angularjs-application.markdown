@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Modeling Data and State in Your AngularJS Application'
-date: 2013-04-24 09:05
+date: 2013-04-24
 ---
 
 ## Respect your data. Contain your state.

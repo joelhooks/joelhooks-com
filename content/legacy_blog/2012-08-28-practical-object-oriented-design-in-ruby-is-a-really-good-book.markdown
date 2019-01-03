@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Practical Object Oriented Design is Excellent'
-date: 2012-08-28 16:35
+date: 2012-08-28
 ---
 
 ![Practical Object-Oriented Design in Ruby](/images/pood.jpeg)

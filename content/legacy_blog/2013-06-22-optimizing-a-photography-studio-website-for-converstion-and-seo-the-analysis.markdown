@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Optimizing a Photography Studio Website for Converstion and SEO: The Analysis'
-date: 2013-06-22 08:32
+date: 2013-06-22
 ---
 
 The internet is a competitive place for small businesses, and this is especially

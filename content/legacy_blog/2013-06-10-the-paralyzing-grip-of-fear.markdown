@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'The Paralyzing Grip of Fear'
-date: 2013-06-10 17:21
+date: 2013-06-10
 ---
 
 My sons love playing basketball. After a certain age

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "I've got a confession to make 😭"
-date: 2018-10-02 09:02
+date: 2018-10-02
 ---
 
 We don’t have a _single_ test covering our front-end/UI for egghead.io.

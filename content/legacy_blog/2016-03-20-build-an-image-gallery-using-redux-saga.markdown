@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Build an Image Gallery Using React, Redux and redux-saga'
-date: 2016-03-20 15:57
+date: 2016-03-20
 ---
 
 # Building an Image Gallery
@@ -18,60 +18,56 @@ We will write the gallery in ES6 (arrow functions, modules, and template strings
 
 There is a significant array of options when it comes to getting started with a React application. For this simple app, we want to keep it as minimal as possible. We are going to use Babel to transpile ES6 into good ol’ ES5 for the browser, budo/browserify to serve it locally, and tape to test.
 
-Create a file called `package.json` in a new project folder and add the following contents to it:
+Create a file called package.json in a new project folder and add the following contents to it:
 
 ### package.json
 
-```javascript
 {
-  "name": "egghead-react-redux-image-gallery",
-  "version": "0.0.1",
-  "description": "Redux Saga beginner tutorial",
-  "main": "src/main.js",
-  "scripts": {
-    "test": "babel-node ./src/saga.spec.js | tap-spec",
-    "start": "budo ./src/main.js:build.js --dir ./src --verbose  --live -- -t babelify"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/joelhooks/egghead-react-redux-image-gallery.git"
-  },
-  "author": "Joel Hooks <joelhooks@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "babel-polyfill": "6.3.14",
-    "react": "^0.14.3",
-    "react-dom": "^0.14.3",
-    "react-redux": "^4.4.1",
-    "redux": "^3.3.1",
-    "redux-saga": "^0.8.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.1.18",
-    "babel-core": "6.4.0",
-    "babel-preset-es2015": "^6.1.18",
-    "babel-preset-react": "^6.1.18",
-    "babel-preset-stage-2": "^6.1.18",
-    "babelify": "^7.2.0",
-    "browserify": "^13.0.0",
-    "budo": "^8.0.4",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.2.2"
-  }
+"name": "egghead-react-redux-image-gallery",
+"version": "0.0.1",
+"description": "Redux Saga beginner tutorial",
+"main": "src/main.js",
+"scripts": {
+"test": "babel-node ./src/saga.spec.js | tap-spec",
+"start": "budo ./src/main.js:build.js --dir ./src --verbose --live -- -t babelify"
+},
+"repository": {
+"type": "git",
+"url": "git+https://github.com/joelhooks/egghead-react-redux-image-gallery.git"
+},
+"author": "Joel Hooks <joelhooks@gmail.com>",
+"license": "MIT",
+"dependencies": {
+"babel-polyfill": "6.3.14",
+"react": "^0.14.3",
+"react-dom": "^0.14.3",
+"react-redux": "^4.4.1",
+"redux": "^3.3.1",
+"redux-saga": "^0.8.0"
+},
+"devDependencies": {
+"babel-cli": "^6.1.18",
+"babel-core": "6.4.0",
+"babel-preset-es2015": "^6.1.18",
+"babel-preset-react": "^6.1.18",
+"babel-preset-stage-2": "^6.1.18",
+"babelify": "^7.2.0",
+"browserify": "^13.0.0",
+"budo": "^8.0.4",
+"tap-spec": "^4.1.1",
+"tape": "^4.2.2"
 }
-```
+}
 
 With the `package.json` in place, you can run `npm install` in the project folder and install all of the dependencies that we will need.
 
-We're also going to need to configure Babel with a `.babelrc` file in the project folder that contains the Babel presets that we want to use:
+We're also going to need to configure Babel with a .babelrc file in the project folder that contains the Babel presets that we want to use:
 
 ### .babelrc
 
-```json
 {
-  "presets": ["es2015", "react", "stage-2"]
+"presets": ["es2015", "react", "stage-2"]
 }
-```
 
 This file tells babel that we will be using ES2015 (ES6), React, and stage-2 features of the emerging ECMAScript standard (ES2016).
 

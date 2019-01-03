@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Stop writing For loops. Start using underscore.'
-date: 2014-02-06 00:33
+date: 2014-02-06
 ---
 
 How many for loops did you write today? This week?

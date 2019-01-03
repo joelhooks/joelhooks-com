@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Configuring Dependency Injection in AngularJS'
-date: 2013-08-18 12:45
+date: 2013-08-18
 ---
 
 Dependency injection is the act of supplying values or object instances (dependencies) to target objects

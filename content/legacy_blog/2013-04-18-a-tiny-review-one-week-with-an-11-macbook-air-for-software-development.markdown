@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'It is Tiny. One Week Developing With an 11" MacBook Air'
-date: 2013-04-18 17:12
+date: 2013-04-18
 comments: true
 ---
 

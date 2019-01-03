@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'The basics of using ui-router with AngularJS'
-date: 2013-07-22 10:55
+date: 2013-07-22
 ---
 
 URL routing is a popular approach to matching the contents of a URL to specific

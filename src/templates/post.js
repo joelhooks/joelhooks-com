@@ -1,23 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { graphql } from 'gatsby';
 import Img from 'gatsby-image';
 import MDXRenderer from 'gatsby-mdx/mdx-renderer';
 
 import Layout from '../components/Layout';
-import Link from '../components/Link';
-
-const CategoryList = ({ list = [] }) => (
-  <Fragment>
-    Categories:
-    <ul>
-      {list.map(category => (
-        <li key={category}>
-          <Link to={`/categories/${category}`}>{category}</Link>
-        </li>
-      ))}
-    </ul>
-  </Fragment>
-);
 
 export default function Post({
   data: { site, mdx },
@@ -57,7 +43,6 @@ export const pageQuery = graphql`
           }
         }
         slug
-        categories
         keywords
       }
       code {

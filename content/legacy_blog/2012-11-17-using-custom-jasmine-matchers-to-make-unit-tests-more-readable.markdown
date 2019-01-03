@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Using Custom Jasmine Matchers to Make Unit Tests More Readable'
-date: 2012-11-17 10:55
+date: 2012-11-17
 comments: true
 ---
 

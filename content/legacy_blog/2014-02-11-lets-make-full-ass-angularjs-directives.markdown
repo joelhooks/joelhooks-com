@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Let's Make Full-Ass AngularJS Directives"
-date: 2014-02-11 15:45
+date: 2014-02-11
 ---
 
 _With best intentions we set forth to create the mighty directive. The steepest slope of the dreaded AngularJS learning curve._
@@ -28,7 +28,7 @@ _me: raises guilt hand sheepishly_
 
 Down and dirty, just toss it in the `link` function.
 
-When you start to browse the ui-bootstrap code, pay attention to the `link` functions on the directives themselves.
+When you start to browse the ui-bootstrap code, pay attention to the link functions on the directives themselves.
 
 ##### dropdown
 

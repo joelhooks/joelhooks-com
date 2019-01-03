@@ -7,7 +7,6 @@ import { css, Global } from '@emotion/core';
 
 import 'prismjs/themes/prism-okaidia.css';
 
-import Link from './Link';
 import mdxComponents from './mdx';
 
 const globalStyles = css`

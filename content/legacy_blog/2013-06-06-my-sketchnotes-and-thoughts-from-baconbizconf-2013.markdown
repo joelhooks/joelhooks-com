@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'My Sketchnotes and Thoughts from BaconBizConf 2013'
-date: 2013-06-06 14:18
+date: 2013-06-06
 comments: true
 ---
 

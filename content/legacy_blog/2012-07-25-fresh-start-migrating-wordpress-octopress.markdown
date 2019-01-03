@@ -1,8 +1,11 @@
 ---
 layout: post
 title: 'Fresh Start: Migrating from Wordpress to Octopress'
-date: 2012-07-25 14:21
-comments: true
+date: 2012-07-25
+description: 'this post has all of the right fields'
+categories: ['test']
+keywords: ['test']
+banner: './images/banner.jpg'
 ---
 
 <img src="/images/content/no_exit.png" style="display: block; margin: auto"/>
