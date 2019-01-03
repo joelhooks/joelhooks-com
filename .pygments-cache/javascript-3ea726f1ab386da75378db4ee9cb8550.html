@@ -1,0 +1,34 @@
+<div class="highlight"><pre><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;DropdownController&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$attrs</span><span class="p">,</span> <span class="nx">dropdownConfig</span><span class="p">,</span> <span class="nx">dropdownService</span><span class="p">,</span> <span class="nx">$animate</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span> <span class="nx">openClass</span> <span class="o">=</span> <span class="nx">dropdownConfig</span><span class="p">.</span><span class="nx">openClass</span><span class="p">;</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">element</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">$element</span> <span class="o">=</span> <span class="nx">element</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">isDefined</span><span class="p">(</span><span class="nx">$attrs</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">)</span> <span class="o">?</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">$parent</span><span class="p">.</span><span class="nx">$eval</span><span class="p">(</span><span class="nx">$attrs</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">)</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">toggle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">open</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">?</span> <span class="o">!!</span><span class="nx">open</span> <span class="o">:</span> <span class="o">!</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="c1">// Allow other directives to watch status</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">$watch</span><span class="p">(</span><span class="s1">&#39;isOpen&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">value</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$animate</span><span class="p">[</span><span class="nx">value</span> <span class="o">?</span> <span class="s1">&#39;addClass&#39;</span> <span class="o">:</span> <span class="s1">&#39;removeClass&#39;</span><span class="p">](</span><span class="nx">self</span><span class="p">.</span><span class="nx">$element</span><span class="p">,</span> <span class="nx">openClass</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span> <span class="nx">value</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">dropdownService</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span> <span class="nx">$scope</span> <span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">dropdownService</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span> <span class="nx">$scope</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">onToggle</span><span class="p">({</span> <span class="nx">open</span><span class="o">:</span> <span class="o">!!</span><span class="nx">value</span> <span class="p">});</span>
+  <span class="p">});</span>
+
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">$on</span><span class="p">(</span><span class="s1">&#39;$locationChangeSuccess&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">isOpen</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="p">});</span>
+<span class="p">})</span>
+</pre></div>

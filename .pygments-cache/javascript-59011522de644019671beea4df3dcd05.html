@@ -1,0 +1,13 @@
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">inputDirective</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$browser&#39;</span><span class="p">,</span> <span class="s1">&#39;$sniffer&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$browser</span><span class="p">,</span> <span class="nx">$sniffer</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span>
+    <span class="nx">require</span><span class="o">:</span> <span class="s1">&#39;?ngModel&#39;</span><span class="p">,</span>
+    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">ctrl</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">ctrl</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="nx">inputType</span><span class="p">[</span><span class="nx">lowercase</span><span class="p">(</span><span class="nx">attr</span><span class="p">.</span><span class="nx">type</span><span class="p">)]</span> <span class="o">||</span> <span class="nx">inputType</span><span class="p">.</span><span class="nx">text</span><span class="p">)(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">ctrl</span><span class="p">,</span> <span class="nx">$sniffer</span><span class="p">,</span>
+                                                            <span class="nx">$browser</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">}];</span>
+</pre></div>

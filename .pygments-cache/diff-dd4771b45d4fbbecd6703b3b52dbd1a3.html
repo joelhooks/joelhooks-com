@@ -1,0 +1,23 @@
+<div class="highlight"><pre>import test from &#39;tape&#39;;
+import {put, take} from &#39;redux-saga/effects&#39;
+import {watchForLoadImages, loadImages} from &#39;./sagas&#39;;
+import {fetchImages} from &#39;./flickr&#39;;
+
+test(&#39;watchForLoadImages&#39;, assert =&gt; {
+  const generator = watchForLoadImages();
+
+  assert.deepEqual(
+    generator.next().value,
+    take(&#39;LOAD_IMAGES&#39;),
+    &#39;watchForLoadImages should be waiting for LOAD_IMAGES action&#39;
+  );
+
+<span class="gi">+  assert.deepEqual(</span>
+<span class="gi">+    gen.next().value,</span>
+<span class="gi">+    false,</span>
+<span class="gi">+    &#39;watchForLoadImages should call loadImages after LOAD_IMAGES action is received&#39;</span>
+<span class="gi">+  );</span>
+
+  assert.end();
+});
+</pre></div>

@@ -1,0 +1,11 @@
+<div class="highlight"><pre>import test from &#39;tape&#39;;
+import {put, take} from &#39;redux-saga/effects&#39;
+import {watchForLoadImages, loadImages} from &#39;./sagas&#39;;
+import {fetchImages} from &#39;./flickr&#39;;
+
+test(&#39;watchForLoadImages&#39;, assert =&gt; {
+  const generator = watchForLoadImages();
+
+  assert.end();
+});
+</pre></div>

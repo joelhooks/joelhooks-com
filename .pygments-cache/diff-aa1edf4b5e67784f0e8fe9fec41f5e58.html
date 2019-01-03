@@ -1,0 +1,35 @@
+<div class="highlight"><pre>export default class Gallery extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      images: flickrImages,
+      selectedImage: flickrImages[0]
+    }
+  }
+<span class="gi">+  handleThumbClick(selectedImage) {</span>
+<span class="gi">+    this.setState({</span>
+<span class="gi">+      selectedImage</span>
+<span class="gi">+   })</span>
+<span class="gi">+  }</span>
+  render() {
+    const {images, selectedImage} = this.state;
+    return (
+      &lt;div className=&quot;image-gallery&quot;&gt;
+        &lt;div className=&quot;gallery-image&quot;&gt;
+          &lt;div&gt;
+            &lt;img src={selectedImage} /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div className=&quot;image-scroller&quot;&gt;
+          {images.map((image, index) =&gt; (
+<span class="gd">-            &lt;div key={index}&gt;</span>
+<span class="gi">+            &lt;div key={index} onClick={this.handleThumbClick.bind(this,image)}&gt;</span>
+              &lt;img src={image}/&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+}
+</pre></div>

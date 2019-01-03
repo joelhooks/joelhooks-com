@@ -1,0 +1,22 @@
+<div class="highlight"><pre>const defaultState = {
+  images: [
+    &quot;https://farm2.staticflickr.com/1553/25266806624_fdd55cecbc.jpg&quot;,
+    &quot;https://farm2.staticflickr.com/1581/25283151224_50f8da511e.jpg&quot;,
+    &quot;https://farm2.staticflickr.com/1653/25265109363_f204ea7b54.jpg&quot;,
+    &quot;https://farm2.staticflickr.com/1571/25911417225_a74c8041b0.jpg&quot;,
+    &quot;https://farm2.staticflickr.com/1450/25888412766_44745cbca3.jpg&quot;
+  ],
+  selectedImage: &quot;https://farm2.staticflickr.com/1553/25266806624_fdd55cecbc.jpg&quot;
+}
+
+export default function images(state = defaultState, action) {
+  switch(action.type) {
+<span class="gd">-    case &#39;TEST&#39;:</span>
+    case &#39;IMAGE_SELECTED&#39;:
+<span class="gd">-      return state;</span>
+<span class="gi">+      return {...state, selectedImage: action.image};</span>
+    default:
+      return state;
+  }
+}
+</pre></div>

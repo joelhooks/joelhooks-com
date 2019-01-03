@@ -1,0 +1,8 @@
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;getCurrentShoppingCart&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;getCurrentAccount&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">getCurrentAccount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//getCurrentAccount is also a factory that returns a function</span>
+        <span class="c1">//perhaps a user can have multiple accounts?</span>
+        <span class="k">return</span> <span class="nx">getCurrentAccount</span><span class="p">().</span><span class="nx">shoppingCart</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}]);</span>
+</pre></div>

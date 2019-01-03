@@ -1,0 +1,8 @@
+<div class="highlight"><pre>import {fetchImages} from &#39;./flickr&#39;;
+<span class="gi">+import {put} from &#39;redux-saga/effects&#39;;</span>
+
+export function* loadImages() {
+  const images = yield fetchImages();
+<span class="gi">+  yield put({type: &#39;IMAGES_LOADED&#39;, images})</span>
+}
+</pre></div>

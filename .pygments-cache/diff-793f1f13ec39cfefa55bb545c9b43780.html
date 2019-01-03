@@ -1,0 +1,16 @@
+<div class="highlight"><pre>const defaultState = {
+  images: []
+}
+
+export default function images(state = defaultState, action) {
+  switch(action.type) {
+    case &#39;TEST&#39;:
+<span class="gd">-      console.log(&#39;THIS IS ONLY A TEST&#39;)</span>
+<span class="gi">+      console.log(state, action)</span>
+<span class="gi">+      return state;</span>
+<span class="gi">+    default:</span>
+<span class="gi">+      return state;</span>
+  }
+<span class="gd">-  return state;</span>
+}
+</pre></div>

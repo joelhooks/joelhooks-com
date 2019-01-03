@@ -1,0 +1,8 @@
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;myDynamicInjectable&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">count</span> <span class="o">=</span> <span class="nx">count</span> <span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nx">count</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+</pre></div>

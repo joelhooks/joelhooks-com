@@ -1,0 +1,30 @@
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">htmlAnchorDirective</span> <span class="o">=</span> <span class="nx">valueFn</span><span class="p">({</span>
+  <span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span>
+  <span class="nx">compile</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">msie</span> <span class="o">&lt;=</span> <span class="mi">8</span><span class="p">)</span> <span class="p">{</span>
+
+      <span class="c1">// turn &lt;a href ng-click=&quot;..&quot;&gt;link&lt;/a&gt; into a stylable link in IE</span>
+      <span class="c1">// but only if it doesn&#39;t have name attribute, in which case it&#39;s an anchor</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">attr</span><span class="p">.</span><span class="nx">href</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">attr</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">attr</span><span class="p">.</span><span class="nx">$set</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+      <span class="p">}</span>
+
+      <span class="c1">// add a comment node to anchors to workaround IE bug that causes element content to be reset</span>
+      <span class="c1">// to new attribute content if attribute is updated with value containing @ and element also</span>
+      <span class="c1">// contains value with @</span>
+      <span class="c1">// see issue #1949</span>
+      <span class="nx">element</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createComment</span><span class="p">(</span><span class="s1">&#39;IE fix&#39;</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">element</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+        <span class="c1">// if we have no href url, then don&#39;t navigate anywhere.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">element</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">))</span> <span class="p">{</span>
+          <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>

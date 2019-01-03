@@ -1,0 +1,7 @@
+<div class="highlight"><pre><span class="kr">import</span> <span class="p">{</span><span class="nx">fetchImages</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./flickr&#39;</span><span class="p">;</span>
+
+<span class="kr">export</span> <span class="kd">function</span><span class="o">*</span> <span class="nx">loadImages</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">images</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">fetchImages</span><span class="p">();</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">images</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>

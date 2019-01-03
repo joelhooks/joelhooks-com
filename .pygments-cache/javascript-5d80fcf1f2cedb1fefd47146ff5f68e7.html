@@ -1,0 +1,8 @@
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">somePercentage</span> <span class="o">=</span> <span class="mf">1.07</span><span class="p">,</span>
+	<span class="nx">severalNumbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">33</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">42</span><span class="p">],</span>
+	<span class="nx">grandTotal</span><span class="p">;</span> 
+
+<span class="nx">grandTotal</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">severalNumbers</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">runningTotal</span><span class="p">,</span> <span class="nx">aNumber</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">runningTotal</span> <span class="o">+</span> <span class="p">(</span><span class="nx">aNumber</span> <span class="o">*</span> <span class="nx">somePercentage</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>

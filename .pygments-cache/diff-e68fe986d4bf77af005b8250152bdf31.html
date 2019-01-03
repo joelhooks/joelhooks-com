@@ -1,0 +1,28 @@
+<div class="highlight"><pre>import &quot;babel-polyfill&quot;;
+
+import React from &#39;react&#39;;
+import ReactDOM from &#39;react-dom&#39;;
+
+import Gallery from &#39;./Gallery&#39;;
+
+import { createStore, applyMiddleware } from &#39;redux&#39;
+import {Provider} from &#39;react-redux&#39;;
+import createSagaMiddleware from &#39;redux-saga&#39;
+import reducer from &#39;./reducer&#39;
+
+<span class="gd">-import {sayHello} from &#39;./sagas&#39;;</span>
+<span class="gi">+import {loadImages} from &#39;./sagas&#39;;</span>
+
+const store = createStore(
+  reducer,
+<span class="gd">-  applyMiddleware(createSagaMiddleware(sayHello))</span>
+<span class="gi">+  applyMiddleware(createSagaMiddleware(loadImages))</span>
+);
+
+ReactDOM.render(
+  &lt;Provider store={store}&gt;
+    &lt;Gallery /&gt;
+  &lt;/Provider&gt;,
+  document.getElementById(&#39;root&#39;)
+);
+</pre></div>

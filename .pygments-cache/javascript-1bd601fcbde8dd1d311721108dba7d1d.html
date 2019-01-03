@@ -1,0 +1,25 @@
+<div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+ 
+    <span class="kd">var</span> <span class="nx">module</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">&quot;myApp.myModel&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+    
+    <span class="kd">var</span> <span class="nx">MyModel</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">MyModel</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">asyncService</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nx">someApi</span><span class="o">:</span> <span class="kd">function</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">asyncService</span><span class="p">.</span><span class="nx">getStuff</span><span class="p">();</span> <span class="c1">//promise?</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+ 
+    <span class="p">}</span>
+ 
+    <span class="kd">var</span> <span class="nx">myModelProvider</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">model</span><span class="o">:</span> <span class="k">new</span> <span class="nx">MyModel</span><span class="p">();</span>
+        <span class="nx">$get</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;asyncService&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">asyncService</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">asyncService</span> <span class="o">=</span> <span class="nx">asyncService</span><span class="p">;</span> <span class="c1">//&quot;manual&quot; dependency injection</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">;</span> <span class="c1">//resolved for the lifetime of app</span>
+        <span class="p">}]</span>
+    <span class="p">};</span>
+ 
+    <span class="nx">modules</span><span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;myModel&#39;</span><span class="p">,</span> <span class="nx">myModelProvider</span><span class="p">);</span>
+<span class="p">}(</span><span class="nx">angular</span><span class="p">))</span>
+</pre></div>

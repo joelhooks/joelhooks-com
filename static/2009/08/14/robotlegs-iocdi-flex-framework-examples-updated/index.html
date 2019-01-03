@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie6 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 7 ]><html dir="ltr" lang="en-US" class="no-js ie ie7 lte7 lte8 lte9"><![endif]-->
+<!--[if IE 8 ]><html dir="ltr" lang="en-US" class="no-js ie ie8 lte8 lte9"><![endif]-->
+<!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
+	<head>
+<base href="http://joelhooks.com" />
+
+		<meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Robotlegs IoC/DI Flex Framework Examples Updatedjoelhooks.com | joelhooks.com</title>
+		
+		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		
+
+
+
+<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+<![endif]-->
+<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+
+<script type="text/javascript" charset="utf-8">
+
+	/**
+	 * Courtesy of Kimili Flash Embed - Version 2.2
+	 * by Michael Bester - http://kimili.com
+	 */
+
+	(function(){
+		try {
+			// Disabling SWFObject's Autohide feature
+			if (typeof swfobject.switchOffAutoHideShow === "function") {
+				swfobject.switchOffAutoHideShow();
+			}
+		} catch(e) {}
+	})();
+</script>
+
+ 
+
+<link rel='next' title='Continuous Scrolling Thumbnail Component for Flex' href='http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/' />
+
+<link rel='shortlink' href='http://joelhooks.com/?p=314' />
+
+<!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,706] -->
+<link rel="canonical" href="http://joelhooks.com/2009/08/14/robotlegs-iocdi-flex-framework-examples-updated/" />
+<!-- /all in one seo pack -->
+
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+
+<style type="text/css"><!--
+.cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
+--></style>
+
+<!-- BEGIN: WP Social Bookmarking Light -->
+<style type="text/css">
+div.wp_social_bookmarking_light{border:0 !important;padding:0px 0 0px 0 !important;margin:0 !important;}
+div.wp_social_bookmarking_light div{float:left !important;border:0 !important;padding:0 4px 0px 0 !important;margin:0 !important;height:21px !important;text-indent:0 !important;}
+div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;vertical-align:top !important;}
+.wp_social_bookmarking_light_clear{clear:both !important;}
+</style>
+<!-- END: WP Social Bookmarking Light -->
+	</head>
+	<body class="single single-post postid-314 single-format-standard">
+		<header role="banner">
+			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
+
+		</header>
+
+		<section id="content" role="main">				<article id="post-314" class="post-314 post type-post status-publish format-standard hentry category-actionscript category-design-patterns category-flex category-object-oriented-concepts category-robotlegs category-software-architecture">
+					<h1>Robotlegs IoC/DI Flex Framework Examples Updated</h1>
+		
+					<div class="entry-content">
+						<p>Live demos are available on <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.robotlegs.org/examples/');"  href="http://www.robotlegs.org/examples/">robotlegs.org here</a></p>
+<p>Acme Widget Factory:<br />
+The Acme Widget Factory is modular example and deals with loading multiple modules into a shell and communicating between those modules. The shell and each module has its own context.</p>
+<p>Lazy Stack:<br />
+Lazy Stack is an example of deferred instantiation of Flex components, and how this is handled by the Robotlegs framework.</p>
+<p>Wheres Window:<br />
+Where&#8217;s Window is a simple example to show how to mediate and communicate between a set of instances of the same view component that have individual mediators. In this case, the view components are windows in an AIR application. This uses a proxy to register and manage the currently open unique windows. I am going to write a more detailed breakdown of this particular example soon.</p>
+<h2>The Elevator Pitch</h2>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/darscan/robotlegs/tree/master');"  href="http://github.com/darscan/robotlegs/tree/master">Robotlegs</a> is an IoC/DI container that is modeled on the PureMVC application structure. It is designed to be MVCS, model-view-controller-service, providing metadata dependency injection across these layers. While following the well organized approach of PureMVC, it eliminates the use of framework singletons and takes full advantage of the Flash Platform to keep the dreaded boiler plate code to a minimum. Eliminating these singletons makes unit testing and TDD much easier, which can be a real struggle when trying to isolate classes for testing where these singleton dependencies exist. Robotlegs is fast, clean, and perhaps more importantly fun to work with. There is a smorgasbord of architectural frameworks available for Flex/AS3, but Robotlegs is worth a look even if you are sick of looking at architectural frameworks.<br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/darscan/robotlegs/tree/master');"  href="http://github.com/darscan/robotlegs/tree/master"><img class="aligncenter size-full wp-image-262" title="robotlegssketchsmall" src="http://69.164.207.135/wp-content/uploads/2009/07/robotlegssketchsmall.gif" alt="robotlegssketchsmall" width="221" height="260" /></a></p>
+
+<!-- Creative Commons License -->
+<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2009/08/14/robotlegs-iocdi-flex-framework-examples-updated/">Robotlegs IoC/DI Flex Framework Examples Updated</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<!-- /Creative Commons License -->
+											</div><!-- .entry-content -->
+	
+				</article><!-- #post-## -->
+				
+<div id="disqus_thread">
+                    <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-285">
+        <div id="dsq-comment-header-285" class="dsq-comment-header">
+            <cite id="dsq-cite-285">
+http://shaun.boyblack.co.za/blog/                <span id="dsq-author-user-285">shaun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-285" class="dsq-comment-body">
+            <div id="dsq-comment-message-285" class="dsq-comment-message"><p>Hey Joel, and most recently added, a plain ActionScript demo: HelloFlash</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-450">
+        <div id="dsq-comment-header-450" class="dsq-comment-header">
+            <cite id="dsq-cite-450">
+http://shaun.boyblack.co.za/blog/                <span id="dsq-author-user-450">shaun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-450" class="dsq-comment-body">
+            <div id="dsq-comment-message-450" class="dsq-comment-message"><p>Hey Joel, and most recently added, a plain ActionScript demo: HelloFlash</p>
+</div>
+        </div>
+    </li>
+
+    </li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://joelhooks.com/2009/08/14/robotlegs-iocdi-flex-framework-examples-updated/';
+    var disqus_identifier = '314 http://joelhooks.com/?p=314';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'joelhooks';
+    var disqus_title = "Robotlegs IoC\/DI Flex Framework Examples Updated";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            DISQUS.request.get('?cf_action=sync_comments&post_id=314');
+        });
+                    };
+    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/joelhooks.com\/2009\/08\/14\/robotlegs-iocdi-flex-framework-examples-updated\/trackback\/"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+		</section><!-- #main -->
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+		<!-- footer -->
+
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-246705-7");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+<!-- BEGIN: WP Social Bookmarking Light -->
+<!-- END: WP Social Bookmarking Light -->
+<!-- Generated in 0.204 seconds. Made 5 queries to database and 14 cached queries. Memory used - 16.1MB -->
+<!-- Cached by DB Cache Reloaded Fix -->
+	</body>
+</html>

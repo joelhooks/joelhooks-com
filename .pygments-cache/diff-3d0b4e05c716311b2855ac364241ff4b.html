@@ -1,0 +1,8 @@
+<div class="highlight"><pre>export function* watchForLoadImages() {
+  while(true) {
+    yield take(&#39;LOAD_IMAGES&#39;);
+<span class="gd">-    yield loadImages();</span>
+<span class="gi">+    yield fork(loadImages); //be sure to import it!</span>
+  }
+}
+</pre></div>

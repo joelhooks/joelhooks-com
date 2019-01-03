@@ -1,0 +1,16 @@
+<div class="highlight"><pre>import {fetchImages} from &#39;./flickr&#39;;
+<span class="gd">-import {put} from &#39;redux-saga/effects&#39;;</span>
+<span class="gi">+import {put, take} from &#39;redux-saga/effects&#39;;</span>
+
+export function* loadImages() {
+  const images = yield fetchImages();
+  yield put({type: &#39;IMAGES_LOADED&#39;, images})
+}
+
+<span class="gi">+export function* watchForLoadImages() {</span>
+<span class="gi">+  while(true) {</span>
+<span class="gi">+    yield take(&#39;LOAD_IMAGES&#39;);</span>
+<span class="gi">+    yield loadImages();</span>
+<span class="gi">+  }</span>
+<span class="gi">+}</span>
+</pre></div>

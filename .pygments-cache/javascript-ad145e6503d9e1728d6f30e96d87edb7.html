@@ -1,0 +1,14 @@
+<div class="highlight"><pre><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;dropdown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;DropdownController&#39;</span><span class="p">,</span>
+    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">isOpen</span><span class="o">:</span> <span class="s1">&#39;=?&#39;</span><span class="p">,</span>
+      <span class="nx">onToggle</span><span class="o">:</span> <span class="s1">&#39;&amp;&#39;</span>
+    <span class="p">},</span>
+    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">,</span> <span class="nx">dropdownCtrl</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">dropdownCtrl</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span> <span class="nx">element</span> <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">})</span>
+</pre></div>

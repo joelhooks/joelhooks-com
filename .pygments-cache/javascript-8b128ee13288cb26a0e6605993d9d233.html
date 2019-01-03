@@ -1,0 +1,57 @@
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">formDirectiveFactory</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isNgForm</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;$timeout&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$timeout</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">formDirective</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;form&#39;</span><span class="p">,</span>
+      <span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span>
+      <span class="nx">controller</span><span class="o">:</span> <span class="nx">FormController</span><span class="p">,</span>
+      <span class="nx">compile</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+          <span class="nx">pre</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span> <span class="nx">formElement</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">controller</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">attr</span><span class="p">.</span><span class="nx">action</span><span class="p">)</span> <span class="p">{</span>
+              <span class="c1">// we can&#39;t use jq events because if a form is destroyed during submission the default</span>
+              <span class="c1">// action is not prevented. see #1238</span>
+              <span class="c1">//</span>
+              <span class="c1">// IE 9 is not affected because it doesn&#39;t fire a submit event and try to do a full</span>
+              <span class="c1">// page reload if the form was destroyed by submission of the form via a click handler</span>
+              <span class="c1">// on a button in the form. Looks like an IE9 specific bug.</span>
+              <span class="kd">var</span> <span class="nx">preventDefaultListener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span>
+                  <span class="o">?</span> <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+                  <span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">returnValue</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// IE</span>
+              <span class="p">};</span>
+
+              <span class="nx">addEventListenerFn</span><span class="p">(</span><span class="nx">formElement</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="nx">preventDefaultListener</span><span class="p">);</span>
+
+              <span class="c1">// unregister the preventDefault listener so that we don&#39;t not leak memory but in a</span>
+              <span class="c1">// way that will achieve the prevention of the default action.</span>
+              <span class="nx">formElement</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$destroy&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">$timeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                  <span class="nx">removeEventListenerFn</span><span class="p">(</span><span class="nx">formElement</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="nx">preventDefaultListener</span><span class="p">);</span>
+                <span class="p">},</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+              <span class="p">});</span>
+            <span class="p">}</span>
+
+            <span class="kd">var</span> <span class="nx">parentFormCtrl</span> <span class="o">=</span> <span class="nx">formElement</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">),</span>
+                <span class="nx">alias</span> <span class="o">=</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">ngForm</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">alias</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">scope</span><span class="p">[</span><span class="nx">alias</span><span class="p">]</span> <span class="o">=</span> <span class="nx">controller</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">parentFormCtrl</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">formElement</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;$destroy&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">parentFormCtrl</span><span class="p">.</span><span class="nx">$removeControl</span><span class="p">(</span><span class="nx">controller</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">alias</span><span class="p">)</span> <span class="p">{</span>
+                  <span class="nx">scope</span><span class="p">[</span><span class="nx">alias</span><span class="p">]</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">extend</span><span class="p">(</span><span class="nx">controller</span><span class="p">,</span> <span class="nx">nullFormCtrl</span><span class="p">);</span> <span class="c1">//stop propagating child destruction handlers upwards</span>
+              <span class="p">});</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">};</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="nx">isNgForm</span> <span class="o">?</span> <span class="nx">extend</span><span class="p">(</span><span class="nx">copy</span><span class="p">(</span><span class="nx">formDirective</span><span class="p">),</span> <span class="p">{</span><span class="nx">restrict</span><span class="o">:</span> <span class="s1">&#39;EAC&#39;</span><span class="p">})</span> <span class="o">:</span> <span class="nx">formDirective</span><span class="p">;</span>
+  <span class="p">}];</span>
+<span class="p">};</span>
+</pre></div>

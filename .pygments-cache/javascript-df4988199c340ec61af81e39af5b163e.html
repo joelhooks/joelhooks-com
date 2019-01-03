@@ -1,0 +1,39 @@
+<div class="highlight"><pre><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span><span class="nx">Component</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span>
+
+<span class="kr">const</span> <span class="nx">flickrImages</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s2">&quot;https://farm2.staticflickr.com/1553/25266806624_fdd55cecbc.jpg&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;https://farm2.staticflickr.com/1581/25283151224_50f8da511e.jpg&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;https://farm2.staticflickr.com/1653/25265109363_f204ea7b54.jpg&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;https://farm2.staticflickr.com/1571/25911417225_a74c8041b0.jpg&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;https://farm2.staticflickr.com/1450/25888412766_44745cbca3.jpg&quot;</span>
+<span class="p">];</span>
+
+<span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">Gallery</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="nx">flickrImages</span><span class="p">,</span>
+      <span class="nx">selectedImage</span><span class="o">:</span> <span class="nx">flickrImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="p">{</span><span class="nx">images</span><span class="p">,</span> <span class="nx">selectedImage</span><span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;image-gallery&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;gallery-image&quot;</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">selectedImage</span><span class="p">}</span> <span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="err">/div&gt;</span>
+        <span class="o">&lt;</span><span class="err">/div&gt;</span>
+        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;image-scroller&quot;</span><span class="o">&gt;</span>
+          <span class="p">{</span><span class="nx">images</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">image</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="o">&gt;</span>
+              <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">}</span><span class="o">/&gt;</span>
+            <span class="o">&lt;</span><span class="err">/div&gt;</span>
+          <span class="p">))}</span>
+        <span class="o">&lt;</span><span class="err">/div&gt;</span>
+      <span class="o">&lt;</span><span class="err">/div&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>

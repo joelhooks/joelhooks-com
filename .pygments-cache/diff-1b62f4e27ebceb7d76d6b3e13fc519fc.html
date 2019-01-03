@@ -1,0 +1,42 @@
+<div class="highlight"><pre>import React, {Component} from &#39;react&#39;
+import {connect} from &#39;react-redux&#39;;
+
+export class Gallery extends Component {
+<span class="gd">-  constructor(props) {</span>
+<span class="gd">-    super(props);</span>
+<span class="gd">-    this.props.dispatch({type: &#39;TEST&#39;});</span>
+<span class="gd">-    console.log(props);</span>
+<span class="gd">-  }</span>
+  render() {
+<span class="gd">-    const {images, selectedImage} = this.props;</span>
+<span class="gi">+    const {images, selectedImage, dispatch} = this.props;</span>
+
+    return (
+      &lt;div className=&quot;image-gallery&quot;&gt;
+        &lt;div className=&quot;gallery-image&quot;&gt;
+          &lt;div&gt;
+            &lt;img src={selectedImage} /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div className=&quot;image-scroller&quot;&gt;
+          {images.map((image, index) =&gt; (
+<span class="gd">-            &lt;div key={index}&gt;</span>
+<span class="gi">+            &lt;div key={index} onClick={() =&gt; dispatch({type:&#39;IMAGE_SELECTED&#39;, image})}&gt;</span>
+              &lt;img src={image}/&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    images: state.images,
+    selectedImage: state.selectedImage
+  }
+}
+
+export default connect(mapStateToProps)(Gallery)
+</pre></div>

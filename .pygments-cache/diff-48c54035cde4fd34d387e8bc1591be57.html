@@ -1,0 +1,24 @@
+<div class="highlight"><pre>export default class Gallery extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      images: flickrImages,
+      selectedImage: flickrImages[0]
+    }
+  }
+<span class="gi">+  componentDidMount() {</span>
+<span class="gi">+    const API_KEY = &#39;a46a979f39c49975dbdd23b378e6d3d5&#39;;</span>
+<span class="gi">+    const API_ENDPOINT = `https://api.flickr.com/services/rest/?method=flickr.interestingness.+getList&amp;api_key=${API_KEY}&amp;format=json&amp;nojsoncallback=1&amp;per_page=5`;+</span>
+<span class="gi">+</span>
+<span class="gi">+    fetch(API_ENDPOINT).then((response) =&gt; {</span>
+<span class="gi">+      return response.json().then((json) =&gt; {</span>
+<span class="gi">+        const images = json.photos.photo.map(({farm, server, id, secret}) =&gt; { </span>
+<span class="gi">+            return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`</span>
+<span class="gi">+        });</span>
+<span class="gi">+</span>
+<span class="gi">+        this.setState({images, selectedImage: images[0]});</span>
+<span class="gi">+      })</span>
+<span class="gi">+    })</span>
+<span class="gi">+  }</span>
+[...]
+</pre></div>

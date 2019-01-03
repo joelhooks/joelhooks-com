@@ -1,0 +1,21 @@
+<div class="highlight"><pre>import &quot;babel-polyfill&quot;;
+
+import React from &#39;react&#39;;
+import ReactDOM from &#39;react-dom&#39;;
+
+import Gallery from &#39;./Gallery&#39;;
+
+<span class="gi">+ import { createStore } from &#39;redux&#39;</span>
+<span class="gi">+ import reducer from &#39;./reducer&#39;</span>
+
+<span class="gi">+ const store = createStore(reducer);</span>
+
+<span class="gi">+ import {Provider} from &#39;react-redux&#39;;</span>
+
+ReactDOM.render(
+<span class="gi">+  &lt;Provider store={store}&gt;</span>
+    &lt;Gallery /&gt;
+<span class="gi">+  &lt;/Provider&gt;,</span>
+  document.getElementById(&#39;root&#39;)
+);
+</pre></div>
