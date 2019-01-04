@@ -1,3 +1,5 @@
+const remarkHighlight = require('remark-highlight.js');
+
 module.exports = {
   pathPrefix: '/',
   siteMetadata: {
@@ -32,14 +34,6 @@ module.exports = {
             options: {
               maxWidth: 1035,
               sizeByPixelDensity: true,
-            },
-          },
-          {
-            resolve: `gatsby-remark-prismjs`,
-            options: {
-              classPrefix: 'language-',
-              inlineCodeMarker: null,
-              aliases: {},
             },
           },
         ],

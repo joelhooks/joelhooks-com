@@ -2,10 +2,7 @@ import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'gatsby';
 import { MDXProvider } from '@mdx-js/tag';
-
 import { css, Global } from '@emotion/core';
-
-import 'prismjs/themes/prism-okaidia.css';
 
 import mdxComponents from './mdx';
 
@@ -19,9 +16,10 @@ const globalStyles = css`
   ${() => {
     /* Override PrismJS Defaults */ return null;
   }} pre {
-    background-color: #2f1e2e !important;
+    background-color: #061526 !important;
     border-radius: 4px;
     font-size: 14px;
+    padding: 5px;
   }
 
   .gatsby-highlight-code-line {

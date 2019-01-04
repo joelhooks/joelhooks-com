@@ -3,6 +3,7 @@ import { graphql } from 'gatsby';
 import { css } from '@emotion/core';
 import Layout from '../components/Layout';
 import underConstruction from './uc.gif';
+import Link from '../components/Link';
 
 export default function Index({ data: { site } }) {
   return (
@@ -22,17 +23,32 @@ export default function Index({ data: { site } }) {
             align-items: center;
             max-width: 600px;
             margin-top: 75px;
+            flex-direction: column;
           `}
         >
-          This site is under construction.
-          {'    '}
-          <img
+          <div
             css={css`
-              padding-left: 15px;
+              display: flex;
+              align-items: center;
             `}
-            src={underConstruction}
-            alt="stick man digging"
-          />
+          >
+            This site is under construction.
+            {'    '}
+            <img
+              css={css`
+                padding-left: 15px;
+              `}
+              src={underConstruction}
+              alt="stick man digging"
+            />
+          </div>
+          <div
+            css={css`
+              margin-top: 35px;
+            `}
+          >
+            <Link to="/blog">Blog Archive</Link>
+          </div>
         </div>
       </div>
     </Layout>
