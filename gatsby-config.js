@@ -1,3 +1,5 @@
+const remarkHighlight = require('remark-highlight.js');
+
 module.exports = {
   pathPrefix: '/',
   siteMetadata: {
@@ -25,6 +27,7 @@ module.exports = {
     {
       resolve: `gatsby-mdx`,
       options: {
+        mdPlugins: [remarkHighlight],
         extensions: ['.mdx', '.md', '.markdown'],
         gatsbyRemarkPlugins: [
           {
@@ -32,14 +35,6 @@ module.exports = {
             options: {
               maxWidth: 1035,
               sizeByPixelDensity: true,
-            },
-          },
-          {
-            resolve: `gatsby-remark-prismjs`,
-            options: {
-              classPrefix: 'language-',
-              inlineCodeMarker: null,
-              aliases: {},
             },
           },
         ],

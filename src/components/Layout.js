@@ -2,15 +2,13 @@ import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'gatsby';
 import { MDXProvider } from '@mdx-js/tag';
-
+import codeStyles from './codeStyles';
 import { css, Global } from '@emotion/core';
-
-import 'prismjs/themes/prism-okaidia.css';
 
 import mdxComponents from './mdx';
 
 const globalStyles = css`
-  html,
+  ${codeStyles} html,
   body {
     margin: 0;
     padding: 0;
