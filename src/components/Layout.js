@@ -2,13 +2,12 @@ import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'gatsby';
 import { MDXProvider } from '@mdx-js/tag';
-import codeStyles from './codeStyles';
 import { css, Global } from '@emotion/core';
 
 import mdxComponents from './mdx';
 
 const globalStyles = css`
-  ${codeStyles} html,
+  html,
   body {
     margin: 0;
     padding: 0;
@@ -20,6 +19,7 @@ const globalStyles = css`
     background-color: #2f1e2e !important;
     border-radius: 4px;
     font-size: 14px;
+    padding: 5px;
   }
 
   .gatsby-highlight-code-line {
