@@ -50,7 +50,7 @@ Or, even better:
 _.each(someArray, doSomeWorkOn); //thanks paulmcpazzi!
 ```
 
-That's [underscorejs](http://underscorejs.org/) in action. Clean, easy to read, short, no variables, stacks of semi-colons... just plain nice.
+That's [underscorejs](https://underscorejs.org/) in action. Clean, easy to read, short, no variables, stacks of semi-colons... just plain nice.
 
 Here's another example:
 
@@ -125,9 +125,9 @@ For the next 30 days, don't write any for loops. If you see a nasty pile of thos
 
 Beware. Underscore is the gateway to functional programming. What has been seen, can't be unseen. In a good way!
 
-If you're wanting to dig a little deeper, you should jump over to this tutorial on [functional programming in javascript](http://reactive-extensions.github.io/learnrx/). It's great and only takes about 1/2 hour to work through. It is "how the sausage is made" fundamentals for the underscore functions I used above. Lot's of wholesome nerd fun!
+If you're wanting to dig a little deeper, you should jump over to this tutorial on [functional programming in javascript](https://reactive-extensions.github.io/learnrx/). It's great and only takes about 1/2 hour to work through. It is "how the sausage is made" fundamentals for the underscore functions I used above. Lot's of wholesome nerd fun!
 
-**note**: _As a more performant alternative to underscore, you might check out [lodash](http://lodash.com/benchmarks)_
+**note**: _As a more performant alternative to underscore, you might check out [lodash](https://lodash.com/benchmarks)_
 
 **note**: _it should also be noted that modern browsers support the above methods natively. `Array.forEach`, `Array.reduce`, and `Array.map` exist, but to use them you likely need to create shims to fallback for cases when they don't exist. For me, having the consistent underscore (lodash) API is much more convenient. YMMV_
 

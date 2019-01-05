@@ -60,7 +60,7 @@ David Miller</a></cite></blockquote>
 **Mind blown.**
 
 In the post quoted above Josh also links to his [excellent Stack
-Overflow](http://stackoverflow.com/questions/14994391/how-do-i-think-in-angularjs-emberjsor-other-client-mvc-framework-if-i-have-a/15012542#15012542)
+Overflow](https://stackoverflow.com/questions/14994391/how-do-i-think-in-angularjs-emberjsor-other-client-mvc-framework-if-i-have-a/15012542#15012542)
 post that expands on this viewpoint. You may have seen this already, but if you
 haven't, go take 10 minutes to read through it.
 

@@ -46,7 +46,7 @@ requirement, I won't spend a lot of time ensuring absolute seperation, but it is
 where the bar is raised and something that I keep in mind as I develop.
 
 Cliff Meyers [has written a great
-article](http://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript)
+article](https://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript)
 on organizing your code in a large Angular app.
 
 ## Directives are awesome and powerful
@@ -72,7 +72,7 @@ the application instead of cut-n-paste HTML and CSS sprinkled everywhere. How
 can I leverage these components for future work?
 
 If you haven't watched them yet, bounce on over to John Lindquist's
-[egghead.io](http://egghead.io) and check out the series on Directives. All of
+[egghead.io](https://egghead.io) and check out the series on Directives. All of
 the videos are excellent, but the Directives information is enlightening.
 
 ## Know thy framework
@@ -114,7 +114,7 @@ spent the last year trying to play makeup with CSS. My attitude is no longer "f
 css" and sounds more like "SCSS!" because I found a happy place where CSS and I
 can get along.
 
-[SCSS](http://sass-lang.com/) syntax takes many of the pain points that put the
+[SCSS](https://sass-lang.com/) syntax takes many of the pain points that put the
 screws to my brain with vanilla CSS and added a nice level of clarity. On top of
 that, Compass provides a pile of wicked mixins that eliminate an entirely new
 level of pain from the stylesheet workflow.
@@ -122,7 +122,7 @@ level of pain from the stylesheet workflow.
 In the future I want to dig into SASS/Compass deeper, combining its expressive
 styling capabilities with the module and component level AngularJS work outlined
 above. I'd like to use a more organized approach to my stylesheets with
-something like [SMACSS](http://smacss.com/) providing a baseline standard for how the styling is
+something like [SMACSS](https://smacss.com/) providing a baseline standard for how the styling is
 implemented and organized.
 
 At this point, CSS and I have fully made up. I've removed a lot of my ignorance,
@@ -140,6 +140,6 @@ Some good comments on [Hacker
 News](https://news.ycombinator.com/item?id=5756911) if you'd like to join the
 discussion.
 
-You might also enjoy: <a href="http://joelhooks.com/blog/2013/07/15/a-look-at-angularjs-internal-directives-that-override-standard-html-tags/"><strong>AngularJS Directives That Override Standard HTML Tags</strong></a>
+You might also enjoy: <a href="https://joelhooks.com/blog/2013/07/15/a-look-at-angularjs-internal-directives-that-override-standard-html-tags/"><strong>AngularJS Directives That Override Standard HTML Tags</strong></a>
 
-or maybe: <a href="http://joelhooks.com/blog/2013/08/03/learn-angularjs-in-a-weekend/"><strong>Learn AngularJS this Weekend</strong></a>
+or maybe: <a href="https://joelhooks.com/blog/2013/08/03/learn-angularjs-in-a-weekend/"><strong>Learn AngularJS this Weekend</strong></a>

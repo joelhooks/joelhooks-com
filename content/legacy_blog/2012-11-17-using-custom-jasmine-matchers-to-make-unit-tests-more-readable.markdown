@@ -7,7 +7,7 @@ comments: true
 
 ![Clean and Dry](/images/clean_and_dry.jpg)
 
-[Image from purplemattfish](http://www.flickr.com/photos/29601732@N06/3969905051/)
+[Image from purplemattfish](https://www.flickr.com/photos/29601732@N06/3969905051/)
 
 I'm a stickler for the "single assertion per test" guideline. One of the pillars of good unit tests is readability. Multiple asserts undermine this principle and make tests that are more difficult to read, understand, and maintain. A clean solution to this problem is to use custom Jasmine matchers in place of multiple assertions.
 
@@ -43,6 +43,6 @@ I don't know about you, but these tests look a **lot** better to me. While the o
 
 [Official Documentation on Jasmine Matcher](https://github.com/pivotal/jasmine/wiki/Matchers)
 
-[Custom Jasmine Matchers For Clarity In Testing Backbone.js Models](http://lostechies.com/derickbailey/2011/09/03/custom-jasmine-matchers-for-clarity-in-testing-backbone-js-models/)
+[Custom Jasmine Matchers For Clarity In Testing Backbone.js Models](https://lostechies.com/derickbailey/2011/09/03/custom-jasmine-matchers-for-clarity-in-testing-backbone-js-models/)
 
-[Custom jQuery matchers in Jasmine](http://testdrivenwebsites.com/2010/08/04/custom-jquery-matchers-in-jasmine/)
+[Custom jQuery matchers in Jasmine](https://testdrivenwebsites.com/2010/08/04/custom-jquery-matchers-in-jasmine/)

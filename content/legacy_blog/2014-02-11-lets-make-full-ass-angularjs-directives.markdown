@@ -8,7 +8,7 @@ _With best intentions we set forth to create the mighty directive. The steepest 
 
 ### The "place where the jQuery goes."
 
-So what is a directive? We've [talked about this before](http://www.joelhooks.com/blog/2013/07/27/using-angularjs-stop-using-jquery-as-a-crutch/), and decided that they are **not** where the jQuery goes... usually... if you **are** going to use jQuery, directives are **definitely** where it should go.
+So what is a directive? We've [talked about this before](https://www.joelhooks.com/blog/2013/07/27/using-angularjs-stop-using-jquery-as-a-crutch/), and decided that they are **not** where the jQuery goes... usually... if you **are** going to use jQuery, directives are **definitely** where it should go.
 
 It's easy to say "OMG, NO JQUERY" - but what does that actually mean? What does a **really kickass directive** look like?
 

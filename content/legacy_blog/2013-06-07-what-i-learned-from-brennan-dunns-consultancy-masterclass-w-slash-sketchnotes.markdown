@@ -18,12 +18,12 @@ elusive. Obviously they are answerable, because people do this sort of thing all
 the time.
 
 Brennan started offering his [Consultancy
-Masterclass](http://doubleyourfreelancingrate.com/build-a-consultancy), and from
+Masterclass](https://doubleyourfreelancingrate.com/build-a-consultancy), and from
 the moment he launched, I've been extremely curious. It isn't cheap at almost
 $1,200, but I had the feeling that learning from Brennan's experience in a more
 direct way than his books, [Double Your Freelancing
-Rate](http://doubleyourfreelancingrate.com/) and [The
-Blueprint](http://doubleyourfreelancingrate.com/the-blueprint), **had** to be
+Rate](https://doubleyourfreelancingrate.com/) and [The
+Blueprint](https://doubleyourfreelancingrate.com/the-blueprint), **had** to be
 beneficial. Both of the books are excellent. I encourage you to follow the links
 and buy them today. When I saw that The Blueprints top-tier package included a
 discount to the class, I was sold.
@@ -63,4 +63,4 @@ and loving what you do.
 
 {% render_partial _partials/consultancy_class.markdown %}
 
-You might also enjoy: <a href="http://joelhooks.com/blog/2013/06/06/my-sketchnotes-and-thoughts-from-baconbizconf-2013/"><strong>My Sketchnotes and Thoughts from BaconBizConf 2013</strong></a>
+You might also enjoy: <a href="https://joelhooks.com/blog/2013/06/06/my-sketchnotes-and-thoughts-from-baconbizconf-2013/"><strong>My Sketchnotes and Thoughts from BaconBizConf 2013</strong></a>

@@ -66,13 +66,13 @@ is a little tough to get at if you use VIM regularly. Luckily that is easy to
 solve with some key remapping. Otherwise, I have absolutely zero buyer's remorse
 and look forward to having a computer onhand more often, as I will be much more
 likely to tote it with me when I go out. I'm looking forward to the [11" Muzetto
-from SFBags](http://sfbags.com/products/muzetto/muzetto.php) to show up.
+from SFBags](https://sfbags.com/products/muzetto/muzetto.php) to show up.
 
 If you're looking to drop some weight from your laptop bag, you really can't go
 wrong with the Air. I'm impressed.
 
 On another note, I setup the new machine using
-[Boxen](http://boxen.github.com/), and it was _awesome_. I ran into a few snags,
+[Boxen](https://boxen.github.com/), and it was _awesome_. I ran into a few snags,
 but it is so cool to have a basic configuration version controlled. I can
 literally go from fresh install of OS X to working in under an hour now. I plan
 on writing my thoughts on that and will post it here soon.

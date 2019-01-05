@@ -11,7 +11,7 @@ they just going to laugh at me?
 
 ### Some Background
 
-My friend John makes [awesome AngularJS training videos](http://egghead.io). They are short, topical, and
+My friend John makes [awesome AngularJS training videos](https://egghead.io). They are short, topical, and
 presented clearly. He loves making training videos, but has very little interest
 in building out a website and marketing the content. "Selling things on the
 internet" can be a chore. If you're just selling one off digital things, it is
@@ -20,9 +20,9 @@ users to register, and charge them on a recurring basis it can be anything but.
 
 As it happens, I'm very interested in these problems. For the last couple of
 years I've been [taking
-classes](http://www.joelhooks.com/blog/2013/06/07/what-i-learned-from-brennan-dunns-consultancy-masterclass-w-slash-sketchnotes/)
+classes](https://www.joelhooks.com/blog/2013/06/07/what-i-learned-from-brennan-dunns-consultancy-masterclass-w-slash-sketchnotes/)
 and [going to
-conferences](http://www.joelhooks.com/blog/2013/06/06/my-sketchnotes-and-thoughts-from-baconbizconf-2013/)
+conferences](https://www.joelhooks.com/blog/2013/06/06/my-sketchnotes-and-thoughts-from-baconbizconf-2013/)
 that boil down to selling things on the internet. Recurring revenue is alluring.
 My gurus are **all about** finding pain and providing immense value to people in
 exchange for money. This is what I want to do too.
@@ -34,7 +34,7 @@ Wonder Twin powers; activate!
 We have content, traffic, and a solid reputation. What's the next step?
 
 To actually build something, of course. [Rails was the clear
-choice](http://www.joelhooks.com/blog/2013/09/15/why-i-built-an-angularjs-training-site-on-rails/)
+choice](https://www.joelhooks.com/blog/2013/09/15/why-i-built-an-angularjs-training-site-on-rails/)
 when it came time to decide what framework to use. It is mature, easy (enough)
 to use, and has a metric shit-ton of resources for building this type of thing.
 
@@ -51,19 +51,19 @@ never had anything real to build. Tutorials and books can be boring, especially
 with no context of something "real" that you actually care about to build. That
 said, there were a few excellent resources that helped me on the way:
 
-[Michael Hartl's Rub on Rails Tutorial](http://ruby.railstutorial.org/): Outside
+[Michael Hartl's Rub on Rails Tutorial](https://ruby.railstutorial.org/): Outside
 of basic Ruby syntax, this is where you want to start. The web version is free,
 and he guides you through building a "real" app with Rails in a clear, easy to
 understand manner.
 
-[Daniel Kehoe's RailsApp Project](http://railsapps.github.io/): This was a huge
+[Daniel Kehoe's RailsApp Project](https://railsapps.github.io/): This was a huge
 boost for me. It covered all the bases. I wanted to build an app with Rails.
 Check. I wanted to use Twitter Boostrap with Rails. Check. I wanted to have
 authentication and authorization in the app. Check. I wanted to integrate
 recurring subscription payments. Check.
 
 [Peter Keen's Mastering Modern
-Payments](http://www.petekeen.net/mastering-modern-payments): If you are going
+Payments](https://www.petekeen.net/mastering-modern-payments): If you are going
 to sell stuff via a Rails app, **buy this book today**. It saved me **so much
 time** and instilled a confidence that I might never have had without it.
 RailsApp is pretty good, but for me it started to break down when I wanted to
@@ -72,7 +72,7 @@ delivered the knowledge I needed in a concise 120 page guide. I'd recommend
 getting the verion with the code, because it was a huge help to me.
 
 [Giles Bowkett's Software as a
-Disservice](http://gilesbowkett.blogspot.com/2013/10/new-ebook-software-as-disservice-fixing.html)
+Disservice](https://gilesbowkett.blogspot.com/2013/10/new-ebook-software-as-disservice-fixing.html)
 is a direct critique of RailsApp. It is harsh, but constructive. It addresses
 code smells that I had noticed, enforced some of what I learned in Pete's book,
 and lays out some solid practices that a Rails noob like me won't learn in 1000

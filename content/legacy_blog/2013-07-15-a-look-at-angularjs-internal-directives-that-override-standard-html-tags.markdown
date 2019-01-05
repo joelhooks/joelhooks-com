@@ -222,6 +222,6 @@ It wasn't immediately obvious to me when I started using AngularJS that the fram
 
 Digging into the guts of the [AngularJS source code](https://github.com/angular/angular.js/tree/master/src) is a great way to learn the hows and whys of the framework, and can reveal techniques that can be applied to your own applications. The AngularJS source is well documented, cleanly written, and well tested. If you're working with AngularJS, I highly recommend diving into these internals and discovering this for yourself. It won't be time wasted.
 
-You might also enjoy: <a href="http://joelhooks.com/blog/2013/05/22/lessons-learned-kicking-off-an-angularjs-project/"><strong>Lessons Learned: A Year with a Large AngularJS Project</strong></a>
+You might also enjoy: <a href="https://joelhooks.com/blog/2013/05/22/lessons-learned-kicking-off-an-angularjs-project/"><strong>Lessons Learned: A Year with a Large AngularJS Project</strong></a>
 
-or maybe: <a href="http://joelhooks.com/blog/2013/08/03/learn-angularjs-in-a-weekend/"><strong>Learn AngularJS this Weekend</strong></a>
+or maybe: <a href="https://joelhooks.com/blog/2013/08/03/learn-angularjs-in-a-weekend/"><strong>Learn AngularJS this Weekend</strong></a>

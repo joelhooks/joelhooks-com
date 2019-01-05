@@ -6,7 +6,7 @@ date: 2013-06-22
 
 The internet is a competitive place for small businesses, and this is especially
 true when we are talking about portrait photographers. My lovely wife is a
-[family photographer in Fort Worth](http://visualempathy.com), Texas. She's been
+[family photographer in Fort Worth](https://visualempathy.com), Texas. She's been
 doing portrait photography professionally since 2007, and being the good nerd
 husband I am, she's had a web presence the entire time. By this I mean she's had
 a website that I built in 2007 (prior to my own shift in careers from 3d
@@ -27,7 +27,7 @@ where I wasn't even considering our own business and how it might benefit from
 the techniques that I've been learning. In fact, in my moment of epiphany it
 occured to me that other photographer's websites suffer in a similar fashion, so
 I decided to write a [guidebook on conversion optimization and SEO for
-photographers](http://studioigniter.com).
+photographers](https://studioigniter.com).
 
 I'm going to use my wife's site as a case study, breaking it down and rebuilding
 it into a useful asset that not only attracts potential clients, but converts

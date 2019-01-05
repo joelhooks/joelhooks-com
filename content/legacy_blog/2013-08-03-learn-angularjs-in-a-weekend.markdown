@@ -10,7 +10,7 @@ Already know AngularJS? Feel free to skip ahead. These resources are excellent, 
 
 ## The Official Tutorial ~4hrs
 
-Start with [the official tutorial](http://docs.angularjs.org/tutorial). It provides a very straight forward overview of AngularJS and walks step by step through building a simple app. When you're done, you should have **a solid understanding of the basics** and the vocabulary you will need to move on to the next step.
+Start with [the official tutorial](https://docs.angularjs.org/tutorial). It provides a very straight forward overview of AngularJS and walks step by step through building a simple app. When you're done, you should have **a solid understanding of the basics** and the vocabulary you will need to move on to the next step.
 
 The official tutorial is _very_ well put together. Unfortunately it utilizes the angular-seed project as a template. The angular-seed project is fine for quickly throwing together a working AngularJS app, but it doesn't provide a structure that scales well in a production application.
 
@@ -18,7 +18,7 @@ The official tutorial is _very_ well put together. Unfortunately it utilizes the
 
 ## Kickass (**free!**) Video Tutorials on Egghead.io ~3hrs
 
-<div style="float: left; padding:10px;"><a class="nofancybox" href="http://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(/images/egghead_logo.png);"></div></a></div>You've done the tutorial, and should have a good grasp of the basics. Your next stop is John Lindquist's [egghead.io for free AngularJS videos](http://www.egghead.io/). This series of bite-sized videos will deliver a ton of great information. John has gone through almost all of the "hard" concepts, and presented them in an easy to understand way.
+<div style="float: left; padding:10px;"><a class="nofancybox" href="https://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(/images/egghead_logo.png);"></div></a></div>You've done the tutorial, and should have a good grasp of the basics. Your next stop is John Lindquist's [egghead.io for free AngularJS videos](https://www.egghead.io/). This series of bite-sized videos will deliver a ton of great information. John has gone through almost all of the "hard" concepts, and presented them in an easy to understand way.
 
 _All_ of the videos are great, but the **series on directives is extra fantastic**. Transclusion? No problem. Even after using AngularJS for over a year, I was able to solidify some of the concepts that were confusing for me.
 
@@ -87,4 +87,4 @@ You've earned it.
 
 P.S. Initial project setup is one of the most critical factors to a project's success. Using templates is a great way to get a head start, but using a template without solid understanding of all the moving parts can be dangerous. I'm working on **step-by-step guide to building your own best practices AngularJS project template**. If you want to get notified of its progress, as well as launch-day discounts, sign up to my newsletter below.
 
-You might also enjoy: <a href="http://joelhooks.com/blog/2013/05/22/lessons-learned-kicking-off-an-angularjs-project/"><strong>Lessons Learned: A Year with a Large AngularJS Project</strong></a>
+You might also enjoy: <a href="https://joelhooks.com/blog/2013/05/22/lessons-learned-kicking-off-an-angularjs-project/"><strong>Lessons Learned: A Year with a Large AngularJS Project</strong></a>

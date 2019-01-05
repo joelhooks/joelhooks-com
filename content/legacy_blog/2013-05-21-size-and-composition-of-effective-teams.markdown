@@ -72,7 +72,7 @@ from.
 ## How big should a team be?
 
 My favorite "rule" for team size comes from Amazon's [Jeff
-Bezos](http://www.fastcompany.com/50106/inside-mind-jeff-bezos) who uses the
+Bezos](https://www.fastcompany.com/50106/inside-mind-jeff-bezos) who uses the
 concept of "pizza teams":
 
 > Bezos pursued his idea of a decentralized, disentangled company where small

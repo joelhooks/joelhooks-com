@@ -19,7 +19,7 @@ functionality of VIM. Many times the problem is best solved by understanding how
 you can accomplish the task with just VIM, and not a plugin. One of the biggest
 barriers I had with getting over the initial learning curve was over-saturation
 with plugins, as I [wrote
-here](http://joelhooks.com/blog/2013/04/09/getting-to-know-vim/).
+here](https://joelhooks.com/blog/2013/04/09/getting-to-know-vim/).
 
 ## Vundle
 
@@ -27,7 +27,7 @@ If any of these plugins had an "absolutely" in front of its "essential"
 descriptor, it would be [Vundle](https://github.com/gmarik/vundle).
 
 Vundle is short for VIM Bundle. It is spiritually alike to
-[Bundler](http://gembundler.com/), and provides a clean easy way to manage
+[Bundler](https://gembundler.com/), and provides a clean easy way to manage
 plugins that you install. In past VIM efforts, I didn't use any sort of scheme
 for managing plugins, and it was allways a complete **mess**. Vundle has solved
 this for me completely.

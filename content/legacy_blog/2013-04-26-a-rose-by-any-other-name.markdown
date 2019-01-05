@@ -5,7 +5,7 @@ date: 2013-04-26
 ---
 
 I posted [an
-article](http://joelhooks.com/blog/2013/04/24/modeling-data-and-state-in-your-angularjs-application/#comment-875747843) about using models to assist in creating leaner, meaner controllers. It resulted in a lively conversation in the comments that spawned an interesting [rebuttal](http://wekeroad.com/2013/04/25/models-and-services-in-angular) from [Rob Conery](http://twitter.com/robconery) that essentially says I am full of it, and the names I attach to the patterns I use are wrong.
+article](https://joelhooks.com/blog/2013/04/24/modeling-data-and-state-in-your-angularjs-application/#comment-875747843) about using models to assist in creating leaner, meaner controllers. It resulted in a lively conversation in the comments that spawned an interesting [rebuttal](https://wekeroad.com/2013/04/25/models-and-services-in-angular) from [Rob Conery](https://twitter.com/robconery) that essentially says I am full of it, and the names I attach to the patterns I use are wrong.
 
 **This is probably true.**
 

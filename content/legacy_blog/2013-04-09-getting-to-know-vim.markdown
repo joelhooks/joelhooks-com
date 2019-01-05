@@ -25,7 +25,7 @@ day.
 
 And I'm having some success!
 
-The excellent [Practical Vim](http://pragprog.com/book/dnvim/practical-vim) has
+The excellent [Practical Vim](https://pragprog.com/book/dnvim/practical-vim) has
 been extremely helpful. The single most important thing I've done this go-around
 is to completely remove _all_ of the dotfiles I've accumulated over the
 years. Some custom bits with [Janus](https://github.com/carlhuda/janus)

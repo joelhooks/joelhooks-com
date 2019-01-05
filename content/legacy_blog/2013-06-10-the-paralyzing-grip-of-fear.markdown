@@ -53,4 +53,4 @@ can have a chance for success.
 **JFDI** - Just F'n Do it.
 
 ![Alex Hillman's Awesome
-Tattoo](http://farm5.staticflickr.com/4124/5050135544_97d67cd23c_o.png)
+Tattoo](https://farm5.staticflickr.com/4124/5050135544_97d67cd23c_o.png)

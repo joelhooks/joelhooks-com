@@ -15,7 +15,7 @@ state, data needs to be contained, and it needs to be done in a consistent manne
 that is easy to comprehend.
 
 I've [written about
-this](http://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-2-models/)
+this](https://joelhooks.com/2011/03/12/an-introduction-to-robotlegs-as3-part-2-models/)
 in the past, in the context of ActionScript 3 and the Robotlegs framework. This
 approach is valid for JavaScript, but requires some translation to build something usable for
 AngularJS.
@@ -28,9 +28,9 @@ AngularJS.
 > implementation of MVC omits these notifications, because the application does
 > not require them or the software platform does not support them.
 > [from
-> Wikipedia](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)
+> Wikipedia](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)
 
-As the "M" in [MVC](http://www.codinghorror.com/blog/2008/05/understanding-model-view-controller.html), model classes **encapsulate** your application’s data and **provide an API** to access
+As the "M" in [MVC](https://www.codinghorror.com/blog/2008/05/understanding-model-view-controller.html), model classes **encapsulate** your application’s data and **provide an API** to access
 and manipulate that data. The other classes in your application will make
 requests of models via this API. When data on the model is updated, the model
 dispatches events that the other classes within your application can react to.
@@ -76,7 +76,7 @@ at that.
 ## Exploring the Code
 
 <iframe width="100%" height="300"
-src="http://jsfiddle.net/joelhooks/jWmck/embedded/js,result,html/"
+src="https://jsfiddle.net/joelhooks/jWmck/embedded/js,result,html/"
 allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 This is a simple/naive example that has a list of authors with a poignant quote from
@@ -94,7 +94,7 @@ a monolithic single JS file isn't going to scale very well.
 
 If you'd like to see a good write-up on structuring larger Angular apps, my
 friend [Cliff
-Meyers](http://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript)
+Meyers](https://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript)
 wrote a great article on the subject.
 
 ## Introducing a Model to Store Data
@@ -104,12 +104,12 @@ In the above example, all of our data is stored within the controller on the
 integration in the future. The task we want to accomplish now is a little
 seperation of data and presentation. This doesn't mean that we won't be using
 `$scope`. We will. AngularJS uses the `$scope` as a [Presentation
-Model](http://martinfowler.com/eaaDev/PresentationModel.html). This is
+Model](https://martinfowler.com/eaaDev/PresentationModel.html). This is
 fine, but we can still provide much nicer separation with a "proper" model for
 the data.
 
 <iframe width="100%" height="300"
-src="http://jsfiddle.net/joelhooks/jWmck/7/embedded/js,result/"
+src="https://jsfiddle.net/joelhooks/jWmck/7/embedded/js,result/"
 allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 If you look at the JavaScript above, I think you will agree that it is already
@@ -123,7 +123,7 @@ directly to do with what I consider a service, but is simply one of the methods
 for defining dependencies for injection.
 
 <iframe width="100%" height="300"
-src="http://jsfiddle.net/joelhooks/jWmck/9/embedded/js,result/"
+src="https://jsfiddle.net/joelhooks/jWmck/9/embedded/js,result/"
 allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 This is more like it. Now we have a tiny controller, and all of our data and
@@ -143,7 +143,7 @@ can also listen for events, the temptation is always there. Ignore this warning
 at your own peril! ;)
 
 <iframe width="100%" height="300"
-src="http://jsfiddle.net/joelhooks/jWmck/10/embedded/js,result,html/"
+src="https://jsfiddle.net/joelhooks/jWmck/10/embedded/js,result,html/"
 allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 This is a bit silly, but shows the flexibility of this approach. The `textarea`
@@ -159,7 +159,7 @@ simply bind to the model. One of Angular's greatest strengths is its awesome
 two-way `{{binding}}`.
 
 <iframe width="100%" height="300"
-src="http://jsfiddle.net/joelhooks/jWmck/12/embedded/js,html,result"
+src="https://jsfiddle.net/joelhooks/jWmck/12/embedded/js,html,result"
 allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 This is pretty nice, and is arguably cleaner than the eventing approach. In many
@@ -183,7 +183,7 @@ about how you solve this problem of separating view and data with AngularJS.
 
 If you are looking for nuts & bolts lessons on AngularJS, it is hard for me to
 express in words how awesome [John Lindquist's
-egghead.io](http://www.egghead.io/) is. If you haven't already, go there now.
+egghead.io](https://www.egghead.io/) is. If you haven't already, go there now.
 
-Join the conversation on [Reddit](http://redd.it/1d31fh) and [Hacker
+Join the conversation on [Reddit](https://redd.it/1d31fh) and [Hacker
 News](https://news.ycombinator.com/item?id=5607330)

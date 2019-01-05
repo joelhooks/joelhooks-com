@@ -28,9 +28,9 @@ An example of a Singleton implementation might look something like this:
 })(window);
 ```
 
-[from Tom Roggero](http://stackoverflow.com/a/6733919/87002)
+[from Tom Roggero](https://stackoverflow.com/a/6733919/87002)
 
-The above JavaScript is from an [answer](http://stackoverflow.com/questions/1635800/javascript-best-singleton-pattern)
+The above JavaScript is from an [answer](https://stackoverflow.com/questions/1635800/javascript-best-singleton-pattern)
 from StackOverflow that seemed resonable. I've never actually needed an enforced Singleton in JavaScript.
 I suspect I never will, but... know thy enemy!
 
@@ -44,12 +44,12 @@ context, so how do we gain the benefit of a Singleton, without the pain?
 
 ## Dependency Injection (DI)
 
-[Dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) is a lovely thing. It can be accomplished in several ways, from simply
+[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) is a lovely thing. It can be accomplished in several ways, from simply
 passing arguments into a constructor, to full blown DI containers like
 [Guice](https://code.google.com/p/google-guice/),
 [SwiftSuspenders](https://github.com/tschneidereit/SwiftSuspenders), and
-[AngularJS](http://angularjs.org/). I'm not going to go to deep in this post, but [here is one from
-the archives](http://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/) that is still relevant (if you don't mind a little AS3). [Here are a couple](http://misko.hevery.com/2008/11/11/clean-code-talks-dependency-injection/) of awesome talks from Miško Hevery that I highly recommend.
+[AngularJS](https://angularjs.org/). I'm not going to go to deep in this post, but [here is one from
+the archives](https://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/) that is still relevant (if you don't mind a little AS3). [Here are a couple](https://misko.hevery.com/2008/11/11/clean-code-talks-dependency-injection/) of awesome talks from Miško Hevery that I highly recommend.
 
 Most containers have a mechanism for
 providing _context-based singletons_.

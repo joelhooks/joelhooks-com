@@ -6,7 +6,7 @@ comments: true
 ---
 
 It is hard to explain how excited I was when Amy announced
-[BaconBizConf](http://unicornfree.com/category/baconbiz) in April of 2013. A
+[BaconBizConf](https://unicornfree.com/category/baconbiz) in April of 2013. A
 small conference devoted to like-minded people that either are, or want to be,
 bootstrapping product businesses. The speaker lineup included personal "gurus"
 that I look up to and listen to closely like Brennan Dunn and Patrick McKenzie.
@@ -21,11 +21,11 @@ my notes with you here, and talk about what I absorbed from these talks.
 
 Nathan Barry has had a really good year. He's released several infoproducts
 including [The App Design
-Handbook](http://nathanbarry.com/app-design-handbook/), [Designing Web
-Applications](http://nathanbarry.com/webapps/), and most recently
-[Authority](http://nathanbarry.com/authority/) which is about... self publishing
+Handbook](https://nathanbarry.com/app-design-handbook/), [Designing Web
+Applications](https://nathanbarry.com/webapps/), and most recently
+[Authority](https://nathanbarry.com/authority/) which is about... self publishing
 infoproducts. Additionally he's launched his first SAAS product with
-[ConvertKit](http://convertkit.com/). This dude is **busy**. He's also made
+[ConvertKit](https://convertkit.com/). This dude is **busy**. He's also made
 **$200k** in the last 9 months across these products.
 
 Wow.
@@ -44,7 +44,7 @@ He's an inspiring guy, and his products are of the highest quality.
 ![Marc-Andre Cournoyer](/images/bacon/bacon_biz_2013-3.jpg)
 
 Next up was Marc-Andre Cournoyer who wrote [Create Your Own Programming
-Language](http://createyourproglang.com/). Marc really hammered home the need to
+Language](https://createyourproglang.com/). Marc really hammered home the need to
 actively seek out and **kill** objections your potential customers might have.
 He pointed out that **social proof** is absolutely essential when you are trying
 to sell a product, and that anchoring prices against much higher prices is
@@ -60,7 +60,7 @@ most valuable content, we are priming the audience for future product offerings.
 
 I can say from first hand experience that this works. I've bought Brennan's
 books, and even took his [Consultancy
-Masterclass](http://doubleyourfreelancingrate.com/build-a-consultancy).
+Masterclass](https://doubleyourfreelancingrate.com/build-a-consultancy).
 
 ![Patrick, Nathan, Marc, and Amy](/images/bacon/bacon_biz_2013-5.jpg)
 
@@ -70,7 +70,7 @@ There was a definite theme.
 
 ![Chris & Natalie Nagele](/images/bacon/bacon_biz_2013-6.jpg)
 
-Chris and Natalie from [Wildbit Software](http://wildbit.com/) are the creators
+Chris and Natalie from [Wildbit Software](https://wildbit.com/) are the creators
 of Beanstalk. They started out with a 100% remote development team, and have
 been migrating to an onsite structure after 10 years of doing remote.
 
@@ -185,11 +185,11 @@ high quality, and I will keep going back as long as they hold it.
 It was also my first time in Philly. Great town!
 
 In the spirit of BaconBiz I've decided to <a
-href="http://gum.co/baconbiz2013sketchnotes">high resolution DRM free PDFs of
+href="https://gum.co/baconbiz2013sketchnotes">high resolution DRM free PDFs of
 my notes</a>. Before you ask, I do realize that the entire set is posted above,
 but if you'd like your own copy for archive and would like to encourage future
 note taking, please take advantage and buy the PDF :>
 
 {% render_partial _partials/consultancy_class.markdown %}
 
-You might also enjoy: <a href="http://joelhooks.com/blog/2013/06/07/what-i-learned-from-brennan-dunns-consultancy-masterclass-w-slash-sketchnotes/"><strong>What I Learned From Brennan Dunn's Consultancy Masterclass</strong></a>
+You might also enjoy: <a href="https://joelhooks.com/blog/2013/06/07/what-i-learned-from-brennan-dunns-consultancy-masterclass-w-slash-sketchnotes/"><strong>What I Learned From Brennan Dunn's Consultancy Masterclass</strong></a>

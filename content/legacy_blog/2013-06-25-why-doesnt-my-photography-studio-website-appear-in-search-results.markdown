@@ -5,15 +5,15 @@ date: 2013-06-25
 ---
 
 This is a series of post examining why our [Fort Worth photography
-studio](http://www.visualempathy.com) website performs poorly in Google search
+studio](https://www.visualempathy.com) website performs poorly in Google search
 results, and why it fails to convert the visitors it does get into new clients.
 The first post sought to [analyze Google Analytics
-data](http://joelhooks.com/blog/2013/06/22/optimizing-a-photography-studio-website-for-converstion-and-seo-the-analysis/)
+data](https://joelhooks.com/blog/2013/06/22/optimizing-a-photography-studio-website-for-converstion-and-seo-the-analysis/)
 and get a clue as to how users arrive to the site via search. The short story is
 that they typically arrive via image searches for very generic terms such as "4
 month old baby" and other similar searches. Even amongst these searches, actual
 clicks through to the site are abysmally low. I'm working on a [book about
-conversion optimization for photographers](http://studioigniter.com/), and our
+conversion optimization for photographers](https://studioigniter.com/), and our
 studio is the first case study in the process.
 
 ![VE Home Page](/images/ve/ve-home.jpg)

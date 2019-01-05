@@ -9,7 +9,7 @@ banner: './images/banner.jpg'
 ---
 
 <img src="/images/content/no_exit.png" style="display: block; margin: auto"/>
-#####photo by: [Thomas Hawk](http://www.flickr.com/photos/thomashawk/31115789/)
+#####photo by: [Thomas Hawk](https://www.flickr.com/photos/thomashawk/31115789/)
 
 I've been wanting to part ways with WordPress for some time. It's been expensive, running a VPS for the hosting. I've been "attacked" on multiple occasions that result in blacklisting from the Google when I ran on much less expensive shared hosting. It is probably theme dependent also, as well as how a given server is configured.
 
@@ -21,13 +21,13 @@ I've got a lot of words written that people still find useful. I don't want to d
 
 <div align="center"><blockquote class="twitter-tweet"><p>@<a href="https://twitter.com/jhooks">jhooks</a> I still refer to some of your blog posts when I’m doing RobotLegs stuff so I would definitely kep them around in some format</p>&mdash; Rob Dodson (@rob_dodson) <a href="https://twitter.com/rob_dodson/status/227195345283727360" data-datetime="2012-07-23T00:16:06+00:00">July 23, 2012</a></blockquote></div>
 
-The first step was to strip out all of the "junk" posts that have accumulated. These were generally time based announcements that weren't adding anything to **any** conversation. After that, I stripped the theme and used the excellent [Boilerplate](http://wordpress.org/extend/themes/boilerplate) theme. If I was to build a Wordpress theme "from scratch," this is the theme I'd go for. I wish I'd found it before. It has an excellent separation of concerns and seems like it would be a pleasure to build upon. Sorry Wordpress, it's too late for that.
+The first step was to strip out all of the "junk" posts that have accumulated. These were generally time based announcements that weren't adding anything to **any** conversation. After that, I stripped the theme and used the excellent [Boilerplate](https://wordpress.org/extend/themes/boilerplate) theme. If I was to build a Wordpress theme "from scratch," this is the theme I'd go for. I wish I'd found it before. It has an excellent separation of concerns and seems like it would be a pleasure to build upon. Sorry Wordpress, it's too late for that.
 
 With the theme stripped an all non-essential plugins disabled, I tweaked the theme so that individual pages had much of the extra fluff removed from them. All dates are gone, next/previous navigation is gone, and I added in a box at the bottom just to let people know that the page should be considered an "archive." It's important to get the pages right at this step. It would be a severe pain to manipulate the resulting static pages.
 
-All that was left was extracting all of the [individual posts into static pages](http://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/). [The WP Static HTML Output](http://wordpress.org/extend/plugins/static-html-output-plugin/) plugin is excellent. It spit out a zip with the proper folder structure to ensure that my links would not be broken. The only flaw was that the Archive Utility on OS X wouldn't unzip the output. I had to use the command line unzip utility. It gave me all of the resources for each page, including the SWFs and other media that they linked to. This was perfect.
+All that was left was extracting all of the [individual posts into static pages](https://joelhooks.com/2009/12/24/continuous-scrolling-thumbnail-component-for-flex/). [The WP Static HTML Output](https://wordpress.org/extend/plugins/static-html-output-plugin/) plugin is excellent. It spit out a zip with the proper folder structure to ensure that my links would not be broken. The only flaw was that the Archive Utility on OS X wouldn't unzip the output. I had to use the command line unzip utility. It gave me all of the resources for each page, including the SWFs and other media that they linked to. This was perfect.
 
-There are other options for this too. [exitWP](https://github.com/thomasf/exitwp/) looks like a solid way to extract posts and create markdown that could potentially be used with [Jekyll](https://github.com/mojombo/jekyll) (and subsequently [Octopress](http://octopress.org/)), but I liked the flat file structure of the straight brute force HTML output.
+There are other options for this too. [exitWP](https://github.com/thomasf/exitwp/) looks like a solid way to extract posts and create markdown that could potentially be used with [Jekyll](https://github.com/mojombo/jekyll) (and subsequently [Octopress](https://octopress.org/)), but I liked the flat file structure of the straight brute force HTML output.
 
 ##Enter Octopress
 
@@ -45,8 +45,8 @@ One item that I didn't really think about was the `sitemap.xml`. I stripped all 
 
 It isn't pretty, but it got all of my post page links wedged into the sitemap. Hopefully this appeases the robots.
 
-Another cool tool that works well with Octopress is [Pow](http://pow.cx/). Octopress is a rack app, and once to point Pow at your Octopress folder, it serves the page up locally at `http://foldername.dev`. Then it's just a matter of running `rake watch` and going to town.
+Another cool tool that works well with Octopress is [Pow](https://pow.cx/). Octopress is a rack app, and once to point Pow at your Octopress folder, it serves the page up locally at `https://foldername.dev`. Then it's just a matter of running `rake watch` and going to town.
 
 ##Conclusion
 
-I'm stoked about making progress on my blogspace. It has been on the todo list for some time. It falls well into the [breakable toy](http://redsquirrel.com/dave/work/a2j/patterns/BreakableToys.html) category of things, and that is something I can use right now as I learn new tools. I'm looking forward to improving this space with quality content about modern standards-based web development with open source tools.
+I'm stoked about making progress on my blogspace. It has been on the todo list for some time. It falls well into the [breakable toy](https://redsquirrel.com/dave/work/a2j/patterns/BreakableToys.html) category of things, and that is something I can use right now as I learn new tools. I'm looking forward to improving this space with quality content about modern standards-based web development with open source tools.

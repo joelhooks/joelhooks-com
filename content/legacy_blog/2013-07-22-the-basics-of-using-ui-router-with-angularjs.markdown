@@ -15,7 +15,7 @@ the routing for an app, you are laying out the various states the application
 can be in, and informing the application what to display and do when a specific
 route is encountered.
 
-AngularJS supplies [URL routing](http://docs.angularjs.org/tutorial/step_07) by default.
+AngularJS supplies [URL routing](https://docs.angularjs.org/tutorial/step_07) by default.
 It is adequate, but also has some limitations.
 
 ![A resonable application structure](/images/app-layout.png)
@@ -28,7 +28,7 @@ different HTML. AngularJS provides a mechanism for this with `ng-switch`. You
 can see a (very simple) example of this below.
 
 <iframe width="100%" height="300"
-  src="http://jsfiddle.net/joelhooks/Swm48/4/embedded/result,js,html"
+  src="https://jsfiddle.net/joelhooks/Swm48/4/embedded/result,js,html"
   allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 In this case, `ng-switch` is swapping out `div` elements, but you can also use
@@ -56,7 +56,7 @@ You need to think about your routing a bit differently, but once you get your
 head around the state-based approach, I think you will like it.
 
 <iframe width="100%" height="300"
-  src="http://jsfiddle.net/SvUjA/1/embedded/result,js,html"
+  src="https://jsfiddle.net/SvUjA/1/embedded/result,js,html"
   allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 This example is functionally very similar to the `ng-switch` approach. The main
@@ -158,6 +158,6 @@ Let me know if you'd like me to explore ui-router a bit deeper in future posts.
 I think it is an excellent approach to routing, and look forward to using it
 more.
 
-**Update:** I've recorded a [screencast about ui-router](http://egghead.io/lessons/angularjs-introduction-ui-router) for egghead.io.
+**Update:** I've recorded a [screencast about ui-router](https://egghead.io/lessons/angularjs-introduction-ui-router) for egghead.io.
 
 **Update 2:** Here's a [screencast about ui-router's named views](https://egghead.io/lessons/angularjs-ui-router-named-views) that I recorded for egghead.io. (note: it is paid/subscription content)

@@ -97,7 +97,7 @@ When using `factory`, the function that is passed in is called directly, and an
 object is expteded to be returned.
 
 Hat tip to
-[@ThomasBurleson](http://twitter.com/ThomasBurleson) for pointing this
+[@ThomasBurleson](https://twitter.com/ThomasBurleson) for pointing this
 out. This can be confusing if encountered in the wild. Now you know.
 Half the battle.
 

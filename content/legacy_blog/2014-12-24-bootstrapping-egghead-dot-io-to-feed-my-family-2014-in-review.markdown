@@ -38,7 +38,7 @@ While my initial "design" for egghead was OK, it was plain-old-boostrap, and gen
 
 As revenues have increased, I've been able to slowly build a team. This has been wonderful, because building something by yourself gets very very lonely.
 
-Our team is modular. We hire consultants, and pay them monthly retainers for blocks of work. The first was the wonderful [Jane Portman](http://uibreakfast.com/) to start refreshing the overall design.
+Our team is modular. We hire consultants, and pay them monthly retainers for blocks of work. The first was the wonderful [Jane Portman](https://uibreakfast.com/) to start refreshing the overall design.
 
 Because I'm terrible at it, and hate it, we hired Evgeniy Nagalskiy to take Jane's designs and convert them to HTML and SCSS for me. This has allowed the designs to actually see the light of day, instead of being a constant source of dread for me.
 
@@ -70,7 +70,7 @@ Writing is something I enjoy, so I will get back at it. I'm in a weird middle sp
 
 I was all over the US in 2014 for the training. My favorite trips were probably to San Francisco. Love the energy and concentrated intelligence in that city.
 
-John and I got to deliver workshops in Paris for ng-europe. This was very exciting for me, as I've never been to France. Paris is amazing, and I will definitely go back. The highlight was a culinary tour by the awesome [Ute Biefang](http://www.uteinparis.com/WELCOME.html). If you like food and are heading to Paris, you should book a tour. It was **fantastic**.
+John and I got to deliver workshops in Paris for ng-europe. This was very exciting for me, as I've never been to France. Paris is amazing, and I will definitely go back. The highlight was a culinary tour by the awesome [Ute Biefang](https://www.uteinparis.com/WELCOME.html). If you like food and are heading to Paris, you should book a tour. It was **fantastic**.
 
 ![best meal of 2015, hands down](/images/best_meal_2015.jpg)
 
@@ -96,13 +96,13 @@ It was very challenging to drive into corners at speeds your mind **knows** are 
 
 ## Stopped smoking for good...
 
-I've had a love hate relationships with nicotine for many years. It's done. No vaping, no gum, no sneaking, just done. If you want to quit, I highly recommend [Allen Carrs Easy Way to Stop Smoking](http://www.amazon.com/exec/obidos/ASIN/0718194551/joehoobuiblo-20/ref=nosim/). It is a great book that uses cognitive behavior therapy in an effective way.
+I've had a love hate relationships with nicotine for many years. It's done. No vaping, no gum, no sneaking, just done. If you want to quit, I highly recommend [Allen Carrs Easy Way to Stop Smoking](https://www.amazon.com/exec/obidos/ASIN/0718194551/joehoobuiblo-20/ref=nosim/). It is a great book that uses cognitive behavior therapy in an effective way.
 
 **Fuck you cigarettes.**
 
 ## Lost 50 pounds...
 
-I lost 50 pounds, which is awesome. I've slacked off a bit and am back up 10, but haven't regressed fully into old habits. This is something I'd definitely like to keep up through 2015 and beyond, as it sure is nice to not have that extra weight. I used the [Primal Blueprint](http://www.amazon.com/exec/obidos/ASIN/0982207778/joehoobuiblo-20/ref=nosim/) approach, and found it to be a moderate paleo that is sustainable.
+I lost 50 pounds, which is awesome. I've slacked off a bit and am back up 10, but haven't regressed fully into old habits. This is something I'd definitely like to keep up through 2015 and beyond, as it sure is nice to not have that extra weight. I used the [Primal Blueprint](https://www.amazon.com/exec/obidos/ASIN/0982207778/joehoobuiblo-20/ref=nosim/) approach, and found it to be a moderate paleo that is sustainable.
 
 ![smaller joel](/images/smaller_joel.jpg)
 

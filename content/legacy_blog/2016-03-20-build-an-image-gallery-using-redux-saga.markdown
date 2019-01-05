@@ -86,7 +86,7 @@ The `package.json` has two standard scripts configured called `start` and `test`
 </head>
 <body>
 <div class="title">
-  <img src="http://cloud.egghead.io/2G021h3t2K10/download/egghead-logo-head-only.svg" class="egghead">
+  <img src="https://cloud.egghead.io/2G021h3t2K10/download/egghead-logo-head-only.svg" class="egghead">
   <h3>Egghead Image Gallery</h3>
 </div>
 
@@ -163,7 +163,7 @@ body {
 }
 ```
 
-The `index.html` loads the `styles.css` to give us some basic styling/layout. It also loads the script `build.js`, which is a _generated_ file. Our `main.js` is a very basic React application that renders an `h1` into the `#root` element inside of `index.html`. With these files in place, you should now be able to run **`npm start`** in the project folder and navigate to [http://10.11.12.1:9966/](http://10.11.12.1:9966/) and see the following:
+The `index.html` loads the `styles.css` to give us some basic styling/layout. It also loads the script `build.js`, which is a _generated_ file. Our `main.js` is a very basic React application that renders an `h1` into the `#root` element inside of `index.html`. With these files in place, you should now be able to run **`npm start`** in the project folder and navigate to [https://10.11.12.1:9966/](https://10.11.12.1:9966/) and see the following:
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/2I1V0o2c1d281f3i3408/Screen%20Shot%202016-03-20%20at%204.31.06%20PM.png?v=1720e99d)
 
@@ -332,13 +332,13 @@ The Flux architecture is one solution that was introduced to help alleviate this
 
 So why not just drop in Flux? It's "official" architecture after all.
 
-Well, **Redux is basically Flux**, but with some distinct advantages. Here's what [Dan Abramov (the creator of Redux) has to say](http://stackoverflow.com/a/32920459/87002):
+Well, **Redux is basically Flux**, but with some distinct advantages. Here's what [Dan Abramov (the creator of Redux) has to say](https://stackoverflow.com/a/32920459/87002):
 
 > Redux is not that different from Flux. Overall it's the same architecture, but Redux is able to cut some complexity corners by using functional composition where Flux uses callback registration.
 
 > It's not fundamentally different, but I find it that Redux makes certain abstractions easier, or at least possible to implement, that would be hard or impossible to implement in Flux.
 
-The [Redux documentation](http://redux.js.org/) is great. Dan is a truly gracious and inspiring individual. If you haven't [read the code cartoons](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6#.7cra4lukv) or watched [Dan's free egghead.io series](https://egghead.io/series/getting-started-with-redux), now is the time!
+The [Redux documentation](https://redux.js.org/) is great. Dan is a truly gracious and inspiring individual. If you haven't [read the code cartoons](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6#.7cra4lukv) or watched [Dan's free egghead.io series](https://egghead.io/series/getting-started-with-redux), now is the time!
 
 ### Bootstrapping Redux
 
@@ -838,7 +838,7 @@ This is where **redux-saga** can be of great service to our application!
 
 redux-saga is built to handle asynchronous actions in our Redux applications. It provides middleware and a handful of effects methods that make building complex sequences of asynchronous actions a breeze.
 
-A saga is a **generator** function. Generators are an ES2015 addition to JavaScript. This might be your first encounter with generator functions, and if that’s the case, they might be a little weird. If that is the case, take a few minutes to read [ES6 Generators in Depth](http://www.2ality.com/2015/03/es6-generators.html) and watch this [short generators video](https://egghead.io/lessons/ecmascript-6-generators). Don’t fret to much if you’re still scratching your head. To use redux-saga you won’t need a PhD in JavaScript Async Programming. Promise.
+A saga is a **generator** function. Generators are an ES2015 addition to JavaScript. This might be your first encounter with generator functions, and if that’s the case, they might be a little weird. If that is the case, take a few minutes to read [ES6 Generators in Depth](https://www.2ality.com/2015/03/es6-generators.html) and watch this [short generators video](https://egghead.io/lessons/ecmascript-6-generators). Don’t fret to much if you’re still scratching your head. To use redux-saga you won’t need a PhD in JavaScript Async Programming. Promise.
 
 Because of the way generators work, we are able to create flat sequences of commands describing complex workflows within our application. The entire image loading sequence described above could look like this:
 
@@ -1188,7 +1188,7 @@ export function* watchForLoadImages() {
 }
 ```
 
-Using the `fork` helper will convert our `watchForLoadImages` into a non-blocking saga that can be executed regardless of whether or not a previous call is in progress. redux-saga [provides two helpers](http://yelouafi.github.io/redux-saga/docs/basics/UsingSagaHelpers.html), `takeEvery` and `takeLatest` that assist in these situations.
+Using the `fork` helper will convert our `watchForLoadImages` into a non-blocking saga that can be executed regardless of whether or not a previous call is in progress. redux-saga [provides two helpers](https://yelouafi.github.io/redux-saga/docs/basics/UsingSagaHelpers.html), `takeEvery` and `takeLatest` that assist in these situations.
 
 ### Selecting the default image
 

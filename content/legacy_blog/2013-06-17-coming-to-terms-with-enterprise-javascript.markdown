@@ -129,5 +129,5 @@ mental image of what you are dealing with. Good or bad. You could say
 "large-scale" JavaScript instead, but it wouldn't be as specific. I'm an
 enterprise developer, and I use JavaScript. Enterprise JavaScript.
 
-[1][http://enterprise-js.com/](http://enterprise-js.com/) is hilarious. Hint:
+[1][https://enterprise-js.com/](https://enterprise-js.com/) is hilarious. Hint:
 don't follow its advice!
