@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "About Me..."
+title: 'About Me...'
 date: 2013-05-24 10:36
 comments: true
 sharing: true
@@ -59,7 +59,7 @@ complicated and fun!
 
 The career took a twist after that when I landed a job at an upscale dallas law
 firm that specialized in aviation accident litigation. It was funny because at
-the time my hair was *really* long, and I certainly didn't fit in at this place.
+the time my hair was _really_ long, and I certainly didn't fit in at this place.
 They took a chance with me though, and I got into forensic animation. Sadly, the
 firm's partner that hired me passed away, and I was let go. They were cool, and
 found me a gig with a local accident reconstructionist.
@@ -74,7 +74,7 @@ add hi-res models, effects, and additional animation.
 
 <div align="center">
 <iframe class="youtube-player" type="text/html" width="640" height="385"
-src="http://www.youtube.com/embed/acpSYe183nY" allowfullscreen frameborder="0">
+src="https://www.youtube.com/embed/acpSYe183nY" allowfullscreen frameborder="0">
 </iframe>
 </div>
 
@@ -124,7 +124,7 @@ framework in the AS3 world, and has ports in several other languages.
 
 It was this experience that lead me to my current adoration/fascination with
 open source software. There is nothing cooler than a group of skilled people
-spending their *free time* to create software that anybody can use, for free, to
+spending their _free time_ to create software that anybody can use, for free, to
 build nice things. How cool is that?
 
 I also saw real benefits with my participation. It lead me to my current gig
@@ -135,7 +135,7 @@ in.
 ## Devpression.
 
 In November 2011, Adobe effectively cut the throat of Flex/Flash as a platform
-for building applications on. This was a tough blow to take. I'd spent a *ton*
+for building applications on. This was a tough blow to take. I'd spent a _ton_
 of time and energy on this platform, and now it wasn't viable?! Fuck me.
 
 I'd been eyeing JavaScript and the rise of HTML5. I kept abreast of the latest
@@ -150,7 +150,7 @@ platforms isn't some sort of impossible feat that would take years.
 
 I've went full-on neckbeard with my technology choices. I
 have no interest in investing heavily in proprietary closed commercial
-platforms. I want to contribute and work in the *open web*. It is such a
+platforms. I want to contribute and work in the _open web_. It is such a
 wonderful space, with so many brilliant people working together to advance the
 state of the art.
 
@@ -159,25 +159,3 @@ state of the art.
 In 2013, I convinced my friend John Lindquist to take his YouTube videos that he had been making them for years and turn it into a business. He was skeptical, to say the least, but over the years since we've grown egghead from a stack of free lessons to well over a thousand individual lessons coming from more than 50 instructors. It's been an amazing ride!
 
 I handle the technical and business aspects of egghead. In the past, I used to say "I suck at marketing", but it turns out I don't. In fact, it can be fun, especially when you are selling a product that you believe in. Our general mission at egghead is to **make the web a better place**. We don't want to change the world, but we can do our small part to make it a bit better.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
