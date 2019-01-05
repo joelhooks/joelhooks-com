@@ -110,7 +110,7 @@ Moving across the country and having a kid throw a real wrench in your social li
 
 I threw a dinner party or two, got invited over for a dinner party or two, and had lots of great meals and conversations with friends.
 
-It was nice.
+It was nice!
 
 ## Made some art
 
