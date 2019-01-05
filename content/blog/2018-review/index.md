@@ -25,7 +25,7 @@ Here's a little life tip, moving across the country and then immediately having 
 
 Individually, both of these activities are intense. They literally disrupt every single aspect of your life, and force you into new and unexpected changes that you _cannot_ get out of.
 
-![man and baby with a bird](./images/colors.png)
+![man and baby with a bird](./colors.png)
 
 It takes awhile to get back to any sense of normal after either of these events, and when they are stacked like that it might take a little longer.
 
@@ -106,7 +106,7 @@ What a big step. It’s nice to give one of the other kids their own room, but w
 
 Moving across the country and having a kid throw a real wrench in your social life, but 2018 things started to perk up.
 
-![a bunch of taco fixins](./images/buffet.jpg)
+![a bunch of taco fixins](./buffet.jpg)
 
 I threw a dinner party or two, got invited over for a dinner party or two, and had lots of great meals and conversations with friends.
 
