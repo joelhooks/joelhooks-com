@@ -13,9 +13,7 @@ const globalStyles = css`
     padding: 0;
   }
 
-  ${() => {
-    /* Override PrismJS Defaults */ return null
-  }} pre {
+  pre {
     background-color: #061526 !important;
     border-radius: 4px;
     font-size: 14px;

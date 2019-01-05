@@ -239,3 +239,13 @@ Small improvements. Incremental change.
 This year I want to add more small habits to my life, and stack the bricks in my favor both professionally and personally.
 
 I want to work with great people. I want to build relationships and enjoy friendships new and old.
+
+import { Tweet } from 'react-twitter-widgets'
+
+<div style={{
+  display: 'flex',
+  justifyContent: 'center',
+  marginTop: '35px'
+}}>
+<Tweet tweetId='1078000407014563841'/>
+</div>

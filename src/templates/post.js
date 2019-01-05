@@ -2,7 +2,6 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import Img from 'gatsby-image'
 import MDXRenderer from 'gatsby-mdx/mdx-renderer'
-import { css } from '@emotion/core'
 
 import Layout from '../components/Layout'
 
@@ -17,10 +16,13 @@ export default function Post({
           width: '100%',
           margin: '0 auto',
           maxWidth: 600 + 32,
+          paddingBottom: '50px',
         }}
       >
         <h1>{mdx.frontmatter.title}</h1>
-        <h2>{mdx.frontmatter.date}</h2>
+        <p>
+          <em>{mdx.frontmatter.date}</em>
+        </p>
 
         {mdx.frontmatter.banner && (
           <Img
