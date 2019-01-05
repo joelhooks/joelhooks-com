@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
-import Helmet from 'react-helmet';
-import { graphql } from 'gatsby';
-import { MDXProvider } from '@mdx-js/tag';
-import { css, Global } from '@emotion/core';
+import React, { Fragment } from 'react'
+import Helmet from 'react-helmet'
+import { graphql } from 'gatsby'
+import { MDXProvider } from '@mdx-js/tag'
+import { css, Global } from '@emotion/core'
 
-import mdxComponents from './mdx';
+import mdxComponents from './mdx'
 
 const globalStyles = css`
   html,
@@ -14,7 +14,7 @@ const globalStyles = css`
   }
 
   ${() => {
-    /* Override PrismJS Defaults */ return null;
+    /* Override PrismJS Defaults */ return null
   }} pre {
     background-color: #061526 !important;
     border-radius: 4px;
@@ -30,25 +30,32 @@ const globalStyles = css`
     padding-right: 1em;
     padding-left: 1em;
   }
-`;
+`
 
 export default ({ site, frontmatter = {}, children }) => {
   const {
     title,
     description: siteDescription,
     keywords: siteKeywords,
-  } = site.siteMetadata;
+  } = site.siteMetadata
 
   const {
     keywords: frontmatterKeywords,
     description: frontmatterDescription,
-  } = frontmatter;
+  } = frontmatter
 
-  const keywords = (frontmatterKeywords || siteKeywords).join(', ');
-  const description = frontmatterDescription || siteDescription;
+  const keywords = (frontmatterKeywords || siteKeywords).join(', ')
+  const description = frontmatterDescription || siteDescription
 
   return (
-    <Fragment>
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 100vh;
+      `}
+    >
       <Helmet
         title={title}
         meta={[
@@ -62,9 +69,9 @@ export default ({ site, frontmatter = {}, children }) => {
       <MDXProvider components={mdxComponents}>
         <Fragment>{children}</Fragment>
       </MDXProvider>
-    </Fragment>
-  );
-};
+    </div>
+  )
+}
 
 export const pageQuery = graphql`
   fragment site on Site {
@@ -75,4 +82,4 @@ export const pageQuery = graphql`
       keywords
     }
   }
-`;
+`

@@ -1,9 +1,10 @@
-import React from 'react';
-import { graphql } from 'gatsby';
-import Img from 'gatsby-image';
-import MDXRenderer from 'gatsby-mdx/mdx-renderer';
+import React from 'react'
+import { graphql } from 'gatsby'
+import Img from 'gatsby-image'
+import MDXRenderer from 'gatsby-mdx/mdx-renderer'
+import { css } from '@emotion/core'
 
-import Layout from '../components/Layout';
+import Layout from '../components/Layout'
 
 export default function Post({
   data: { site, mdx },
@@ -11,19 +12,27 @@ export default function Post({
 }) {
   return (
     <Layout site={site} frontmatter={mdx.frontmatter}>
-      <h1>{mdx.frontmatter.title}</h1>
-      <h2>{mdx.frontmatter.date}</h2>
+      <div
+        css={{
+          width: '100%',
+          margin: '0 auto',
+          maxWidth: 600 + 32,
+        }}
+      >
+        <h1>{mdx.frontmatter.title}</h1>
+        <h2>{mdx.frontmatter.date}</h2>
 
-      {mdx.frontmatter.banner && (
-        <Img
-          sizes={mdx.frontmatter.banner.childImageSharp.sizes}
-          alt={site.siteMetadata.keywords.join(', ')}
-        />
-      )}
+        {mdx.frontmatter.banner && (
+          <Img
+            sizes={mdx.frontmatter.banner.childImageSharp.sizes}
+            alt={site.siteMetadata.keywords.join(', ')}
+          />
+        )}
 
-      <MDXRenderer>{mdx.code.body}</MDXRenderer>
+        <MDXRenderer>{mdx.code.body}</MDXRenderer>
+      </div>
     </Layout>
-  );
+  )
 }
 
 export const pageQuery = graphql`
@@ -50,4 +59,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`
