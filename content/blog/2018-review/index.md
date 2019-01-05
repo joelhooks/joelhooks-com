@@ -29,6 +29,8 @@ Individually, both of these activities are intense. They literally disrupt every
 
 It takes awhile to get back to any sense of normal after either of these events, and when they are stacked like that it might take a little longer.
 
+![group of people sitting on rock](./images/family.jpg)
+
 These dramatic changes affected the whole family, and 2018 felt like the year we collectively started to even out.
 
 ## Building habits and systems
