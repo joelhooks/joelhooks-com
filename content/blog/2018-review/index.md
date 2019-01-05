@@ -27,7 +27,7 @@ Individually, both of these activities are intense. They literally disrupt every
 
 It takes awhile to get back to any sense of normal after either of these events, and when they are stacked like that it might take a little longer.
 
-![man and child in colorful clothese with a bird](./images/color_romi.jpg)
+![man and child in colorful clothes with a bird](./images/kids.jpg)
 
 These dramatic changes affected the whole family, and 2018 felt like the year we collectively started to even out.
 
@@ -106,7 +106,7 @@ What a big step. It’s nice to give one of the other kids their own room, but w
 
 Moving across the country and having a kid throw a real wrench in your social life, but 2018 things started to perk up.
 
-![a bunch of taco food on a buffet](./images/dinner.jpg)
+![a bunch of taco fixins](./images/buffet.jpg)
 
 I threw a dinner party or two, got invited over for a dinner party or two, and had lots of great meals and conversations with friends.
 
