@@ -148,7 +148,7 @@ For the first time in a decade I don't work at home. For the last 10 years I've 
 
 It's been great actually. And the best part might be having the space back in our home for just chilling out and listening to records.
 
-![a room with several charis and vinyl records](./images/listening.jpg)
+![a room with several chairs and vinyl records](./images/listening.jpg)
 
 We enjoy it quite a lot.
 
