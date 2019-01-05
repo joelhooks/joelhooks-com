@@ -37,7 +37,6 @@ module.exports = {
               maxWidth: 800,
               sizeByPixelDensity: true,
               linkImagesToOriginal: false,
-              withWebp: true,
             },
           },
         ],
