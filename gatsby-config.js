@@ -1,4 +1,4 @@
-const remarkHighlight = require('remark-highlight.js');
+const remarkHighlight = require('remark-highlight.js')
 
 module.exports = {
   pathPrefix: '/',
@@ -15,6 +15,7 @@ module.exports = {
       options: {
         path: `${__dirname}/content/blog`,
         name: 'blog',
+        ignore: [`**/readme.md`],
       },
     },
     {
@@ -22,6 +23,7 @@ module.exports = {
       options: {
         path: `${__dirname}/content/legacy_blog`,
         name: 'legacy',
+        ignore: [`**/readme.md`],
       },
     },
     {
@@ -62,6 +64,63 @@ module.exports = {
         trackingId: `UA-246705-7`,
       },
     },
+    {
+      resolve: `gatsby-plugin-feed`,
+      options: {
+        query: `
+          {
+            site {
+              siteMetadata {
+                title
+                description
+                siteUrl
+                site_url: siteUrl
+              }
+            }
+          }
+        `,
+        feeds: [
+          {
+            serialize: ({ query: { site, allMdx } }) => {
+              return allMdx.edges.map(edge => {
+                return Object.assign({}, edge.node.frontmatter, {
+                  description: edge.node.excerpt,
+                  date: edge.node.fields.date,
+                  url: site.siteMetadata.siteUrl + edge.node.fields.slug,
+                  guid: site.siteMetadata.siteUrl + edge.node.fields.slug,
+                  custom_elements: [{ 'content:encoded': edge.node.html }],
+                })
+              })
+            },
+            query: `
+              {
+                allMdx(
+                  limit: 1000,
+                  filter: { frontmatter: { published: { ne: false } } }
+                  sort: { order: DESC, fields: [frontmatter___date] }
+                ) {
+                  edges {
+                    node {
+                      excerpt(pruneLength: 250)
+                      html
+                      fields { 
+                        slug
+                        date
+                      }
+                      frontmatter {
+                        title
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+            output: '/rss.xml',
+            title: 'Joel Hooks Blog RSS Feed',
+          },
+        ],
+      },
+    },
     'gatsby-plugin-offline',
   ],
-};
+}

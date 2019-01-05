@@ -1,9 +1,9 @@
-import React from 'react';
-import { graphql } from 'gatsby';
-import { css } from '@emotion/core';
-import Layout from '../components/Layout';
-import underConstruction from './uc.gif';
-import Link from '../components/Link';
+import React from 'react'
+import { graphql } from 'gatsby'
+import { css } from '@emotion/core'
+import Layout from '../components/Layout'
+import underConstruction from './uc.gif'
+import Link from '../components/Link'
 
 export default function Index({ data: { site } }) {
   return (
@@ -22,7 +22,7 @@ export default function Index({ data: { site } }) {
             display: flex;
             align-items: center;
             max-width: 600px;
-            margin-top: 75px;
+            1margin-top: 75px;
             flex-direction: column;
           `}
         >
@@ -52,7 +52,7 @@ export default function Index({ data: { site } }) {
         </div>
       </div>
     </Layout>
-  );
+  )
 }
 
 export const pageQuery = graphql`
@@ -61,4 +61,4 @@ export const pageQuery = graphql`
       ...site
     }
   }
-`;
+`

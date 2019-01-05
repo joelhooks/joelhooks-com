@@ -1,1 +1,1 @@
-This folder is filled with old posts exported from wordpress.
+# Static HTML exported from a wordpress blog
