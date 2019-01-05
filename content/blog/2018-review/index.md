@@ -19,7 +19,7 @@ Following the lead of my friends [Marisa](https://medium.com/@marisamorby/2018-r
 2. What didn't go well?
 3. What will we change for the future?
 
-## So, what went well?
+# So, what went well?
 
 Here's a little life tip, moving across the country and then immediately having your 5th kid 9 months later is not a sequence I would recommend or repeat.
 
@@ -31,7 +31,7 @@ It takes awhile to get back to any sense of normal after either of these events,
 
 These dramatic changes affected the whole family, and 2018 felt like the year we collectively started to even out.
 
-### Building habits and systems
+## Building habits and systems
 
 In May I went to the dentist. It's only in recent years that I started actually going every 6th months. Most of my life I went sporadically, but I'm lucky the have strong enamel and didn't even have a cavity until I was 35. Since then, as one does as they get older, I've become more health conscious and would love to still have a set of original functioning teeth into my golden years.
 
@@ -53,7 +53,7 @@ Here’s the thing though, I’m still doing it. It’s just part of the daily r
 
 In fact, that small habit lead to me picking up a couple other habits, one at a time.
 
-### Tracking my calories
+## Tracking my calories
 
 I’ve tried a lot of different diets and approaches to weight loss over the years. Most of the ones that get hyped are radical and require significant lifestyle changes with regards to how you eat.
 
@@ -67,7 +67,7 @@ So instead of a restrictive diet that dictates what I can eat and/or when I can 
 
 For me, this has been fantastic. I’ve dropped a few pounds, and have a better understanding of how what I eat affects me on a day to day basis. Definitely plan to keep this up throughout 2019.
 
-### Lifting weights 🏋🏼‍♂️
+## Lifting weights 🏋🏼‍♂️
 
 The last time I lifted weights, or really did any sort of consistent rigorous physical activity was when I was 17, and even then it was mostly just doing curls to pump up my arms.
 
@@ -96,13 +96,13 @@ All of these things I can attribute to both the weight loss and the weight lifti
 
 Looking forward to slow incremental progress as a weight lifter.
 
-### One of the kids moved out 😭
+## One of the kids moved out 😭
 
 This is bitter-sweet, but our oldest moved out and got an apartment with his partner.
 
 What a big step. It’s nice to give one of the other kids their own room, but we miss having the full set around the house all the time.
 
-### Started making friends
+## Started making friends
 
 Moving across the country and having a kid throw a real wrench in your social life, but 2018 things started to perk up.
 
@@ -112,7 +112,7 @@ I threw a dinner party or two, got invited over for a dinner party or two, and h
 
 It was nice.
 
-### Made some art
+## Made some art
 
 Once again this summer I got to make the annual pilgrimage to learn from Joshua Davis. He taught a great workshop and I was as happy as I've ever been with the images that I created.
 
@@ -120,7 +120,7 @@ Once again this summer I got to make the annual pilgrimage to learn from Joshua 
 
 These were done in processing and used computer vision as the input so the camera on my laptop scanned the room watching for movement and color to affect changes on the variables that generate the imagery.
 
-### Got to meet and hang our with my coworkers
+## Got to meet and hang our with my coworkers
 
 Before September I’d never met the designer I work with on a daily basis in person.
 
@@ -132,7 +132,7 @@ The internet, right??
 
 We converged the entire company on Prague, and it was an awesome week of hanging out and getting to know one another.
 
-### Launched a standalone product
+## Launched a standalone product
 
 We worked with Kent C Dodds in 2018 to produce and launch his [Testing JavaScript](https://testingjavascript.com) self-paced workshop.
 
@@ -152,7 +152,7 @@ It's been great actually. And the best part might be having the space back in ou
 
 We enjoy it quite a lot.
 
-### Several new tattoos
+## Several new tattoos
 
 Well, once you get started, might as well go all in?
 
@@ -174,7 +174,7 @@ The JFDI means Just Fucking Do It, and is something that my friend Alex Hillman 
 
 So, there it is. JFDI. It’s a consistent and constant reminder to do the work.
 
-## What didn’t go well?
+# What didn’t go well?
 
 At the beginning of 2018 I was enrolled in a woodworking class and bought a kickass Saw Stop table saw for the garage.
 
@@ -182,11 +182,13 @@ Built one thing.
 
 Now it’s just a table sitting in the garage.
 
+![a garage with a table saw and another table](./images/unused_tools.jpg)
+
 This is still something I want to do, but building a wood shop is a slippery slope. Space is limited. Need more tools… blah blah
 
 Excuses!
 
-### Mediocre Bullet Journaling
+## Mediocre Bullet Journaling
 
 I really love the idea of Bullet Journaling as a system. It makes logical sense and it is functionally fairly easy to do.
 
@@ -196,7 +198,7 @@ That’s the point where I stopped doing it.
 
 I felt productive af when it was going well though!
 
-### Derailed from the plan at work…
+## Derailed from the plan at work…
 
 At the beginning of 2018 we had a rock solid plan to aggressively pursue “enterprise” accounts for egghead.
 
@@ -214,15 +216,21 @@ Most days it feels like I’m making it up as I go along and that there are 1000
 
 We’ve also been affected by slower growth overall as a business, so that has made it difficult to expand the team or make any headway on the very hard technical problems that I’d like to solve.
 
-Even if we could expand the team, I don’t know that it would change the situation radically as it still means focus and prioritization - leadership - skills that would be nice to have nailed, but feels like I fall short more often than not.
+On one hand egghead has been a big success for me personally and professionally, on the other I feel desperately inadequate to sit at the helm.
 
-On one hand egghead has been a wild success, on the other I feel desperately inadequate to sit at the helm.
-
-## The focus for 2019
+# The focus for 2019
 
 All in all I’m stoked for the new year. It doesn’t mean a new beginning or a new chance. I’m not one to make New Years resolutions, but the plan is relatively simple.
 
-### Continue to work on habits and systems
+## Build a few things
+
+I'd like to use the tools that I have in the house to build a few things. Simple stuff like bookshelves and cabinets that will be useful around the house.
+
+Wood working is still interesting to me and I want to work out how to use the space and tools effectively. The shared space is difficult, but it doesn't have to be a deal breaker, especially for smaller projects.
+
+## Continue to work on habits and systems
+
+The plan is to work on the fundamentals. Tiny habits applied conssitantly.
 
 Or universe is comprised of systems. Good ones and bad. I want to work on my own personal systems, the things I can control, to optimize them and make them run better.
 
