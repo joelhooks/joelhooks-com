@@ -106,7 +106,7 @@ What a big step. It’s nice to give one of the other kids their own room, but w
 
 Moving across the country and having a kid throw a real wrench in your social life, but 2018 things started to perk up.
 
-![a bunch of taco food on a buffet](./images/dinner_party.jpg)
+![a bunch of taco food on a buffet](./images/dinner.jpg)
 
 I threw a dinner party or two, got invited over for a dinner party or two, and had lots of great meals and conversations with friends.
 
@@ -116,7 +116,7 @@ It was nice.
 
 Once again this summer I got to make the annual pilgrimage to learn from Joshua Davis. He taught a great workshop and I was as happy as I've ever been with the images that I created.
 
-![abstract computer generated art](./images/art_camp_2018.jpg)
+![abstract computer generated art](./images/art.jpg)
 
 These were done in processing and used computer vision as the input so the camera on my laptop scanned the room watching for movement and color to affect changes on the variables that generate the imagery.
 
@@ -144,11 +144,11 @@ It’s the start of a new line of business for us, and a way for the content cre
 
 For the first time in a decade I don't work at home. For the last 10 years I've monopolized the dining room of our houses to get work done. This year I wanted to get that space back as well as provide some seperation between work and home so I rented a small office about 8 minutes from home.
 
-![a television and a white board with various writing](./images/office.jpg)
+![a television and a white board with various writing](./images/officespace.jpg)
 
 It's been great actually. And the best part might be having the space back in our home for just chilling out and listening to records.
 
-![a room with several charis and vinyl records](./images/listening-room.jpg)
+![a room with several charis and vinyl records](./images/listening.jpg)
 
 We enjoy it quite a lot.
 
@@ -156,11 +156,11 @@ We enjoy it quite a lot.
 
 Well, once you get started, might as well go all in?
 
-![a tattoo of rainbows shooting out of an ocilloscope into space](./images/ww_tattoo.jpg)
+![a tattoo of rainbows shooting out of an ocilloscope into space](./images/ww.jpg)
 
 This one is from Winston the Whale in Portland. It is what it is ;)
 
-![a tattoo of cartoon cats](./images/cat_tat.jpg)
+![a tattoo of cartoon cats](./images/cat.jpg)
 
 This one is from Jiran of our three cats. Rat, the white one, actually passed away this year. Cyan pointed out that Comet, the orange cat, does NOT have a tail IRL. She says "It's OK, he'll be dead in a few years and we can just pretend."
 
@@ -182,7 +182,7 @@ Built one thing.
 
 Now it’s just a table sitting in the garage.
 
-![a garage with a table saw and another table](./images/unused_tools.jpg)
+![a garage with a table saw and another table](./images/unused.jpg)
 
 This is still something I want to do, but building a wood shop is a slippery slope. Space is limited. Need more tools… blah blah
 
