@@ -1,7 +1,7 @@
 ---
 slug: 2018-in-review
 date: 2019-01-04
-title: '2018 in Review: No goals for 2019 inside'
+title: '2018 in Review'
 description: 'If there is one thing I learned in 2018, it is to stop setting goals and start working on systems.'
 categories: ['JFDI']
 keywords: ['planning', 'systems']
