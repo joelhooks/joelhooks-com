@@ -5,31 +5,31 @@
 <!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
 	<head>
-<base href="http://joelhooks.com" />
+<base href="https://joelhooks.com" />
 
 		<meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2joelhooks.com | joelhooks.com</title>
 		
-		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		<link rel="stylesheet" href="https://joelhooks.com/wp-content/themes/boilerplate/style.css" />
 		
 
 
 
 <!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
-	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="https://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
 <![endif]-->
-<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
-<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
-<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+<link rel='stylesheet' id='codebox-css'  href='https://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='https://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='https://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
 
 <script type="text/javascript" charset="utf-8">
 
 	/**
 	 * Courtesy of Kimili Flash Embed - Version 2.2
-	 * by Michael Bester - http://kimili.com
+	 * by Michael Bester - https://kimili.com
 	 */
 
 	(function(){
@@ -44,18 +44,18 @@
 
  
 
-<link rel='next' title='Robotlegs AS3: A Dependency Injection Driven MVCS Framework for Flash/Flex – Inspired by PureMVC' href='http://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-%e2%80%93-inspired-by-puremvc/' />
+<link rel='next' title='Robotlegs AS3: A Dependency Injection Driven MVCS Framework for Flash/Flex – Inspired by PureMVC' href='https://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-%e2%80%93-inspired-by-puremvc/' />
 
-<link rel='shortlink' href='http://joelhooks.com/?p=226' />
+<link rel='shortlink' href='https://joelhooks.com/?p=226' />
 
 <!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,768] -->
 <meta name="description" content="A detailed photo gallery example of using the Parsley Inversion of Control Container with Flex." />
 <meta name="keywords" content="adobe, flex, ioc, inversion of control, dependency injection, di, design patterns, slideshow, component, development, framework, consultant, puremvc, actionscript" />
-<link rel="canonical" href="http://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/" />
+<link rel="canonical" href="https://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/" />
 <!-- /all in one seo pack -->
 
-<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
-<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: https://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="https://creativecommons.org/licenses/by/3.0/us/" />
 
 <style type="text/css"><!--
 .cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
@@ -66,13 +66,13 @@
 
 	/**
 	 * Courtesy of Kimili Flash Embed - Version 2.2
-	 * by Michael Bester - http://kimili.com
+	 * by Michael Bester - https://kimili.com
 	 */
 
 	(function(){
 		try {
 			// Registering Statically Published SWFs
-			swfobject.registerObject("fm_ParsleyGallery_1524227167","10.0.0","http://joelhooks.com/wp-content/plugins/kimili-flash-embed/lib/expressInstall.swf");
+			swfobject.registerObject("fm_ParsleyGallery_1524227167","10.0.0","https://joelhooks.com/wp-content/plugins/kimili-flash-embed/lib/expressInstall.swf");
 		} catch(e) {}
 	})();
 </script>
@@ -87,7 +87,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 	</head>
 	<body class="single single-post postid-226 single-format-standard">
 		<header role="banner">
-			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<h1><a href="https://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
 			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
 
 		</header>
@@ -96,24 +96,24 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 					<h1>Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2</h1>
 		
 					<div class="entry-content">
-						<p>This is the second part in a series exploring Inversion of Control and Dependency Injection containers available for Flex. In <a href="http://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/">the first part of the series we discussed what IoC and DI</a> are and how they can benefit our applications. In this part, we will explore the Parsley IoC Container through a simple image gallery application.</p>
-<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/IoC-DI-Flex-Example/tree/master');"  href="http://github.com/joelhooks/IoC-DI-Flex-Example/tree/master">Here&#8217;s the source on github&#8230;</a></p>
+						<p>This is the second part in a series exploring Inversion of Control and Dependency Injection containers available for Flex. In <a href="https://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/">the first part of the series we discussed what IoC and DI</a> are and how they can benefit our applications. In this part, we will explore the Parsley IoC Container through a simple image gallery application.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/github.com/joelhooks/IoC-DI-Flex-Example/tree/master');"  href="https://github.com/joelhooks/IoC-DI-Flex-Example/tree/master">Here&#8217;s the source on github&#8230;</a></p>
 <div align="center">
 <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="fm_ParsleyGallery_1524227167"
 			class="flashmovie"
 			width="500"
 			height="600">
-	<param name="movie" value="http://joelhooks.com/examples/parsleyGallery/ParsleyGallery.swf" />
+	<param name="movie" value="https://joelhooks.com/examples/parsleyGallery/ParsleyGallery.swf" />
 	<!--[if !IE]>-->
 	<object	type="application/x-shockwave-flash"
-			data="http://joelhooks.com/examples/parsleyGallery/ParsleyGallery.swf"
+			data="https://joelhooks.com/examples/parsleyGallery/ParsleyGallery.swf"
 			name="fm_ParsleyGallery_1524227167"
 			width="500"
 			height="600">
 	<!--<![endif]-->
 		
-<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="https://adobe.com/go/getflashplayer"><img src="https://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
 
 	<!--[if !IE]>-->
 	</object>
@@ -123,7 +123,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 <p><span id="more-226"></span></p>
 <h2>Less talk. More Code.</h2>
 <p>One aspect of an IoC/DI container that is consistent across frameworks is the need to bootstrap the configuration. Parsley provides several ways to accomplish this.</p>
-<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.spicefactory.org/parsley/docs/2.0/manual/config.php#intro');"  href="http://www.spicefactory.org/parsley/docs/2.0/manual/config.php#intro">from the docs</a>:</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.spicefactory.org/parsley/docs/2.0/manual/config.php#intro');"  href="https://www.spicefactory.org/parsley/docs/2.0/manual/config.php#intro">from the docs</a>:</p>
 <blockquote><p>Configuring and initializing the Parsley Framework usually consists of the following steps:</p>
 <p><strong>Step 1</strong>: Telling the IOC Container which classes it should manage. This can be done with MXML, XML files or in ActionScript. All three mechanisms will be described in the following sections.</p>
 <p><strong>Step 2:</strong> Configure the container services like Dependency Injection or Messaging for each individual class. This can be done with the mechanism you had chosen for step 1 (e.g. with MXML or XML configuration tags) or &#8211; in most cases &#8211; conveniently with AS3 Metadata Tags right within the classes themselves.</p>
@@ -180,12 +180,12 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 <span style="color: #808080; font-style: italic;">	licensed by another party restricting such use. Please leave the credits intact.</span>
 &nbsp;
 <span style="color: #808080; font-style: italic;">	Joel Hooks</span>
-<span style="color: #808080; font-style: italic;">	http://joelhooks.com</span>
+<span style="color: #808080; font-style: italic;">	https://joelhooks.com</span>
 <span style="color: #808080; font-style: italic;">	joelhooks@gmail.com</span>
 <span style="color: #808080; font-style: italic;">--&gt;</span>
 <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;mx:Object</span></span>
-<span style="color: #009900;">    <span style="color: #000066;">xmlns:mx</span>=<span style="color: #ff0000;">&quot;http://www.adobe.com/2006/mxml&quot;</span></span>
-<span style="color: #009900;">    <span style="color: #000066;">xmlns</span>=<span style="color: #ff0000;">&quot;http://www.spicefactory.org/parsley&quot;</span></span>
+<span style="color: #009900;">    <span style="color: #000066;">xmlns:mx</span>=<span style="color: #ff0000;">&quot;https://www.adobe.com/2006/mxml&quot;</span></span>
+<span style="color: #009900;">    <span style="color: #000066;">xmlns</span>=<span style="color: #ff0000;">&quot;https://www.spicefactory.org/parsley&quot;</span></span>
 <span style="color: #009900;">    <span style="color: #000066;">xmlns:models</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.models.*&quot;</span></span>
 <span style="color: #009900;">    <span style="color: #000066;">xmlns:controllers</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.controllers.*&quot;</span></span>
 <span style="color: #009900;">    <span style="color: #000066;">xmlns:presentation</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.models.presentation.*&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span>
@@ -282,17 +282,17 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 <span style="color: #808080; font-style: italic;">	licensed by another party restricting such use. Please leave the credits intact.</span>
 &nbsp;
 <span style="color: #808080; font-style: italic;">	Joel Hooks</span>
-<span style="color: #808080; font-style: italic;">	http://joelhooks.com</span>
+<span style="color: #808080; font-style: italic;">	https://joelhooks.com</span>
 <span style="color: #808080; font-style: italic;">	joelhooks@gmail.com</span>
 <span style="color: #808080; font-style: italic;">--&gt;</span>
 <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:Application</span></span>
-<span style="color: #009900;">	<span style="color: #000066;">xmlns:fx</span>=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:fx</span>=<span style="color: #ff0000;">&quot;https://ns.adobe.com/mxml/2009&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">preinitialize</span>=<span style="color: #ff0000;">&quot;onPreInitialize()&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">xmlns:s</span>=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">xmlns:mx</span>=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/halo&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">minWidth</span>=<span style="color: #ff0000;">&quot;1024&quot;</span> <span style="color: #000066;">minHeight</span>=<span style="color: #ff0000;">&quot;768&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">xmlns:tag</span>=<span style="color: #ff0000;">&quot;org.spicefactory.parsley.flex.tag.*&quot;</span></span>
-<span style="color: #009900;">	<span style="color: #000066;">xmlns:spicefactory</span>=<span style="color: #ff0000;">&quot;http://www.spicefactory.org/parsley/flex&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:spicefactory</span>=<span style="color: #ff0000;">&quot;https://www.spicefactory.org/parsley/flex&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">addedToStage</span>=<span style="color: #ff0000;">&quot;this.addedToStageHandler(event)&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">applicationComplete</span>=<span style="color: #ff0000;">&quot;trace('application complete');&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">xmlns:views</span>=<span style="color: #ff0000;">&quot;com.joelhooks.parsley.example.views.*&quot;</span></span>
@@ -384,7 +384,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 	licensed by another party restricting such use. Please leave the credits intact.
 &nbsp;
 	Joel Hooks
-	http://joelhooks.com
+	https://joelhooks.com
 	joelhooks@gmail.com
 */</span>
 package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">controllers</span>
@@ -514,7 +514,7 @@ package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #
 	licensed by another party restricting such use. Please leave the credits intact.
 &nbsp;
 	Joel Hooks
-	http://joelhooks.com
+	https://joelhooks.com
 	joelhooks@gmail.com
 */</span>
 package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #006600;">parsley</span>.<span style="color: #006600;">example</span>.<span style="color: #006600;">delegates</span>
@@ -577,7 +577,7 @@ package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #
 			<span style="color: #b1b100;">for</span> <span style="color: #b1b100;">each</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">var</span> flickrPhoto:Photo <span style="color: #b1b100;">in</span> results<span style="color: #66cc66;">&#41;</span>
 			<span style="color: #66cc66;">&#123;</span>
 				<span style="color: #000000; font-weight: bold;">var</span> photo:GalleryImage = <span style="color: #000000; font-weight: bold;">new</span> GalleryImage<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>
-				<span style="color: #000000; font-weight: bold;">var</span> baseURL:<span style="color: #0066CC;">String</span> = <span style="color: #ff0000;">'http://farm'</span> + flickrPhoto.<span style="color: #006600;">farmId</span> + <span style="color: #ff0000;">'.static.flickr.com/'</span> + flickrPhoto.<span style="color: #006600;">server</span> + <span style="color: #ff0000;">'/'</span> + flickrPhoto.<span style="color: #006600;">id</span> + <span style="color: #ff0000;">'_'</span> + flickrPhoto.<span style="color: #006600;">secret</span>;
+				<span style="color: #000000; font-weight: bold;">var</span> baseURL:<span style="color: #0066CC;">String</span> = <span style="color: #ff0000;">'https://farm'</span> + flickrPhoto.<span style="color: #006600;">farmId</span> + <span style="color: #ff0000;">'.static.flickr.com/'</span> + flickrPhoto.<span style="color: #006600;">server</span> + <span style="color: #ff0000;">'/'</span> + flickrPhoto.<span style="color: #006600;">id</span> + <span style="color: #ff0000;">'_'</span> + flickrPhoto.<span style="color: #006600;">secret</span>;
 				photo.<span style="color: #006600;">thumbURL</span> = baseURL + <span style="color: #ff0000;">'_s.jpg'</span>;
 				photo.<span style="color: #0066CC;">URL</span> = baseURL + <span style="color: #ff0000;">'.jpg'</span>;
 				gallery.<span style="color: #006600;">photos</span>.<span style="color: #006600;">addItem</span><span style="color: #66cc66;">&#40;</span> photo <span style="color: #66cc66;">&#41;</span>;
@@ -682,11 +682,11 @@ package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #
 <span style="color: #808080; font-style: italic;">	licensed by another party restricting such use. Please leave the credits intact.</span>
 &nbsp;
 <span style="color: #808080; font-style: italic;">	Joel Hooks</span>
-<span style="color: #808080; font-style: italic;">	http://joelhooks.com</span>
+<span style="color: #808080; font-style: italic;">	https://joelhooks.com</span>
 <span style="color: #808080; font-style: italic;">	joelhooks@gmail.com</span>
 <span style="color: #808080; font-style: italic;">--&gt;</span>
 <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;s:Group</span></span>
-<span style="color: #009900;">	<span style="color: #000066;">xmlns:fx</span>=<span style="color: #ff0000;">&quot;http://ns.adobe.com/mxml/2009&quot;</span></span>
+<span style="color: #009900;">	<span style="color: #000066;">xmlns:fx</span>=<span style="color: #ff0000;">&quot;https://ns.adobe.com/mxml/2009&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">xmlns:s</span>=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/spark&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">xmlns:mx</span>=<span style="color: #ff0000;">&quot;library://ns.adobe.com/flex/halo&quot;</span></span>
 <span style="color: #009900;">	<span style="color: #000066;">width</span>=<span style="color: #ff0000;">&quot;500&quot;</span> <span style="color: #000066;">height</span>=<span style="color: #ff0000;">&quot;600&quot;</span></span>
@@ -758,12 +758,12 @@ package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #
 <p>There are two more Actions, RetreiveGalleryAction and SelectImageAction that function as their names imply. In addition the project has several custom events that are used for messaging. I&#8217;m not going to detail these as it would be repetitive, but it is worth noting that this only scratches the surface of the features that are available in Parsley. The docs are extensive, and the API is extremely robust. Typically you won&#8217;t ever need to access the API directly after you make the call in the preinitialize method to bootstrap the container. After that it does its work silently in the background.</p>
 <h2>So I think&#8230;</h2>
 <p>Parsley could be considered a &#8216;magical&#8217; black box framework. This is the trade off you get removing all of the boiler plate code you see in other frameworks. Looking at the extent of classes and libraries that make up Parsley is intimidating. You are placing a lot of trust in a complicated framework and have to hope that trust isn&#8217;t misplaced. There is something to be said for a simple &#8216;non-magical&#8217; framework like PureMVC. Yes, it comes at the cost of boiler plate code, but comprehension is less of a concern.</p>
-<p>The biggest challenge Parsley presents to learning the framework is that code examples are scarce (at best) outside of the out of context examples in the (excellent otherwise) documentation and a <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.sitronnier.com/blog/parsley-2-basic-flex-example');"  href="http://www.sitronnier.com/blog/parsley-2-basic-flex-example">couple blog posts</a>. Researching the framework, I actually found myself referring to SWiZ examples to understand some of the applied concepts. This is interesting in that the SWiZ examples really do carry over, as the frameworks have significant overlap in scope and functionality. There is <a onclick="javascript:pageTracker._trackPageview('/outgoing/groups.google.com/group/swiz-framework/browse_thread/thread/dc418a286c9a3f76');"  href="http://groups.google.com/group/swiz-framework/browse_thread/thread/dc418a286c9a3f76">a thread on the SWiZ Google Group</a> that goes into this, and I was surprised to see the complete lack of knowledge even to the existence of Parsley. I&#8217;ve been aware of the framework since early 2008, but didn&#8217;t take time to get my head around it. It really is perplexing as to why there aren&#8217;t more examples floating around, as Parsley is very mature and robust at this stage in its development. That is something that I really love about PureMVC. Cliff has done such an excellent job centralizing the examples and framework tutorials with <a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/PureMVC_AS3/');"  href="http://trac.puremvc.org/PureMVC_AS3/">the manifold project</a>. The effort it takes to maintain are huge, so I understand that most don&#8217;t have the time or inclination to do so, but it is much appreciated to be sure.</p>
+<p>The biggest challenge Parsley presents to learning the framework is that code examples are scarce (at best) outside of the out of context examples in the (excellent otherwise) documentation and a <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.sitronnier.com/blog/parsley-2-basic-flex-example');"  href="https://www.sitronnier.com/blog/parsley-2-basic-flex-example">couple blog posts</a>. Researching the framework, I actually found myself referring to SWiZ examples to understand some of the applied concepts. This is interesting in that the SWiZ examples really do carry over, as the frameworks have significant overlap in scope and functionality. There is <a onclick="javascript:pageTracker._trackPageview('/outgoing/groups.google.com/group/swiz-framework/browse_thread/thread/dc418a286c9a3f76');"  href="https://groups.google.com/group/swiz-framework/browse_thread/thread/dc418a286c9a3f76">a thread on the SWiZ Google Group</a> that goes into this, and I was surprised to see the complete lack of knowledge even to the existence of Parsley. I&#8217;ve been aware of the framework since early 2008, but didn&#8217;t take time to get my head around it. It really is perplexing as to why there aren&#8217;t more examples floating around, as Parsley is very mature and robust at this stage in its development. That is something that I really love about PureMVC. Cliff has done such an excellent job centralizing the examples and framework tutorials with <a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/PureMVC_AS3/');"  href="https://trac.puremvc.org/PureMVC_AS3/">the manifold project</a>. The effort it takes to maintain are huge, so I understand that most don&#8217;t have the time or inclination to do so, but it is much appreciated to be sure.</p>
 <p>In Part 3 we will go into swapping out the service and get a little unit testing coverage on the application.</p>
-<div class="note-block">I got a little distracted with <a href="http://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-–-inspired-by-puremvc/">Robotlegs</a> and wrote <a href="http://joelhooks.com/2009/07/21/unit-testing-with-inversion-of-control-ioc-and-dependency-injection-di-with-the-robotlegs-framework-and-flexunit-4/">part 3</a> of this tutorial with that framework instead. Parsley is awesome, but Robotlegs suits my needs and makes me smile.</div>
+<div class="note-block">I got a little distracted with <a href="https://joelhooks.com/2009/07/17/robotlegs-as3-a-dependency-injection-driven-mvcs-framework-for-flashflex-–-inspired-by-puremvc/">Robotlegs</a> and wrote <a href="https://joelhooks.com/2009/07/21/unit-testing-with-inversion-of-control-ioc-and-dependency-injection-di-with-the-robotlegs-framework-and-flexunit-4/">part 3</a> of this tutorial with that framework instead. Parsley is awesome, but Robotlegs suits my needs and makes me smile.</div>
 
 <!-- Creative Commons License -->
-<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/">Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<div class="cc-block"><a rel="license" href="https://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="https://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/">Inversion of Control and Dependency Injection with Flex using the Parsley Application Framework &#8211; Part 2</a></em> by <em><a href="https://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
 <!-- /Creative Commons License -->
 											</div><!-- .entry-content -->
 	
@@ -777,7 +777,7 @@ package com.<span style="color: #006600;">joelhooks</span>.<span style="color: #
                     <li class="comment even thread-even depth-1" id="dsq-comment-273">
         <div id="dsq-comment-header-273" class="dsq-comment-header">
             <cite id="dsq-cite-273">
-http://twitter.com/velobr                <span id="dsq-author-user-273">Marvin Froeder</span>
+https://twitter.com/velobr                <span id="dsq-author-user-273">Marvin Froeder</span>
             </cite>
         </div>
         <div id="dsq-comment-body-273" class="dsq-comment-body">
@@ -792,7 +792,7 @@ http://twitter.com/velobr                <span id="dsq-author-user-273">Marvin F
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-274">
         <div id="dsq-comment-header-274" class="dsq-comment-header">
             <cite id="dsq-cite-274">
-http://joelhooks.com                <span id="dsq-author-user-274">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-274">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-274" class="dsq-comment-body">
@@ -805,7 +805,7 @@ http://joelhooks.com                <span id="dsq-author-user-274">Joel Hooks</s
     <li class="comment even thread-even depth-1" id="dsq-comment-466">
         <div id="dsq-comment-header-466" class="dsq-comment-header">
             <cite id="dsq-cite-466">
-http://twitter.com/velobr                <span id="dsq-author-user-466">Marvin Froeder</span>
+https://twitter.com/velobr                <span id="dsq-author-user-466">Marvin Froeder</span>
             </cite>
         </div>
         <div id="dsq-comment-body-466" class="dsq-comment-body">
@@ -820,7 +820,7 @@ http://twitter.com/velobr                <span id="dsq-author-user-466">Marvin F
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-467">
         <div id="dsq-comment-header-467" class="dsq-comment-header">
             <cite id="dsq-cite-467">
-http://joelhooks.com                <span id="dsq-author-user-467">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-467">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-467" class="dsq-comment-body">
@@ -863,7 +863,7 @@ http://joelhooks.com                <span id="dsq-author-user-467">Joel Hooks</s
             </cite>
         </div>
         <div id="dsq-comment-body-863" class="dsq-comment-body">
-            <div id="dsq-comment-message-863" class="dsq-comment-message"><p>Great Article, I also found this important fact about parsleys silent failure issue http://stageaction.wordpress.com/2011/11/17/flex-parsley-silent-failure/</p>
+            <div id="dsq-comment-message-863" class="dsq-comment-message"><p>Great Article, I also found this important fact about parsleys silent failure issue https://stageaction.wordpress.com/2011/11/17/flex-parsley-silent-failure/</p>
 </div>
         </div>
     </li>
@@ -878,8 +878,8 @@ http://joelhooks.com                <span id="dsq-author-user-467">Joel Hooks</s
 
 <script type="text/javascript">
 /* <![CDATA[ */
-    var disqus_url = 'http://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/';
-    var disqus_identifier = '226 http://joelhooks.com/?p=226';
+    var disqus_url = 'https://joelhooks.com/2009/07/14/inversion-of-control-and-dependency-injection-with-flex-using-the-parsley-application-framework-part-2/';
+    var disqus_identifier = '226 https://joelhooks.com/?p=226';
     var disqus_container_id = 'disqus_thread';
     var disqus_domain = 'disqus.com';
     var disqus_shortname = 'joelhooks';
@@ -905,7 +905,7 @@ http://joelhooks.com                <span id="dsq-author-user-467">Joel Hooks</s
             DISQUS.request.get('?cf_action=sync_comments&post_id=226');
         });
                     };
-    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+    var facebookXdReceiverPath = 'https://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
 /* ]]> */
 </script>
 
@@ -923,18 +923,18 @@ http://joelhooks.com                <span id="dsq-author-user-467">Joel Hooks</s
 (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    dsq.src = 'https://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 })();
 /* ]]> */
 </script>
 		</section><!-- #main -->
-                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="https://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="https://twitter.com/jhooks">@jhooks</a></p></blockquote>
 		<!-- footer -->
 
-<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: https://www.oratransplant.nl/uga -->
 <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "https://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">

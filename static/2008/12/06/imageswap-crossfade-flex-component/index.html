@@ -5,31 +5,31 @@
 <!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
 	<head>
-<base href="http://joelhooks.com" />
+<base href="https://joelhooks.com" />
 
 		<meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>ImageSwap (crossfade) Flex Componentjoelhooks.com | joelhooks.com</title>
 		
-		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		<link rel="stylesheet" href="https://joelhooks.com/wp-content/themes/boilerplate/style.css" />
 		
 
 
 
 <!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
-	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="https://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
 <![endif]-->
-<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
-<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
-<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+<link rel='stylesheet' id='codebox-css'  href='https://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='https://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='https://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
 
 <script type="text/javascript" charset="utf-8">
 
 	/**
 	 * Courtesy of Kimili Flash Embed - Version 2.2
-	 * by Michael Bester - http://kimili.com
+	 * by Michael Bester - https://kimili.com
 	 */
 
 	(function(){
@@ -44,16 +44,16 @@
 
  
 
-<link rel='next' title='Form Validation for the Lazy Programmer in Flex' href='http://joelhooks.com/2009/02/01/form-validation-for-the-lazy-programmer-in-flex/' />
+<link rel='next' title='Form Validation for the Lazy Programmer in Flex' href='https://joelhooks.com/2009/02/01/form-validation-for-the-lazy-programmer-in-flex/' />
 
-<link rel='shortlink' href='http://joelhooks.com/?p=118' />
+<link rel='shortlink' href='https://joelhooks.com/?p=118' />
 
 <!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,694] -->
-<link rel="canonical" href="http://joelhooks.com/2008/12/06/imageswap-crossfade-flex-component/" />
+<link rel="canonical" href="https://joelhooks.com/2008/12/06/imageswap-crossfade-flex-component/" />
 <!-- /all in one seo pack -->
 
-<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
-<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: https://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="https://creativecommons.org/licenses/by/3.0/us/" />
 
 <style type="text/css"><!--
 .cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
@@ -64,7 +64,7 @@
 
 	/**
 	 * Courtesy of Kimili Flash Embed - Version 2.2
-	 * by Michael Bester - http://kimili.com
+	 * by Michael Bester - https://kimili.com
 	 */
 
 	(function(){
@@ -85,7 +85,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 	</head>
 	<body class="single single-post postid-118 single-format-standard">
 		<header role="banner">
-			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<h1><a href="https://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
 			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
 
 		</header>
@@ -94,7 +94,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 					<h1>ImageSwap (crossfade) Flex Component</h1>
 		
 					<div class="entry-content">
-						<p>I needed a component that would work in my <a href="http://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/">slideshow component</a> and give a decent crossfade while letting the user know that something was going on. I used TweenLite for the tweening, and it works pretty well. It dispatches an &#8216;imageLoaded&#8217; event when the image swap has completed. I needed this so that the slideshow timer can resume. It pauses when the image starts loading because of various image sizes/connection speeds. Pretty simple, but it is a lot nicer than the harsh transition (or lack of) in the current slideshow.</p>
+						<p>I needed a component that would work in my <a href="https://joelhooks.com/2008/05/11/continuous-scrolling-image-thumbnail-and-slideshow-component-for-flex/">slideshow component</a> and give a decent crossfade while letting the user know that something was going on. I used TweenLite for the tweening, and it works pretty well. It dispatches an &#8216;imageLoaded&#8217; event when the image swap has completed. I needed this so that the slideshow timer can resume. It pauses when the image starts loading because of various image sizes/connection speeds. Pretty simple, but it is a lot nicer than the harsh transition (or lack of) in the current slideshow.</p>
 
 <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="fm_TestFadeComponent_1570460873"
@@ -117,7 +117,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 <p><a href="/examples/imageSwap/srcview/">Source Here.</a></p>
 
 <!-- Creative Commons License -->
-<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2008/12/06/imageswap-crossfade-flex-component/">ImageSwap (crossfade) Flex Component</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<div class="cc-block"><a rel="license" href="https://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="https://joelhooks.com/2008/12/06/imageswap-crossfade-flex-component/">ImageSwap (crossfade) Flex Component</a></em> by <em><a href="https://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
 <!-- /Creative Commons License -->
 											</div><!-- .entry-content -->
 	
@@ -131,7 +131,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
                     <li class="comment even thread-even depth-1" id="dsq-comment-216">
         <div id="dsq-comment-header-216" class="dsq-comment-header">
             <cite id="dsq-cite-216">
-http://vedovelli.com.br                <span id="dsq-author-user-216">Ved</span>
+https://vedovelli.com.br                <span id="dsq-author-user-216">Ved</span>
             </cite>
         </div>
         <div id="dsq-comment-body-216" class="dsq-comment-body">
@@ -144,7 +144,7 @@ http://vedovelli.com.br                <span id="dsq-author-user-216">Ved</span>
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-217">
         <div id="dsq-comment-header-217" class="dsq-comment-header">
             <cite id="dsq-cite-217">
-http://www.curiousfind.com                <span id="dsq-author-user-217">Jamie</span>
+https://www.curiousfind.com                <span id="dsq-author-user-217">Jamie</span>
             </cite>
         </div>
         <div id="dsq-comment-body-217" class="dsq-comment-body">
@@ -170,7 +170,7 @@ http://www.curiousfind.com                <span id="dsq-author-user-217">Jamie</
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-219">
         <div id="dsq-comment-header-219" class="dsq-comment-header">
             <cite id="dsq-cite-219">
-http://www.edomgroup.com                <span id="dsq-author-user-219">TM</span>
+https://www.edomgroup.com                <span id="dsq-author-user-219">TM</span>
             </cite>
         </div>
         <div id="dsq-comment-body-219" class="dsq-comment-body">
@@ -185,7 +185,7 @@ http://www.edomgroup.com                <span id="dsq-author-user-219">TM</span>
     <li class="comment even thread-even depth-1" id="dsq-comment-220">
         <div id="dsq-comment-header-220" class="dsq-comment-header">
             <cite id="dsq-cite-220">
-http://joelhooks.com                <span id="dsq-author-user-220">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-220">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-220" class="dsq-comment-body">
@@ -199,7 +199,7 @@ http://joelhooks.com                <span id="dsq-author-user-220">Joel Hooks</s
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-221">
         <div id="dsq-comment-header-221" class="dsq-comment-header">
             <cite id="dsq-cite-221">
-http://www.bojinx.com                <span id="dsq-author-user-221">Wael</span>
+https://www.bojinx.com                <span id="dsq-author-user-221">Wael</span>
             </cite>
         </div>
         <div id="dsq-comment-body-221" class="dsq-comment-body">
@@ -212,12 +212,12 @@ http://www.bojinx.com                <span id="dsq-author-user-221">Wael</span>
     <li class="comment even thread-even depth-1" id="dsq-comment-222">
         <div id="dsq-comment-header-222" class="dsq-comment-header">
             <cite id="dsq-cite-222">
-http://www.ticketpoint.de                <span id="dsq-author-user-222">Flüge</span>
+https://www.ticketpoint.de                <span id="dsq-author-user-222">Flüge</span>
             </cite>
         </div>
         <div id="dsq-comment-body-222" class="dsq-comment-body">
             <div id="dsq-comment-message-222" class="dsq-comment-message"><p>Hello,<br />
-your homepage gave me some real good ideas for my next slideshows. Unfortunately, I&#8217;m not that good with computers, but I like taking pictures <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':-)' class='wp-smiley' />  I might have to try out the Flex component myself. And by the way, your photos are great <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':-)' class='wp-smiley' /> </p>
+your homepage gave me some real good ideas for my next slideshows. Unfortunately, I&#8217;m not that good with computers, but I like taking pictures <img src='https://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':-)' class='wp-smiley' />  I might have to try out the Flex component myself. And by the way, your photos are great <img src='https://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':-)' class='wp-smiley' /> </p>
 </div>
         </div>
     </li>
@@ -250,8 +250,8 @@ is it possible to get source or some kind of tutorial</p>
 
 <script type="text/javascript">
 /* <![CDATA[ */
-    var disqus_url = 'http://joelhooks.com/2008/12/06/imageswap-crossfade-flex-component/';
-    var disqus_identifier = '118 http://joelhooks.com/?p=118';
+    var disqus_url = 'https://joelhooks.com/2008/12/06/imageswap-crossfade-flex-component/';
+    var disqus_identifier = '118 https://joelhooks.com/?p=118';
     var disqus_container_id = 'disqus_thread';
     var disqus_domain = 'disqus.com';
     var disqus_shortname = 'joelhooks';
@@ -277,7 +277,7 @@ is it possible to get source or some kind of tutorial</p>
             DISQUS.request.get('?cf_action=sync_comments&post_id=118');
         });
                     };
-    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+    var facebookXdReceiverPath = 'https://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
 /* ]]> */
 </script>
 
@@ -295,18 +295,18 @@ is it possible to get source or some kind of tutorial</p>
 (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    dsq.src = 'https://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 })();
 /* ]]> */
 </script>
 		</section><!-- #main -->
-                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="https://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="https://twitter.com/jhooks">@jhooks</a></p></blockquote>
 		<!-- footer -->
 
-<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: https://www.oratransplant.nl/uga -->
 <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "https://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">

@@ -5,31 +5,31 @@
 <!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
 	<head>
-<base href="http://joelhooks.com" />
+<base href="https://joelhooks.com" />
 
 		<meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>IntelliJ Idea Flex and Actionscript 3 Workflow: [Part 1] Creating a Flex Projectjoelhooks.com | joelhooks.com</title>
 		
-		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		<link rel="stylesheet" href="https://joelhooks.com/wp-content/themes/boilerplate/style.css" />
 		
 
 
 
 <!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
-	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="https://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
 <![endif]-->
-<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
-<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
-<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+<link rel='stylesheet' id='codebox-css'  href='https://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='https://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='https://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
 
 <script type="text/javascript" charset="utf-8">
 
 	/**
 	 * Courtesy of Kimili Flash Embed - Version 2.2
-	 * by Michael Bester - http://kimili.com
+	 * by Michael Bester - https://kimili.com
 	 */
 
 	(function(){
@@ -44,16 +44,16 @@
 
  
 
-<link rel='next' title='Modular Robotlegs' href='http://joelhooks.com/2010/05/02/modular-robotlegs/' />
+<link rel='next' title='Modular Robotlegs' href='https://joelhooks.com/2010/05/02/modular-robotlegs/' />
 
-<link rel='shortlink' href='http://joelhooks.com/?p=463' />
+<link rel='shortlink' href='https://joelhooks.com/?p=463' />
 
 <!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,738] -->
-<link rel="canonical" href="http://joelhooks.com/2010/03/21/intellij-idea-flex-and-actionscript-3-workflow-part-1-creating-a-flex-project/" />
+<link rel="canonical" href="https://joelhooks.com/2010/03/21/intellij-idea-flex-and-actionscript-3-workflow-part-1-creating-a-flex-project/" />
 <!-- /all in one seo pack -->
 
-<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
-<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: https://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="https://creativecommons.org/licenses/by/3.0/us/" />
 
 <style type="text/css"><!--
 .cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
@@ -70,7 +70,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 	</head>
 	<body class="single single-post postid-463 single-format-standard">
 		<header role="banner">
-			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<h1><a href="https://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
 			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
 
 		</header>
@@ -80,14 +80,14 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 		
 					<div class="entry-content">
 						<p>I&#8217;ve been using IntelliJ Idea 9 quite a bit in both production and personal work lately. It is a great IDE, with lots of useful features. This is going to be a series of short screencasts that highlight the workflow in Idea for Flex/Actionscript development. The first is a quick introduction and how to set up a Flex project. If you have any questions or requests for future videos in the series please feel free to leave them in the comments.</p>
-<p><a href="http://joelhooks.com/video/intro.mov" rel="shadowbox;height=664;width=994"><img src="http://69.164.207.135/wp-content/uploads/2010/03/idea_flex_part1.png" alt="" title="idea_flex_part1" width="450" height="301" class="aligncenter size-full wp-image-464" /></a></p>
-<p><a href="http://joelhooks.com/video/intro.mov">direct link to the video (42mb QT)</a></p>
+<p><a href="https://joelhooks.com/video/intro.mov" rel="shadowbox;height=664;width=994"><img src="https://69.164.207.135/wp-content/uploads/2010/03/idea_flex_part1.png" alt="" title="idea_flex_part1" width="450" height="301" class="aligncenter size-full wp-image-464" /></a></p>
+<p><a href="https://joelhooks.com/video/intro.mov">direct link to the video (42mb QT)</a></p>
 <h3>Resources</h3>
-<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/confluence.jetbrains.net/display/IDEADEV/Maia+EAP');"  href="http://confluence.jetbrains.net/display/IDEADEV/Maia+EAP">IntelliJ IDEA EAP Download Page</a><br />
-<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.insideria.com/2010/02/intellij-idea9-actionscript-3f.html');"  href="http://www.insideria.com/2010/02/intellij-idea9-actionscript-3f.html">Jesse Freeman&#8217;s IDEA Workflow series on InsideRIA</a></p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/confluence.jetbrains.net/display/IDEADEV/Maia+EAP');"  href="https://confluence.jetbrains.net/display/IDEADEV/Maia+EAP">IntelliJ IDEA EAP Download Page</a><br />
+<a onclick="javascript:pageTracker._trackPageview('/outgoing/www.insideria.com/2010/02/intellij-idea9-actionscript-3f.html');"  href="https://www.insideria.com/2010/02/intellij-idea9-actionscript-3f.html">Jesse Freeman&#8217;s IDEA Workflow series on InsideRIA</a></p>
 
 <!-- Creative Commons License -->
-<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2010/03/21/intellij-idea-flex-and-actionscript-3-workflow-part-1-creating-a-flex-project/">IntelliJ Idea Flex and Actionscript 3 Workflow: [Part 1] Creating a Flex Project</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<div class="cc-block"><a rel="license" href="https://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="https://joelhooks.com/2010/03/21/intellij-idea-flex-and-actionscript-3-workflow-part-1-creating-a-flex-project/">IntelliJ Idea Flex and Actionscript 3 Workflow: [Part 1] Creating a Flex Project</a></em> by <em><a href="https://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
 <!-- /Creative Commons License -->
 											</div><!-- .entry-content -->
 	
@@ -114,11 +114,11 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-337">
         <div id="dsq-comment-header-337" class="dsq-comment-header">
             <cite id="dsq-cite-337">
-http://www.helmutgranda.com/                <span id="dsq-author-user-337">Helmut</span>
+https://www.helmutgranda.com/                <span id="dsq-author-user-337">Helmut</span>
             </cite>
         </div>
         <div id="dsq-comment-body-337" class="dsq-comment-body">
-            <div id="dsq-comment-message-337" class="dsq-comment-message"><p>I would like to see how long it will take you to be able to fly in Idea as fast as you did in FDT <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> .</p>
+            <div id="dsq-comment-message-337" class="dsq-comment-message"><p>I would like to see how long it will take you to be able to fly in Idea as fast as you did in FDT <img src='https://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> .</p>
 </div>
         </div>
     </li>
@@ -127,12 +127,12 @@ http://www.helmutgranda.com/                <span id="dsq-author-user-337">Helmu
     <li class="comment even thread-even depth-1" id="dsq-comment-338">
         <div id="dsq-comment-header-338" class="dsq-comment-header">
             <cite id="dsq-cite-338">
-http://joelhooks.com                <span id="dsq-author-user-338">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-338">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-338" class="dsq-comment-body">
             <div id="dsq-comment-message-338" class="dsq-comment-message"><p>That was Mr Lindquist flying in FDT. That is one thing I do need to work on in IDEA (my hotkeys)</p>
-<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/pv3d.org/2009/11/18/robotlegs-hello-world-video-tutorial/');"  href="http://pv3d.org/2009/11/18/robotlegs-hello-world-video-tutorial/" rel="nofollow">http://pv3d.org/2009/11/18/robotlegs-hello-worl&#8230;</a></p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/pv3d.org/2009/11/18/robotlegs-hello-world-video-tutorial/');"  href="https://pv3d.org/2009/11/18/robotlegs-hello-world-video-tutorial/" rel="nofollow">https://pv3d.org/2009/11/18/robotlegs-hello-worl&#8230;</a></p>
 </div>
         </div>
     </li>
@@ -141,7 +141,7 @@ http://joelhooks.com                <span id="dsq-author-user-338">Joel Hooks</s
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-339">
         <div id="dsq-comment-header-339" class="dsq-comment-header">
             <cite id="dsq-cite-339">
-http://joelhooks.com                <span id="dsq-author-user-339">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-339">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-339" class="dsq-comment-body">
@@ -167,7 +167,7 @@ http://joelhooks.com                <span id="dsq-author-user-339">Joel Hooks</s
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-340">
         <div id="dsq-comment-header-340" class="dsq-comment-header">
             <cite id="dsq-cite-340">
-http://www.newtriks.com/                <span id="dsq-author-user-340">newtriks</span>
+https://www.newtriks.com/                <span id="dsq-author-user-340">newtriks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-340" class="dsq-comment-body">
@@ -180,7 +180,7 @@ http://www.newtriks.com/                <span id="dsq-author-user-340">newtriks<
     <li class="comment even thread-even depth-1" id="dsq-comment-341">
         <div id="dsq-comment-header-341" class="dsq-comment-header">
             <cite id="dsq-cite-341">
-http://twitter.com/rickcr                <span id="dsq-author-user-341">Rick Reumann</span>
+https://twitter.com/rickcr                <span id="dsq-author-user-341">Rick Reumann</span>
             </cite>
         </div>
         <div id="dsq-comment-body-341" class="dsq-comment-body">
@@ -193,11 +193,11 @@ http://twitter.com/rickcr                <span id="dsq-author-user-341">Rick Reu
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-378">
         <div id="dsq-comment-header-378" class="dsq-comment-header">
             <cite id="dsq-cite-378">
-http://www.helmutgranda.com/                <span id="dsq-author-user-378">Helmut</span>
+https://www.helmutgranda.com/                <span id="dsq-author-user-378">Helmut</span>
             </cite>
         </div>
         <div id="dsq-comment-body-378" class="dsq-comment-body">
-            <div id="dsq-comment-message-378" class="dsq-comment-message"><p>I would like to see how long it will take you to be able to fly in Idea as fast as you did in FDT <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> .</p>
+            <div id="dsq-comment-message-378" class="dsq-comment-message"><p>I would like to see how long it will take you to be able to fly in Idea as fast as you did in FDT <img src='https://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> .</p>
 </div>
         </div>
     </li>
@@ -206,12 +206,12 @@ http://www.helmutgranda.com/                <span id="dsq-author-user-378">Helmu
     <li class="comment even thread-even depth-1" id="dsq-comment-379">
         <div id="dsq-comment-header-379" class="dsq-comment-header">
             <cite id="dsq-cite-379">
-http://joelhooks.com                <span id="dsq-author-user-379">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-379">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-379" class="dsq-comment-body">
             <div id="dsq-comment-message-379" class="dsq-comment-message"><p>That was Mr Lindquist flying in FDT. That is one thing I do need to work on in IDEA (my hotkeys)</p>
-<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/pv3d.org/2009/11/18/robotlegs-hello-world-video-tutorial/');"  href="http://pv3d.org/2009/11/18/robotlegs-hello-world-video-tutorial/" rel="nofollow">http://pv3d.org/2009/11/18/robotlegs-hello-worl&#8230;</a></p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/pv3d.org/2009/11/18/robotlegs-hello-world-video-tutorial/');"  href="https://pv3d.org/2009/11/18/robotlegs-hello-world-video-tutorial/" rel="nofollow">https://pv3d.org/2009/11/18/robotlegs-hello-worl&#8230;</a></p>
 </div>
         </div>
     </li>
@@ -220,7 +220,7 @@ http://joelhooks.com                <span id="dsq-author-user-379">Joel Hooks</s
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-381">
         <div id="dsq-comment-header-381" class="dsq-comment-header">
             <cite id="dsq-cite-381">
-http://joelhooks.com                <span id="dsq-author-user-381">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-381">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-381" class="dsq-comment-body">
@@ -233,7 +233,7 @@ http://joelhooks.com                <span id="dsq-author-user-381">Joel Hooks</s
     <li class="comment even thread-even depth-1" id="dsq-comment-377">
         <div id="dsq-comment-header-377" class="dsq-comment-header">
             <cite id="dsq-cite-377">
-http://www.newtriks.com/                <span id="dsq-author-user-377">newtriks</span>
+https://www.newtriks.com/                <span id="dsq-author-user-377">newtriks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-377" class="dsq-comment-body">
@@ -246,7 +246,7 @@ http://www.newtriks.com/                <span id="dsq-author-user-377">newtriks<
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-376">
         <div id="dsq-comment-header-376" class="dsq-comment-header">
             <cite id="dsq-cite-376">
-http://twitter.com/rickcr                <span id="dsq-author-user-376">Rick Reumann</span>
+https://twitter.com/rickcr                <span id="dsq-author-user-376">Rick Reumann</span>
             </cite>
         </div>
         <div id="dsq-comment-body-376" class="dsq-comment-body">
@@ -298,7 +298,7 @@ http://twitter.com/rickcr                <span id="dsq-author-user-376">Rick Reu
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-344">
         <div id="dsq-comment-header-344" class="dsq-comment-header">
             <cite id="dsq-cite-344">
-http://joelhooks.com                <span id="dsq-author-user-344">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-344">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-344" class="dsq-comment-body">
@@ -324,7 +324,7 @@ http://joelhooks.com                <span id="dsq-author-user-344">Joel Hooks</s
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-375">
         <div id="dsq-comment-header-375" class="dsq-comment-header">
             <cite id="dsq-cite-375">
-http://joelhooks.com                <span id="dsq-author-user-375">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-375">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-375" class="dsq-comment-body">
@@ -350,7 +350,7 @@ http://joelhooks.com                <span id="dsq-author-user-375">Joel Hooks</s
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-489">
         <div id="dsq-comment-header-489" class="dsq-comment-header">
             <cite id="dsq-cite-489">
-http://joelhooks.com                <span id="dsq-author-user-489">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-489">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-489" class="dsq-comment-body">
@@ -363,7 +363,7 @@ http://joelhooks.com                <span id="dsq-author-user-489">Joel Hooks</s
     <li class="comment even thread-even depth-1" id="dsq-comment-627">
         <div id="dsq-comment-header-627" class="dsq-comment-header">
             <cite id="dsq-cite-627">
-http://www.gardentractorattachments.net/                <span id="dsq-author-user-627">Garden tractor attachment</span>
+https://www.gardentractorattachments.net/                <span id="dsq-author-user-627">Garden tractor attachment</span>
             </cite>
         </div>
         <div id="dsq-comment-body-627" class="dsq-comment-body">
@@ -381,7 +381,7 @@ http://www.gardentractorattachments.net/                <span id="dsq-author-use
         </div>
         <div id="dsq-comment-body-629" class="dsq-comment-body">
             <div id="dsq-comment-message-629" class="dsq-comment-message"><p>Do you know how to specify dependencies on folders that contain both .swc and .as in IntelliJ? I couldn&#39;t find a good how to for this so I posted a question on the forum:</p>
-<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/devnet.jetbrains.net/message/5277552');"  href="http://devnet.jetbrains.net/message/5277552" rel="nofollow">http://devnet.jetbrains.net/message/5277552</a></p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/devnet.jetbrains.net/message/5277552');"  href="https://devnet.jetbrains.net/message/5277552" rel="nofollow">https://devnet.jetbrains.net/message/5277552</a></p>
 </div>
         </div>
     </li>
@@ -407,7 +407,7 @@ http://www.gardentractorattachments.net/                <span id="dsq-author-use
             </cite>
         </div>
         <div id="dsq-comment-body-653" class="dsq-comment-body">
-            <div id="dsq-comment-message-653" class="dsq-comment-message"><p>Actually, I&#39;ve found the solution to this at <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.rossgerbasi.com/2010/03/intellij-and-flash-cs4');"  href="http://www.rossgerbasi.com/2010/03/intellij-and-flash-cs4" rel="nofollow">http://www.rossgerbasi.com/201&#8230;</a>/<br />Remember to replace &#8220;CS4&#8243; with &#8220;CS5&#8243; or whatever.</p>
+            <div id="dsq-comment-message-653" class="dsq-comment-message"><p>Actually, I&#39;ve found the solution to this at <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.rossgerbasi.com/2010/03/intellij-and-flash-cs4');"  href="https://www.rossgerbasi.com/2010/03/intellij-and-flash-cs4" rel="nofollow">https://www.rossgerbasi.com/201&#8230;</a>/<br />Remember to replace &#8220;CS4&#8243; with &#8220;CS5&#8243; or whatever.</p>
 </div>
         </div>
     </li>
@@ -416,7 +416,7 @@ http://www.gardentractorattachments.net/                <span id="dsq-author-use
     <li class="comment even thread-even depth-1" id="dsq-comment-690">
         <div id="dsq-comment-header-690" class="dsq-comment-header">
             <cite id="dsq-cite-690">
-http://flexmechanic.com                <span id="dsq-author-user-690">Nikos </span>
+https://flexmechanic.com                <span id="dsq-author-user-690">Nikos </span>
             </cite>
         </div>
         <div id="dsq-comment-body-690" class="dsq-comment-body">
@@ -429,7 +429,7 @@ http://flexmechanic.com                <span id="dsq-author-user-690">Nikos </sp
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-691">
         <div id="dsq-comment-header-691" class="dsq-comment-header">
             <cite id="dsq-cite-691">
-http://flexmechanic.com                <span id="dsq-author-user-691">Nikos </span>
+https://flexmechanic.com                <span id="dsq-author-user-691">Nikos </span>
             </cite>
         </div>
         <div id="dsq-comment-body-691" class="dsq-comment-body">
@@ -461,8 +461,8 @@ http://flexmechanic.com                <span id="dsq-author-user-691">Nikos </sp
 
 <script type="text/javascript">
 /* <![CDATA[ */
-    var disqus_url = 'http://joelhooks.com/2010/03/21/intellij-idea-flex-and-actionscript-3-workflow-part-1-creating-a-flex-project/';
-    var disqus_identifier = '463 http://joelhooks.com/?p=463';
+    var disqus_url = 'https://joelhooks.com/2010/03/21/intellij-idea-flex-and-actionscript-3-workflow-part-1-creating-a-flex-project/';
+    var disqus_identifier = '463 https://joelhooks.com/?p=463';
     var disqus_container_id = 'disqus_thread';
     var disqus_domain = 'disqus.com';
     var disqus_shortname = 'joelhooks';
@@ -488,7 +488,7 @@ http://flexmechanic.com                <span id="dsq-author-user-691">Nikos </sp
             DISQUS.request.get('?cf_action=sync_comments&post_id=463');
         });
                     };
-    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+    var facebookXdReceiverPath = 'https://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
 /* ]]> */
 </script>
 
@@ -506,18 +506,18 @@ http://flexmechanic.com                <span id="dsq-author-user-691">Nikos </sp
 (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    dsq.src = 'https://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 })();
 /* ]]> */
 </script>
 		</section><!-- #main -->
-                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="https://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="https://twitter.com/jhooks">@jhooks</a></p></blockquote>
 		<!-- footer -->
 
-<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: https://www.oratransplant.nl/uga -->
 <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "https://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">

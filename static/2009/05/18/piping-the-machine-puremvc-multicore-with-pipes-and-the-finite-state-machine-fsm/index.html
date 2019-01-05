@@ -5,31 +5,31 @@
 <!--[if IE 9 ]><html dir="ltr" lang="en-US" class="no-js ie ie9 lte9"><![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js"><!--<![endif]-->
 	<head>
-<base href="http://joelhooks.com" />
+<base href="https://joelhooks.com" />
 
 		<meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>Piping the Machine: PureMVC Multicore with Pipes and the Finite State Machine (FSM)joelhooks.com | joelhooks.com</title>
 		
-		<link rel="stylesheet" href="http://joelhooks.com/wp-content/themes/boilerplate/style.css" />
+		<link rel="stylesheet" href="https://joelhooks.com/wp-content/themes/boilerplate/style.css" />
 		
 
 
 
 <!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"></script>
-	<script>!window.ieshiv && document.write(unescape('%3Cscript src="http://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
+	<script>!window.ieshiv && document.write(unescape('%3Cscript src="https://joelhooks.com/wp-content/themes/boilerplate/js/ieshiv.js"%3E%3C/script%3E'))</script>
 <![endif]-->
-<link rel='stylesheet' id='codebox-css'  href='http://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
-<script type='text/javascript' src='http://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
-<script type='text/javascript' src='http://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
+<link rel='stylesheet' id='codebox-css'  href='https://joelhooks.com/wp-content/plugins/wp-codebox/css/codebox.css?ver=0.1' type='text/css' media='screen' />
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?ver=2.2'></script>
+<script type='text/javascript' src='https://joelhooks.com/wp-includes/js/jquery/jquery.js?ver=1.7.1'></script>
+<script type='text/javascript' src='https://joelhooks.com/wp-content/plugins/wp-codebox/js/codebox.js?ver=0.1'></script>
 
 <script type="text/javascript" charset="utf-8">
 
 	/**
 	 * Courtesy of Kimili Flash Embed - Version 2.2
-	 * by Michael Bester - http://kimili.com
+	 * by Michael Bester - https://kimili.com
 	 */
 
 	(function(){
@@ -44,16 +44,16 @@
 
  
 
-<link rel='next' title='Inversion of Control and Dependency Injection in Flex using the Parsley Application Framework &#8211; Part 1' href='http://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/' />
+<link rel='next' title='Inversion of Control and Dependency Injection in Flex using the Parsley Application Framework &#8211; Part 1' href='https://joelhooks.com/2009/07/12/inversion-of-control-and-dependency-injection-in-flex-using-the-parsley-application-framework-part-1/' />
 
-<link rel='shortlink' href='http://joelhooks.com/?p=177' />
+<link rel='shortlink' href='https://joelhooks.com/?p=177' />
 
 <!-- All in One SEO Pack 1.6.13.8 by Michael Torbert of Semper Fi Web Design[635,741] -->
-<link rel="canonical" href="http://joelhooks.com/2009/05/18/piping-the-machine-puremvc-multicore-with-pipes-and-the-finite-state-machine-fsm/" />
+<link rel="canonical" href="https://joelhooks.com/2009/05/18/piping-the-machine-puremvc-multicore-with-pipes-and-the-finite-state-machine-fsm/" />
 <!-- /all in one seo pack -->
 
-<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: http://www.g-loaded.eu/ -->
-<link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/3.0/us/" />
+<!-- Creative Commons License added by Creative-Commons-Configurator plugin - Get it at: https://www.g-loaded.eu/ -->
+<link rel="license" type="text/html" href="https://creativecommons.org/licenses/by/3.0/us/" />
 
 <style type="text/css"><!--
 .cc-block { width: 90%; margin: 8px auto; padding: 4px; text-align: center; border: 1px solid #cccccc; color: #000000; background-color: #eef6e6; }
@@ -64,13 +64,13 @@
 
 	/**
 	 * Courtesy of Kimili Flash Embed - Version 2.2
-	 * by Michael Bester - http://kimili.com
+	 * by Michael Bester - https://kimili.com
 	 */
 
 	(function(){
 		try {
 			// Registering Statically Published SWFs
-			swfobject.registerObject("fm_PipingTheMachine_1550004562","9.0.124","http://joelhooks.com/wp-content/plugins/kimili-flash-embed/lib/expressInstall.swf");
+			swfobject.registerObject("fm_PipingTheMachine_1550004562","9.0.124","https://joelhooks.com/wp-content/plugins/kimili-flash-embed/lib/expressInstall.swf");
 		} catch(e) {}
 	})();
 </script>
@@ -85,7 +85,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 	</head>
 	<body class="single single-post postid-177 single-format-standard">
 		<header role="banner">
-			<h1><a href="http://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
+			<h1><a href="https://joelhooks.com/" title="joelhooks.com" rel="home">joelhooks.com</a></h1>
 			<p>[without tests] you aren't refactoring, you're just changing shit. - Hamlet Darcy</p>
 
 		</header>
@@ -95,7 +95,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 		
 					<div class="entry-content">
 						<p>This is going to be a walkthrough of making use of PureMVC Multicore (AS3). To help in building a PureMVC Multicore application, we are going to make use of the StateMachine utility for initial setup and configuration as well as the Pipes utility for communication between cores.</p>
-<p><a href="http://joelhooks.com/examples/pipemachine/srcview/">Here&#8217;s the Source.</a></p>
+<p><a href="https://joelhooks.com/examples/pipemachine/srcview/">Here&#8217;s the Source.</a></p>
 <p style="text-align: center;">
 <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="fm_PipingTheMachine_1550004562"
@@ -110,7 +110,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 			width="450"
 			height="500">
 	<!--<![endif]-->
-		<a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="http://adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+		<a onclick="javascript:pageTracker._trackPageview('/outgoing/adobe.com/go/getflashplayer');"  href="https://adobe.com/go/getflashplayer"><img src="https://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
 
 	<!--[if !IE]>-->
 	</object>
@@ -119,29 +119,29 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 <span id="more-177"></span></p>
 <h2>Overview</h2>
 <p>PureMVC can seem a bit overwhelming at first, but once the core concepts are understood the simplicity of the framework is possibly its biggest strength. Developing multicore applications in PureMVC, that is applications that create multiple instances of the PureMVC core actors (Facade, Model, View, Controller), adds another level of complexity that can be daunting. Luckily, there are utilities to help us out here, and abstract some of the problems with communication between modules loaded into an application.</p>
-<p>This tutorial is based on the <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.seaofarrows.com');"  href="http://www.seaofarrows.com" target="_blank">Sea of Arrows player</a> put together by Cliff Hall. My goal was to remove some of the complexity involved with a real application and deconstruct the blocks used to build the player in a form that is easier to digest. It is highly recommended that you check out the player for a further example of this particular application structure.</p>
+<p>This tutorial is based on the <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.seaofarrows.com');"  href="https://www.seaofarrows.com" target="_blank">Sea of Arrows player</a> put together by Cliff Hall. My goal was to remove some of the complexity involved with a real application and deconstruct the blocks used to build the player in a form that is easier to digest. It is highly recommended that you check out the player for a further example of this particular application structure.</p>
 <p>For the purposes of demonstration this application is kept as simple as possible. For a trivial project, this level of complexity in regards to multiple cores, dynamically loaded modules, a finite state machine, and a plumbed framework for components to communicate is over-engineered (at best). It seems like a lot of work, and it is, but the payoff is when you have a complex project with multiple developers and designers working across many modules. This structure is made to scale, and scale well providing many options for efficient development. It allows for finely grained control of all of the actors in your system.</p>
 <h2>The Tools</h2>
 <p>Here is a brief overview of the tools we are going to use, and then we will get into some code and look at a simple example of everything put together.</p>
 <h3>PureMVC</h3>
-<p style="text-align: center;"><img class="aligncenter" src="http://puremvc.org/images/stories/puremvc-icon.jpg" alt="" width="318" height="200" /></p>
+<p style="text-align: center;"><img class="aligncenter" src="https://puremvc.org/images/stories/puremvc-icon.jpg" alt="" width="318" height="200" /></p>
 <p><em>From the website:</em></p>
-<blockquote><p><a onclick="javascript:pageTracker._trackPageview('/outgoing/puremvc.org/content/view/67/178/');"  href="http://puremvc.org/content/view/67/178/" target="_blank">PureMVC is a lightweight framework</a> for creating applications based upon the classic Model, View and Controller concept.</p>
+<blockquote><p><a onclick="javascript:pageTracker._trackPageview('/outgoing/puremvc.org/content/view/67/178/');"  href="https://puremvc.org/content/view/67/178/" target="_blank">PureMVC is a lightweight framework</a> for creating applications based upon the classic Model, View and Controller concept.</p>
 <p>Based upon proven design patterns, this free, open source framework which was originally implemented in the ActionScript 3 language for use with Adobe Flex, Flash and AIR, is now being ported to all major development platforms.</p></blockquote>
-<p>If you want a tutorial for basic PureMVC usage, <a onclick="javascript:pageTracker._trackPageview('/outgoing/flash.tutsplus.com/tutorials/workflow/understanding-the-puremvc-open-source-framework/');"  href="http://flash.tutsplus.com/tutorials/workflow/understanding-the-puremvc-open-source-framework/">click here</a>.</p>
+<p>If you want a tutorial for basic PureMVC usage, <a onclick="javascript:pageTracker._trackPageview('/outgoing/flash.tutsplus.com/tutorials/workflow/understanding-the-puremvc-open-source-framework/');"  href="https://flash.tutsplus.com/tutorials/workflow/understanding-the-puremvc-open-source-framework/">click here</a>.</p>
 <h3>Pipes</h3>
-<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/Utility_AS3_MultiCore_Pipes');"  href="http://trac.puremvc.org/Utility_AS3_MultiCore_Pipes">Pipes</a> is a drop in utility for <a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/PureMVC_AS3_MultiCore');"  href="http://trac.puremvc.org/PureMVC_AS3_MultiCore">multicore PureMVC</a> applications that utilizes a plumbing metaphor to facilitate communication between cores. If you&#8217;ve ever walked down the PVC aisle of your local mega-hardware store, you are familiar with the objects represented in the utility.</p>
-<p style="text-align: center;"><img class="size-full wp-image-187  aligncenter" title="pipes-diagram" src="http://69.164.207.135/wp-content/uploads/2009/05/pipes-diagram.png" alt="pipes-diagram" width="500" height="208" /></p>
-<p style="text-align: left;">The above diagram comes from the excellent <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.joshuaostrom.com/2008/06/15/understanding-puremvc-pipes/');"  href="http://www.joshuaostrom.com/2008/06/15/understanding-puremvc-pipes/">Pipes overview written by Joshua Ostrom</a>.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/Utility_AS3_MultiCore_Pipes');"  href="https://trac.puremvc.org/Utility_AS3_MultiCore_Pipes">Pipes</a> is a drop in utility for <a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/PureMVC_AS3_MultiCore');"  href="https://trac.puremvc.org/PureMVC_AS3_MultiCore">multicore PureMVC</a> applications that utilizes a plumbing metaphor to facilitate communication between cores. If you&#8217;ve ever walked down the PVC aisle of your local mega-hardware store, you are familiar with the objects represented in the utility.</p>
+<p style="text-align: center;"><img class="size-full wp-image-187  aligncenter" title="pipes-diagram" src="https://69.164.207.135/wp-content/uploads/2009/05/pipes-diagram.png" alt="pipes-diagram" width="500" height="208" /></p>
+<p style="text-align: left;">The above diagram comes from the excellent <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.joshuaostrom.com/2008/06/15/understanding-puremvc-pipes/');"  href="https://www.joshuaostrom.com/2008/06/15/understanding-puremvc-pipes/">Pipes overview written by Joshua Ostrom</a>.</p>
 <h3>StateMachine</h3>
-<p>The <a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/Utility_AS3_StateMachine');"  href="http://trac.puremvc.org/Utility_AS3_StateMachine">StateMachine utility</a> is a <a onclick="javascript:pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Finite_state_machine');"  href="http://en.wikipedia.org/wiki/Finite_state_machine">finite state machine</a> for controlling application state in PureMVC. Configured by XML it seems daunting at first, but is relatively simple with only a handful of classes in the utility to make things happen. It makes for an elegant way to step through logical progressions and control available actions inside your application. This example is utilizing the StateMachine for the initial configuration, but it is possible to create complex workflows with the utility.</p>
-<p>Check out the <a onclick="javascript:pageTracker._trackPageview('/outgoing/code.google.com/p/puremvc-utilities/');"  href="http://code.google.com/p/puremvc-utilities/">FSMVisualizer</a> for a really cool way to look at the PureMVC StateMachine.</p>
+<p>The <a onclick="javascript:pageTracker._trackPageview('/outgoing/trac.puremvc.org/Utility_AS3_StateMachine');"  href="https://trac.puremvc.org/Utility_AS3_StateMachine">StateMachine utility</a> is a <a onclick="javascript:pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Finite_state_machine');"  href="https://en.wikipedia.org/wiki/Finite_state_machine">finite state machine</a> for controlling application state in PureMVC. Configured by XML it seems daunting at first, but is relatively simple with only a handful of classes in the utility to make things happen. It makes for an elegant way to step through logical progressions and control available actions inside your application. This example is utilizing the StateMachine for the initial configuration, but it is possible to create complex workflows with the utility.</p>
+<p>Check out the <a onclick="javascript:pageTracker._trackPageview('/outgoing/code.google.com/p/puremvc-utilities/');"  href="https://code.google.com/p/puremvc-utilities/">FSMVisualizer</a> for a really cool way to look at the PureMVC StateMachine.</p>
 <h2>The Code</h2>
 <h3>The Shell</h3>
 <p>The shell of the application is the root container that will be in charge of creating instances of the modules and displaying their visual components. In this Flex example of the shell, the main MXML file serves as the viewComponent of the first PureMVC core that will be created.</p>
-<p>The application is started like a typical PureMVC application. The difference here is with the naming convention being used. Normally in an application that will make use of a single PureMVC core will will create an ApplicationFacade. In this multicore application we are going to instead name the facade <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/ShellFacade.as.html">ShellFacade</a>.</p>
-<p>The <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/ShellFacade.as.html">ShellFacade</a> class contains our notification constants. In this case it also cotains constants related to the StateMachine utility that define the states, their actions, and the notifications associated with those actions.</p>
-<p>The StateMachine is initialized in our <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/controller/StartupCommand.as.html">StartupCommand</a>, which is a typical MacroCommand found in most PureMVC applications. The first Command run is the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/controller/state/InjectFSMCommand.as.html">InjectFSMCommand</a> which initializes the StateMachine and provides it with the XML configuration defining the various states. The next Command issued is the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/controller/state/StartShellCommand.as.html">StartShellCommand</a>, which is our initial state as configured by the StateMachine.</p>
+<p>The application is started like a typical PureMVC application. The difference here is with the naming convention being used. Normally in an application that will make use of a single PureMVC core will will create an ApplicationFacade. In this multicore application we are going to instead name the facade <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/ShellFacade.as.html">ShellFacade</a>.</p>
+<p>The <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/ShellFacade.as.html">ShellFacade</a> class contains our notification constants. In this case it also cotains constants related to the StateMachine utility that define the states, their actions, and the notifications associated with those actions.</p>
+<p>The StateMachine is initialized in our <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/controller/StartupCommand.as.html">StartupCommand</a>, which is a typical MacroCommand found in most PureMVC applications. The first Command run is the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/controller/state/InjectFSMCommand.as.html">InjectFSMCommand</a> which initializes the StateMachine and provides it with the XML configuration defining the various states. The next Command issued is the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/controller/state/StartShellCommand.as.html">StartShellCommand</a>, which is our initial state as configured by the StateMachine.</p>
 
 <div class="wp_codebox"><table><tr id="p1771"><td class="line_numbers"><pre>1
 2
@@ -228,22 +228,22 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
 &nbsp;
 <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/fsm<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>;</pre></td></tr></table></div>
 
-<p>StateMachine states are defined by their <strong>name</strong>, a<strong> changed</strong> property, and <strong>transitions</strong>. Transitions define an <strong>action</strong> that triggers the move to a new state, and a <strong>target</strong> which defines the name of the state in which to move when the action notification is received by the StateMachine. The changed property of a state corresponds directly to the Command defined in the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/ShellFacade.as.html">ShellFacade</a>. When the StateMachine receives a notification to move to a new state, the Command defined in the changed property is executed.</p>
-<p><img class="aligncenter size-full wp-image-182" title="pipingthemachinestatediagram" src="http://69.164.207.135/wp-content/uploads/2009/05/pipingthemachinestatediagram.png" alt="pipingthemachinestatediagram" width="491" height="131" /></p>
-<p>We start off in the <em>Starting</em> state which simply mediates the shell application. From there we move to the <em>Plumbing</em> state which creates some of the initial Pipes, instantiates the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/logger/LoggerModule.as.html">LoggerModule</a> and connects it to the shell. From there we move to the <em>Assembling</em> state which requests a <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/logger/view/components/LoggerWindow.mxml.html">LoggerWindow</a> viewComponent to add to the stage. From here we move to the <em>Navigating</em> state which has no transitions associated with it. It is our final state and means that our application is configured and ready for the user to interact with. There is also a <em>Failing</em> state, which like the <em>Navigating</em> state has no transitions. If some portion of the configuration process were to fail, this state would be called to notify the user that something horrible has happened.</p>
-<p>Communications between modules happens in a module&#8217;s JunctionMediator. This mediator&#8217;s viewComponent is a Junction. One issue to consider when utilizing dynamic modules is memory management. The connections made between modules with the Pipes utility need to be managed so that when they are disconnect there are no artifacts left to get in the way of Garbage Collection. This application utilizes an extended JunctionMediator defined by the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/ManagedJunctionMediator.as.html">ManagedJunctionMediator</a> class which defines a connection pool for the various pipes. When a module is instantiated, the connections are stored in a HashMap. Later, when we want to remove the module, the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/ManagedJunctionMediator.as.html">ManagedJunctionMediator</a> references its pool of connections and removes any connections related to that particular module. This is an area that needs more refinement, and while it works well for this demonstration, it could be further abstracted to make a more complete solution for this issue. The <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/view/ShellJunctionMediator.as.html">ShellJunctionMediator</a> is the only class extending <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/ManagedJunctionMediator.as.html">ManagedJunctionMediator</a> in this application.</p>
+<p>StateMachine states are defined by their <strong>name</strong>, a<strong> changed</strong> property, and <strong>transitions</strong>. Transitions define an <strong>action</strong> that triggers the move to a new state, and a <strong>target</strong> which defines the name of the state in which to move when the action notification is received by the StateMachine. The changed property of a state corresponds directly to the Command defined in the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/ShellFacade.as.html">ShellFacade</a>. When the StateMachine receives a notification to move to a new state, the Command defined in the changed property is executed.</p>
+<p><img class="aligncenter size-full wp-image-182" title="pipingthemachinestatediagram" src="https://69.164.207.135/wp-content/uploads/2009/05/pipingthemachinestatediagram.png" alt="pipingthemachinestatediagram" width="491" height="131" /></p>
+<p>We start off in the <em>Starting</em> state which simply mediates the shell application. From there we move to the <em>Plumbing</em> state which creates some of the initial Pipes, instantiates the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/logger/LoggerModule.as.html">LoggerModule</a> and connects it to the shell. From there we move to the <em>Assembling</em> state which requests a <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/logger/view/components/LoggerWindow.mxml.html">LoggerWindow</a> viewComponent to add to the stage. From here we move to the <em>Navigating</em> state which has no transitions associated with it. It is our final state and means that our application is configured and ready for the user to interact with. There is also a <em>Failing</em> state, which like the <em>Navigating</em> state has no transitions. If some portion of the configuration process were to fail, this state would be called to notify the user that something horrible has happened.</p>
+<p>Communications between modules happens in a module&#8217;s JunctionMediator. This mediator&#8217;s viewComponent is a Junction. One issue to consider when utilizing dynamic modules is memory management. The connections made between modules with the Pipes utility need to be managed so that when they are disconnect there are no artifacts left to get in the way of Garbage Collection. This application utilizes an extended JunctionMediator defined by the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/ManagedJunctionMediator.as.html">ManagedJunctionMediator</a> class which defines a connection pool for the various pipes. When a module is instantiated, the connections are stored in a HashMap. Later, when we want to remove the module, the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/ManagedJunctionMediator.as.html">ManagedJunctionMediator</a> references its pool of connections and removes any connections related to that particular module. This is an area that needs more refinement, and while it works well for this demonstration, it could be further abstracted to make a more complete solution for this issue. The <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/view/ShellJunctionMediator.as.html">ShellJunctionMediator</a> is the only class extending <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/ManagedJunctionMediator.as.html">ManagedJunctionMediator</a> in this application.</p>
 <p>It is important to note that a JunctionMediator&#8217;s handleNotifications method needs to have the default in the switch set to super.handleNotification( note ). There are standard notifications that a JunctionMediator listens for that need to be handled. In addition, the listNotificationInterests method is handled a bit differently to accommodate this functionality.</p>
 <h2>Adding a Doodad</h2>
-<p>When you click on the Add Doodad button, the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/controller/AddNewDoodadCommand.as.html">AddNewDoodadCommand</a> is called. This command instantiates a new <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a> and registers a <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/view/DoodadModuleMediator.as.html">DoodadModuleMediator</a> with the shell&#8217;s core. The command then connects the module&#8217;s pipes to the shell&#8217;s STDIN and STDOUT pipes. After the module is wired to the shell for communication a notification is sent to get the UI associated with the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a></p>
-<p>The <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a> is not a visual component. It extends <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/components/PipeAwareModule.as.html">PipeAwareModule</a>, which is itself an extension of ModuleBase. This is as opposed to Module, which is a visual class, but in this demonstration the visual components are created by the module and then sent to the shell for display. All of the visual components are mediated by their module, but control of their placement rests with the shell.</p>
-<p>A <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/components/PipeAwareModule.as.html">PipeAwareModule</a> is instantiated with a unique identifier. This provides a way to differentiate it from other instances of the module easily. The <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a> itself also creates a sequential integer identifier, but this is used here for the purposes of labeling and not marking the module for unique identification.</p>
-<p>When the shell asks for a new Doodad, the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/model/message/UIQueryMessage.as.html">UIQueryMessage</a> of type GET is sent from the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/view/ShellJunctionMediator.as.html">ShellJunctionMediator</a> and is received by the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/view/DoodadJunctionMediator.as.html">DoodadJunctionMediator</a>. The <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a> then creates the visual component in the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/controller/CreateDoodadCommand.as.html">CreateDoodadCommand</a> and sends it back to the shell via a <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/model/message/UIQueryMessage.as.html">UIQueryMessage</a> of type SET. The shell then adds the component to the stage. When the Doodad&#8217;s &#8216;kill&#8217; button is pressed, the <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/view/DoodadJunctionMediator.as.html">DoodadJunctionMediator</a> is ordered to send out another <a href="http://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/model/message/UIQueryMessage.as.html">UIQueryMessage</a>, this time of type DESTROY which lets the shell know that it needs to unplug the module.</p>
+<p>When you click on the Add Doodad button, the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/controller/AddNewDoodadCommand.as.html">AddNewDoodadCommand</a> is called. This command instantiates a new <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a> and registers a <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/view/DoodadModuleMediator.as.html">DoodadModuleMediator</a> with the shell&#8217;s core. The command then connects the module&#8217;s pipes to the shell&#8217;s STDIN and STDOUT pipes. After the module is wired to the shell for communication a notification is sent to get the UI associated with the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a></p>
+<p>The <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a> is not a visual component. It extends <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/components/PipeAwareModule.as.html">PipeAwareModule</a>, which is itself an extension of ModuleBase. This is as opposed to Module, which is a visual class, but in this demonstration the visual components are created by the module and then sent to the shell for display. All of the visual components are mediated by their module, but control of their placement rests with the shell.</p>
+<p>A <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/view/components/PipeAwareModule.as.html">PipeAwareModule</a> is instantiated with a unique identifier. This provides a way to differentiate it from other instances of the module easily. The <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a> itself also creates a sequential integer identifier, but this is used here for the purposes of labeling and not marking the module for unique identification.</p>
+<p>When the shell asks for a new Doodad, the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/model/message/UIQueryMessage.as.html">UIQueryMessage</a> of type GET is sent from the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/shell/view/ShellJunctionMediator.as.html">ShellJunctionMediator</a> and is received by the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/view/DoodadJunctionMediator.as.html">DoodadJunctionMediator</a>. The <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/DoodadModule.as.html">DoodadModule</a> then creates the visual component in the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/controller/CreateDoodadCommand.as.html">CreateDoodadCommand</a> and sends it back to the shell via a <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/model/message/UIQueryMessage.as.html">UIQueryMessage</a> of type SET. The shell then adds the component to the stage. When the Doodad&#8217;s &#8216;kill&#8217; button is pressed, the <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/modules/doodad/view/DoodadJunctionMediator.as.html">DoodadJunctionMediator</a> is ordered to send out another <a href="https://joelhooks.com/examples/pipemachine/srcview/source/com/joelhooks/pipingthemachine/common/model/message/UIQueryMessage.as.html">UIQueryMessage</a>, this time of type DESTROY which lets the shell know that it needs to unplug the module.</p>
 <h2>Conclusion</h2>
 <p>There is a lot going on here, and it is complex on many levels. There are huge advantages to engineering a complex application this way. It provides flexibility in terms of development allowing for growth and expansion of the system. This particular example is kept relatively simple, and in a real world application I would strive to make the modules more generic, abstracting out the Doodad-specific bits in the shell so that any module added would share common functionality in terms of memory management and basic mechanisms related to the visual components. Hopefully it provides a helpful overview for people looking to understand multicore applications with PureMVC and make use of some of the handy utilities the community has made available.</p>
 <p>Let me know if you have any questions and I will do my best to answer them. If you have anything to add, or find any errors, please don&#8217;t hesitate to let me know.</p>
 
 <!-- Creative Commons License -->
-<div class="cc-block"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="http://joelhooks.com/2009/05/18/piping-the-machine-puremvc-multicore-with-pipes-and-the-finite-state-machine-fsm/">Piping the Machine: PureMVC Multicore with Pipes and the Finite State Machine (FSM)</a></em> by <em><a href="http://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
+<div class="cc-block"><a rel="license" href="https://creativecommons.org/licenses/by/3.0/us/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/3.0/us/88x31.png" class="cc-button" /></a><br />The <em><a href="https://joelhooks.com/2009/05/18/piping-the-machine-puremvc-multicore-with-pipes-and-the-finite-state-machine-fsm/">Piping the Machine: PureMVC Multicore with Pipes and the Finite State Machine (FSM)</a></em> by <em><a href="https://joelhooks.com">Joel Hooks</a></em>, unless otherwise expressly stated, is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.</div>
 <!-- /Creative Commons License -->
 											</div><!-- .entry-content -->
 	
@@ -257,7 +257,7 @@ div.wp_social_bookmarking_light img{border:0 !important;padding:0;margin:0;verti
                     <li class="comment even thread-even depth-1" id="dsq-comment-258">
         <div id="dsq-comment-header-258" class="dsq-comment-header">
             <cite id="dsq-cite-258">
-http://www.newtriks.com                <span id="dsq-author-user-258">Simon Bailey</span>
+https://www.newtriks.com                <span id="dsq-author-user-258">Simon Bailey</span>
             </cite>
         </div>
         <div id="dsq-comment-body-258" class="dsq-comment-body">
@@ -271,7 +271,7 @@ http://www.newtriks.com                <span id="dsq-author-user-258">Simon Bail
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-259">
         <div id="dsq-comment-header-259" class="dsq-comment-header">
             <cite id="dsq-cite-259">
-http://puremvc.org                <span id="dsq-author-user-259">Cliff Hall</span>
+https://puremvc.org                <span id="dsq-author-user-259">Cliff Hall</span>
             </cite>
         </div>
         <div id="dsq-comment-body-259" class="dsq-comment-body">
@@ -284,7 +284,7 @@ http://puremvc.org                <span id="dsq-author-user-259">Cliff Hall</spa
     <li class="comment even thread-even depth-1" id="dsq-comment-260">
         <div id="dsq-comment-header-260" class="dsq-comment-header">
             <cite id="dsq-cite-260">
-http://blog.jeffyamada.com                <span id="dsq-author-user-260">Jeff Yamada</span>
+https://blog.jeffyamada.com                <span id="dsq-author-user-260">Jeff Yamada</span>
             </cite>
         </div>
         <div id="dsq-comment-body-260" class="dsq-comment-body">
@@ -297,7 +297,7 @@ http://blog.jeffyamada.com                <span id="dsq-author-user-260">Jeff Ya
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-261">
         <div id="dsq-comment-header-261" class="dsq-comment-header">
             <cite id="dsq-cite-261">
-http://craigkaminsky.blogspot.com                <span id="dsq-author-user-261">Craig Kaminsky</span>
+https://craigkaminsky.blogspot.com                <span id="dsq-author-user-261">Craig Kaminsky</span>
             </cite>
         </div>
         <div id="dsq-comment-body-261" class="dsq-comment-body">
@@ -310,11 +310,11 @@ http://craigkaminsky.blogspot.com                <span id="dsq-author-user-261">
     <li class="comment even thread-even depth-1" id="dsq-comment-262">
         <div id="dsq-comment-header-262" class="dsq-comment-header">
             <cite id="dsq-cite-262">
-http://revisual.co.uk                <span id="dsq-author-user-262">neil manuell</span>
+https://revisual.co.uk                <span id="dsq-author-user-262">neil manuell</span>
             </cite>
         </div>
         <div id="dsq-comment-body-262" class="dsq-comment-body">
-            <div id="dsq-comment-message-262" class="dsq-comment-message"><p>this is cool.  someday soon I&#8217;m going to have to use piping, and this is where I&#8217;m going to start <img src='http://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
+            <div id="dsq-comment-message-262" class="dsq-comment-message"><p>this is cool.  someday soon I&#8217;m going to have to use piping, and this is where I&#8217;m going to start <img src='https://joelhooks.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> </p>
 </div>
         </div>
     </li>
@@ -395,7 +395,7 @@ Does anybody know anything about PureMVC multicore port for Objective-C?</p>
     <li class="comment even thread-even depth-1" id="dsq-comment-458">
         <div id="dsq-comment-header-458" class="dsq-comment-header">
             <cite id="dsq-cite-458">
-http://joelhooks.com                <span id="dsq-author-user-458">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-458">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-458" class="dsq-comment-body">
@@ -422,11 +422,11 @@ http://joelhooks.com                <span id="dsq-author-user-458">Joel Hooks</s
     <li class="comment even thread-even depth-1" id="dsq-comment-268">
         <div id="dsq-comment-header-268" class="dsq-comment-header">
             <cite id="dsq-cite-268">
-http://joelhooks.com                <span id="dsq-author-user-268">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-268">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-268" class="dsq-comment-body">
-            <div id="dsq-comment-message-268" class="dsq-comment-message"><p>I don&#39;t find Pipes difficult ( any more <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' />  ) and while I have huge respect for Darshan&#39;s efforts with Fabrication, it extends virtually every single PureMVC framework creating an entirely new framework. I really like working from the reference PureMVC.</p>
+            <div id="dsq-comment-message-268" class="dsq-comment-message"><p>I don&#39;t find Pipes difficult ( any more <img src='https://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' />  ) and while I have huge respect for Darshan&#39;s efforts with Fabrication, it extends virtually every single PureMVC framework creating an entirely new framework. I really like working from the reference PureMVC.</p>
 </div>
         </div>
     </li>
@@ -449,11 +449,11 @@ http://joelhooks.com                <span id="dsq-author-user-268">Joel Hooks</s
     <li class="comment even thread-even depth-1" id="dsq-comment-456">
         <div id="dsq-comment-header-456" class="dsq-comment-header">
             <cite id="dsq-cite-456">
-http://joelhooks.com                <span id="dsq-author-user-456">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-456">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-456" class="dsq-comment-body">
-            <div id="dsq-comment-message-456" class="dsq-comment-message"><p>I don&#39;t find Pipes difficult ( any more <img src='http://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' />  ) and while I have huge respect for Darshan&#39;s efforts with Fabrication, it extends virtually every single PureMVC framework creating an entirely new framework. I really like working from the reference PureMVC.</p>
+            <div id="dsq-comment-message-456" class="dsq-comment-message"><p>I don&#39;t find Pipes difficult ( any more <img src='https://joelhooks.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' />  ) and while I have huge respect for Darshan&#39;s efforts with Fabrication, it extends virtually every single PureMVC framework creating an entirely new framework. I really like working from the reference PureMVC.</p>
 </div>
         </div>
     </li>
@@ -466,7 +466,7 @@ http://joelhooks.com                <span id="dsq-author-user-456">Joel Hooks</s
             </cite>
         </div>
         <div id="dsq-comment-body-269" class="dsq-comment-body">
-            <div id="dsq-comment-message-269" class="dsq-comment-message"><p>Hi Joel, thank you.  I used your example and the one at <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.tekool.net/');"  href="http://www.tekool.net/" rel="nofollow">http://www.tekool.net/</a> as the basis for an Actionscript only project.  I implemented IEventDispatcher in a module data proxy so it can dispatch an event when it is updated.  I passed the module facade to each module on instantiation so each module retrieves its proxy and then attaches a listener to it.  This also allows the module to directly notify its junction mediator.  Each module is assigned to an index in the proxy array.  This acts as a data binding to the proxy, something not readily available in Actionscript only projects. Module to module communication is then bounced off the shell back to the intended module index in the proxy.  I also modified the module message header to contain a to-module and a from-module parameter.  When the module proxy gets an update it uses the to-module parameter as the index in it&#39;s array.  As mentioned prior each module listens to its index in the proxy.  As a side benefit each module can also access another modules data if needed and I suppose an index in the proxy could be assigned to the shell so that data would be readily available too.  The next step is to use the state machine for layout control perhaps implementing a three phase process like the Flex Layout Manager does.  Thank you again for your great example.</p>
+            <div id="dsq-comment-message-269" class="dsq-comment-message"><p>Hi Joel, thank you.  I used your example and the one at <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.tekool.net/');"  href="https://www.tekool.net/" rel="nofollow">https://www.tekool.net/</a> as the basis for an Actionscript only project.  I implemented IEventDispatcher in a module data proxy so it can dispatch an event when it is updated.  I passed the module facade to each module on instantiation so each module retrieves its proxy and then attaches a listener to it.  This also allows the module to directly notify its junction mediator.  Each module is assigned to an index in the proxy array.  This acts as a data binding to the proxy, something not readily available in Actionscript only projects. Module to module communication is then bounced off the shell back to the intended module index in the proxy.  I also modified the module message header to contain a to-module and a from-module parameter.  When the module proxy gets an update it uses the to-module parameter as the index in it&#39;s array.  As mentioned prior each module listens to its index in the proxy.  As a side benefit each module can also access another modules data if needed and I suppose an index in the proxy could be assigned to the shell so that data would be readily available too.  The next step is to use the state machine for layout control perhaps implementing a three phase process like the Flex Layout Manager does.  Thank you again for your great example.</p>
 </div>
         </div>
     </li>
@@ -475,7 +475,7 @@ http://joelhooks.com                <span id="dsq-author-user-456">Joel Hooks</s
     <li class="comment even thread-even depth-1" id="dsq-comment-270">
         <div id="dsq-comment-header-270" class="dsq-comment-header">
             <cite id="dsq-cite-270">
-http://joelhooks.com                <span id="dsq-author-user-270">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-270">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-270" class="dsq-comment-body">
@@ -492,7 +492,7 @@ http://joelhooks.com                <span id="dsq-author-user-270">Joel Hooks</s
             </cite>
         </div>
         <div id="dsq-comment-body-453" class="dsq-comment-body">
-            <div id="dsq-comment-message-453" class="dsq-comment-message"><p>Hi Joel, thank you.  I used your example and the one at <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.tekool.net/');"  href="http://www.tekool.net/" rel="nofollow">http://www.tekool.net/</a> as the basis for an Actionscript only project.  I implemented IEventDispatcher in a module data proxy so it can dispatch an event when it is updated.  I passed the module facade to each module on instantiation so each module retrieves its proxy and then attaches a listener to it.  This also allows the module to directly notify its junction mediator.  Each module is assigned to an index in the proxy array.  This acts as a data binding to the proxy, something not readily available in Actionscript only projects. Module to module communication is then bounced off the shell back to the intended module index in the proxy.  I also modified the module message header to contain a to-module and a from-module parameter.  When the module proxy gets an update it uses the to-module parameter as the index in it&#39;s array.  As mentioned prior each module listens to its index in the proxy.  As a side benefit each module can also access another modules data if needed and I suppose an index in the proxy could be assigned to the shell so that data would be readily available too.  The next step is to use the state machine for layout control perhaps implementing a three phase process like the Flex Layout Manager does.  Thank you again for your great example.</p>
+            <div id="dsq-comment-message-453" class="dsq-comment-message"><p>Hi Joel, thank you.  I used your example and the one at <a onclick="javascript:pageTracker._trackPageview('/outgoing/www.tekool.net/');"  href="https://www.tekool.net/" rel="nofollow">https://www.tekool.net/</a> as the basis for an Actionscript only project.  I implemented IEventDispatcher in a module data proxy so it can dispatch an event when it is updated.  I passed the module facade to each module on instantiation so each module retrieves its proxy and then attaches a listener to it.  This also allows the module to directly notify its junction mediator.  Each module is assigned to an index in the proxy array.  This acts as a data binding to the proxy, something not readily available in Actionscript only projects. Module to module communication is then bounced off the shell back to the intended module index in the proxy.  I also modified the module message header to contain a to-module and a from-module parameter.  When the module proxy gets an update it uses the to-module parameter as the index in it&#39;s array.  As mentioned prior each module listens to its index in the proxy.  As a side benefit each module can also access another modules data if needed and I suppose an index in the proxy could be assigned to the shell so that data would be readily available too.  The next step is to use the state machine for layout control perhaps implementing a three phase process like the Flex Layout Manager does.  Thank you again for your great example.</p>
 </div>
         </div>
     </li>
@@ -501,7 +501,7 @@ http://joelhooks.com                <span id="dsq-author-user-270">Joel Hooks</s
     <li class="comment even thread-even depth-1" id="dsq-comment-454">
         <div id="dsq-comment-header-454" class="dsq-comment-header">
             <cite id="dsq-cite-454">
-http://joelhooks.com                <span id="dsq-author-user-454">Joel Hooks</span>
+https://joelhooks.com                <span id="dsq-author-user-454">Joel Hooks</span>
             </cite>
         </div>
         <div id="dsq-comment-body-454" class="dsq-comment-body">
@@ -514,7 +514,7 @@ http://joelhooks.com                <span id="dsq-author-user-454">Joel Hooks</s
     <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-271">
         <div id="dsq-comment-header-271" class="dsq-comment-header">
             <cite id="dsq-cite-271">
-http://www.fellowesbindingmachine.net/                <span id="dsq-author-user-271">fellowes_binding_machine</span>
+https://www.fellowesbindingmachine.net/                <span id="dsq-author-user-271">fellowes_binding_machine</span>
             </cite>
         </div>
         <div id="dsq-comment-body-271" class="dsq-comment-body">
@@ -525,7 +525,7 @@ http://www.fellowesbindingmachine.net/                <span id="dsq-author-user-
 
     </li>
     <li class="post pingback">
-        <p>Pingback: <a href='http://joelhooks.com/2010/05/02/modular-robotlegs/' rel='external nofollow' class='url'>Modular Robotlegs | Building Blocks</a></p>
+        <p>Pingback: <a href='https://joelhooks.com/2010/05/02/modular-robotlegs/' rel='external nofollow' class='url'>Modular Robotlegs | Building Blocks</a></p>
     </li>
     </li>
             </ul>
@@ -537,8 +537,8 @@ http://www.fellowesbindingmachine.net/                <span id="dsq-author-user-
 
 <script type="text/javascript">
 /* <![CDATA[ */
-    var disqus_url = 'http://joelhooks.com/2009/05/18/piping-the-machine-puremvc-multicore-with-pipes-and-the-finite-state-machine-fsm/';
-    var disqus_identifier = '177 http://joelhooks.com/?p=177';
+    var disqus_url = 'https://joelhooks.com/2009/05/18/piping-the-machine-puremvc-multicore-with-pipes-and-the-finite-state-machine-fsm/';
+    var disqus_identifier = '177 https://joelhooks.com/?p=177';
     var disqus_container_id = 'disqus_thread';
     var disqus_domain = 'disqus.com';
     var disqus_shortname = 'joelhooks';
@@ -564,7 +564,7 @@ http://www.fellowesbindingmachine.net/                <span id="dsq-author-user-
             DISQUS.request.get('?cf_action=sync_comments&post_id=177');
         });
                     };
-    var facebookXdReceiverPath = 'http://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
+    var facebookXdReceiverPath = 'https://joelhooks.com/wp-content/plugins/disqus-comment-system/xd_receiver.htm';
 /* ]]> */
 </script>
 
@@ -588,18 +588,18 @@ http://www.fellowesbindingmachine.net/                <span id="dsq-author-user-
 (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = 'http://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
+    dsq.src = 'https://' + disqus_shortname + '.' + disqus_domain + '/embed.js?pname=wordpress&pver=2.69';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 })();
 /* ]]> */
 </script>
 		</section><!-- #main -->
-                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="http://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="http://twitter.com/jhooks">@jhooks</a></p></blockquote>
+                        <blockquote class="style1"><p>This content is archived. I didn't want it to be lost in the ether, so I exported it from wordpress as static files. I also stripped it of the heavy theme as much as possible using the excellent <a href="https://aarontgrogg.com/boilerplate/">Boilerplate</a> theme. </p><p>If this website is useful to you, makes you angry, or otherwise stirs your emotions; I'd love to hear about it. <a href="https://twitter.com/jhooks">@jhooks</a></p></blockquote>
 		<!-- footer -->
 
-<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: http://www.oratransplant.nl/uga -->
+<!-- tracker added by Ultimate Google Analytics plugin v1.6.0: https://www.oratransplant.nl/uga -->
 <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "https://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
