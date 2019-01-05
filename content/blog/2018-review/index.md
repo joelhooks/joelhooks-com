@@ -25,7 +25,7 @@ Here's a little life tip, moving across the country and then immediately having 
 
 Individually, both of these activities are intense. They literally disrupt every single aspect of your life, and force you into new and unexpected changes that you _cannot_ get out of.
 
-![man and baby with a bird](./images/colors.jpg)
+![man and baby with a bird](./images/colors.png)
 
 It takes awhile to get back to any sense of normal after either of these events, and when they are stacked like that it might take a little longer.
 
