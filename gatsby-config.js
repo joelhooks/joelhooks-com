@@ -31,6 +31,7 @@ module.exports = {
       options: {
         extensions: ['.mdx', '.md', '.markdown'],
         gatsbyRemarkPlugins: [
+          'gatsby-remark-autolink-headers',
           {
             resolve: 'gatsby-remark-images',
             options: {
@@ -123,6 +124,5 @@ module.exports = {
         ],
       },
     },
-    'gatsby-plugin-offline',
   ],
 }
