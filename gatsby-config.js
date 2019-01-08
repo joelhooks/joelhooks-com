@@ -1,5 +1,3 @@
-const remarkHighlight = require('remark-highlight.js')
-
 module.exports = {
   pathPrefix: '/',
   siteMetadata: {
@@ -7,7 +5,26 @@ module.exports = {
     author: 'Joel Hooks',
     title: 'The blog of Joel Hooks',
     description: 'This is where I post my things.',
+    canonicalUrl: 'https://joelhooks.com',
+    image: 'https://joelhooks.com/images/joel-hooks.jpg',
+    author: {
+      name: 'Joel Hooks',
+      minibio: `
+        <strong>Joel Hooks</strong> is a principle developer and co-founder at egghead.io.
+        He is a published author, international speaker, and has been building UIs for 
+        20+ years. Joel lives in Vancouver WA with his partner and their 5 kids.
+      `,
+    },
+    organization: {
+      name: 'Joel Hooks',
+      url: 'https://joelhooks.com',
+      logo: 'https://joelhooks.com/android-chrome-512x512.png',
+    },
     keywords: ['Video Blogger'],
+    social: {
+      twitter: '@jhooks',
+      fbAppID: '',
+    },
   },
   plugins: [
     {
@@ -41,6 +58,10 @@ module.exports = {
               backgroundColor: 'transparent',
             },
           },
+          { resolve: 'gatsby-remark-responsive-iframe' },
+          { resolve: 'gatsby-remark-copy-linked-files' },
+          { resolve: 'gatsby-remark-numbered-footnotes' },
+          { resolve: 'gatsby-remark-smartypants' },
         ],
       },
     },
@@ -50,15 +71,32 @@ module.exports = {
     'gatsby-plugin-catch-links',
     'gatsby-plugin-react-helmet',
     {
+      resolve: `gatsby-plugin-typography`,
+      options: {
+        pathToConfigModule: `src/utils/typography`,
+      },
+    },
+    {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        name: 'Video Blogger',
-        short_name: 'JHooks',
-        start_url: '/',
+        name: 'Joel Hooks',
+        short_name: '@JHooks',
+        start_url: '.',
         background_color: '#fff',
         theme_color: '#525dce',
         display: 'standalone',
-        icon: 'assets/logo.png',
+        icons: [
+          {
+            src: '/android-chrome-192x192.png?v=6946GROn29',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/android-chrome-512x512.png?v=6946GROn29',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
       },
     },
     {

@@ -2,12 +2,14 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import { css } from '@emotion/core'
 import Layout from '../components/Layout'
-import underConstruction from './uc.gif'
+import selfie from './selfie_stick.jpg'
 import Link from '../components/Link'
+import SEO from 'components/SEO'
 
 export default function Index({ data: { site } }) {
   return (
     <Layout site={site}>
+      <SEO />
       <div
         css={css`
           display: flex;
@@ -30,21 +32,20 @@ export default function Index({ data: { site } }) {
             css={css`
               display: flex;
               align-items: center;
+              margin-top: 75px;
             `}
           >
-            This site is under construction.
-            {'    '}
             <img
               css={css`
                 padding-left: 15px;
               `}
-              src={underConstruction}
-              alt="stick man digging"
+              src={selfie}
+              alt="joel hooks standing against a wall"
             />
           </div>
           <div
             css={css`
-              margin-top: 35px;
+              margin-top: 15px;
             `}
           >
             <Link to="/blog">Blog Archive</Link>

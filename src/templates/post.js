@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import Img from 'gatsby-image'
 import MDXRenderer from 'gatsby-mdx/mdx-renderer'
+import SEO from 'components/SEO'
 
 import Layout from '../components/Layout'
 
@@ -11,6 +12,7 @@ export default function Post({
 }) {
   return (
     <Layout site={site} frontmatter={mdx.frontmatter}>
+      <SEO frontmatter={mdx.frontmatter} isBlogPost />
       <div
         css={{
           width: '100%',
