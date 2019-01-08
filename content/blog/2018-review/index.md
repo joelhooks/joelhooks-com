@@ -206,6 +206,8 @@ I felt productive af when it was going well though!
 
 At the beginning of 2018 we had a rock solid plan to aggressively pursue “enterprise” accounts for egghead.
 
+Felt confident af.
+
 In May we stopped pursuing enterprise accounts at egghead.
 
 Managers want, almost universally, **whips and dashboards**. They want to know who is slacking off so they can punish/push them.
@@ -220,7 +222,7 @@ Most days it feels like I’m making it up as I go along and that there are 1000
 
 We’ve also been affected by slower growth overall as a business, so that has made it difficult to expand the team or make any headway on the very hard technical problems that I’d like to solve.
 
-On one hand egghead has been a big success for me personally and professionally, on the other I feel desperately inadequate to sit at the helm.
+egghead has been a big success for me personally and professionally, but I struggle hard with knowing what I don't know and making the appropriate decisions for the health of the business.
 
 # The focus for 2019
 
