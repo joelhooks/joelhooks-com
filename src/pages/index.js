@@ -34,15 +34,9 @@ export default function Index({ data: { site } }) {
               align-items: center;
               margin-top: 75px;
             `}
-          >
-            <img
-              css={css`
-                padding-left: 15px;
-              `}
-              src={selfie}
-              alt="joel hooks standing against a wall"
-            />
-          </div>
+          />
+            
+         
           <div
             css={css`
               margin-top: 15px;
