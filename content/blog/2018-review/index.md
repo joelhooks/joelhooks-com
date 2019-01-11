@@ -160,7 +160,7 @@ We enjoy it quite a lot.
 
 Well, once you get started, might as well go all in?
 
-![a tattoo of rainbows shooting out of an ocilloscope into space](./images/ww.jpg)
+![a tattoo of rainbows shooting out of an ocilloscope into space](./images/spacescope.jpg)
 
 This one is from Winston the Whale in Portland. It is what it is ;)
 
