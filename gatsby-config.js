@@ -2,7 +2,6 @@ module.exports = {
   pathPrefix: '/',
   siteMetadata: {
     siteUrl: 'https://joelhooks.com/',
-    author: 'Joel Hooks',
     title: 'The blog of Joel Hooks',
     description: 'This is where I post my things.',
     canonicalUrl: 'https://joelhooks.com',
