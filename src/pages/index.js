@@ -2,7 +2,6 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import { css } from '@emotion/core'
 import Layout from '../components/Layout'
-import selfie from './selfie_stick.jpg'
 import Link from '../components/Link'
 import SEO from 'components/SEO'
 
