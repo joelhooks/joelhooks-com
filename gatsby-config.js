@@ -46,9 +46,6 @@ module.exports = {
       resolve: `gatsby-mdx`,
       options: {
         extensions: ['.mdx', '.md', '.markdown'],
-        defaultLayouts: {
-          default: require.resolve('./src/templates/post.js'),
-        },
         gatsbyRemarkPlugins: [
           {
             resolve: 'gatsby-remark-images',
