@@ -46,47 +46,25 @@ module.exports = {
       resolve: `gatsby-mdx`,
       options: {
         extensions: ['.mdx', '.md', '.markdown'],
-        plugins: [
+        defaultLayouts: {
+          default: require.resolve('./src/templates/post.js'),
+        },
+        gatsbyRemarkPlugins: [
           {
             resolve: 'gatsby-remark-images',
             options: {
               maxWidth: 1024,
-              withWebp: true,
-              quality: 80,
               linkImagesToOriginal: false,
-              backgroundColor: 'transparent',
             },
           },
-          { resolve: 'gatsby-remark-responsive-iframe' },
           { resolve: 'gatsby-remark-copy-linked-files' },
           { resolve: 'gatsby-remark-numbered-footnotes' },
           { resolve: 'gatsby-remark-smartypants' },
         ],
       },
     },
-    'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     'gatsby-plugin-emotion',
-    {
-      resolve: 'gatsby-transformer-remark',
-      options: {
-        plugins: [
-          {
-            resolve: 'gatsby-remark-images',
-            options: {
-              maxWidth: 1380,
-              linkImagesToOriginal: false,
-            },
-          },
-          {
-            resolve: 'gatsby-remark-responsive-iframe',
-          },
-          'gatsby-remark-copy-linked-files',
-          'gatsby-remark-numbered-footnotes',
-          'gatsby-remark-smartypants',
-        ],
-      },
-    },
     'gatsby-plugin-catch-links',
     'gatsby-plugin-react-helmet',
     {
@@ -148,7 +126,6 @@ module.exports = {
                   date: edge.node.fields.date,
                   url: site.siteMetadata.siteUrl + edge.node.fields.slug,
                   guid: site.siteMetadata.siteUrl + edge.node.fields.slug,
-
                 })
               })
             },

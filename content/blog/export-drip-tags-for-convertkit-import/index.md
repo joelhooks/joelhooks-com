@@ -6,6 +6,7 @@ categories: ['tools']
 featured: false
 published: true
 ---
+
 If you need to migrate your email list subscribers from Drip to Convertkit, you will run into the problem of importing each of your tags as an individual list into Convertkit.
 
 If you follow the [official recommendation][1], they suggest that you export each individual tag from Drip. With each export taking 3 minutes to 12 hours, you could be there for a long long time.
@@ -16,7 +17,10 @@ This saved me a shitload of time!
 
 Here's a video overview:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Lx-UDHy90Bk" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen />
+<div style=" position: relative; overflow: hidden; padding-top: 56.25%;">
+
+<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://www.youtube.com/embed/Lx-UDHy90Bk" frameBorder="0" allowFullScreen></iframe>
+</div>
 
 [1]: https://help.convertkit.com/article/799-switch-from-drip
 [2]: https://github.com/joelhooks/migrate-to-convertkit-from-drip
