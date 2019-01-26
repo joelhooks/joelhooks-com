@@ -2,8 +2,9 @@ module.exports = {
   pathPrefix: '/',
   siteMetadata: {
     siteUrl: 'https://joelhooks.com/',
-    title: 'The blog of Joel Hooks',
-    description: 'This is where I post my things.',
+    title: 'Joel Hooks - Video Blogger',
+    description:
+      'Articles and notes from the co-founder of egghead.io. Musings on software, business, and life.',
     canonicalUrl: 'https://joelhooks.com',
     image: 'https://joelhooks.com/images/joel-hooks.jpg',
     author: {
