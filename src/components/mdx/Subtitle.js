@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 
 export default styled.h2`
   text-align: left;
@@ -7,4 +7,4 @@ export default styled.h2`
   margin-bottom: 20px;
   font-weight: 900;
   line-height: 1.1;
-`;
+`

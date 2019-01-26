@@ -6,10 +6,9 @@ description: 'this post has all of the right fields'
 categories: ['test']
 keywords: ['test']
 banner: './images/banner.jpg'
-featured: false
 published: false
 redirects:
   - '/invisible-post-423123'
 ---
 
-This exists to populate GraphQL fields and avoid null errors. It should contain all of the avaialble frontmatter.
+This exists to populate GraphQL fields and avoid null errors. It should contain all of the available frontmatter.

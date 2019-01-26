@@ -1,28 +1,28 @@
+const config = require('./config/website')
+const pathPrefix = config.pathPrefix === '/' ? '' : config.pathPrefix
+
+require('dotenv').config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
 module.exports = {
-  pathPrefix: '/',
+  pathPrefix: config.pathPrefix,
   siteMetadata: {
-    siteUrl: 'https://joelhooks.com/',
-    title: 'Joel Hooks - Video Blogger',
-    description:
-      'Articles and notes from the co-founder of egghead.io. Musings on software, business, and life.',
-    canonicalUrl: 'https://joelhooks.com',
-    image: 'https://joelhooks.com/images/joel-hooks.jpg',
-    author: {
-      name: 'Joel Hooks',
-      minibio: `
-        <strong>Joel Hooks</strong> is a principle developer and co-founder at egghead.io.
-        He is a published author, international speaker, and has been building UIs for 
-        20+ years. Joel lives in Vancouver WA with his partner and their 5 kids.
-      `,
-    },
-    organization: {
-      name: 'Joel Hooks',
-      url: 'https://joelhooks.com',
-      logo: 'https://joelhooks.com/android-chrome-512x512.png',
-    },
+    siteUrl: config.siteUrl + pathPrefix,
+    title: config.siteTitle,
+    twitterHandle: config.twitterHandle,
+    description: config.siteDescription,
     keywords: ['Video Blogger'],
+    canonicalUrl: config.siteUrl,
+    image: config.siteLogo,
+    author: config.author,
+    organization: {
+      name: config.organization,
+      url: config.siteUrl,
+      logo: config.siteLogo,
+    },
     social: {
-      twitter: '@jhooks',
+      twitter: config.twitterHandle,
       fbAppID: '',
     },
   },
@@ -32,7 +32,6 @@ module.exports = {
       options: {
         path: `${__dirname}/content/blog`,
         name: 'blog',
-        ignore: [`**/readme.md`],
       },
     },
     {
@@ -51,43 +50,37 @@ module.exports = {
           {
             resolve: 'gatsby-remark-images',
             options: {
-              maxWidth: 1024,
-              linkImagesToOriginal: false,
+              backgroundColor: '#fafafa',
+              maxWidth: 1035,
+              sizeByPixelDensity: true,
             },
           },
-          { resolve: 'gatsby-remark-copy-linked-files' },
-          { resolve: 'gatsby-remark-numbered-footnotes' },
-          { resolve: 'gatsby-remark-smartypants' },
         ],
       },
     },
+    'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     'gatsby-plugin-emotion',
     'gatsby-plugin-catch-links',
     'gatsby-plugin-react-helmet',
     {
-      resolve: `gatsby-plugin-typography`,
-      options: {
-        pathToConfigModule: `src/utils/typography`,
-      },
-    },
-    {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        name: 'Joel Hooks',
-        short_name: '@JHooks',
-        start_url: '.',
-        background_color: '#fff',
-        theme_color: '#525dce',
+        name: config.siteTitle,
+        short_name: config.siteTitleShort,
+        description: config.siteDescription,
+        start_url: config.pathPrefix,
+        background_color: config.backgroundColor,
+        theme_color: config.themeColor,
         display: 'standalone',
         icons: [
           {
-            src: '/android-chrome-192x192.png?v=6946GROn29',
+            src: '/favicons/android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/android-chrome-512x512.png?v=6946GROn29',
+            src: '/favicons/android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },
@@ -97,7 +90,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: `UA-246705-7`,
+        trackingId: `GOOGLE_ID`,
       },
     },
     {
@@ -137,7 +130,6 @@ module.exports = {
                   edges {
                     node {
                       excerpt(pruneLength: 250)
-
                       fields { 
                         slug
                         date
@@ -151,10 +143,17 @@ module.exports = {
               }
             `,
             output: '/rss.xml',
-            title: 'Joel Hooks Blog RSS Feed',
+            title: 'Blog RSS Feed',
           },
         ],
       },
     },
+    {
+      resolve: `gatsby-plugin-typography`,
+      options: {
+        pathToConfigModule: `src/lib/typography`,
+      },
+    },
+    'gatsby-plugin-offline',
   ],
 }

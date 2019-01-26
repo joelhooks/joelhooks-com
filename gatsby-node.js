@@ -67,10 +67,14 @@ exports.createPages = ({ actions, graphql }) =>
       return Promise.reject(errors)
     }
 
+    if (_.isEmpty(data.allMdx)) {
+      return Promise.reject('There are no posts!')
+    }
+
     const { edges } = data.allMdx
     const { createRedirect, createPage } = actions
     createPosts(createPage, createRedirect, edges)
-    createPaginatedPages(actions.createPage, edges, '/blog', {
+    createPaginatedPages(actions.createPage, edges, '/articles', {
       categories: [],
     })
   })
@@ -79,6 +83,9 @@ exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
     resolve: {
       modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+      alias: {
+        $components: path.resolve(__dirname, 'src/components'),
+      },
     },
   })
 }

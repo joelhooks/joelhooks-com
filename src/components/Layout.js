@@ -2,37 +2,117 @@ import React, { Fragment } from 'react'
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import { MDXProvider } from '@mdx-js/tag'
-import { css, Global } from '@emotion/core'
-
+import { Global, css } from '@emotion/core'
+import { ThemeProvider } from 'emotion-theming'
+import { bpMaxSM } from '../lib/breakpoints'
+import theme from '../../config/theme'
 import mdxComponents from './mdx'
+import Header from './Header'
+import reset from '../lib/reset'
+import { fonts } from '../lib/typography'
+import config from '../../config/website'
+import Footer from '../components/Footer'
 
-const globalStyles = css`
-  html,
-  body {
-    margin: 0;
-    padding: 0;
+export const globalStyles = css`
+  .button-secondary {
+    border-radius: 4px;
+    padding: 12px 12px;
+    background: ${theme.colors.primary_light};
   }
-
+  ${bpMaxSM} {
+    p,
+    em,
+    strong {
+      font-size: 90%;
+    }
+    h1 {
+      font-size: 30px;
+    }
+    h2 {
+      font-size: 24px;
+    }
+  }
+  hr {
+    margin: 50px 0;
+    border: none;
+    border-top: 1px solid ${theme.colors.gray};
+    background: none;
+  }
+  em {
+    font-family: ${fonts.regularItalic};
+  }
+  strong {
+    em {
+      font-family: ${fonts.semiboldItalic};
+    }
+  }
+  input {
+    border-radius: 4px;
+    border: 1px solid ${theme.colors.gray};
+    padding: 5px 10px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    font-family: ${fonts.regular};
+    margin-top: 5px;
+    ::placeholder {
+      opacity: 0.4;
+    }
+  }
+  .gatsby-resp-image-image {
+    background: none !important;
+    box-shadow: 0;
+  }
+  button {
+    border-radius: 4px;
+    background-color: ${theme.brand.primary};
+    border: none;
+    color: ${theme.colors.white};
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 1px solid ${theme.brand.primary};
+    transition: ${theme.transition.ease};
+    :hover {
+      background: ${theme.colors.link_color_hover};
+      border: 1px solid ${theme.colors.link_color_hover};
+      transition: ${theme.transition.ease};
+    }
+  }
   pre {
     background-color: #061526 !important;
     border-radius: 4px;
-    font-size: 14px;
-    padding: 5px;
+    font-size: 16px;
+    padding: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+    /* Track */
+    ::-webkit-scrollbar {
+      width: 100%;
+      height: 5px;
+      border-radius: 0 0 5px 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #061526;
+      border-radius: 0 0 4px 4px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 5px;
+    }
   }
-
-  .gatsby-highlight-code-line {
-    background-color: #4f424c;
-    display: block;
-    margin-right: -1em;
-    margin-left: -1em;
-    padding-right: 1em;
-    padding-left: 1em;
-  }
+  ${reset};
 `
 
-export default ({ site, frontmatter = {}, children }) => {
+export default ({
+  site,
+  frontmatter = {},
+  children,
+  dark,
+  headerBg,
+  headerColor,
+  noFooter,
+}) => {
   const {
-    title,
     description: siteDescription,
     keywords: siteKeywords,
   } = site.siteMetadata
@@ -46,52 +126,40 @@ export default ({ site, frontmatter = {}, children }) => {
   const description = frontmatterDescription || siteDescription
 
   return (
-    <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        min-height: 100vh;
-      `}
-    >
-      <Helmet
-        title={title}
-        meta={[
-          { name: 'description', content: description },
-          { name: 'keywords', content: keywords },
-        ]}
-      >
-        <html lang="en" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
+    <ThemeProvider theme={theme}>
+      <Fragment>
+        <Global styles={globalStyles} />
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+          `}
         >
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        >
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        ><link rel="manifest" href="/site.webmanifest" />>
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />>
-        <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#ffffff" />
-      </Helmet>
-      <Global styles={globalStyles} />
-      <MDXProvider components={mdxComponents}>
-        <Fragment>{children}</Fragment>
-      </MDXProvider>
-    </div>
+          <Helmet
+            title={config.siteTitle}
+            meta={[
+              { name: 'description', content: description },
+              { name: 'keywords', content: keywords },
+            ]}
+          >
+            <html lang="en" />
+            <noscript>This site runs best with JavaScript enabled.</noscript>
+          </Helmet>
+          <Header
+            siteTitle={site.siteMetadata.title}
+            dark={dark}
+            bgColor={headerBg}
+            headerColor={headerColor}
+          />
+          <MDXProvider components={mdxComponents}>
+            <Fragment>{children}</Fragment>
+          </MDXProvider>
+          {!noFooter && <Footer author={site.siteMetadata.author.name} />}
+        </div>
+      </Fragment>
+    </ThemeProvider>
   )
 }
 
@@ -100,6 +168,9 @@ export const pageQuery = graphql`
     siteMetadata {
       title
       description
+      author {
+        name
+      }
       keywords
     }
   }

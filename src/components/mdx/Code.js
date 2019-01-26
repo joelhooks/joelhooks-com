@@ -1,12 +1,9 @@
-import React from 'react';
-import theme from 'prism-react-renderer/themes/oceanicNext';
-import Highlight, { defaultProps } from 'prism-react-renderer';
-import {
-  LiveProvider,
-  LiveEditor,
-  LiveError,
-  LivePreview,
-} from 'react-live';
+import React from 'react'
+import { css } from '@emotion/core'
+import theme from 'prism-react-renderer/themes/oceanicNext'
+import Highlight, { defaultProps } from 'prism-react-renderer'
+import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live'
+
 const Code = ({ codeString, language, ...props }) => {
   if (props['react-live']) {
     return (
@@ -15,7 +12,7 @@ const Code = ({ codeString, language, ...props }) => {
         <LiveError />
         <LivePreview />
       </LiveProvider>
-    );
+    )
   } else {
     return (
       <Highlight
@@ -24,16 +21,20 @@ const Code = ({ codeString, language, ...props }) => {
         language={language}
         theme={theme}
       >
-        {({
-          className,
-          style,
-          tokens,
-          getLineProps,
-          getTokenProps,
-        }) => (
+        {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre className={className} style={style}>
             {tokens.map((line, i) => (
               <div {...getLineProps({ line, key: i })}>
+                <span
+                  css={css`
+                    display: inline-block;
+                    width: 2em;
+                    user-select: none;
+                    opacity: 0.3;
+                  `}
+                >
+                  {i + 1}
+                </span>
                 {line.map((token, key) => (
                   <span {...getTokenProps({ token, key })} />
                 ))}
@@ -42,8 +43,8 @@ const Code = ({ codeString, language, ...props }) => {
           </pre>
         )}
       </Highlight>
-    );
+    )
   }
-};
+}
 
-export default Code;
+export default Code
