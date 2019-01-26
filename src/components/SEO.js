@@ -5,7 +5,13 @@ import { StaticQuery, graphql } from 'gatsby'
 import PropTypes from 'prop-types'
 import SchemaOrg from './SchemaOrg'
 
-const SEO = ({ postData, frontmatter = {}, postImage, isBlogPost }) => (
+const SEO = ({
+  postData,
+  excerpt,
+  frontmatter = {},
+  postImage,
+  isBlogPost,
+}) => (
   <StaticQuery
     query={graphql`
       {
@@ -63,7 +69,7 @@ const SEO = ({ postData, frontmatter = {}, postImage, isBlogPost }) => (
             <meta name="twitter:card" content="summary" />
             <meta name="twitter:creator" content={seo.social.twitter} />
             <meta name="twitter:title" content={title} />
-            <meta name="twitter:description" content={description} />
+            <meta name="twitter:description" content={excerpt || description} />
             <meta name="twitter:image" content={image} />
           </Helmet>
           <SchemaOrg

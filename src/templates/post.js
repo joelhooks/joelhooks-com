@@ -12,7 +12,7 @@ export default function Post({
 }) {
   return (
     <Layout site={site} frontmatter={mdx.frontmatter}>
-      <SEO frontmatter={mdx.frontmatter} isBlogPost />
+      <SEO excerpt={mdx.excerpt} frontmatter={mdx.frontmatter} isBlogPost />
       <div
         css={{
           width: '100%',
@@ -45,6 +45,7 @@ export const pageQuery = graphql`
       ...site
     }
     mdx(fields: { id: { eq: $id } }) {
+      excerpt(pruneLength: 300)
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
