@@ -20,11 +20,6 @@ export const globalStyles = css`
     background: ${theme.colors.primary_light};
   }
   ${bpMaxSM} {
-    p,
-    em,
-    strong {
-      font-size: 90%;
-    }
     h1 {
       font-size: 30px;
     }
