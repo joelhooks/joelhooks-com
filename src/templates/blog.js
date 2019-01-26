@@ -29,14 +29,14 @@ const Blog = ({
             )}
 
             <h2>
-              <Link to={post.fields.slug}>{post.frontmatter.title}</Link>
+              <Link to={`/${post.fields.slug}`}>{post.frontmatter.title}</Link>
             </h2>
 
             <small>{post.frontmatter.date}</small>
 
             <p>{post.excerpt}</p>
 
-            <Link to={post.fields.slug}>Continue Reading</Link>
+            <Link to={`/${post.fields.slug}`}>Continue Reading</Link>
           </div>
         ))}
 

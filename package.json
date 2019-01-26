@@ -40,6 +40,8 @@
     "gatsby-transformer-remark": "^2.1.19",
     "gatsby-transformer-sharp": "^2.1.10",
     "mdx-utils": "0.0.2",
+    "minimist": "^1.2.0",
+    "moment": "^2.24.0",
     "prism-react-renderer": "^0.1.5",
     "prism-themes": "^1.0.1",
     "prismjs": "^1.15.0",
@@ -51,6 +53,8 @@
     "react-typography": "^0.16.18",
     "remark-highlight.js": "^5.1.0",
     "serve": "^10.1.1",
+    "shortid": "^2.2.14",
+    "slug": "^0.9.3",
     "typography": "^0.16.18",
     "typography-theme-wordpress-2016": "^0.16.18"
   },
@@ -66,6 +70,7 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "start": "serve public/"
+    "start": "serve public/",
+    "newPost": "node ./scripts/new-post.js"
   }
 }
