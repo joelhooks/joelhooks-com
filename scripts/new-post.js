@@ -22,7 +22,7 @@ fs.writeFileSync(
   `${dir}/index.mdx`,
   `---
 slug: ${slug}
-guid: guid
+guid: ${guid}
 date: ${moment().format('YYYY-MM-DD')}
 title: "${title}"
 published: false
