@@ -10,7 +10,8 @@ const args = minimist(process.argv.slice(2))
 const title = _.first(_.get(args, '_', ''))
 const guid = shortid.generate()
 const slug = `${slugify(title.toLowerCase())}~${guid}`
-const dir = `./content/blog/${slugify(title.toLowerCase())}`
+const date = moment().format('YYYY-MM-DD')
+const dir = `./content/blog/${date}-${slugify(title.toLowerCase())}`
 
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir)
@@ -23,7 +24,7 @@ fs.writeFileSync(
   `---
 slug: ${slug}
 guid: ${guid}
-date: ${moment().format('YYYY-MM-DD')}
+date: ${date}
 title: "${title}"
 published: false
 ---`,
