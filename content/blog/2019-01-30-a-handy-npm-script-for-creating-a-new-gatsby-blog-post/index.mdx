@@ -1,0 +1,242 @@
+---
+slug: a-handy-npm-script-for-creating-a-new-gatsby-blog-post
+date: 2019-01-30
+title: 'A handy npm script for creating a new Gatsby blog post'
+published: true
+---
+
+This blog is built with Gatsby and uses MDX for the post content. It's a great setup, and so far I've enjoyed using it very much.
+
+One thing I missed from my old Octopress/Jekyll configuration was the ability to run a rake task to create a new post with all of the basic required frontmatter metadata filled in.
+
+```md
+---
+slug: a-handy-npm-script-for-creating-a-new-gatsby-blog-post~M3MyBb6Fd
+guid: M3MyBb6Fd
+date: 2019-01-30
+title: 'A handy npm script for creating a new Gatsby blog post'
+published: false
+---
+```
+
+Here's an example of markdown meta for this post. Gatsby uses this frontmatter when it builds the site to create the appropriate corresponding pages.
+
+It was kind of a pain in the ass to manually type it out every time, so I decided to solve my frustration via the power of code.
+
+```bash
+$ npm run newPost "This is the title of my blogpost"
+```
+
+This is the basic structure of the command I want to be able to run from the terminal command line. Once this is executed, a new folder should be created and named appropriately. Inside the folder will be an `index.mdx` file that has all of its basic/required frontmatter inside and all that I need to do is hop in and write the post.
+
+```text
+/content
+  - blog
+    -- 2019-01-30-a-handy-npm-script-for-creating-a-new-gatsby-blog-post
+      --- index.mdx
+```
+
+This is the result for my setup after running the script.
+
+So let's take a look at how I built it by first looking at what needs to happen.
+
+1. execute a node script with arguments
+2. parse the arguments
+3. extract the title
+4. "slugify" the title for use in filenames and the url
+5. capture the current date
+6. write the file to disk
+
+I made a sub-folder called `scripts` and created `newPost.js` inside.
+
+To get the command line arguments we need to access `process.argv` in node. The contents of `newPost.js` look like this:
+
+```javascript
+console.log(process.argv)
+```
+
+Now we can take a look at what `process.argv` contains by running the following command:
+
+```bash
+node ./scripts/newPost.js "this is my test post"
+```
+
+Assuming there are no errors, the output is an array looks like this:
+
+```javascript
+;[
+  '/Users/joel/.nodenv/versions/10.6.0/bin/node',
+  '/Users/joel/Code/joelhooks-com/test.js',
+  'this is my test post',
+]
+```
+
+The contents of `process.argv` is an array that contains the location of the node executable that is being used, the location of the script being executed, and finally the argument that we passed in.
+
+We can try again with some more arguments:
+
+```bash
+node ./scripts/newPost.js "this is my test post" 1 "gopher"
+```
+
+And you'll see that it simply adds to the array:
+
+```javascript
+;[
+  '/Users/joel/.nodenv/versions/10.6.0/bin/node',
+  '/Users/joel/Code/joelhooks-com/test.js',
+  'this is my test post',
+  '1',
+  'gopher',
+]
+```
+
+We want to make sure that we actually have an name to work with, so I'm going to check and make sure with a simple if/else guard in my script.
+
+```javascript
+const title = process.argv[2]
+
+if (!title) {
+  throw 'a title is required!'
+}
+```
+
+Try and run it now with no name argument. It should throw an error and crash out.
+
+Now that we have a name, we want to create a "kebab case" slug. Slugs can be a little tricky to get right in all cases, so for this I'm going to use a small library. `npm i slug` will get me exactly what I need:
+
+```javascript
+const slugify = require('slug')
+
+const title = process.argv[2]
+
+if (!title) {
+  throw 'a title is required!'
+}
+
+console.log(slugify(title))
+```
+
+This outputs `This-is-the-title-of-my-blogpost` which is close, but typically a slug will be all lowercase, so it will look more like this:
+
+```javascript
+const slugify = require('slug')
+
+const title = process.argv[2]
+
+if (!title) {
+  throw 'a title is required!'
+}
+
+const slug = slugify(title.toLowerCase())
+```
+
+For sorting purposes I also like to add the date to the post's folder name. My goto is the tiny `date-fns` library that provides most of the date/time utility that you'll ever need in a tiny package with `npm i date-fns` and using it as so:
+
+```javascript
+const slugify = require('slug')
+const dateFns = require('date-fns')
+
+const title = process.argv[2]
+
+if (!title) {
+  throw 'a title is required!'
+}
+
+const slug = slugify(title.toLowerCase())
+const date = dateFns.format(new Date(), 'YYYY-MM-DD')
+```
+
+You could manually extract and format a date, but... who has time for that?? This works great, and I have all the pieces I need to assemble and output my file.
+
+First I'm going to create the path:
+
+```javascript
+const slugify = require('slug')
+const dateFns = require('date-fns')
+
+const title = process.argv[2]
+
+if (!title) {
+  throw 'a title is required!'
+}
+
+const slug = slugify(title.toLowerCase())
+const date = dateFns.format(new Date(), 'YYYY-MM-DD')
+const dir = `./content/blog/${date}-${slug}`
+```
+
+Now I can use the node `fs`, or file system, module to create the folder:
+
+```javascript
+const fs = require('fs')
+const slugify = require('slug')
+const dateFns = require('date-fns')
+
+const title = process.argv[2]
+
+if (!title) {
+  throw 'a title is required!'
+}
+
+const slug = slugify(title.toLowerCase())
+const date = dateFns.format(new Date(), 'YYYY-MM-DD')
+const dir = `./content/blog/${date}-${slug}`
+
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir)
+} else {
+  throw 'That post already exists!'
+}
+```
+
+The `fs` module needs to be "imported" using require, and then I also added an if/else around the call to `fs.mkdirSync(dir)` to ensure that I wasn't going to overwrite an existing post. Better safe than sorry. Once that runs, you'll see an empty folder is created. Now we can us `fs.writeFileSync` to create the actual file itself:
+
+```javascript
+const fs = require('fs')
+const slugify = require('slug')
+const dateFns = require('date-fns')
+
+const title = process.argv[2]
+
+if (!title) {
+  throw 'a title is required!'
+}
+
+const slug = slugify(title.toLowerCase())
+const date = dateFns.format(new Date(), 'YYYY-MM-DD')
+const dir = `./content/blog/${date}-${slug}`
+
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir)
+} else {
+  throw 'That post already exists!'
+}
+
+fs.writeFileSync(
+  `${dir}/index.mdx`,
+  `---
+slug: ${slug}
+date: ${date}
+title: "${title}"
+published: false
+---`,
+  function(err) {
+    if (err) {
+      return console.log(err)
+    }
+
+    console.log(`${title} was created!`)
+  },
+)
+```
+
+`fs.writeFileSync` takes three arguments. The first is the path or destination, and the second is the file contents. Since this is modern node, we have access to string template literals using the backticks. This is particularly nice because they allow us to create relatively clean formatted strings that respect whitespace and don't require special linebreak characters.
+
+The final argument is a callback function that is called when the operation is complete. If there is an error it is logged out, and we also get a friendly message if it was a success.
+
+And with that, you now have a handy script for creating new markdown blogposts for your Gatsby app.
+
+Since this is strictly for my personal use I didn't take any time to make the command line argument handline robust. This is a script with a very specific single task for a single user. That means it can be a little dodgy and not have any negative effects. It took about ten minutes to write, and will now save me a lot of pointless typing in th future.
+
+More importantly it removed a bit of friction/pain from my blogging experience, which means I might actually do it more 🙂
