@@ -235,8 +235,21 @@ published: false
 
 The final argument is a callback function that is called when the operation is complete. If there is an error it is logged out, and we also get a friendly message if it was a success.
 
-And with that, you now have a handy script for creating new markdown blogposts for your Gatsby app.
+To round this out and make it a bit easier to run, I added a command to the `scripts` property of my package.json.
 
-Since this is strictly for my personal use I didn't take any time to make the command line argument handline robust. This is a script with a very specific single task for a single user. That means it can be a little dodgy and not have any negative effects. It took about ten minutes to write, and will now save me a lot of pointless typing in th future.
+```json
+"scripts": {
+  "build": "gatsby build",
+  "develop": "gatsby develop",
+  "start": "serve public/",
+  "newPost": "node ./scripts/newPost.js"
+}
+```
+
+And with that you can now type `npm run newPost "Post title here"` to create a new markdown blog posts for your Gatsby app.
+
+Since this is strictly for my personal use I didn't take any time to make the command line argument handling robust.
+
+This is a script with a very specific single task for a single user. That means it can be a little dodgy and not have any negative effects. It took about ten minutes to write, and will now save me a lot of pointless typing in th future.
 
 More importantly it removed a bit of friction/pain from my blogging experience, which means I might actually do it more 🙂
