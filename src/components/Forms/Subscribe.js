@@ -5,6 +5,7 @@ import { css } from '@emotion/core'
 import theme from '../../../config/theme'
 import { rhythm } from '../../lib/typography'
 import { bpMaxSM } from '../../lib/breakpoints'
+import axios from 'axios'
 
 const FORM_ID = process.env.CONVERTKIT_SIGNUP_FORM
 
@@ -12,14 +13,14 @@ const SubscribeSchema = Yup.object().shape({
   email_address: Yup.string()
     .email('Invalid email address')
     .required('Required'),
-  first_name: Yup.string(),
+  name: Yup.string(),
 })
 
 const PostSubmissionMessage = ({ response }) => {
   return (
     <div>
       Thanks! {/* Double opt in */}
-      Please confirm your subscription and you'll be on your way.
+      Please check your inbox to confirm your subscription!
       {/* Single opt in
       You've been added to the list. */}
     </div>
@@ -32,35 +33,28 @@ class SignUp extends React.Component {
   }
 
   async handleSubmit(values) {
+    const url = `https://app.convertkit.com/forms/${FORM_ID}/subscriptions`
     this.setState({ submitted: true, loading: true })
-    try {
-      const response = await fetch(
-        `https://app.convertkit.com/forms/${FORM_ID}/subscriptions`,
-        {
-          method: 'post',
-          body: JSON.stringify(values, null, 2),
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+
+    axios
+      .post(url, { ...values, api_key: process.env.CONVERTKIT_PUBLIC_KEY })
+      .then(
+        ({ data }) => {
+          this.setState({
+            submitted: true,
+            loading: false,
+            response: data,
+            errorMessage: null,
+          })
+        },
+        err => {
+          this.setState({
+            submitted: false,
+            loading: false,
+            errorMessage: 'Something went wrong!',
+          })
         },
       )
-
-      const responseJson = await response.json()
-
-      this.setState({
-        submitted: true,
-        loading: false,
-        response: responseJson,
-        errorMessage: null,
-      })
-    } catch (error) {
-      this.setState({
-        submitted: false,
-        loading: false,
-        errorMessage: 'Something went wrong!',
-      })
-    }
   }
 
   render() {
@@ -69,7 +63,7 @@ class SignUp extends React.Component {
 
     return (
       <div>
-        {!successful && (
+        {!submitted && (
           <h2
             css={css`
               margin-bottom: ${rhythm(1)};
@@ -80,11 +74,11 @@ class SignUp extends React.Component {
           </h2>
         )}
 
-        {!successful && (
+        {!submitted && (
           <Formik
             initialValues={{
               email_address: '',
-              first_name: '',
+              name: '',
             }}
             validationSchema={SubscribeSchema}
             onSubmit={values => this.handleSubmit(values)}
@@ -124,7 +118,7 @@ class SignUp extends React.Component {
                   }
                 `}
               >
-                <label htmlFor="first_name">
+                <label htmlFor="name">
                   <div
                     css={css`
                       display: flex;
@@ -134,7 +128,7 @@ class SignUp extends React.Component {
                   >
                     First Name
                     <ErrorMessage
-                      name="first_name"
+                      name="name"
                       component="span"
                       className="field-error"
                     />
@@ -142,7 +136,7 @@ class SignUp extends React.Component {
                   <Field
                     aria-label="your first name"
                     aria-required="false"
-                    name="first_name"
+                    name="name"
                     placeholder="Jane"
                     type="text"
                   />
