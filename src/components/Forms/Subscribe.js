@@ -33,7 +33,7 @@ class SignUp extends React.Component {
   }
 
   async handleSubmit(values) {
-    const url = `https://app.convertkit.com/forms/${FORM_ID}/subscriptions`
+    const url = `https://api.convertkit.com//v3/forms/${FORM_ID}/subscribe`
     this.setState({ submitted: true, loading: true })
 
     axios
@@ -64,14 +64,17 @@ class SignUp extends React.Component {
     return (
       <div>
         {!submitted && (
-          <h2
-            css={css`
-              margin-bottom: ${rhythm(1)};
-              margin-top: 0;
-            `}
-          >
-            Join the Newsletter
-          </h2>
+          <div>
+            <h2
+              css={css`
+                margin-bottom: ${rhythm(1)};
+                margin-top: 0;
+              `}
+            >
+              Get hand-crafted updates about web development.
+            </h2>
+            <p>No spam and you can unsubscribe at any time.</p>
+          </div>
         )}
 
         {!submitted && (
