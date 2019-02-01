@@ -10,7 +10,7 @@ import axios from 'axios'
 const FORM_ID = process.env.CONVERTKIT_SIGNUP_FORM
 
 const SubscribeSchema = Yup.object().shape({
-  email_address: Yup.string()
+  email: Yup.string()
     .email('Invalid email address')
     .required('Required'),
   name: Yup.string(),
