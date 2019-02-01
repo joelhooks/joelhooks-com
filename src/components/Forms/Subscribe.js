@@ -80,7 +80,7 @@ class SignUp extends React.Component {
         {!submitted && (
           <Formik
             initialValues={{
-              email_address: '',
+              email: '',
               name: '',
             }}
             validationSchema={SubscribeSchema}
@@ -154,7 +154,7 @@ class SignUp extends React.Component {
                   >
                     Email
                     <ErrorMessage
-                      name="email_address"
+                      name="email"
                       component="span"
                       className="field-error"
                     />
@@ -162,7 +162,7 @@ class SignUp extends React.Component {
                   <Field
                     aria-label="your email address"
                     aria-required="true"
-                    name="email_address"
+                    name="email"
                     placeholder="jane@acme.com"
                     type="email"
                   />
