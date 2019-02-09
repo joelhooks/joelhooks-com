@@ -22,19 +22,12 @@ const Code = ({ codeString, language, ...props }) => {
         theme={theme}
       >
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
-          <pre className={className} style={style}>
+          <pre
+            className={`${className} no-whitespace-normalization`}
+            style={style}
+          >
             {tokens.map((line, i) => (
               <div {...getLineProps({ line, key: i })}>
-                <span
-                  css={css`
-                    display: inline-block;
-                    width: 2em;
-                    user-select: none;
-                    opacity: 0.3;
-                  `}
-                >
-                  {i + 1}
-                </span>
                 {line.map((token, key) => (
                   <span {...getTokenProps({ token, key })} />
                 ))}
