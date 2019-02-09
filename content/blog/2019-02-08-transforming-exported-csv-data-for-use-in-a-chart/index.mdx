@@ -218,12 +218,7 @@ The lessons get added with `sortBy` from lodash, which sorts an array based on t
 
 Inside of `sortBy` we use `...series.lessons` to spread any existing lessons in the accumulated series back into the new series object. Then we can add the data from the current row as a new lesson into the accumulated series object.
 
-This part gets a little weird if you aren't used to reducers and (re)building objects using the `...` spread operator, but it's worth practicing and thinking about because it is a very useful tool. If you'd like a really great explaination of this, I highly recommend this egghead video from Dan Abramov:
-
-<div style=" position: relative; overflow: hidden; padding-top: 56.25%; margin-bottom: 25px">
-
-<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://egghead.io/lessons/react-redux-avoiding-array-mutations-with-concat-slice-and-spread/embed" frameBorder="0" allowFullScreen></iframe>
-</div>
+This part gets a little weird if you aren't used to reducers and (re)building objects using the `...` spread operator, but it's worth practicing and thinking about because it is a very useful tool. If you'd like a really great explaination of this, I highly recommend [this egghead video from Dan Abramov](https://egghead.io/lessons/react-redux-avoiding-array-mutations-with-concat-slice-and-spread).
 
 To get a clearer picture of what just happened, we have reduced/transformed this csv data:
 
