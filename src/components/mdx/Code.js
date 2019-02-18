@@ -1,5 +1,4 @@
 import React from 'react'
-import { css } from '@emotion/core'
 import theme from 'prism-react-renderer/themes/oceanicNext'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live'

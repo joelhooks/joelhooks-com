@@ -59,7 +59,7 @@ class SignUp extends React.Component {
 
   render() {
     const { submitted, loading, response, errorMessage } = this.state
-    const successful = response && response.status === 'success'
+    // const successful = response && response.status === 'success'
 
     return (
       <div>
