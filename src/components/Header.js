@@ -76,13 +76,3 @@ const Header = ({
 )
 
 export default Header
-
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-  }
-`
