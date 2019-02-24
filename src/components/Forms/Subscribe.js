@@ -71,9 +71,8 @@ class SignUp extends React.Component {
                 margin-top: 0;
               `}
             >
-              If you are interested in receiving emails about coding, business,
-              learning, and teaching other people you can sign up for my email
-              list.
+              Want more? Get emails from me about coding, business, learning,
+              and teaching.
             </h2>
             <p>
               There will be no spam and you can unsubscribe at any time. I send
