@@ -10,6 +10,7 @@ import { fonts } from '../lib/typography'
 import Share from '../components/Share'
 import config from '../../config/website'
 import { bpMaxSM } from '../lib/breakpoints'
+import get from 'lodash/get'
 
 export default function Post({
   data: { site, mdx },
@@ -24,7 +25,7 @@ export default function Post({
     <Layout site={site} frontmatter={mdx.frontmatter}>
       <SEO
         excerpt={mdx.excerpt}
-        postImage={banner}
+        postImage={get(banner, 'childImageSharp.fixed.src')}
         frontmatter={mdx.frontmatter}
         isBlogPost
       />
@@ -109,6 +110,9 @@ export const pageQuery = graphql`
           childImageSharp {
             fluid(maxWidth: 900) {
               ...GatsbyImageSharpFluid_withWebp_tracedSVG
+            }
+            fixed(width: 500) {
+              ...GatsbyImageSharpFixed
             }
           }
         }
