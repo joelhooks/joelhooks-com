@@ -22,7 +22,12 @@ export default function Post({
 
   return (
     <Layout site={site} frontmatter={mdx.frontmatter}>
-      <SEO excerpt={mdx.excerpt} frontmatter={mdx.frontmatter} isBlogPost />
+      <SEO
+        excerpt={mdx.excerpt}
+        postImage={banner}
+        frontmatter={mdx.frontmatter}
+        isBlogPost
+      />
       <article
         css={css`
           width: 100%;
