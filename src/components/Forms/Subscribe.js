@@ -75,7 +75,11 @@ class SignUp extends React.Component {
               learning, and teaching other people you can sign up for my email
               list.
             </h2>
-            <p>There will be no spam and you can unsubscribe at any time.</p>
+            <p>
+              There will be no spam and you can unsubscribe at any time. I send
+              different content than what is posted here. Over 4000 people enjoy
+              it, and you probably will too!
+            </p>
           </div>
         )}
 
