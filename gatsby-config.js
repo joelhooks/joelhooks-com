@@ -45,9 +45,14 @@ module.exports = {
     {
       resolve: `gatsby-mdx`,
       options: {
+        globalScope: `
+          import ResponsiveEmbed from "react-responsive-embed";
+          import { TwitterTweetEmbed } from "react-twitter-embed";
+
+          export default { ResponsiveEmbed, TwitterTweetEmbed };
+        `,
         extensions: ['.mdx', '.md', '.markdown'],
         gatsbyRemarkPlugins: [
-          { resolve: `gatsby-remark-responsive-iframe` },
           {
             resolve: 'gatsby-remark-images',
             options: {

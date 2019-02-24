@@ -36,10 +36,7 @@ const createPosts = (createPage, createRedirect, edges) => {
 exports.createPages = ({ actions, graphql }) =>
   graphql(`
     query {
-      allMdx(
-        filter: { frontmatter: { published: { ne: false } } }
-        sort: { order: DESC, fields: [frontmatter___date] }
-      ) {
+      allMdx(sort: { order: DESC, fields: [frontmatter___date] }) {
         edges {
           node {
             id
