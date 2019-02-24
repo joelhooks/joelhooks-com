@@ -31,6 +31,6 @@ module.exports = {
   // Social component
   twitter: 'https://twitter.com/jhooks',
   twitterHandle: '@jhooks',
-  github: 'https://github.com/joelhooks/',
+  github: 'https://github.com/joelhooks/joelhooks-com/',
   linkedin: '',
 }
