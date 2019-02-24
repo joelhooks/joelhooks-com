@@ -1,7 +1,7 @@
 import React from 'react'
 import Doodle from './Doodle'
 import theme from '../../config/theme'
-import { lighten, darken, saturate } from 'polished'
+import { lighten, saturate } from 'polished'
 import { bpMaxSM } from '../lib/breakpoints'
 
 // #00b8a9, #f8f3d4, #f6416c, #ffde7d
