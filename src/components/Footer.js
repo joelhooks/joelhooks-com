@@ -15,6 +15,9 @@ const Footer = ({ author }) => (
         }
       `}
     >
+      <br />
+      <br />
+      <br />
       <SubscribeForm />
       <br />
       <br />
