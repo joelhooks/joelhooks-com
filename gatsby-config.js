@@ -176,9 +176,12 @@ module.exports = {
               ) {
                 edges {
                   node {
+                    id
                     rawBody
-                    frontmatter {
+                    fields {
                       slug
+                    }
+                    frontmatter {
                       title
                       description
                     }
@@ -189,18 +192,19 @@ module.exports = {
           `,
             transformer: ({ data }) =>
               data.allMdx.edges.reduce((records, { node }) => {
-                const { slug, title, description } = node.frontmatter
+                const { title, description } = node.frontmatter
+                const { slug } = node.fields
 
                 const base = { slug, title, description }
                 const chunks = node.rawBody.split('\n\n')
 
                 return [
                   ...records,
-                  ...chunks.map(text => ({
+                  {
                     ...base,
                     objectID: `${slug}-${node.id}`,
-                    text,
-                  })),
+                    text: node.rawBody,
+                  },
                 ]
               }, []),
           },
