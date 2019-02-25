@@ -37,7 +37,7 @@ exports.createPages = ({ actions, graphql }) =>
   graphql(`
     query {
       allMdx(
-        filter: { frontmatter: { published: { ne: false } } }
+        filter: { frontmatter: { hidden: { ne: true } } }
         sort: { order: DESC, fields: [frontmatter___date] }
       ) {
         edges {
