@@ -200,11 +200,11 @@ module.exports = {
 
                 return [
                   ...records,
-                  {
+                  ...chunks.map((text, index) => ({
                     ...base,
-                    objectID: `${slug}-${node.id}`,
-                    text: node.rawBody,
-                  },
+                    objectID: `${slug}-${index}`,
+                    text,
+                  })),
                 ]
               }, []),
           },
