@@ -130,7 +130,7 @@ module.exports = {
               {
                 allMdx(
                   limit: 1000,
-                  filter: { frontmatter: { published: { ne: false } } }
+                  filter: { frontmatter: { published: { ne: false }, hidden: { ne: true } } }
                   sort: { order: DESC, fields: [frontmatter___date] }
                 ) {
                   edges {
@@ -158,6 +158,53 @@ module.exports = {
       resolve: `gatsby-plugin-typography`,
       options: {
         pathToConfigModule: `src/lib/typography`,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-algolia`,
+      options: {
+        appId: process.env.ALGOLIA_APP_ID,
+        apiKey: process.env.ALGOLIA_API_KEY,
+        indexName: process.env.ALGOLIA_INDEX_NAME, // for all queries
+        queries: [
+          {
+            query: `
+            {
+              allMdx(
+                filter: { frontmatter: { hidden: { ne: true } } }
+
+              ) {
+                edges {
+                  node {
+                    rawBody
+                    frontmatter {
+                      slug
+                      title
+                      description
+                    }
+                  }
+                }
+              }
+            }
+          `,
+            transformer: ({ data }) =>
+              data.allMdx.edges.reduce((records, { node }) => {
+                const { slug, title, description } = node.frontmatter
+
+                const base = { slug, title, description }
+                const chunks = node.rawBody.split('\n\n')
+
+                return [
+                  ...records,
+                  ...chunks.map(text => ({
+                    ...base,
+                    objectID: `${slug}-${node.id}`,
+                    text,
+                  })),
+                ]
+              }, []),
+          },
+        ],
       },
     },
     'gatsby-plugin-offline',
