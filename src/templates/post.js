@@ -44,26 +44,6 @@ export default function Post({
           >
             {title}
           </h1>
-          <div
-            css={css`
-              display: flex;
-              justify-content: center;
-              margin-bottom: 20px;
-              h3,
-              span {
-                text-align: center;
-                font-size: 15px;
-                opacity: 0.6;
-                font-family: ${fonts.regular}, sans-serif;
-                font-weight: normal;
-                margin: 0 5px;
-              }
-            `}
-          >
-            {author && <h3>{author}</h3>}
-            {author && <span>—</span>}
-            {date && <h3>{date}</h3>}
-          </div>
           {banner && (
             <div
               css={css`
