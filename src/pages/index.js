@@ -68,7 +68,7 @@ export default function Index({ data: { site, allMdx } }) {
       headerColor={theme.colors.black}
       headerBg={theme.colors.white}
     >
-      <Hero />
+      {/* <Hero /> */}
       <Container
         css={css`
           padding-bottom: 0;
