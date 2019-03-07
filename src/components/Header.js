@@ -3,8 +3,8 @@ import { Link } from 'gatsby'
 import { css } from '@emotion/core'
 import theme from '../../config/theme'
 import Search from './Search'
-
 import Container from './Container'
+import Logo from './Logo'
 
 const Header = ({
   dark,
@@ -29,18 +29,27 @@ const Header = ({
           justify-content: space-between;
           align-items: center;
           color: ${headerColor};
-          a {
-            color: ${headerColor ? headerColor : theme.colors.body_color};
-          }
-          a:hover {
-            color: ${headerColor === theme.colors.white
-              ? 'white'
-              : theme.colors.link_color_hover};
-          }
         `}
       >
-        <Link to="/" aria-label="go to homepage" activeClassName="active">
-          {siteTitle}
+        <Link
+          to="/"
+          aria-label="go to homepage"
+          activeClassName="active"
+          css={css({
+            color: theme.colors.black,
+            ':hover': {
+              color: theme.colors.primary,
+            },
+          })}
+        >
+          <Logo />
+          <span
+            css={css({
+              color: headerColor ? headerColor : theme.colors.body_color,
+            })}
+          >
+            {siteTitle}
+          </span>
         </Link>
         <div
           css={css`
