@@ -2,9 +2,11 @@ import React from 'react'
 import { Link } from 'gatsby'
 import { css } from '@emotion/core'
 import theme from '../../config/theme'
+import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
 import Logo from './Logo'
+import { FaFileExcel } from 'react-icons/fa'
 
 const Header = ({
   dark,
@@ -13,18 +15,24 @@ const Header = ({
   headerColor = 'black',
 }) => (
   <header
-    css={css`
-      width: 100%;
-      flex-shrink: 0;
-      background: none;
-      padding: 30px 0 0 0;
-      background: ${dark ? '#090909' : `${bgColor}` || 'none'};
-    `}
+    css={css({
+      width: '100%',
+      flexShrink: 0,
+      background: 'none',
+      padding: '20px 0',
+      background: dark ? '#090909' : bgColor || 'none',
+      [bpMinMD]: {
+        padding: '30px 0',
+      },
+      [bpMinLG]: {
+        padding: '50px 0',
+      },
+    })}
   >
     <Container noVerticalPadding>
       <nav
         css={css`
-          width: 100%;
+          width: '100%';
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -36,50 +44,52 @@ const Header = ({
           aria-label="go to homepage"
           activeClassName="active"
           css={css({
+            display: 'flex',
             color: theme.colors.black,
             ':hover': {
               color: theme.colors.primary,
             },
+            [bpMinXL]: {
+              transform: 'translate(-70px, 0)',
+            },
           })}
         >
-          <Logo />
+          <Logo
+            css={css({
+              width: '60px',
+              height: '49px',
+              [bpMinMD]: {
+                width: '100px',
+                height: '82px',
+              },
+              [bpMinLG]: {
+                width: '140px',
+                height: '115px',
+              },
+            })}
+          />
           <span
             css={css({
+              display: 'none',
+              margin: '20px 0 0 15px',
+              fontSize: '14px',
               color: headerColor ? headerColor : theme.colors.body_color,
+              [bpMinSM]: {
+                display: 'block',
+              },
+              [bpMinMD]: {
+                margin: '42px 0 0 20px',
+                fontSize: '16px',
+              },
+              [bpMinLG]: {
+                margin: '60px 0 0 20px',
+                fontSize: '18px',
+              },
             })}
           >
             {siteTitle}
           </span>
         </Link>
-        <div
-          css={css`
-            font-size: 16px;
-            line-height: 1.25;
-            display: flex;
-            align-items: center;
-            a {
-              color: ${dark ? '#fbfbfb' : 'rgba(0,0,0,0.85)'};
-              text-decoration: none;
-              & + a {
-                margin-left: 32px;
-              }
-            }
-            .active {
-              display: none;
-              visibility: hidden;
-            }
-          `}
-        >
-          {/*
-          <Link
-            to="/articles"
-            activeClassName="active"
-            aria-label="View articles page"
-          >
-            Articles
-          </Link>
-          */}
-        </div>
         <Search />
       </nav>
     </Container>

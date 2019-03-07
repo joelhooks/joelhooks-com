@@ -1,11 +1,12 @@
 import React from 'react'
 
-export default () => (
+export default props => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="140"
     height="115"
     viewBox="0 0 140 115"
+    {...props}
   >
     <title>joelhooks.com</title>
     <defs>
