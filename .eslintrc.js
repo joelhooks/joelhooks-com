@@ -1,7 +1,9 @@
 module.exports = {
-  extends: ['prettier', 'prettier/react'],
-  plugins: ['html', 'prettier', 'react', 'react-hooks'],
+  plugins: ['html', 'react', 'react-hooks'],
   parser: 'babel-eslint',
+  settings: {
+    react: { version: 'detect' },
+  },
   parserOptions: {
     ecmaVersion: 2018,
     // Can I remove these now?
@@ -16,7 +18,6 @@ module.exports = {
     jquery: true,
     jest: true,
   },
-
 
   rules: {
     'react-hooks/rules-of-hooks': 'error',
@@ -89,22 +90,6 @@ module.exports = {
       {
         hoist: 'all',
         allow: ['resolve', 'reject', 'done', 'next', 'err', 'error'],
-      },
-    ],
-    quotes: [
-      2,
-      'single',
-      {
-        avoidEscape: true,
-        allowTemplateLiterals: true,
-      },
-    ],
-    'prettier/prettier': [
-      'error',
-      {
-        trailingComma: 'es5',
-        singleQuote: true,
-        printWidth: 80,
       },
     ],
     'jsx-a11y/href-no-hash': 'off',
