@@ -18,9 +18,8 @@ const Blog = ({
     .map(id =>
       allMdx.edges.find(
         edge =>
-          edge.node.id === id &&
-          edge.node.parent.sourceInstanceName !== 'pages',
-      ),
+          edge.node.id === id && edge.node.parent.sourceInstanceName !== 'pages'
+      )
     )
     .filter(post => post !== undefined)
 

@@ -97,7 +97,7 @@ export const globalStyles = css`
   ${reset};
 `
 
-export default ({
+const Layout = ({
   site,
   frontmatter = {},
   children,
@@ -156,6 +156,8 @@ export default ({
     </ThemeProvider>
   )
 }
+
+export default Layout
 
 export const pageQuery = graphql`
   fragment site on Site {

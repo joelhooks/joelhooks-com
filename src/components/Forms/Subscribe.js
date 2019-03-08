@@ -16,16 +16,14 @@ const SubscribeSchema = Yup.object().shape({
   name: Yup.string(),
 })
 
-const PostSubmissionMessage = ({ response }) => {
-  return (
-    <div>
-      Thanks! {/* Double opt in */}
-      Please check your inbox to confirm your subscription!
-      {/* Single opt in
+const PostSubmissionMessage = ({ response }) => (
+  <div>
+    Thanks! {/* Double opt in */}
+    Please check your inbox to confirm your subscription!
+    {/* Single opt in
       You've been added to the list. */}
-    </div>
-  )
-}
+  </div>
+)
 
 class SignUp extends React.Component {
   state = {
@@ -59,7 +57,6 @@ class SignUp extends React.Component {
 
   render() {
     const { submitted, loading, response, errorMessage } = this.state
-    const successful = response && response.status === 'success'
 
     return (
       <div>
@@ -90,7 +87,7 @@ class SignUp extends React.Component {
             }}
             validationSchema={SubscribeSchema}
             onSubmit={values => this.handleSubmit(values)}
-            render={({ errors, touched }) => (
+            render={({ errors }) => (
               <Form
                 css={css`
                   display: flex;

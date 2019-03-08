@@ -25,10 +25,10 @@ const HeroPattern = () => (
           conic-gradient(
             @p(${lighten(0.3, theme.brand.primary)}, ${lighten(
       0.5,
-      theme.brand.primary,
+      theme.brand.primary
     )}, ${saturate(0.2, theme.brand.primary)}, ${lighten(
       0.4,
-      theme.brand.primary,
+      theme.brand.primary
     )}),
             calc(@n() * 100% / 9), transparent 0
           )

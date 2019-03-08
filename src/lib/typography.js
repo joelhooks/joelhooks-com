@@ -19,7 +19,7 @@ const typography = new Typography({
   headerColor: 'hsla(0,0%,0%,0.9)',
   bodyColor: 'hsla(0,0%,0%,0.8)',
 
-  overrideStyles: ({ rhythm }) => ({
+  overrideStyles: props => ({
     h1: {
       color: 'hsla(0,0%,0%,0.75)',
     },
@@ -34,8 +34,8 @@ const typography = new Typography({
     },
     'h1,h2,h3,h4': {
       lineHeight: 1.25,
-      marginTop: rhythm(1),
-      marginBottom: rhythm(1 / 2),
+      marginTop: props.rhythm(1),
+      marginBottom: props.rhythm(1 / 2),
     },
   }),
 })
