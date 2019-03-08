@@ -3,16 +3,18 @@ import { fonts } from '../src/lib/typography'
 
 const brand = {
   // primary: '#5348FF',
-  primary: '#0078CC',
+  // primary: '#0078CC',
   //primary: '#1ABC9C',
   //primary: '#D42210',
   //primary: '#D96E0E',
   //primary: '#9B59B6',
   //primary: '#6420E5',
+  primary: '#FF4094',
   secondary: '#EEF4F2',
 }
 
 const colors = {
+  primary: brand.primary,
   primary_light: `${lighten(0.33, brand.primary)}`,
   gray: '#D3D3D3',
   black: '#000',

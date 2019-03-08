@@ -80,11 +80,14 @@ const Hits = connectHits(({ hits }) => (
 const OpenSearch = styled('a')`
   align-self: center;
   border: 2px solid transparent;
-  color: ${theme.colors.heading};
+  color: ${theme.colors.black};
   height: 100%;
   margin: 0;
   padding: 0 0.625rem;
   width: 2.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   :active,
   :focus,
   :hover {
@@ -95,7 +98,7 @@ const OpenSearch = styled('a')`
     border: 2px solid ${theme.colors.darkest};
     border-radius: 0;
   }
-  @media ${theme.breakpoints.s} {
+  @media (max-width: ${theme.breakpoints.s}) {
     width: 2.5rem;
   }
 `
@@ -148,8 +151,8 @@ const Search = connectSearchBox(({ currentRefinement, refine, setActive }) => (
 const SearchContainer = styled('div')`
   display: flex;
   align-items: flex-start;
-  margin-left: auto;
-  margin-top: 0;
+  /* margin-left: auto;
+  margin-top: 0; */
   color: ${theme.colors.black};
 `
 
