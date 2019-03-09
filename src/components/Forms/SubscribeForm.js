@@ -64,6 +64,12 @@ class SubscribeForm extends React.Component {
           <div
             css={css({
               display: 'flex',
+              flexDirection: 'column-reverse',
+              alignItems: 'center',
+              [bpMinSM]: {
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+              },
             })}
           >
             <div
@@ -97,9 +103,13 @@ class SubscribeForm extends React.Component {
               src={joelsHandImg}
               alt=""
               css={css({
-                width: '100px',
+                width: '50px',
                 flexShrink: 0,
-                margin: '0 0 0 120px',
+                margin: 0,
+                [bpMinSM]: {
+                  width: '100px',
+                  margin: '0 0 0 120px',
+                },
               })}
             />
           </div>
