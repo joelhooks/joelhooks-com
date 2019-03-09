@@ -28,10 +28,10 @@ const Footer = ({ author }) => (
         })}
       >
         <div
-          css={css`
-            font-size: 90%;
-            opacity: 0.7;
-          `}
+          css={css({
+            fontSize: '90%',
+            opacity: 0.7,
+          })}
         >
           {author && `${author} \u00A9 ${new Date().getFullYear()}`}
         </div>
