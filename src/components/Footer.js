@@ -1,7 +1,7 @@
 import React from 'react'
 import { css } from '@emotion/core'
 import { bpMaxSM } from '../lib/breakpoints'
-import SubscribeForm from './Forms/Subscribe'
+import SubscribeForm from './Forms/SubscribeForm'
 import { Twitter, GitHub } from './Social'
 import Container from './Container'
 
@@ -15,18 +15,13 @@ const Footer = ({ author }) => (
         }
       `}
     >
-      <br />
-      <br />
-      <br />
-      <SubscribeForm />
-      <br />
-      <br />
-      <br />
+      <SubscribeForm css={css({ marginTop: '60px' })} />
       <div
         css={css`
           display: flex;
           align-items: center;
           justify-content: space-between;
+          margin-top: 60px;
         `}
       >
         <div
