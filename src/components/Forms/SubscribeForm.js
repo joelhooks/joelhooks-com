@@ -17,7 +17,11 @@ const SubscribeSchema = Yup.object().shape({
 })
 
 const PostSubmissionMessage = ({ response }) => (
-  <div>
+  <div
+    css={css({
+      textAlign: 'center',
+    })}
+  >
     Thanks! {/* Double opt in */}
     Please check your inbox to confirm your subscription!
     {/* Single opt in
