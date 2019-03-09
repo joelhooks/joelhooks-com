@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { css } from '@emotion/core'
 import theme from '../../../config/theme'
-import { bpMinSM } from '../../lib/breakpoints'
+import { bpMinSM, bpMinMD } from '../../lib/breakpoints'
 import joelsHandImg from '../../images/joels-hand-rotated.svg'
 
 const FORM_ID = process.env.CONVERTKIT_SIGNUP_FORM
@@ -81,8 +81,11 @@ class SubscribeForm extends React.Component {
               <h2
                 css={css({
                   margin: '0 0 20px 0',
-                  fontSize: '24px',
+                  fontSize: '22px',
                   fontFamily: theme.fonts.regular,
+                  [bpMinSM]: {
+                    fontSize: '24px',
+                  },
                 })}
               >
                 Want more? Get emails from me about coding, business, learning,
@@ -103,10 +106,14 @@ class SubscribeForm extends React.Component {
               src={joelsHandImg}
               alt=""
               css={css({
-                width: '50px',
+                width: '70px',
                 flexShrink: 0,
                 margin: 0,
                 [bpMinSM]: {
+                  width: '80px',
+                  margin: '0 0 0 80px',
+                },
+                [bpMinMD]: {
                   width: '100px',
                   margin: '0 0 0 120px',
                 },
