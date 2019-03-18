@@ -5,7 +5,7 @@ module.exports = {
   siteTitleShort: 'Blog of Joel Hooks', // short_name for manifest
   siteUrl: 'https://joelhooks.com', // Domain of your site. No trailing slash!
   siteLanguage: 'en', // Language Tag on <html> element
-  siteLogo: '/images/logo.png', // Used for SEO and manifest, path to your image you placed in the 'static' folder
+  siteLogo: 'https://joelhooks.com/images/logo.png', // Used for SEO and manifest, path to your image you placed in the 'static' folder
   siteDescription:
     'Articles and notes from the co-founder of egghead.io. Musings on software, business, and life.',
   author: {
