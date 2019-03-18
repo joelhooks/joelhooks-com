@@ -44,9 +44,7 @@ const SEO = ({
         frontmatter || postData.childMarkdownRemark.frontmatter || {}
       const title = isBlogPost ? postMeta.title : config.siteTitle
       const description = postMeta.description || seo.description
-      const image = postImage
-        ? `${seo.canonicalUrl}${postImage}`
-        : seo.author.image
+      const image = postImage ? `${seo.canonicalUrl}${postImage}` : seo.image
       const url = postMeta.slug
         ? `${seo.canonicalUrl}${path.sep}${postMeta.slug}`
         : seo.canonicalUrl
