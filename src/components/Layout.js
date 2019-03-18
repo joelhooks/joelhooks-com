@@ -140,9 +140,7 @@ const Layout = ({
               { name: 'description', content: description },
               { name: 'keywords', content: keywords },
             ]}
-          >
-          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" />
-          </Helmet>
+          />
           <Header
             siteTitle={site.siteMetadata.title}
             dark={dark}
