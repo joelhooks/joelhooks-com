@@ -10,6 +10,7 @@ module.exports = {
     'Articles and notes from the co-founder of egghead.io. Musings on software, business, and life.',
   author: {
     name: 'Joel Hooks',
+    image: 'https://joelhooks.com/images/joel-hooks.png',
     minibio: `
       <strong>Joel Hooks</strong> is a principle developer and co-founder at egghead.io.
       He is a published author, international speaker, and has been building UIs for 
