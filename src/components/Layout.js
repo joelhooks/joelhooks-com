@@ -132,14 +132,16 @@ const Layout = ({
           `}
         >
           <Helmet
+            htmlAttributes={{
+              lang: 'en',
+            }}
             title={config.siteTitle}
             meta={[
               { name: 'description', content: description },
               { name: 'keywords', content: keywords },
             ]}
           >
-            <html lang="en" />
-            <noscript>This site runs best with JavaScript enabled.</noscript>
+          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" />
           </Helmet>
           <Header
             siteTitle={site.siteMetadata.title}
