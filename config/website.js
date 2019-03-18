@@ -23,7 +23,6 @@ module.exports = {
   userTwitter: '@jhooks', // Twitter Username
   ogSiteName: 'Joel Hooks - Video Blogger', // Facebook Site Name
   ogLanguage: 'en_US',
-  googleAnalyticsID: 'UA-246705-7',
 
   // Manifest and Progress color
   themeColor: '#5348FF',
