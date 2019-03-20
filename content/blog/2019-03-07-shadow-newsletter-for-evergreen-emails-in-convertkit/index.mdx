@@ -31,14 +31,58 @@ But that's not the beauty of it...
 
 When you add _new_ subscribers to the sequence, they get the chance to receive your best, most badass content too! They start at the beginning and go through the sequence every Thursday receiving a new email from you like clockwork.
 
-The shadow newsletter assumes a few things. First and foremost it assumes that the emails in the shadow newsletter are actually badass. They are really good emails that people will want to receive. They usually aren't going to contain time sensitive or in the moment topical references.
+## Custom Template and Unsubscribe
 
-The shadow newsletter is **evergreen** 🌲
+One thing that I want to make sure of is that people can opt-out of the shadow newsletter, and this requires a custom email template. I prefer the "plain text" template in ConvertKit, so I just copied the markup out of their template and pasted into a new template names "Shadow Newsletter" and included a trigger link:
+
+```html
+<style>
+  .message-content {
+    max-width: 600px;
+  }
+  .message-content div {
+    padding-bottom: 10px;
+  }
+  .message-content img {
+    max-width: 100%;
+    height: auto;
+  }
+  p {
+    margin-bottom: 1em;
+  }
+</style>
+<div class="message-content">
+  {{ message_content }}
+  <br />
+  <br />
+  <small
+    >{{ address }}<br />
+    <a href="https://unsubscribe-link.com" trigger-id="RULE_ID"
+      >Unsubscribe from Thursday Newsletter</a
+    >
+    or
+    <a href="{{ unsubscribe_url }}" class="unsubscribe-link"
+      >Unsubscribe from everything</a
+    >
+    <br />
+  </small>
+</div>
+```
+
+For this to work properly, you need to create a trigger link rule. I've set my rule up to add a tag to folks that click the newsletter unsubscribe link, and then in the sequence I add a global filter for anybody with that tag so they will never get emails again.
+
+You could also set it up to just remove them from the sequence as an alternative. Either way, just make sure you honor their wishes.
+
+The shadow newsletter assumes a few things:
+
+- the emails in the shadow newsletter are actually badass.
+- They are really good emails that people will want to receive.
+- They aren't going to contain time sensitive or in the moment topical references.
+- The shadow newsletter is **evergreen** 🌲
 
 The single sequence acting as a shadow newsletter is a great way to start, and is relatively simple. Once you've got it running, you can be assured that new subscribers will be treated to your best work.
 
-It's important to groom the emails in the shadow newsletter occasionally. I go back through them and tweak them, adjust titles, update content, add new information, and do other editing tasks on a regular basis.
+It's important to groom the emails in the shadow newsletter occasionally. I go back through them and tweak them, adjust titles, update content, add new information, and do
+other editing tasks on a regular basis.
 
-If you want to get more complex, you can dig into automations where you pull people out of the shadow newsletter at the right times to pitch them an offer or deliver another sequence.
-
-By setting up a shadow newsletter for your email list you can relax a bit. You'll know that new subscribers are being taken care of.
+If you want to get more complex, you can dig into automations where you pull people out of the shadow newsletter at the right times to pitch them an offer or deliver another sequence. By setting up a shadow newsletter for your email list you can relax a bit. You'll know that new subscribers are being taken care of.

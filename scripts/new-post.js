@@ -1,35 +1,33 @@
 #!/usr/bin/env node
 const fs = require('fs')
-const minimist = require('minimist')
 const slugify = require('slug')
-const _ = require('lodash')
 const moment = require('moment')
+const path = require('path')
+const shortid = require('shortid')
 
-const args = minimist(process.argv.slice(2))
-const title = _.first(_.get(args, '_', ''))
-const slug = `${slugify(title.toLowerCase())}`
-const date = moment().format('YYYY-MM-DD')
-const dir = `./content/blog/${date}-${slugify(title.toLowerCase())}`
+const POST_PATH = path.resolve('./content/blog/')
 
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir)
-} else {
-  throw 'That post already exists!'
+const title = process.argv[2]
+
+if (!title) {
+  throw 'No title was supplied as an argument.'
 }
 
-fs.writeFileSync(
-  `${dir}/index.mdx`,
-  `---
+const id = shortid.generate(4)
+const slug = `${slugify(title.toLowerCase())}`
+const date = moment().format('YYYY-MM-DD')
+const dir = `${POST_PATH}/${date}--${slugify(title.toLowerCase())}~~${id}`
+
+const frontmatter = `---
+id: ${id}
 slug: ${slug}
 date: ${date}
 title: "${title}"
 published: false
----`,
-  function(err) {
-    if (err) {
-      return console.log(err)
-    }
+---`.trim()
 
-    console.log(`${title} was created!`)
-  },
-)
+fs.writeFileSync(`${dir}/index.mdx`, frontmatter, function(err) {
+  if (err) {
+    return
+  }
+})
