@@ -6,7 +6,7 @@ import Container from 'components/Container'
 import SEO from '../components/SEO'
 import Layout from '../components/Layout'
 import Link from '../components/Link'
-import { bpMaxSM } from '../lib/breakpoints'
+import { bpMaxSM, bpMinMD } from '../lib/breakpoints'
 
 const Blog = ({
   data: { site, allMdx },
@@ -18,8 +18,9 @@ const Blog = ({
     .map(id =>
       allMdx.edges.find(
         edge =>
-          edge.node.id === id && edge.node.parent.sourceInstanceName !== 'pages'
-      )
+          edge.node.id === id &&
+          edge.node.parent.sourceInstanceName !== 'pages',
+      ),
     )
     .filter(post => post !== undefined)
 
@@ -58,8 +59,6 @@ const Blog = ({
                   margin-top: 20px;
                 }
               }
-              .gatsby-image-wrapper {
-              }
               background: white;
               padding: 40px;
               ${bpMaxSM} {
@@ -71,12 +70,12 @@ const Blog = ({
           >
             {post.frontmatter.banner && (
               <div
-                css={css`
-                  padding: 60px 60px 40px 60px;
-                  ${bpMaxSM} {
-                    padding: 20px;
-                  }
-                `}
+                css={css({
+                  marginBottom: '30px',
+                  [bpMinMD]: {
+                    marginBottom: '40px',
+                  },
+                })}
               >
                 <Link
                   aria-label={`View ${post.frontmatter.title} article`}
@@ -88,8 +87,7 @@ const Blog = ({
             )}
             <h2
               css={css`
-                margin-top: 30px;
-                margin-bottom: 10px;
+                margin: 0 0 20px 0;
               `}
             >
               <Link
