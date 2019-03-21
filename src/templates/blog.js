@@ -62,7 +62,9 @@ const Blog = ({
               background: white;
               padding: 40px;
               ${bpMaxSM} {
-                padding: 20px;
+                padding: ${post.frontmatter.banner
+                  ? '0 20px 20px 20px'
+                  : '20px'};
               }
               display: flex;
               flex-direction: column;
@@ -71,9 +73,9 @@ const Blog = ({
             {post.frontmatter.banner && (
               <div
                 css={css({
-                  marginBottom: '30px',
+                  margin: '0 -20px 30px -20px',
                   [bpMinMD]: {
-                    marginBottom: '40px',
+                    margin: '0 0 40px 0',
                   },
                 })}
               >
