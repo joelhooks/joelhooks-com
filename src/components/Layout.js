@@ -41,6 +41,14 @@ export const globalStyles = css`
       font-family: ${fonts.semiboldItalic};
     }
   }
+  h1,
+  h2,
+  h3,
+  h4 {
+    a {
+      color: inherit;
+    }
+  }
   input {
     border-radius: 4px;
     border: 1px solid ${theme.colors.gray};
