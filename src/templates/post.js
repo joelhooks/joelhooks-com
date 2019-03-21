@@ -8,7 +8,7 @@ import Container from 'components/Container'
 import Layout from '../components/Layout'
 import Share from '../components/Share'
 import config from '../../config/website'
-import { bpMaxSM } from '../lib/breakpoints'
+import { bpMaxSM, bpMinMD, bpMinLG } from '../lib/breakpoints'
 import get from 'lodash/get'
 
 export default function Post({
@@ -29,28 +29,38 @@ export default function Post({
         isBlogPost
       />
       <article
-        css={css`
-          width: 100%;
-          display: flex;
-        `}
+        css={css({
+          width: '100%',
+          display: 'flex',
+          '.gatsby-resp-image-link': {
+            margin: '0 -20px',
+            [bpMinMD]: {
+              margin: 0,
+            },
+          },
+        })}
       >
         <Container>
           <h1
-            css={css`
-              text-align: center;
-              margin-bottom: 20px;
-            `}
+            css={css({
+              textAlign: 'center',
+              margin: '0 0 30px 0',
+              [bpMinMD]: {
+                margin: '0 0 50px 0',
+              },
+            })}
           >
             {title}
           </h1>
           {banner && (
             <div
-              css={css`
-                padding: 30px;
-                ${bpMaxSM} {
-                  padding: 0;
-                }
-              `}
+              css={css({
+                margin: '0 -20px 30px -20px',
+                [bpMinMD]: {
+                  width: '90%',
+                  margin: '0 auto 50px auto',
+                },
+              })}
             >
               <Img
                 sizes={banner.childImageSharp.fluid}
@@ -58,7 +68,6 @@ export default function Post({
               />
             </div>
           )}
-          <br />
           <MDXRenderer>{mdx.code.body}</MDXRenderer>
         </Container>
         {/* <SubscribeForm /> */}

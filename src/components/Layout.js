@@ -21,7 +21,7 @@ export const globalStyles = css`
   }
   ${bpMaxSM} {
     h1 {
-      font-size: 30px;
+      font-size: 28px;
     }
     h2 {
       font-size: 24px;
@@ -39,6 +39,14 @@ export const globalStyles = css`
   strong {
     em {
       font-family: ${fonts.semiboldItalic};
+    }
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    a {
+      color: inherit;
     }
   }
   input {
