@@ -58,7 +58,7 @@ module.exports = {
             options: {
               backgroundColor: '#fafafa',
               maxWidth: 1035,
-              sizeByPixelDensity: true,
+            
             },
           },
         ],
