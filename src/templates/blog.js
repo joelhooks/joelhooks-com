@@ -115,17 +115,24 @@ const Blog = ({
             </Link>
           </div>
         ))}
-        <br />
-        <br />
-        <div>
-          {nextPagePath && (
-            <Link to={nextPagePath} aria-label="View next page">
-              Next Page →
-            </Link>
-          )}
+        <div
+          css={css({
+            marginTop: '50px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            [bpMaxSM]: {
+              marginTop: '30px',
+            },
+          })}
+        >
           {previousPagePath && (
             <Link to={previousPagePath} aria-label="View previous page">
               ← Previous Page
+            </Link>
+          )}
+          {nextPagePath && (
+            <Link to={nextPagePath} aria-label="View next page">
+              Next Page →
             </Link>
           )}
         </div>
