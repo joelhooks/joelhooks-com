@@ -1785,11 +1785,6 @@ blob@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/blob/-/blob-0.0.5.tgz#d680eeef25f8cd91ad533f5b01eed48e64caf683"
 
-blork@^9.2.1:
-  version "9.2.1"
-  resolved "https://registry.yarnpkg.com/blork/-/blork-9.2.1.tgz#a88af9266c30bce9a1de1c8064961d8153087b2b"
-  integrity sha512-J/+fAkcWNPJjTmRtHSREbFB2Fmm+3yebihPLmo16fy3V6KmhchHRbTB2ClzCK6grQ/z3Ct5GfvlGtAL9xJM92Q==
-
 bluebird@^3.0.5, bluebird@^3.5.0, bluebird@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.3.tgz#7d01c6f9616c9a51ab0f8c549a79dfe6ec33efa7"
@@ -2292,25 +2287,6 @@ chokidar@^2.0.0, chokidar@^2.0.2, chokidar@^2.1.2:
     path-is-absolute "^1.0.0"
     readdirp "^2.2.1"
     upath "^1.1.0"
-  optionalDependencies:
-    fsevents "^1.2.7"
-
-chokidar@^2.0.4:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.1.5.tgz#0ae8434d962281a5f56c72869e79cb6d9d86ad4d"
-  integrity sha512-i0TprVWp+Kj4WRPtInjexJ8Q+BqTE909VpH8xVhXrJkoc5QC8VO9TryGOqTr+2hljzc1sC62t22h5tZePodM/A==
-  dependencies:
-    anymatch "^2.0.0"
-    async-each "^1.0.1"
-    braces "^2.3.2"
-    glob-parent "^3.1.0"
-    inherits "^2.0.3"
-    is-binary-path "^1.0.0"
-    is-glob "^4.0.0"
-    normalize-path "^3.0.0"
-    path-is-absolute "^1.0.0"
-    readdirp "^2.2.1"
-    upath "^1.1.1"
   optionalDependencies:
     fsevents "^1.2.7"
 
@@ -4797,19 +4773,6 @@ gatsby-plugin-sharp@^2.0.20:
     sharp "^0.21.3"
     svgo "^0.7.2"
 
-gatsby-plugin-templated-files@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-templated-files/-/gatsby-plugin-templated-files-2.0.0.tgz#7defc923336cf4e6e59392edfeef1410e7eafd27"
-  integrity sha512-nGxxxGKwhM88U/w5zsQ0jVfgizECrn5f1hN8UDBVKdvtzSjIDDw4Tis1gfXWUNav6IIutP9S/LHVEtYXu0aC+A==
-  dependencies:
-    anymatch "^2.0.0"
-    blork "^9.2.1"
-    chokidar "^2.0.4"
-    hokey-cokey "^2.0.0"
-    md5-file "^4.0.0"
-    path-to-from-params "^1.0.3"
-    pretty-bytes "^5.1.0"
-
 gatsby-plugin-typography@^2.2.7:
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-typography/-/gatsby-plugin-typography-2.2.7.tgz#164869018c28da8cde70f3c451365e2c0643608f"
@@ -5588,11 +5551,6 @@ hoek@4.x.x:
 hoist-non-react-statics@^2.3.1, hoist-non-react-statics@^2.5.0, hoist-non-react-statics@^2.5.5:
   version "2.5.5"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
-
-hokey-cokey@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/hokey-cokey/-/hokey-cokey-2.0.0.tgz#108b0290414570892c10f34d8ad3394368918bd8"
-  integrity sha512-6T/OV4CK9jRqCsA1AUKMdAbWHso5/X6+0XXCyrVewzP8hTr7ZnQuP1BYES458b/cm1VwSytGXQvUTsnDcoXuYw==
 
 homedir-polyfill@^1.0.1:
   version "1.0.3"
@@ -6965,11 +6923,6 @@ md5-file@^3.1.1:
   dependencies:
     buffer-alloc "^1.1.0"
 
-md5-file@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/md5-file/-/md5-file-4.0.0.tgz#f3f7ba1e2dd1144d5bf1de698d0e5f44a4409584"
-  integrity sha512-UC0qFwyAjn4YdPpKaDNw6gNxRf7Mcx7jC1UGCY4boCzgvU2Aoc1mOGzTtrjjLKhM5ivsnhoKpQVxKPp+1j1qwg==
-
 md5.js@^1.3.4:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/md5.js/-/md5.js-1.3.5.tgz#b5d07b8e3216e3e27cd728d72f70d1e6a342005f"
@@ -8127,13 +8080,6 @@ path-root@^0.1.1:
   dependencies:
     path-root-regex "^0.1.0"
 
-path-to-from-params@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/path-to-from-params/-/path-to-from-params-1.0.3.tgz#a0d80220d14d37cfaec44531dd995858c11715be"
-  integrity sha1-oNgCINFNN8+uxEUx3ZlYWMEXFb4=
-  dependencies:
-    path-to-regexp "^1.7.0"
-
 path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
@@ -8141,13 +8087,6 @@ path-to-regexp@0.1.7:
 path-to-regexp@2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-2.2.1.tgz#90b617025a16381a879bc82a38d4e8bdeb2bcf45"
-
-path-to-regexp@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-1.7.0.tgz#59fde0f435badacba103a84e9d3bc64e96b9937d"
-  integrity sha1-Wf3g9DW62suhA6hOnTvGTpa5k30=
-  dependencies:
-    isarray "0.0.1"
 
 path-type@^1.0.0:
   version "1.1.0"
@@ -11019,11 +10958,6 @@ unzip-response@^2.0.1:
 upath@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/upath/-/upath-1.1.0.tgz#35256597e46a581db4793d0ce47fa9aebfc9fabd"
-
-upath@^1.1.1:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/upath/-/upath-1.1.2.tgz#3db658600edaeeccbe6db5e684d67ee8c2acd068"
-  integrity sha512-kXpym8nmDmlCBr7nKdIx8P2jNBa+pBpIUFRnKJ4dr8htyYGJFokkr2ZvERRtUN+9SY+JqXouNgUPtv6JQva/2Q==
 
 update-check@1.5.2:
   version "1.5.2"
