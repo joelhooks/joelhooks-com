@@ -178,7 +178,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     createNodeField({
       name: 'banner',
       node,
-      banner: node.frontmatter.banner,
+      banner: node.frontmatter.banner || {},
     })
 
     createNodeField({
