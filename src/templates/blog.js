@@ -125,10 +125,12 @@ const Blog = ({
             },
           })}
         >
-          {previousPagePath && (
+          {previousPagePath ? (
             <Link to={previousPagePath} aria-label="View previous page">
               ← Previous Page
             </Link>
+          ) : (
+            <div />
           )}
           {nextPagePath && (
             <Link to={nextPagePath} aria-label="View next page">
