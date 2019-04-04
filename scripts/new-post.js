@@ -26,8 +26,22 @@ title: "${title}"
 published: false
 ---`.trim()
 
-fs.writeFileSync(`${dir}/index.mdx`, frontmatter, function(err) {
-  if (err) {
-    return
+function ensureDirectoryExistence(filePath) {
+  var dirname = path.dirname(filePath)
+  console.log(dirname, filePath)
+  if (fs.existsSync(dirname)) {
+    return true
   }
-})
+  ensureDirectoryExistence(dirname)
+  fs.mkdirSync(dirname)
+  return true
+}
+
+if (ensureDirectoryExistence(`${dir}/index.mdx`)) {
+  fs.writeFileSync(`${dir}/index.mdx`, frontmatter, function(err) {
+    if (err) {
+      console.error(err)
+      return
+    }
+  })
+}
