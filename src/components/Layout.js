@@ -3,7 +3,8 @@ import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import { MDXProvider } from '@mdx-js/tag'
 import { Global, css } from '@emotion/core'
-import { ThemeProvider } from 'emotion-theming'
+// import { ThemeProvider } from 'emotion-theming'
+import { createTheming } from '@callstack/react-theme-provider'
 import { bpMaxSM } from '../lib/breakpoints'
 import theme from '../../config/theme'
 import mdxComponents from './mdx'
@@ -12,6 +13,15 @@ import reset from '../lib/reset'
 import { fonts } from '../lib/typography'
 import config from '../../config/website'
 import Footer from '../components/Footer'
+
+const defaultTheme = {
+  colors: {
+    primary: 'yellow',
+    secondary: 'green',
+  },
+}
+
+const { ThemeProvider, withTheme, useTheme } = createTheming(defaultTheme)
 
 export const globalStyles = css`
   .button-secondary {
@@ -114,6 +124,7 @@ const Layout = ({
   headerColor,
   noFooter,
 }) => {
+  const themeAlt = useTheme()
   const {
     description: siteDescription,
     keywords: siteKeywords,
@@ -128,7 +139,7 @@ const Layout = ({
   const description = frontmatterDescription || siteDescription
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <Fragment>
         <Global styles={globalStyles} />
         <div
@@ -149,6 +160,7 @@ const Layout = ({
               { name: 'keywords', content: keywords },
             ]}
           />
+          <div style={{ color: themeAlt.colors.primary }}>Hello</div>
           <Header
             siteTitle={site.siteMetadata.title}
             dark={dark}
