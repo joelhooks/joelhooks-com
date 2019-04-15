@@ -1,6 +1,6 @@
 import { createTheming } from '@callstack/react-theme-provider'
 
-export const themes = {
+const themes = {
   default: {
     primaryColor: '#FFA72A',
     accentColor: '#458622',
@@ -19,4 +19,4 @@ export const themes = {
 
 const { ThemeProvider, useTheme } = createTheming(themes.default)
 
-export { ThemeProvider, useTheme }
+export { ThemeProvider, useTheme, themes }

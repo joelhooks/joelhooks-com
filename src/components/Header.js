@@ -14,6 +14,7 @@ const Header = ({
   bgColor = 'none',
   siteTitle,
   headerColor = 'black',
+  toggleTheme,
 }) => {
   const themeAlt = useTheme()
   return (
@@ -94,7 +95,12 @@ const Header = ({
             </span>
           </Link>
           <Search />
-          <div style={{ color: themeAlt.secondaryColor }}>Hello</div>
+          <div
+            style={{ color: themeAlt.secondaryColor }}
+            onClick={() => toggleTheme('dark')}
+          >
+            Hello
+          </div>
         </nav>
       </Container>
     </header>
