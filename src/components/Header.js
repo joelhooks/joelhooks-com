@@ -8,7 +8,7 @@ import Container from './Container'
 import Logo from './Logo'
 import ThemeToggler from './ThemeToggler'
 
-const Header = ({ siteTitle, toggleTheme }) => {
+const Header = ({ siteTitle }) => {
   const theme = useTheme()
   return (
     <header
@@ -88,7 +88,10 @@ const Header = ({ siteTitle, toggleTheme }) => {
             </span>
           </Link>
           <Search />
-          <ThemeToggler toggleTheme={toggleTheme} themeName={theme.themeName} />
+          <ThemeToggler
+            toggleTheme={theme.toggleTheme}
+            themeName={theme.themeName}
+          />
         </nav>
       </Container>
     </header>

@@ -16,7 +16,9 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
   const [themeName, setTheme] = useState('default')
   const toggleTheme = name => setTheme(name)
 
-  const theme = themes[themeName]
+  const theme = { ...themes[themeName], toggleTheme: toggleTheme }
+
+  console.log('theme: ', theme)
 
   const {
     description: siteDescription,
@@ -167,10 +169,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               { name: 'keywords', content: keywords },
             ]}
           />
-          <Header
-            siteTitle={site.siteMetadata.title}
-            toggleTheme={toggleTheme}
-          />
+          <Header siteTitle={site.siteMetadata.title} />
           <MDXProvider components={mdxComponents}>
             <Fragment>{children}</Fragment>
           </MDXProvider>
