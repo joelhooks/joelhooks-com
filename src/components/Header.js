@@ -16,7 +16,7 @@ const Header = ({ siteTitle, toggleTheme }) => {
         flexShrink: 0,
         background: 'none',
         padding: '20px 0',
-        background: theme.primary,
+        background: theme.colors.primary,
         [bpMinMD]: {
           padding: '30px 0',
         },
@@ -40,9 +40,9 @@ const Header = ({ siteTitle, toggleTheme }) => {
             activeClassName="active"
             css={css({
               display: 'flex',
-              color: theme.black,
+              color: theme.colors.black,
               ':hover': {
-                color: theme.primary,
+                color: theme.colors.primary,
               },
               [bpMinXL]: {
                 transform: 'translate(-70px, 0)',
@@ -68,7 +68,7 @@ const Header = ({ siteTitle, toggleTheme }) => {
                 display: 'none',
                 margin: '20px 0 0 15px',
                 fontSize: '14px',
-                color: theme.textColor,
+                color: theme.colors.textColor,
                 [bpMinSM]: {
                   display: 'block',
                 },
@@ -87,7 +87,7 @@ const Header = ({ siteTitle, toggleTheme }) => {
           </Link>
           <Search />
           <div
-            style={{ color: theme.secondary }}
+            style={{ color: theme.colors.secondary }}
             onClick={() => toggleTheme('dark')}
           >
             Hello

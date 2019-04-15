@@ -45,32 +45,32 @@ const Layout = ({
         <Global
           styles={css`
             body {
-              color: ${theme.text};
-              background-color: ${theme.bodyBg};
+              color: ${theme.colors.text};
+              background-color: ${theme.colors.bodyBg};
             }
             ::selection {
-              color: ${theme.white};
-              background-color: ${theme.link};
+              color: ${theme.colors.white};
+              background-color: ${theme.colors.link};
             }
             a {
-              color: ${theme.link};
+              color: ${theme.colors.link};
               transition: all 0.3s ease-in-out;
               &:hover,
               &:focus {
-                color: ${theme.linkHover};
+                color: ${theme.colors.linkHover};
               }
             }
             blockquote {
-              border-left: 5px solid ${theme.link};
+              border-left: 5px solid ${theme.colors.link};
             }
             caption {
-              color: ${theme.bodyBg};
+              color: ${theme.colors.bodyBg};
             }
 
             .button-secondary {
               border-radius: 4px;
               padding: 12px 12px;
-              background: ${theme.primaryLight};
+              background: ${theme.colors.primaryLight};
             }
             ${bpMaxSM} {
               h1 {
@@ -83,7 +83,7 @@ const Layout = ({
             hr {
               margin: 50px 0;
               border: none;
-              border-top: 1px solid ${theme.gray};
+              border-top: 1px solid ${theme.colors.gray};
               background: none;
             }
             em {
@@ -104,7 +104,7 @@ const Layout = ({
             }
             input {
               border-radius: 4px;
-              border: 1px solid ${theme.gray};
+              border: 1px solid ${theme.colors.gray};
               padding: 5px 10px;
               box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
               font-family: ${fonts.regular};
@@ -119,16 +119,16 @@ const Layout = ({
             }
             button {
               border-radius: 4px;
-              background-color: ${theme.primary};
+              background-color: ${theme.colors.primary};
               border: none;
-              color: ${theme.white};
+              color: ${theme.colors.white};
               padding: 5px 10px;
               cursor: pointer;
-              border: 1px solid ${theme.primary};
+              border: 1px solid ${theme.colors.primary};
               transition: all 200ms ease;
               :hover {
-                background: ${theme.linkHover};
-                border: 1px solid ${theme.linkHover};
+                background: ${theme.colors.linkHover};
+                border: 1px solid ${theme.colors.linkHover};
               }
             }
             pre {
