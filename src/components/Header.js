@@ -6,6 +6,7 @@ import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
 import Logo from './Logo'
+import ThemeToggler from './ThemeToggler'
 
 const Header = ({ siteTitle, toggleTheme }) => {
   const theme = useTheme()
@@ -86,12 +87,7 @@ const Header = ({ siteTitle, toggleTheme }) => {
             </span>
           </Link>
           <Search />
-          <div
-            style={{ color: theme.colors.secondary }}
-            onClick={() => toggleTheme('dark')}
-          >
-            Hello
-          </div>
+          <ThemeToggler toggleTheme={toggleTheme} themeName={theme.themeName} />
         </nav>
       </Container>
     </header>

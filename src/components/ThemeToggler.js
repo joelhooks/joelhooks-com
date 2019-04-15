@@ -1,5 +1,11 @@
-import React, {useState} from 'react'
+import React from 'react'
 
-const ThemeToggler = () => (
-  
+const ThemeToggler = ({ toggleTheme, themeName }) => (
+  <button
+    onClick={() => toggleTheme(themeName === 'dark' ? 'default' : 'dark')}
+  >
+    {themeName === 'dark' ? 'default' : 'dark'}
+  </button>
 )
+
+export default ThemeToggler
