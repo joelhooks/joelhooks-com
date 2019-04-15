@@ -17,7 +17,8 @@ const Header = ({ siteTitle, toggleTheme }) => {
         flexShrink: 0,
         background: 'none',
         padding: '20px 0',
-        background: theme.colors.primary,
+        background:
+          theme.themeName === 'dark' ? theme.colors.secondary : 'transparent',
         [bpMinMD]: {
           padding: '30px 0',
         },
