@@ -17,6 +17,7 @@ const Header = ({
   toggleTheme,
 }) => {
   const themeAlt = useTheme()
+  console.log('themeAlt: ', themeAlt)
   return (
     <header
       css={css({

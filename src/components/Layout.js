@@ -24,7 +24,6 @@ const Layout = ({
 }) => {
   const [themeName, setTheme] = useState('default')
   const toggleTheme = name => setTheme(name)
-  console.log('themeName: ', themeName)
 
   const themeAlt = useTheme()
   console.log('themeAlt: ', themeAlt || 'und')
@@ -63,12 +62,6 @@ const Layout = ({
               { name: 'keywords', content: keywords },
             ]}
           />
-          <div
-            style={{ color: themeAlt.primaryColor }}
-            onClick={() => toggleTheme('default')}
-          >
-            Hello
-          </div>
           <Header
             siteTitle={site.siteMetadata.title}
             dark={dark}

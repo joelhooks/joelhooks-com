@@ -1,19 +1,31 @@
 import { createTheming } from '@callstack/react-theme-provider'
+import { darken, lighten, rgba } from 'polished'
+
+const colors = {
+  black: '#000',
+  white: '#fff',
+  primaryColorDefault: '#ff4094',
+  primaryColorDark: '#333333',
+  secondaryColorDefault: '#eef4f2',
+  secondaryColorDark: '#888888',
+}
 
 const themes = {
   default: {
-    primaryColor: '#FFA72A',
-    accentColor: '#458622',
-    backgroundColor: '#FFC777',
-    textColor: '#504f4d',
-    secondaryColor: '#7F5315',
+    themeName: 'default',
+    primaryColor: primaryColorDefault,
+    secondaryColor: secondaryColorDefault,
+    textColor: rgba(colors.black, 0.85),
+    linkColor: primaryColorDefault,
+    linkColorHover: `${darken(0.07, primaryColorDefault)}`,
   },
   dark: {
-    primaryColor: '#FFA72A',
-    accentColor: '#458622',
-    backgroundColor: '#504f4d',
-    textColor: '#FFC777',
-    secondaryColor: '#252525',
+    themeName: 'dark',
+    primaryColor: primaryColorDark,
+    secondaryColor: secondaryColorDark,
+    textColor: rgba(colors.black, 0.85),
+    linkColor: primaryColorDark,
+    linkColorHover: `${darken(0.07, primaryColorDark)}`,
   },
 }
 
