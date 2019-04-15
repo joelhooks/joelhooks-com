@@ -1,31 +1,38 @@
 import { createTheming } from '@callstack/react-theme-provider'
 import { darken, lighten, rgba } from 'polished'
 
+const colorConsts = {
+  primaryDefault: '#ff4094',
+  primaryDark: '#333333',
+  secondaryDefault: '#eef4f2',
+  secondaryDark: '#888888',
+}
+
 const colors = {
   black: '#000',
   white: '#fff',
-  primaryColorDefault: '#ff4094',
-  primaryColorDark: '#333333',
-  secondaryColorDefault: '#eef4f2',
-  secondaryColorDark: '#888888',
 }
 
 const themes = {
   default: {
     themeName: 'default',
-    primaryColor: primaryColorDefault,
-    secondaryColor: secondaryColorDefault,
+    primary: colorConsts.primaryDefault,
+    primaryLight: lighten(0.33, colorConsts.primaryDefault),
+    secondary: colorConsts.secondaryDefault,
     textColor: rgba(colors.black, 0.85),
-    linkColor: primaryColorDefault,
-    linkColorHover: `${darken(0.07, primaryColorDefault)}`,
+    link: colorConsts.primaryDefault,
+    linkHover: darken(0.07, colorConsts.primaryDefault),
+    ...colors,
   },
   dark: {
     themeName: 'dark',
-    primaryColor: primaryColorDark,
-    secondaryColor: secondaryColorDark,
-    textColor: rgba(colors.black, 0.85),
-    linkColor: primaryColorDark,
-    linkColorHover: `${darken(0.07, primaryColorDark)}`,
+    primary: colorConsts.primaryDark,
+    primaryLight: lighten(0.33, colorConsts.primaryDark),
+    secondary: colorConsts.secondaryDark,
+    text: rgba(colors.black, 0.85),
+    link: colorConsts.primaryDark,
+    linkHover: `${darken(0.07, colorConsts.primaryDark)}`,
+    ...colors,
   },
 }
 

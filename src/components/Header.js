@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { css } from '@emotion/core'
-import theme from '../../config/theme'
 import { useTheme } from '../../config/theming'
 import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
@@ -9,15 +8,8 @@ import Container from './Container'
 import Logo from './Logo'
 import { FaFileExcel } from 'react-icons/fa'
 
-const Header = ({
-  dark,
-  bgColor = 'none',
-  siteTitle,
-  headerColor = 'black',
-  toggleTheme,
-}) => {
-  const themeAlt = useTheme()
-  console.log('themeAlt: ', themeAlt)
+const Header = ({ siteTitle, toggleTheme }) => {
+  const theme = useTheme()
   return (
     <header
       css={css({
@@ -25,7 +17,7 @@ const Header = ({
         flexShrink: 0,
         background: 'none',
         padding: '20px 0',
-        background: dark ? '#090909' : bgColor || 'none',
+        background: theme.primary,
         [bpMinMD]: {
           padding: '30px 0',
         },
@@ -41,7 +33,6 @@ const Header = ({
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: ${headerColor};
           `}
         >
           <Link
@@ -50,9 +41,9 @@ const Header = ({
             activeClassName="active"
             css={css({
               display: 'flex',
-              color: theme.colors.black,
+              color: theme.black,
               ':hover': {
-                color: theme.colors.primary,
+                color: theme.primary,
               },
               [bpMinXL]: {
                 transform: 'translate(-70px, 0)',
@@ -78,7 +69,7 @@ const Header = ({
                 display: 'none',
                 margin: '20px 0 0 15px',
                 fontSize: '14px',
-                color: headerColor ? headerColor : theme.colors.body_color,
+                color: theme.textColor,
                 [bpMinSM]: {
                   display: 'block',
                 },
@@ -97,7 +88,7 @@ const Header = ({
           </Link>
           <Search />
           <div
-            style={{ color: themeAlt.secondaryColor }}
+            style={{ color: theme.secondary }}
             onClick={() => toggleTheme('dark')}
           >
             Hello

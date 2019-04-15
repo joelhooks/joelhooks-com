@@ -25,8 +25,11 @@ const Layout = ({
   const [themeName, setTheme] = useState('default')
   const toggleTheme = name => setTheme(name)
 
+  // const computedTheme
+
   const themeAlt = useTheme()
   console.log('themeAlt: ', themeAlt || 'und')
+
   const {
     description: siteDescription,
     keywords: siteKeywords,
