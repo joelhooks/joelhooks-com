@@ -177,9 +177,6 @@ const Layout = ({
           />
           <Header
             siteTitle={site.siteMetadata.title}
-            dark={dark}
-            bgColor={headerBg}
-            headerColor={headerColor}
             toggleTheme={toggleTheme}
           />
           <MDXProvider components={mdxComponents}>

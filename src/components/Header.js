@@ -6,7 +6,6 @@ import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
 import Logo from './Logo'
-import { FaFileExcel } from 'react-icons/fa'
 
 const Header = ({ siteTitle, toggleTheme }) => {
   const theme = useTheme()
