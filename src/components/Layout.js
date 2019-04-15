@@ -40,7 +40,7 @@ const Layout = ({
   const description = frontmatterDescription || siteDescription
 
   return (
-    <ThemeProvider theme={themes[themeName]}>
+    <ThemeProvider theme={theme}>
       <Fragment>
         <Global
           styles={css`
