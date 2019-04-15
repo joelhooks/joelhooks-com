@@ -12,15 +12,7 @@ import { fonts } from '../lib/typography'
 import config from '../../config/website'
 import Footer from '../components/Footer'
 
-const Layout = ({
-  site,
-  frontmatter = {},
-  children,
-  dark,
-  headerBg,
-  headerColor,
-  noFooter,
-}) => {
+const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
   const [themeName, setTheme] = useState('default')
   const toggleTheme = name => setTheme(name)
 
