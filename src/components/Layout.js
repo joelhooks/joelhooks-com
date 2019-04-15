@@ -3,11 +3,11 @@ import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import { MDXProvider } from '@mdx-js/tag'
 import { Global, css } from '@emotion/core'
-import { ThemeProvider, useTheme, themes } from '../../config/theming'
+import { ThemeProvider, themes } from '../../config/theming'
 import { bpMaxSM } from '../lib/breakpoints'
 import mdxComponents from './mdx'
 import Header from './Header'
-import Reset from '../lib/reset'
+import reset from '../lib/reset'
 import { fonts } from '../lib/typography'
 import config from '../../config/website'
 import Footer from '../components/Footer'
@@ -24,7 +24,7 @@ const Layout = ({
   const [themeName, setTheme] = useState('default')
   const toggleTheme = name => setTheme(name)
 
-  const theme = useTheme()
+  const theme = themes[themeName]
 
   const {
     description: siteDescription,
@@ -44,6 +44,29 @@ const Layout = ({
       <Fragment>
         <Global
           styles={css`
+            body {
+              color: ${theme.text};
+              background-color: ${theme.bodyBg};
+            }
+            ::selection {
+              color: ${theme.white};
+              background-color: ${theme.link};
+            }
+            a {
+              color: ${theme.link};
+              transition: all 0.3s ease-in-out;
+              &:hover,
+              &:focus {
+                color: ${theme.linkHover};
+              }
+            }
+            blockquote {
+              border-left: 5px solid ${theme.link};
+            }
+            caption {
+              color: ${theme.bodyBg};
+            }
+
             .button-secondary {
               border-radius: 4px;
               padding: 12px 12px;
@@ -131,7 +154,7 @@ const Layout = ({
                 border-radius: 5px;
               }
             }
-            ${Reset()};
+            ${reset};
           `}
         />
         <div
