@@ -18,7 +18,9 @@ const Header = ({ siteTitle }) => {
         background: 'none',
         padding: '20px 0',
         background:
-          theme.themeName === 'dark' ? theme.colors.secondary : 'transparent',
+          theme.themeName === 'dark'
+            ? theme.colors.secondary
+            : theme.colors.white,
         [bpMinMD]: {
           padding: '30px 0',
         },
