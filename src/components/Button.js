@@ -5,7 +5,6 @@ import { useTheme } from '../../config/theming'
 
 const Button = ({ to, children, secondary, ...restProps }) => {
   const theme = useTheme()
-  console.log('theme: ', theme)
   const styles = css({
     display: 'inline-flex',
     border: 'none',
