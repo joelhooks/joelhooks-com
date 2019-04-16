@@ -59,11 +59,6 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               color: ${theme.colors.bodyBg};
             }
 
-            .button-secondary {
-              border-radius: 4px;
-              padding: 12px 12px;
-              background: ${theme.colors.primaryLight};
-            }
             ${bpMaxSM} {
               h1 {
                 font-size: 28px;
@@ -108,43 +103,6 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             .gatsby-resp-image-image {
               background: none !important;
               box-shadow: 0;
-            }
-            button {
-              border-radius: 4px;
-              background-color: ${theme.colors.primary};
-              border: none;
-              color: ${theme.colors.white};
-              padding: 5px 10px;
-              cursor: pointer;
-              border: 1px solid ${theme.colors.primary};
-              transition: all 200ms ease;
-              :hover {
-                background: ${theme.colors.linkHover};
-                border: 1px solid ${theme.colors.linkHover};
-              }
-            }
-            pre {
-              background-color: #061526 !important;
-              border-radius: 4px;
-              font-size: 16px;
-              padding: 10px;
-              overflow-x: auto;
-              /* Track */
-              ::-webkit-scrollbar {
-                width: 100%;
-                height: 5px;
-                border-radius: 0 0 5px 5px;
-              }
-              ::-webkit-scrollbar-track {
-                background: #061526;
-                border-radius: 0 0 4px 4px;
-                border: 1px solid rgba(0, 0, 0, 0.2);
-              }
-              /* Handle */
-              ::-webkit-scrollbar-thumb {
-                background: #888;
-                border-radius: 5px;
-              }
             }
             ${reset};
           `}

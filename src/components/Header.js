@@ -8,6 +8,8 @@ import Container from './Container'
 import Logo from './Logo'
 import ThemeToggler from './ThemeToggler'
 
+import Button from './Button'
+
 const Header = ({ siteTitle }) => {
   const theme = useTheme()
   return (

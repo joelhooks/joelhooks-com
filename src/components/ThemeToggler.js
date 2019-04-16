@@ -1,12 +1,12 @@
 import React from 'react'
+import Button from './Button'
 
 const ThemeToggler = ({ toggleTheme, themeName }) => (
-  <button
-    style={{ width: '100px' }}
+  <Button
     onClick={() => toggleTheme(themeName === 'dark' ? 'default' : 'dark')}
   >
     {themeName === 'dark' ? 'default' : 'dark'}
-  </button>
+  </Button>
 )
 
 export default ThemeToggler

@@ -39,7 +39,7 @@ const themes = {
       bodyBg: colorConsts.bodyBgSecondary,
       text: rgba(colors.black, 0.85),
       link: colors.white,
-      linkHover: `${darken(0.3, colors.white)}`,
+      linkHover: darken(0.3, colors.white),
       ...colors,
     },
   },

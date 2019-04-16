@@ -6,6 +6,7 @@ import { css } from '@emotion/core'
 import theme from '../../../config/theme'
 import { bpMinSM, bpMinMD } from '../../lib/breakpoints'
 import joelsHandImg from '../../images/joels-hand-rotated.svg'
+import Button from '../Button'
 
 const FORM_ID = process.env.CONVERTKIT_SIGNUP_FORM
 
@@ -185,7 +186,7 @@ class SubscribeForm extends React.Component {
                     css={inputFieldStyles}
                   />
                 </label>
-                <button
+                <Button
                   data-element="submit"
                   type="submit"
                   css={css({
@@ -197,7 +198,7 @@ class SubscribeForm extends React.Component {
                 >
                   {!loading && 'Subscribe'}
                   {loading && 'Subscribing...'}
-                </button>
+                </Button>
               </Form>
             )}
           />
