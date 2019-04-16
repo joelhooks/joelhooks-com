@@ -18,8 +18,6 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
 
   const theme = { ...themes[themeName], toggleTheme: toggleTheme }
 
-  console.log('theme: ', theme)
-
   const {
     description: siteDescription,
     keywords: siteKeywords,
