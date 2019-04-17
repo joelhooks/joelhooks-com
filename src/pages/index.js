@@ -33,8 +33,10 @@ export default function Index({ data: { site, allMdx } }) {
               css={css({
                 marginBottom: rhythm(0.3),
                 transition: theme.transition.ease,
-                ':hover': {
-                  color: theme.brand.primary,
+                '@media (hover: hover)': {
+                  ':hover': {
+                    color: theme.brand.primary,
+                  },
                 },
               })}
             >

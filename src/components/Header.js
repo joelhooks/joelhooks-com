@@ -42,8 +42,10 @@ const Header = ({ siteTitle }) => {
             css={css({
               display: 'flex',
               color: theme.colors.text,
-              ':hover': {
-                color: theme.colors.primary,
+              '@media (hover: hover)': {
+                ':hover': {
+                  color: theme.colors.primary,
+                },
               },
               [bpMinXL]: {
                 transform: 'translate(-70px, 0)',

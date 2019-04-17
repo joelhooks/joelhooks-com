@@ -17,9 +17,11 @@ const Button = ({ to, children, secondary, ...restProps }) => {
     padding: '10px 15px',
     cursor: 'pointer',
     transition: 'all 150ms ease',
-    ':hover': {
-      color: theme.colors.white,
-      background: darken(0.1, theme.colors.primary),
+    '@media (hover: hover)': {
+      ':hover': {
+        color: theme.colors.white,
+        background: darken(0.1, theme.colors.primary),
+      },
     },
   })
   return to ? (

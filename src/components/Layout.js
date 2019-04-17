@@ -62,9 +62,11 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             }
             a {
               color: ${theme.colors.primary};
-              &:hover,
-              &:focus {
-                color: ${theme.colors.primary};
+              @media (hover: hover) {
+                &:hover,
+                &:focus {
+                  color: ${theme.colors.primary};
+                }
               }
             }
             blockquote {
