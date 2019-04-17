@@ -165,9 +165,11 @@ export default () => {
       <OpenSearch
         css={{
           background: rgba(theme.colors.text, 0.05),
-          ':hover': {
-            background: theme.colors.primary,
-            color: theme.colors.white,
+          '@media (hover: hover)': {
+            ':hover': {
+              background: theme.colors.primary,
+              color: theme.colors.white,
+            },
           },
           color: theme.colors.text,
         }}

@@ -34,8 +34,10 @@ const ThemeToggler = ({ toggleTheme, themeName }) => {
         justifyContent: 'center',
         margin: 0,
         color: theme.colors.text,
-        ':hover': {
-          color: theme.colors.white,
+        '@media (hover: hover)': {
+          ':hover': {
+            color: theme.colors.white,
+          },
         },
       }}
       aria-label={
