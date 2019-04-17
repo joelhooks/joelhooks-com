@@ -6,7 +6,7 @@ const ThemeToggler = ({ toggleTheme, themeName }) => (
     css={{ position: 'fixed', right: '10vw' }}
     onClick={() => toggleTheme(themeName === 'dark' ? 'default' : 'dark')}
   >
-    {themeName === 'dark' ? 'default' : 'dark'}
+    {themeName === 'dark' ? 'light' : 'dark'}
   </Button>
 )
 

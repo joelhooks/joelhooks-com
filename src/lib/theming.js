@@ -2,9 +2,9 @@ import { createTheming } from '@callstack/react-theme-provider'
 import { darken, lighten, rgba } from 'polished'
 
 const colors = {
-  pink: '#ff4094',
   black: '#131415',
   white: '#fff',
+  pink: '#ff4094',
   gray: '#dedede',
 }
 

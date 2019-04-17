@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import { MDXProvider } from '@mdx-js/tag'
@@ -14,9 +14,13 @@ import Footer from '../components/Footer'
 import { rgba } from 'polished'
 
 const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
-  const [themeName, setTheme] = useState('default')
+  const [themeName, setTheme] = useState(
+    localStorage.getItem('theme') || 'default',
+  )
+  React.useEffect(() => {
+    localStorage.setItem('theme', themeName)
+  }, [themeName])
   const toggleTheme = name => setTheme(name)
-
   const theme = { ...themes[themeName], toggleTheme: toggleTheme, useTheme }
 
   const {
