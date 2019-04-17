@@ -14,14 +14,25 @@ import Footer from '../components/Footer'
 import { rgba } from 'polished'
 
 const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
-  const [themeName, setTheme] = useState(
-    localStorage.getItem('theme') || 'default',
-  )
-  React.useEffect(() => {
+  const initializeTheme = () => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') || 'default'
+    } else {
+      return 'default'
+    }
+  }
+
+  const [themeName, setTheme] = useState(initializeTheme)
+
+  useEffect(() => {
     localStorage.setItem('theme', themeName)
   }, [themeName])
+
   const toggleTheme = name => setTheme(name)
-  const theme = { ...themes[themeName], toggleTheme: toggleTheme, useTheme }
+  const theme = {
+    ...themes[themeName],
+    toggleTheme: toggleTheme,
+  }
 
   const {
     description: siteDescription,

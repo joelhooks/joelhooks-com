@@ -42,7 +42,7 @@ const Header = ({ siteTitle }) => {
             activeClassName="active"
             css={css({
               display: 'flex',
-              color: theme.colors.black,
+              color: theme.colors.text,
               ':hover': {
                 color: theme.colors.primary,
               },
