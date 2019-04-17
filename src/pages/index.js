@@ -47,12 +47,12 @@ export default function Index({ data: { site, allMdx } }) {
             </h2>
             <Description>
               {post.excerpt}{' '}
-              <Link
+              {/* <Link
                 to={post.frontmatter.slug}
                 aria-label={`View ${post.frontmatter.title}`}
               >
                 Read Article →
-              </Link>
+              </Link> */}
             </Description>
             <span />
           </div>
@@ -76,7 +76,7 @@ export const pageQuery = graphql`
       }
     }
     allMdx(
-      limit: 5
+      limit: 8
       sort: { fields: [frontmatter___date], order: DESC }
       filter: { frontmatter: { published: { ne: false } } }
     ) {

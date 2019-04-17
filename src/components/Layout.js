@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import { MDXProvider } from '@mdx-js/tag'
 import { Global, css } from '@emotion/core'
-import { ThemeProvider, themes } from '../../config/theming'
+import { ThemeProvider, themes, useTheme } from '../lib/theming'
 import { bpMaxSM } from '../lib/breakpoints'
 import mdxComponents from './mdx'
 import Header from './Header'
@@ -11,12 +11,13 @@ import reset from '../lib/reset'
 import { fonts } from '../lib/typography'
 import config from '../../config/website'
 import Footer from '../components/Footer'
+import { rgba } from 'polished'
 
 const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
   const [themeName, setTheme] = useState('default')
   const toggleTheme = name => setTheme(name)
 
-  const theme = { ...themes[themeName], toggleTheme: toggleTheme }
+  const theme = { ...themes[themeName], toggleTheme: toggleTheme, useTheme }
 
   const {
     description: siteDescription,
@@ -38,25 +39,24 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
           styles={css`
             body {
               color: ${theme.colors.text};
-              background-color: ${theme.colors.bodyBg};
+              background-color: ${theme.colors.bg};
             }
             ::selection {
               color: ${theme.colors.white};
-              background-color: ${theme.colors.link};
+              background-color: ${theme.colors.primary};
             }
             a {
-              color: ${theme.colors.link};
-              transition: all 0.3s ease-in-out;
+              color: ${theme.colors.primary};
               &:hover,
               &:focus {
-                color: ${theme.colors.linkHover};
+                color: ${theme.colors.primary};
               }
             }
             blockquote {
-              border-left: 5px solid ${theme.colors.link};
+              border-left: 5px solid ${theme.colors.primary};
             }
             caption {
-              color: ${theme.colors.bodyBg};
+              color: ${theme.colors.bg};
             }
 
             ${bpMaxSM} {
@@ -70,7 +70,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             hr {
               margin: 50px 0;
               border: none;
-              border-top: 1px solid ${theme.colors.gray};
+              border-top: 1px solid ${rgba(theme.colors.text, 0.2)};
               background: none;
             }
             em {

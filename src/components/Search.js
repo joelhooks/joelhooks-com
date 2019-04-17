@@ -92,7 +92,7 @@ const OpenSearch = styled('a')`
   :focus,
   :hover {
     background-color: transparent;
-    color: ${theme.colors.primaryDark};
+    color: ${theme.colors.text};
   }
   :focus {
     border: 2px solid ${theme.colors.darkest};

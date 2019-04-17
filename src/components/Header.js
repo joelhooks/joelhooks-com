@@ -1,13 +1,12 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { css } from '@emotion/core'
-import { useTheme } from '../../config/theming'
+import { useTheme } from '../lib/theming'
 import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
 import Logo from './Logo'
 import ThemeToggler from './ThemeToggler'
-
 import Button from './Button'
 
 const Header = ({ siteTitle }) => {
@@ -19,10 +18,7 @@ const Header = ({ siteTitle }) => {
         flexShrink: 0,
         background: 'none',
         padding: '20px 0',
-        background:
-          theme.themeName === 'dark'
-            ? theme.colors.secondary
-            : theme.colors.white,
+        background: theme.colors.bg,
         [bpMinMD]: {
           padding: '30px 0',
         },
@@ -74,7 +70,7 @@ const Header = ({ siteTitle }) => {
                 display: 'none',
                 margin: '20px 0 0 15px',
                 fontSize: '14px',
-                color: theme.colors.textColor,
+                color: theme.colors.text,
                 [bpMinSM]: {
                   display: 'block',
                 },

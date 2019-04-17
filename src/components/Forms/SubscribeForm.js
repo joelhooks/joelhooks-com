@@ -5,7 +5,7 @@ import axios from 'axios'
 import { css } from '@emotion/core'
 import theme from '../../../config/theme'
 import { bpMinSM, bpMinMD } from '../../lib/breakpoints'
-import joelsHandImg from '../../images/joels-hand-rotated.svg'
+import Hand from '../Hand'
 import Button from '../Button'
 
 const FORM_ID = process.env.CONVERTKIT_SIGNUP_FORM
@@ -107,9 +107,7 @@ class SubscribeForm extends React.Component {
                 people enjoy it, and you probably will too!
               </p>
             </div>
-            <img
-              src={joelsHandImg}
-              alt=""
+            <div
               css={css({
                 width: '70px',
                 flexShrink: 0,
@@ -123,7 +121,9 @@ class SubscribeForm extends React.Component {
                   margin: '0 0 0 120px',
                 },
               })}
-            />
+            >
+              <Hand />
+            </div>
           </div>
         )}
 
@@ -235,7 +235,7 @@ const inputFieldStyles = css({
   fontSize: '16px',
   height: '50px',
   borderRadius: '3px',
-  borderColor: theme.colors.gray,
+  borderColor: theme.colors.text,
   boxShadow: 'none',
   fontWeight: 400,
   '::placeholder': {
