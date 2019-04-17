@@ -86,15 +86,11 @@ class SubscribeForm extends React.Component {
               <h2
                 css={css({
                   margin: '0 0 20px 0',
-                  fontSize: '22px',
-                  fontFamily: theme.fonts.regular,
-                  [bpMinSM]: {
-                    fontSize: '24px',
-                  },
+                  fontFamily: theme.fonts.semibold,
                 })}
               >
-                Want more? Get emails from me about coding, business, learning,
-                and teaching.
+                Get emails from me about coding, business, learning, and
+                teaching.
               </h2>
               <p
                 css={css({
@@ -109,7 +105,6 @@ class SubscribeForm extends React.Component {
             </div>
             <div
               css={css({
-                width: '70px',
                 flexShrink: 0,
                 margin: 0,
                 [bpMinSM]: {

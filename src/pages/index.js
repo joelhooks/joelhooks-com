@@ -2,9 +2,9 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
-import Layout from '../components/Layout'
-import Link from '../components/Link'
-import Button from '../components/Button'
+import Layout from 'components/Layout'
+import Link from 'components/Link'
+import Button from 'components/Button'
 import Container from 'components/Container'
 import { rhythm } from '../lib/typography'
 import theme from '../../config/theme'
@@ -58,7 +58,7 @@ export default function Index({ data: { site, allMdx } }) {
           </div>
         ))}
         <Button secondary to="/articles" aria-label="Visit blog page">
-          View all articles
+          Browse all articles
         </Button>
         <hr />
       </Container>

@@ -4,7 +4,7 @@ import { darken, lighten, rgba } from 'polished'
 const colors = {
   black: '#131415',
   white: '#fff',
-  pink: '#ff4094',
+  pink: 'DEEPPINK',
   gray: '#dedede',
 }
 
@@ -17,7 +17,6 @@ const themes = {
       primary: colors.pink,
       text: colors.black,
       bg: colors.white,
-
       ...colors,
     },
   },
@@ -27,7 +26,6 @@ const themes = {
       primary: colors.pink,
       text: colors.white,
       bg: colors.black,
-
       ...colors,
     },
   },

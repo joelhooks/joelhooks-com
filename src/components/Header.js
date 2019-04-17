@@ -1,13 +1,12 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { css } from '@emotion/core'
-import { useTheme } from '../lib/theming'
+import { useTheme } from './Theming'
 import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
 import Logo from './Logo'
 import ThemeToggler from './ThemeToggler'
-import Button from './Button'
 
 const Header = ({ siteTitle }) => {
   const theme = useTheme()
@@ -54,7 +53,7 @@ const Header = ({ siteTitle }) => {
             <Logo
               css={css({
                 width: '60px',
-                height: '49px',
+                height: '50px',
                 [bpMinMD]: {
                   width: '100px',
                   height: '82px',
@@ -68,14 +67,14 @@ const Header = ({ siteTitle }) => {
             <span
               css={css({
                 display: 'none',
-                margin: '20px 0 0 15px',
+                margin: '65px 0 0 15px',
                 fontSize: '14px',
                 color: theme.colors.text,
                 [bpMinSM]: {
                   display: 'block',
                 },
                 [bpMinMD]: {
-                  margin: '42px 0 0 20px',
+                  margin: '60px 0 0 20px',
                   fontSize: '16px',
                 },
                 [bpMinLG]: {
@@ -87,11 +86,20 @@ const Header = ({ siteTitle }) => {
               {siteTitle}
             </span>
           </Link>
-          <Search />
-          <ThemeToggler
-            toggleTheme={theme.toggleTheme}
-            themeName={theme.themeName}
-          />
+          <div
+            css={{
+              marginTop: '35px',
+              display: 'flex',
+            }}
+          >
+            <Search />
+
+            <ThemeToggler
+              css={{}}
+              toggleTheme={theme.toggleTheme}
+              themeName={theme.themeName}
+            />
+          </div>
         </nav>
       </Container>
     </header>

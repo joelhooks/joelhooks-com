@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from '../lib/theming'
+import { useTheme } from './Theming'
 
 const Logo = ({ props }) => {
   const theme = useTheme()
