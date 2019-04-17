@@ -3,15 +3,13 @@ import { graphql } from 'gatsby'
 import Img from 'gatsby-image'
 import { css } from '@emotion/core'
 import Container from 'components/Container'
-import SEO from '../components/SEO'
-import Layout from '../components/Layout'
-import Link from '../components/Link'
+import SEO from 'components/SEO'
+import Layout from 'components/Layout'
+import Link from 'components/Link'
 import { bpMaxSM, bpMinMD } from '../lib/breakpoints'
+import { useTheme } from 'components/Theming'
 
-const Blog = ({
-  data: { site, allMdx },
-  pageContext: { pagination, categories },
-}) => {
+const Blog = ({ data: { site, allMdx }, pageContext: { pagination } }) => {
   const { page, nextPagePath, previousPagePath } = pagination
 
   const posts = page
@@ -48,7 +46,6 @@ const Blog = ({
             key={post.id}
             css={css`
               :not(:first-of-type) {
-                margin-top: 20px;
                 ${bpMaxSM} {
                   margin-top: 20px;
                 }
@@ -59,8 +56,7 @@ const Blog = ({
                   margin-top: 20px;
                 }
               }
-              background: white;
-              padding: 40px;
+              margin-top: 40px;
               ${bpMaxSM} {
                 padding: ${post.frontmatter.banner
                   ? '0 20px 20px 20px'
@@ -71,14 +67,7 @@ const Blog = ({
             `}
           >
             {post.frontmatter.banner && (
-              <div
-                css={css({
-                  margin: '0 -20px 30px -20px',
-                  [bpMinMD]: {
-                    margin: '0 0 40px 0',
-                  },
-                })}
-              >
+              <div>
                 <Link
                   aria-label={`View ${post.frontmatter.title} article`}
                   to={`/${post.fields.slug}`}
@@ -87,11 +76,7 @@ const Blog = ({
                 </Link>
               </div>
             )}
-            <h2
-              css={css`
-                margin: 0 0 20px 0;
-              `}
-            >
+            <h2>
               <Link
                 aria-label={`View ${post.frontmatter.title} article`}
                 to={`/${post.fields.slug}`}
@@ -100,18 +85,12 @@ const Blog = ({
               </Link>
             </h2>
             {/* <small>{post.frontmatter.date}</small> */}
-            <p
-              css={css`
-                margin-top: 10px;
-              `}
-            >
-              {post.excerpt}
-            </p>{' '}
+            <p>{post.excerpt}</p>
             <Link
               to={`/${post.fields.slug}`}
-              aria-label={`view "${post.frontmatter.title}" article`}
+              aria-label={`Read ${post.frontmatter.title}`}
             >
-              Read Article →
+              Read Article
             </Link>
           </div>
         ))}
