@@ -2,50 +2,12 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
-import Layout from '../components/Layout'
-import Link from '../components/Link'
+import Layout from 'components/Layout'
+import Link from 'components/Link'
+import Button from 'components/Button'
 import Container from 'components/Container'
 import { rhythm } from '../lib/typography'
 import theme from '../../config/theme'
-
-const Hero = ({ description }) => (
-  <section
-    css={css`
-      * {
-        color: ${theme.colors.white};
-      }
-      width: 100%;
-      background: ${theme.brand.primary};
-      padding: 20px 0 30px 0;
-      display: flex;
-    `}
-  >
-    <Container
-      css={css`
-        display: flex;
-        flex-direction: column;
-      `}
-    >
-      <h1
-        css={css`
-          position: relative;
-          z-index: 5;
-          line-height: 1.5;
-          margin: 0;
-          max-width: ${rhythm(15)};
-        `}
-      >
-        {description}
-      </h1>
-    </Container>
-    <div
-      css={css`
-        height: 150px;
-        overflow: hidden;
-      `}
-    />
-  </section>
-)
 
 const Description = styled.p`
   margin-bottom: 10px;
@@ -54,12 +16,7 @@ const Description = styled.p`
 
 export default function Index({ data: { site, allMdx } }) {
   return (
-    <Layout
-      site={site}
-      headerColor={theme.colors.black}
-      headerBg={theme.colors.white}
-    >
-      {/* <Hero /> */}
+    <Layout site={site}>
       <Container
         css={css`
           padding-bottom: 0;
@@ -90,23 +47,19 @@ export default function Index({ data: { site, allMdx } }) {
             </h2>
             <Description>
               {post.excerpt}{' '}
-              <Link
+              {/* <Link
                 to={post.frontmatter.slug}
                 aria-label={`View ${post.frontmatter.title}`}
               >
                 Read Article →
-              </Link>
+              </Link> */}
             </Description>
             <span />
           </div>
         ))}
-        <Link
-          to="/articles"
-          aria-label="Visit blog page"
-          className="button-secondary"
-        >
-          View all articles
-        </Link>
+        <Button secondary to="/articles" aria-label="Visit blog page">
+          Browse all articles
+        </Button>
         <hr />
       </Container>
     </Layout>
@@ -123,7 +76,7 @@ export const pageQuery = graphql`
       }
     }
     allMdx(
-      limit: 5
+      limit: 8
       sort: { fields: [frontmatter___date], order: DESC }
       filter: { frontmatter: { published: { ne: false } } }
     ) {

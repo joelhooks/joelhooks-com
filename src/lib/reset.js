@@ -1,5 +1,4 @@
 import { css } from '@emotion/core'
-import theme from '../../config/theme'
 import typography, { fonts } from '../lib/typography'
 
 const reset = css`
@@ -32,25 +31,9 @@ ul, ol {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  body {
-    color: ${theme.colors.body_color};
-    background-color: ${theme.colors.bg_color};
-  }
-  ::selection {
-    color: ${theme.colors.white};
-    background-color: ${theme.colors.link_color};
-  }
-  
+  }  
   a {
-    color: ${theme.colors.link_color};
-    transition: all 0.3s ease-in-out;
     text-decoration: none;
-    &:hover,
-    &:focus {
-      color: ${theme.colors.link_color_hover};
-    }
-  
   }
   
   a:not([href]):not([tabindex]) {
@@ -67,7 +50,6 @@ ul, ol {
   }
 
   blockquote {
-    border-left: 5px solid ${theme.colors.link_color};
     padding-left: 1rem !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -105,12 +87,11 @@ ul, ol {
   }
   table {
     border-collapse: collapse;
-    background-color: ${theme.colors.bg_color};
+    background-color: transparent;
   }
   caption {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
-    color: ${theme.colors.body_color};
     text-align: center;
     caption-side: bottom;
   }
@@ -167,7 +148,29 @@ ul, ol {
   [hidden] {
     display: none !important;
   }
-
+  pre {
+    background-color: #061526 !important;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 10px;
+    overflow-x: auto;
+    /* Track */
+    ::-webkit-scrollbar {
+      width: 100%;
+      height: 5px;
+      border-radius: 0 0 5px 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #061526;
+      border-radius: 0 0 4px 4px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 5px;
+    }
+  }
 `
 
 export default reset

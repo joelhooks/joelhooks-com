@@ -8,9 +8,10 @@ import {
   InstantSearch,
   Highlight,
 } from 'react-instantsearch-dom'
-import theme from '../../config/theme'
-import { FaSearch } from 'react-icons/fa'
+import { MdSearch } from 'react-icons/md'
 import Overlay from './Overlay'
+import { useTheme } from './Theming'
+import { rgba } from 'polished'
 
 const client = algoliasearch('DSQGVIFOX3', '29ed94b0481df0099a928e5d4229b5e9')
 
@@ -27,24 +28,24 @@ const List = styled('ul')`
   margin: 0 auto;
   max-width: 650px;
   padding: 0;
-  color: ${theme.colors.black};
+  color: black;
 `
 
 const Result = styled('li')`
   margin-top: 2rem;
-  color: ${theme.colors.black};
+  color: black;
 `
 
 const Heading = styled('h2')`
   font-size: 1.25rem;
   font-weight: 600;
   a {
-    color: ${theme.colors.link_color};
+    color: DEEPPINK;
     text-decoration: none;
     :active,
     :focus,
     :hover {
-      color: ${theme.colors.link_color_hover};
+      color: MEDIUMVIOLETRED;
     }
   }
 `
@@ -56,7 +57,7 @@ const Link = styled('a')`
   margin-top: 0.5rem;
   text-decoration: none;
   text-transform: uppercase;
-  color: ${theme.colors.black} !important;
+  color: black !important;
 `
 
 const Hits = connectHits(({ hits }) => (
@@ -77,37 +78,31 @@ const Hits = connectHits(({ hits }) => (
   </List>
 ))
 
-const OpenSearch = styled('a')`
-  align-self: center;
-  border: 2px solid transparent;
-  color: ${theme.colors.black};
-  height: 100%;
-  margin: 0;
-  padding: 0 0.625rem;
-  width: 2.375rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  :active,
-  :focus,
-  :hover {
-    background-color: transparent;
-    color: ${theme.colors.primaryDark};
-  }
-  :focus {
-    border: 2px solid ${theme.colors.darkest};
-    border-radius: 0;
-  }
-  @media (max-width: ${theme.breakpoints.s}) {
-    width: 2.5rem;
-  }
-`
+const OpenSearch = styled('a')({
+  borderRadius: '50%',
+  alignSelf: 'center',
+  border: '2px solid transparent',
+  color: 'black',
+  margin: '0',
+  marginRight: '10px',
+  padding: '0 0.525rem',
+  width: '2.375rem',
+  height: '2.375rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+})
 
-const Icon = styled(FaSearch)`
+const Icon = styled(MdSearch)`
   height: 100%;
   margin: 0;
   position: relative;
-  top: -0.125em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 `
 
 const Label = styled('label')`
@@ -117,7 +112,7 @@ const Label = styled('label')`
 `
 
 const Input = styled('input')`
-  border: 2px solid ${theme.colors.textLight};
+  border: 2px solid gray;
   border-radius: 4px;
   display: block;
   font-size: 1.25rem;
@@ -153,12 +148,13 @@ const SearchContainer = styled('div')`
   align-items: flex-start;
   /* margin-left: auto;
   margin-top: 0; */
-  color: ${theme.colors.black};
+  color: black;
 `
 
+// eslint-disable-next-line react/display-name
 export default () => {
   const [active, setActive] = useState(false)
-
+  const theme = useTheme()
   return (
     <InstantSearch
       searchClient={client}
@@ -167,6 +163,14 @@ export default () => {
     >
       <Configure distinct={1} />
       <OpenSearch
+        css={{
+          background: rgba(theme.colors.text, 0.05),
+          ':hover': {
+            background: theme.colors.primary,
+            color: theme.colors.white,
+          },
+          color: theme.colors.text,
+        }}
         href="/search"
         onClick={event => {
           event.preventDefault()
