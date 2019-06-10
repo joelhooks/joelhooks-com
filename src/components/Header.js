@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
 import { useTheme } from './Theming'
 import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
@@ -33,6 +34,7 @@ const Header = ({ siteTitle }) => {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            ${tw`py-8`};
           `}
         >
           <Link

@@ -94,4 +94,7 @@ module.exports = {
     ],
     'jsx-a11y/href-no-hash': 'off',
   },
+  globals: {
+    tw: true,
+  },
 }
