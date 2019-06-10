@@ -65,7 +65,6 @@ module.exports = {
     },
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
-    'gatsby-plugin-tailwindcss',
     'gatsby-plugin-emotion',
     'gatsby-plugin-catch-links',
     'gatsby-plugin-react-helmet',
@@ -110,14 +109,15 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allMdx } }) => allMdx.edges.map(edge => {
-                return Object.assign({}, edge.node.frontmatter, {
+            serialize: ({ query: { site, allMdx } }) =>
+              allMdx.edges.map(edge =>
+                Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   date: edge.node.fields.date,
                   url: `${site.siteMetadata.siteUrl}/${edge.node.fields.slug}`,
                   guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.slug}`,
-                })
-              }),
+                }),
+              ),
             query: `
               {
                 allMdx(
