@@ -4,11 +4,9 @@ import { darken, lighten, rgba } from 'polished'
 const colors = {
   black: '#131415',
   white: '#fff',
-  pink: 'DEEPPINK',
+  pink: '#ff1493',
   gray: '#dedede',
 }
-
-const colorConsts = {}
 
 const themes = {
   default: {
