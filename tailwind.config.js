@@ -1,4 +1,4 @@
-module.exports = {
+const tailwindConfig = {
   theme: {
     screens: {
       sm: '545px',
@@ -12,11 +12,11 @@ module.exports = {
       white: '#fff',
       pink: '#ff1493',
       gray: '#dedede',
-      cyan: '#9cdbff',
-      red: '#ff0000',
     },
     extend: {},
   },
   variants: {},
   plugins: [],
 }
+
+export default tailwindConfig

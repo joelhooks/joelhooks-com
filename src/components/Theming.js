@@ -1,5 +1,4 @@
 import { createTheming } from '@callstack/react-theme-provider'
-import { darken, lighten, rgba } from 'polished'
 
 const colors = {
   black: '#131415',
@@ -14,7 +13,7 @@ const themes = {
     colors: {
       primary: colors.pink,
       text: colors.black,
-      bg: colors.white,
+      bodyBg: colors.white,
       ...colors,
     },
   },
@@ -23,7 +22,7 @@ const themes = {
     colors: {
       primary: colors.pink,
       text: colors.white,
-      bg: colors.black,
+      bodyBg: colors.black,
       ...colors,
     },
   },

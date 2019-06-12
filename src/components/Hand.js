@@ -37,7 +37,7 @@ const Hand = ({}) => {
         <ellipse
           cx="49.059"
           cy="168.748"
-          fill={theme.colors.bg}
+          fill={theme.colors.bodyBg}
           stroke={theme.colors.text}
           strokeWidth="1.765"
           rx="48.176"
@@ -53,7 +53,7 @@ const Hand = ({}) => {
           ry="4.413"
         />
         <path
-          fill={theme.colors.bg}
+          fill={theme.colors.bodyBg}
           stroke={theme.colors.text}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -68,7 +68,7 @@ const Hand = ({}) => {
           ry="1"
         />
         <path
-          fill={theme.colors.bg}
+          fill={theme.colors.bodyBg}
           stroke={theme.colors.text}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -241,7 +241,7 @@ const Hand = ({}) => {
             transform="rotate(-8 37.589 148.2)"
           />
           <path
-            stroke={theme.colors.bg}
+            stroke={theme.colors.bodyBg}
             strokeWidth=".588"
             mask="url(#joels-hand-rotated-b)"
           />
@@ -262,8 +262,8 @@ const Hand = ({}) => {
           <g transform="rotate(-38 169.513 12.182)">
             <g strokeLinejoin="round">
               <use
-                fill={theme.colors.bg}
-                stroke={theme.colors.bg}
+                fill={theme.colors.bodyBg}
+                stroke={theme.colors.bodyBg}
                 strokeWidth="2.118"
                 xlinkHref="#joels-hand-rotated-c"
               />
@@ -349,7 +349,7 @@ const Hand = ({}) => {
             <ellipse
               cx="10.588"
               cy="5.322"
-              fill={theme.colors.bg}
+              fill={theme.colors.bodyBg}
               rx="4.412"
               ry="4.413"
             />
@@ -367,7 +367,7 @@ const Hand = ({}) => {
           </g>
           <g strokeLinecap="round" transform="rotate(-16 511.603 -136.898)">
             <g
-              stroke={theme.colors.bg}
+              stroke={theme.colors.bodyBg}
               strokeWidth="1.059"
               transform="rotate(30 5.795 22.948)"
             >
@@ -382,7 +382,7 @@ const Hand = ({}) => {
             </g>
             <g strokeLinejoin="round">
               <use
-                stroke={theme.colors.bg}
+                stroke={theme.colors.bodyBg}
                 strokeWidth="2.118"
                 xlinkHref="#joels-hand-rotated-d"
               />
@@ -458,8 +458,8 @@ const Hand = ({}) => {
             transform="rotate(-101 85.99 22.853)"
           >
             <use
-              fill={theme.colors.bg}
-              stroke={theme.colors.bg}
+              fill={theme.colors.bodyBg}
+              stroke={theme.colors.bodyBg}
               strokeWidth="2.118"
               xlinkHref="#joels-hand-rotated-g"
             />
@@ -471,7 +471,7 @@ const Hand = ({}) => {
             <ellipse
               cx="12.353"
               cy="6.209"
-              fill={theme.colors.bg}
+              fill={theme.colors.bodyBg}
               stroke={theme.colors.text}
               strokeWidth="1.059"
               rx="6.176"

@@ -13,28 +13,15 @@ const Header = ({ siteTitle }) => {
   const theme = useTheme()
   return (
     <header
-      css={css({
-        width: '100%',
-        flexShrink: 0,
-        background: 'none',
-        padding: '20px 0',
-        background: theme.colors.bg,
-        [bpMinMD]: {
-          padding: '30px 0',
-        },
-        [bpMinLG]: {
-          padding: '50px 0',
-        },
-      })}
+      css={css`
+        ${tw`w-full flex-shrink-0 py-5 md:py-8 lg:py-12`}
+        background: ${theme.colors.bodyBg};
+      `}
     >
       <Container noVerticalPadding>
         <nav
           css={css`
-            width: '100%';
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            ${tw`py-8 bg-cyan`};
+            ${tw`w-full flex justify-between items-center`}
           `}
         >
           <Link
