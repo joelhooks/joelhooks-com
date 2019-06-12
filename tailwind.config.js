@@ -1,4 +1,4 @@
-const tailwindConfig = {
+module.exports = {
   theme: {
     screens: {
       sm: '545px',
@@ -18,5 +18,3 @@ const tailwindConfig = {
   variants: {},
   plugins: [],
 }
-
-export default tailwindConfig
