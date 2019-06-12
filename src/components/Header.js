@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
 import { useTheme } from './Theming'
-import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
+import { bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
 import Logo from './Logo'
@@ -12,29 +13,15 @@ const Header = ({ siteTitle }) => {
   const theme = useTheme()
   return (
     <header
-      css={css({
-        width: '100%',
-        flexShrink: 0,
-        background: 'none',
-        padding: '20px 0',
-        background: theme.colors.bg,
-        [bpMinMD]: {
-          padding: '30px 0',
+      css={css(
+        {
+          background: theme.colors.bodyBg,
         },
-        [bpMinLG]: {
-          padding: '50px 0',
-        },
-      })}
+        tw`w-full flex-shrink-0 py-5 md:py-8 lg:py-12`,
+      )}
     >
       <Container noVerticalPadding>
-        <nav
-          css={css`
-            width: '100%';
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          `}
-        >
+        <nav css={css(tw`w-full flex justify-between items-center`)}>
           <Link
             to="/"
             aria-label="go to homepage"
@@ -67,23 +54,19 @@ const Header = ({ siteTitle }) => {
               })}
             />
             <span
-              css={css({
-                display: 'none',
-                margin: '65px 0 0 15px',
-                fontSize: '14px',
-                color: theme.colors.text,
-                [bpMinSM]: {
-                  display: 'block',
+              css={css(
+                {
+                  margin: '65px 0 0 15px',
+                  color: theme.colors.text,
+                  [bpMinMD]: {
+                    margin: '60px 0 0 20px',
+                  },
+                  [bpMinLG]: {
+                    margin: '60px 0 0 20px',
+                  },
                 },
-                [bpMinMD]: {
-                  margin: '60px 0 0 20px',
-                  fontSize: '16px',
-                },
-                [bpMinLG]: {
-                  margin: '60px 0 0 20px',
-                  fontSize: '18px',
-                },
-              })}
+                tw`hidden sm:block text-sm md:text-base lg:text-lg`,
+              )}
             >
               {siteTitle}
             </span>

@@ -54,7 +54,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
           styles={css`
             body {
               color: ${theme.colors.text};
-              background-color: ${theme.colors.bg};
+              background-color: ${theme.colors.bodyBg};
             }
             ::selection {
               color: ${theme.colors.white};
@@ -73,7 +73,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               border-left: 5px solid ${theme.colors.primary};
             }
             caption {
-              color: ${theme.colors.bg};
+              color: ${theme.colors.bodyBg};
             }
 
             ${bpMaxSM} {
