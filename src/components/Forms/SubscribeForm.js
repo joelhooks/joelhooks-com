@@ -230,7 +230,7 @@ const inputFieldStyles = css({
   fontSize: '16px',
   height: '50px',
   borderRadius: '3px',
-  borderColor: theme.colors.text,
+  borderColor: theme.colors.bodyColor,
   boxShadow: 'none',
   fontWeight: 400,
   '::placeholder': {

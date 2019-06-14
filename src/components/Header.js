@@ -12,32 +12,26 @@ import ThemeToggler from './ThemeToggler'
 const Header = ({ siteTitle }) => {
   const theme = useTheme()
   return (
-    <header
-      css={css(
-        {
-          background: theme.colors.bodyBg,
-        },
-        tw`w-full flex-shrink-0 py-5 md:py-8 lg:py-12`,
-      )}
-    >
+    <header css={css(tw`w-full flex-shrink-0 py-5 md:py-8 lg:py-12 bg-body`)}>
       <Container noVerticalPadding>
         <nav css={css(tw`w-full flex justify-between items-center`)}>
           <Link
             to="/"
             aria-label="go to homepage"
             activeClassName="active"
-            css={css({
-              display: 'flex',
-              color: theme.colors.text,
-              '@media (hover: hover)': {
-                ':hover': {
-                  color: theme.colors.primary,
+            css={css(
+              {
+                '@media (hover: hover)': {
+                  ':hover': {
+                    color: theme.colors.primary,
+                  },
+                },
+                [bpMinXL]: {
+                  transform: 'translate(-70px, 0)',
                 },
               },
-              [bpMinXL]: {
-                transform: 'translate(-70px, 0)',
-              },
-            })}
+              tw`flex text-body-color`,
+            )}
           >
             <Logo
               css={css({
@@ -57,7 +51,6 @@ const Header = ({ siteTitle }) => {
               css={css(
                 {
                   margin: '65px 0 0 15px',
-                  color: theme.colors.text,
                   [bpMinMD]: {
                     margin: '60px 0 0 20px',
                   },
@@ -65,7 +58,7 @@ const Header = ({ siteTitle }) => {
                     margin: '60px 0 0 20px',
                   },
                 },
-                tw`hidden sm:block text-sm md:text-base lg:text-lg`,
+                tw`hidden sm:block text-sm md:text-base lg:text-lg text`,
               )}
             >
               {siteTitle}

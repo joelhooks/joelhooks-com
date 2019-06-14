@@ -8,10 +8,17 @@ module.exports = {
       xxl: '1920px',
     },
     colors: {
-      black: '#131415',
-      white: '#fff',
-      pink: '#ff1493',
-      gray: '#dedede',
+      black: 'var(--color-black)',
+      white: 'var(--color-white)',
+      pink: 'var(--color-pink)',
+      gray: 'var(--color-gray)',
+      primary: 'var(--color-primary)',
+    },
+    textColor: {
+      'body-color': 'var(--color-body-color)',
+    },
+    backgroundColor: {
+      'body-bg': 'var(--color-body-bg)',
     },
     extend: {},
   },

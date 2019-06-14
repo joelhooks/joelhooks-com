@@ -27,11 +27,11 @@ const Logo = ({ props }) => {
           <rect
             width="53.797"
             height="39.087"
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeWidth="1.266"
             rx="1.266"
           />
-          <g fill={theme.colors.text} transform="translate(3.797 22.696)">
+          <g fill={theme.colors.bodyColor} transform="translate(3.797 22.696)">
             <rect width="6.329" height="1.261" y="11.348" rx=".63" />
             <rect width="6.329" height="1.261" x="9.494" y="11.348" rx=".63" />
             <rect width="6.962" height="1.261" x="20.253" y="11.348" rx=".63" />
@@ -44,21 +44,21 @@ const Logo = ({ props }) => {
           <ellipse
             cx="3.797"
             cy="3.783"
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             rx="1.266"
             ry="1.261"
           />
           <ellipse
             cx="7.595"
             cy="3.783"
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             rx="1.266"
             ry="1.261"
           />
           <ellipse
             cx="11.392"
             cy="3.783"
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             rx="1.266"
             ry="1.261"
           />
@@ -68,12 +68,12 @@ const Logo = ({ props }) => {
           height="32.152"
           x="53.797"
           y="69.978"
-          stroke={theme.colors.text}
+          stroke={theme.colors.bodyColor}
           strokeWidth="1.266"
           rx="1.266"
         />
         <path
-          fill={theme.colors.text}
+          fill={theme.colors.bodyColor}
           d="M90.225348,92.5025921 L92.5613317,92.110912 C92.9060667,92.0531094 93.2323878,92.2857141 93.2901903,92.630449 C93.3018084,92.6997392 93.3018084,92.7704804 93.2901903,92.8397706 L92.8985102,95.1757543 C92.8407077,95.5204893 92.5143865,95.7530939 92.1696516,95.6952914 C92.039763,95.6735126 91.9199037,95.6117567 91.8267764,95.5186295 L89.8824728,93.5743259 C89.6353056,93.3271586 89.6353056,92.9264213 89.8824728,92.679254 C89.9756001,92.5861268 90.0954594,92.5243708 90.225348,92.5025921 Z"
           transform="rotate(45 91.498 93.903)"
         />
@@ -84,14 +84,14 @@ const Logo = ({ props }) => {
                 cx="24.051"
                 cy="80.696"
                 fill={theme.colors.bodyBg}
-                stroke={theme.colors.text}
+                stroke={theme.colors.bodyColor}
                 strokeWidth="1.266"
                 rx="15.19"
                 ry="1.891"
               />
               <g strokeLinecap="square">
                 <use
-                  stroke={theme.colors.text}
+                  stroke={theme.colors.bodyColor}
                   strokeWidth="4.43"
                   xlinkHref="#joelhooks-com-a"
                 />
@@ -103,7 +103,7 @@ const Logo = ({ props }) => {
               </g>
               <g strokeLinecap="square">
                 <use
-                  stroke={theme.colors.text}
+                  stroke={theme.colors.bodyColor}
                   strokeWidth="4.43"
                   xlinkHref="#joelhooks-com-b"
                 />
@@ -114,27 +114,27 @@ const Logo = ({ props }) => {
                 />
               </g>
               <path
-                fill={theme.colors.text}
+                fill={theme.colors.bodyColor}
                 d="M25.5936392,20.0034333 L30.2070893,28.3852947 L30.2215314,39.0896256 C30.222003,39.4391725 30.5057492,39.7221541 30.8552962,39.7216825 C30.9952189,39.7214937 31.1311348,39.6749427 31.2417925,39.589308 L50.9970961,24.3012666 C51.2735347,24.087339 51.3242099,23.6898187 51.1102823,23.4133801 C51.0128249,23.2874451 50.8714773,23.2028749 50.71443,23.1765363 L26.2527946,19.0740535 C25.9080618,19.016238 25.581732,19.2488305 25.5239165,19.5935633 C25.5003403,19.7341399 25.5249073,19.8785591 25.5936392,20.0034333 Z"
                 transform="rotate(-13 38.379 29.393)"
               />
               <path
-                fill={theme.colors.text}
+                fill={theme.colors.bodyColor}
                 d="M0.453590444,3.87804538 L3.51225721,9.78986617 L3.49704502,17.33182 C3.49633998,17.6813666 3.77913194,17.9653017 4.12867854,17.9660067 C4.27556092,17.966303 4.41797332,17.9155027 4.53150792,17.8223125 L17.8006592,6.93087395 C18.0708457,6.70910247 18.1100938,6.31029175 17.8883223,6.04010527 C17.7921394,5.92292466 17.6570907,5.84416048 17.507741,5.81813953 L1.12435592,2.9636907 C0.77999614,2.90369349 0.452200035,3.1342149 0.392202827,3.47857468 C0.368457708,3.61486208 0.390020075,3.75517595 0.453590444,3.87804538 Z"
                 transform="rotate(-96 9.207 10.46)"
               />
               <path
-                fill={theme.colors.text}
+                fill={theme.colors.bodyColor}
                 d="M26.1260891,37.1822387 L22.9368733,34.8080481 C26.3918571,30.5872649 29.7139569,28.4768733 32.9031728,28.4768733 C36.0923886,28.4768733 35.9595046,29.5980188 32.5045208,31.8403099 L29.3153049,33.5545266 L26.1260891,37.1822387 Z"
               />
               <polygon
-                fill={theme.colors.text}
+                fill={theme.colors.bodyColor}
                 points="13.005 22.805 9.816 23.6 7.033 17.634 9.285 16.476"
                 transform="rotate(17 10.02 20.038)"
               />
             </g>
             <g
-              stroke={theme.colors.text}
+              stroke={theme.colors.bodyColor}
               strokeWidth="1.266"
               transform="translate(32.55 54.593)"
             >
@@ -147,7 +147,7 @@ const Logo = ({ props }) => {
               <polyline points="9.966 1.187 8.77 8.696 14.351 12.662" />
             </g>
             <g
-              stroke={theme.colors.text}
+              stroke={theme.colors.bodyColor}
               strokeWidth="1.266"
               transform="scale(-1 1) rotate(-5 505.06 296.862)"
             >
@@ -162,7 +162,7 @@ const Logo = ({ props }) => {
           </g>
           <g
             fill={theme.colors.bodyBg}
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             transform="translate(4.43 80.696)"
           >
             <path

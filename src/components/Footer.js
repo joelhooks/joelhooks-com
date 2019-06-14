@@ -1,6 +1,6 @@
 import React from 'react'
+import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
-import { bpMinSM } from '../lib/breakpoints'
 import SubscribeForm from './Forms/SubscribeForm'
 import { Twitter, GitHub } from './Social'
 import Container from './Container'
@@ -11,24 +11,11 @@ const Footer = ({ author }) => {
   return (
     <footer>
       <Container noVerticalPadding>
-        <SubscribeForm
-          css={css({
-            paddingTop: '40px',
-            [bpMinSM]: {
-              paddingTop: '60px',
-            },
-          })}
-        />
+        <SubscribeForm css={css(tw`mt-10 sm:mt-12`)} />
         <div
-          css={css({
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '50px 0 30px 0',
-            [bpMinSM]: {
-              padding: '60px 0 40px 0',
-            },
-          })}
+          css={css(
+            tw`flex justify-between items-center pt-12 pb-8 sm:pt-16 sm:pb-10`,
+          )}
         >
           <div
             css={css({
@@ -39,8 +26,14 @@ const Footer = ({ author }) => {
             {author && `${author} \u00A9 ${new Date().getFullYear()}`}
           </div>
           <div>
-            <Twitter color={theme.colors.text} hover={theme.colors.primary} />
-            <GitHub color={theme.colors.text} hover={theme.colors.primary} />
+            <Twitter
+              color={theme.colors.bodyColor}
+              hover={theme.colors.primary}
+            />
+            <GitHub
+              color={theme.colors.bodyColor}
+              hover={theme.colors.primary}
+            />
           </div>
         </div>
       </Container>
