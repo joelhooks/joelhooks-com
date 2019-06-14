@@ -19,18 +19,19 @@ const Header = ({ siteTitle }) => {
             to="/"
             aria-label="go to homepage"
             activeClassName="active"
-            css={css({
-              display: 'flex',
-              color: theme.colors.text,
-              '@media (hover: hover)': {
-                ':hover': {
-                  color: theme.colors.primary,
+            css={css(
+              {
+                '@media (hover: hover)': {
+                  ':hover': {
+                    color: theme.colors.primary,
+                  },
+                },
+                [bpMinXL]: {
+                  transform: 'translate(-70px, 0)',
                 },
               },
-              [bpMinXL]: {
-                transform: 'translate(-70px, 0)',
-              },
-            })}
+              tw`flex text-body-color`,
+            )}
           >
             <Logo
               css={css({

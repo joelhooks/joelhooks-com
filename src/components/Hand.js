@@ -37,8 +37,8 @@ const Hand = ({}) => {
         <ellipse
           cx="49.059"
           cy="168.748"
-          fill={theme.colors.body}
-          stroke={theme.colors.text}
+          fill={theme.colors.bodyBg}
+          stroke={theme.colors.bodyColor}
           strokeWidth="1.765"
           rx="48.176"
           ry="11.297"
@@ -46,15 +46,15 @@ const Hand = ({}) => {
         <ellipse
           cx="49.059"
           cy="169.631"
-          fill={theme.colors.text}
-          stroke={theme.colors.text}
+          fill={theme.colors.bodyColor}
+          stroke={theme.colors.bodyColor}
           strokeWidth="1.765"
           rx="24"
           ry="4.413"
         />
         <path
-          fill={theme.colors.body}
-          stroke={theme.colors.text}
+          fill={theme.colors.bodyBg}
+          stroke={theme.colors.bodyColor}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.765"
@@ -63,13 +63,13 @@ const Hand = ({}) => {
         <ellipse
           cx="49.059"
           cy="204.404"
-          fill={theme.colors.text}
+          fill={theme.colors.bodyColor}
           rx="1"
           ry="1"
         />
         <path
-          fill={theme.colors.body}
-          stroke={theme.colors.text}
+          fill={theme.colors.bodyBg}
+          stroke={theme.colors.bodyColor}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.765"
@@ -78,39 +78,39 @@ const Hand = ({}) => {
         <ellipse
           cx="35.647"
           cy="230.528"
-          fill={theme.colors.text}
+          fill={theme.colors.bodyColor}
           rx="1"
           ry="1"
         />
         <path
-          stroke={theme.colors.text}
+          stroke={theme.colors.bodyColor}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.765"
           d="M50.4705882,167.159312 L49.0588235,201.579656"
         />
         <path
-          stroke={theme.colors.text}
+          stroke={theme.colors.bodyColor}
           strokeLinecap="round"
           strokeWidth="1.765"
           d="M0.705882353,168.747943 C20.5502485,120.813818 41.2825878,78.9100471 62.9029004,43.0366303 L63.9311731,41.1096771 C70.7946249,19.5870452 76.0067554,8.82572924 79.5675645,8.82572924 C83.1283737,8.82572924 83.4032659,14.5088437 80.3922413,25.8750726 C87.2129933,29.3364371 90.4020977,34.7949089 89.9595546,42.2504881"
         />
         <path
-          stroke={theme.colors.text}
+          stroke={theme.colors.bodyColor}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.765"
           d="M85.0588235,15.9601603 C97.8553062,4.48556306 106.524149,-0.801766347 111.065352,0.0981720649 L111.738744,0.601601338 C112.438445,1.50678206 112.213981,2.46037133 111.065352,3.46236914 C109.342408,4.96536586 99.7143649,12.8311926 99.7143649,14.8974433 L99.7143649,15.1610718 C100.20658,15.4058477 100.978377,15.3179715 102.029757,14.8974433 C103.606826,14.266651 105.399728,13.7591481 107.094109,14.1511602 C108.223697,14.4125016 108.834324,15.5148432 108.925991,17.4581849 C108.853235,18.437521 109.566355,18.8254289 111.065352,18.6219085 C113.313846,18.316628 114.628518,18.6954221 115.464206,20.5276485 C116.02133,21.7491328 116.02133,22.8229863 115.464206,23.7492091 C114.693885,25.0404945 114.873216,25.5680205 116.0022,25.3317872 C117.695676,24.9774373 119.002604,24.7193711 119.855647,26.8385508 C120.424343,28.2513373 119.312703,30.0393739 116.520726,32.2026607 C115.816379,32.577371 115.241055,33.4624618 114.794753,34.8579329 C114.125301,36.9511396 114.898203,43.9288676 106.526487,50.7441612 L97.3145735,168.747943"
         />
         <path
-          stroke={theme.colors.text}
+          stroke={theme.colors.bodyColor}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.765"
           d="M108.877129,17.2984293 C108.960388,18.7102787 108.048348,21.2301318 106.141008,24.8579887 C106.141008,24.8579887 106.141008,24.8579887 106.141008,24.8579887 L106.141008,24.8579887 C105.557654,25.9675584 104.185267,26.3941402 103.075698,25.8107858 C102.050619,25.2718522 101.595666,24.0476064 102.020022,22.9700359 C103.013166,20.448232 103.509722,18.8900764 103.509722,18.2955818"
         />
         <path
-          stroke={theme.colors.text}
+          stroke={theme.colors.bodyColor}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.765"
@@ -118,7 +118,7 @@ const Hand = ({}) => {
           transform="rotate(13 111.284 26.3)"
         />
         <path
-          stroke={theme.colors.text}
+          stroke={theme.colors.bodyColor}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.765"
@@ -142,7 +142,7 @@ const Hand = ({}) => {
           <ellipse
             cx="97.259"
             cy="122.148"
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             mask="url(#joels-hand-rotated-b)"
             rx="1.059"
             ry="1.059"
@@ -150,7 +150,7 @@ const Hand = ({}) => {
           <ellipse
             cx="97.259"
             cy="128.503"
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             mask="url(#joels-hand-rotated-b)"
             rx="1.059"
             ry="1.059"
@@ -164,8 +164,8 @@ const Hand = ({}) => {
             ry="1.059"
           />
           <path
-            fill={theme.colors.text}
-            stroke={theme.colors.text}
+            fill={theme.colors.bodyColor}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -174,8 +174,8 @@ const Hand = ({}) => {
             transform="rotate(3 96.91 72.506)"
           />
           <path
-            fill={theme.colors.text}
-            stroke={theme.colors.text}
+            fill={theme.colors.bodyColor}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -184,12 +184,12 @@ const Hand = ({}) => {
             transform="rotate(3 93.02 157.762)"
           />
           <path
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             d="M56.3400175,150.965513 L54.1392453,150.563518 C53.9462111,150.528258 53.8183026,150.343151 53.8535536,150.150068 C53.8801019,150.004654 53.9938672,149.89086 54.1392453,149.864305 L56.3400175,149.46231 C56.4853956,149.435755 56.5991609,149.321962 56.6257092,149.176547 L57.027604,146.975227 C57.062855,146.782144 57.2479167,146.654204 57.4409509,146.689464 C57.5863291,146.716018 57.7000943,146.829812 57.7266426,146.975227 L58.1285375,149.176547 C58.1550858,149.321962 58.268851,149.435755 58.4142292,149.46231 L60.6150013,149.864305 C60.8080355,149.899565 60.935944,150.084673 60.900693,150.277755 C60.8741447,150.42317 60.7603795,150.536963 60.6150013,150.563518 L58.4142292,150.965513 C58.268851,150.992068 58.1550858,151.105862 58.1285375,151.251276 L57.7266426,153.452597 C57.6913916,153.645679 57.5063299,153.77362 57.3132957,153.73836 C57.1679175,153.711805 57.0541523,153.598011 57.027604,153.452597 L56.6257092,151.251276 C56.5991609,151.105862 56.4853956,150.992068 56.3400175,150.965513 Z"
             mask="url(#joels-hand-rotated-b)"
           />
           <path
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -197,7 +197,7 @@ const Hand = ({}) => {
             mask="url(#joels-hand-rotated-b)"
           />
           <path
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -205,7 +205,7 @@ const Hand = ({}) => {
             mask="url(#joels-hand-rotated-b)"
           />
           <polyline
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -214,7 +214,7 @@ const Hand = ({}) => {
             transform="rotate(-8 23.838 136.04)"
           />
           <polygon
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -223,7 +223,7 @@ const Hand = ({}) => {
             transform="rotate(-8 6.056 149.722)"
           />
           <polygon
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -232,7 +232,7 @@ const Hand = ({}) => {
             transform="rotate(-8 22.573 148.751)"
           />
           <path
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -241,7 +241,7 @@ const Hand = ({}) => {
             transform="rotate(-8 37.589 148.2)"
           />
           <path
-            stroke={theme.colors.body}
+            stroke={theme.colors.bodyBg}
             strokeWidth=".588"
             mask="url(#joels-hand-rotated-b)"
           />
@@ -251,7 +251,7 @@ const Hand = ({}) => {
             mask="url(#joels-hand-rotated-b)"
           />
           <path
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeDasharray="3.529 3.529"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -262,54 +262,54 @@ const Hand = ({}) => {
           <g transform="rotate(-38 169.513 12.182)">
             <g strokeLinejoin="round">
               <use
-                fill={theme.colors.body}
-                stroke={theme.colors.body}
+                fill={theme.colors.bodyBg}
+                stroke={theme.colors.bodyBg}
                 strokeWidth="2.118"
                 xlinkHref="#joels-hand-rotated-c"
               />
               <use
-                stroke={theme.colors.text}
+                stroke={theme.colors.bodyColor}
                 strokeWidth="1.059"
                 xlinkHref="#joels-hand-rotated-c"
               />
             </g>
             <path
-              stroke={theme.colors.text}
+              stroke={theme.colors.bodyColor}
               strokeLinecap="round"
               strokeWidth="1.059"
               d="M20.2585758,6.08293678 C19.6139199,5.04973786 18.6564984,4.13874329 17.4726224,3.41182496 C15.6214972,2.27520508 13.2167159,1.58863126 10.5882353,1.58863126 C7.75501249,1.58863126 5.18169598,2.38633041 3.28150878,3.68551171 C2.40810463,4.28266884 1.67691247,4.98577408 1.12805971,5.76606229"
             />
             <path
-              fill={theme.colors.text}
+              fill={theme.colors.bodyColor}
               d="M10.5882353,11.5065445 C10.7519548,11.131451 11.0372609,10.9439043 11.4441536,10.9439043 C11.8510463,10.9439043 12.1363524,11.131451 12.300072,11.5065445 C12.4302116,11.9233151 12.3200934,12.2931989 11.9697175,12.6161961 C11.6193416,12.9391933 11.1588475,13.382012 10.5882353,13.9446522 C10.0176231,13.382012 9.557129,12.9391933 9.20675308,12.6161961 C8.85637715,12.2931989 8.74625901,11.9233151 8.87639864,11.5065445 C9.04011818,11.131451 9.32542429,10.9439043 9.73231697,10.9439043 C10.1392096,10.9439043 10.4245158,11.131451 10.5882353,11.5065445 Z"
             />
             <ellipse
               cx="6.882"
               cy="9.002"
-              fill={theme.colors.text}
+              fill={theme.colors.bodyColor}
               rx="1"
               ry="1"
             />
             <ellipse
               cx="14.471"
               cy="9.002"
-              fill={theme.colors.text}
+              fill={theme.colors.bodyColor}
               rx="1"
               ry="1"
             />
             <path
-              fill={theme.colors.text}
+              fill={theme.colors.bodyColor}
               d="M6.88235294,12.7090501 C6.68742891,12.7090501 6.52941176,12.5509936 6.52941176,12.3560209 C6.52941176,12.1610483 6.68742891,12.0029918 6.88235294,12.0029918 C7.07727697,12.0029918 7.23529412,12.1610483 7.23529412,12.3560209 C7.23529412,12.5509936 7.07727697,12.7090501 6.88235294,12.7090501 Z M7.58823529,13.9446522 C7.39331126,13.9446522 7.23529412,13.7865957 7.23529412,13.591623 C7.23529412,13.3966504 7.39331126,13.2385939 7.58823529,13.2385939 C7.78315932,13.2385939 7.94117647,13.3966504 7.94117647,13.591623 C7.94117647,13.7865957 7.78315932,13.9446522 7.58823529,13.9446522 Z M5.82352941,13.591623 C5.62860538,13.591623 5.47058824,13.4335665 5.47058824,13.2385939 C5.47058824,13.0436212 5.62860538,12.8855647 5.82352941,12.8855647 C6.01845344,12.8855647 6.17647059,13.0436212 6.17647059,13.2385939 C6.17647059,13.4335665 6.01845344,13.591623 5.82352941,13.591623 Z M14.1176471,12.7090501 C13.922723,12.7090501 13.7647059,12.5509936 13.7647059,12.3560209 C13.7647059,12.1610483 13.922723,12.0029918 14.1176471,12.0029918 C14.3125711,12.0029918 14.4705882,12.1610483 14.4705882,12.3560209 C14.4705882,12.5509936 14.3125711,12.7090501 14.1176471,12.7090501 Z M13.4117647,13.9446522 C13.2168407,13.9446522 13.0588235,13.7865957 13.0588235,13.591623 C13.0588235,13.3966504 13.2168407,13.2385939 13.4117647,13.2385939 C13.6066887,13.2385939 13.7647059,13.3966504 13.7647059,13.591623 C13.7647059,13.7865957 13.6066887,13.9446522 13.4117647,13.9446522 Z M15.1764706,13.591623 C14.9815466,13.591623 14.8235294,13.4335665 14.8235294,13.2385939 C14.8235294,13.0436212 14.9815466,12.8855647 15.1764706,12.8855647 C15.3713946,12.8855647 15.5294118,13.0436212 15.5294118,13.2385939 C15.5294118,13.4335665 15.3713946,13.591623 15.1764706,13.591623 Z"
             />
             <path
-              stroke={theme.colors.text}
+              stroke={theme.colors.bodyColor}
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="1.059"
               d="M10.5882353,13.9446522 C10.5882353,14.6507105 10.1764706,15.0037397 9.35294118,15.0037397 L9.08823529,15.0037397"
             />
             <path
-              stroke={theme.colors.text}
+              stroke={theme.colors.bodyColor}
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="1.059"
@@ -318,20 +318,20 @@ const Hand = ({}) => {
             />
             <path
               fill="#000"
-              stroke={theme.colors.text}
+              stroke={theme.colors.bodyColor}
               strokeWidth=".882"
               d="M1.85294118,4.76589379 L1.85304686,3.91279743 C1.85304686,3.71793177 2.01101669,3.55996194 2.20588235,3.55996194 C2.24213406,3.55996194 2.27816926,3.56554871 2.31271915,3.57652555 C2.68452352,3.69465136 2.91361713,3.79691646 3,3.88332087 L2.73529412,4.05983545 L1.85294118,4.76589379 Z"
             />
             <path
               fill="#000"
-              stroke={theme.colors.text}
+              stroke={theme.colors.bodyColor}
               strokeWidth=".882"
               d="M18.0882353,4.76589379 L18.088341,3.91279743 C18.088341,3.71793177 18.2463108,3.55996194 18.4411765,3.55996194 C18.4774282,3.55996194 18.5134634,3.56554871 18.5480133,3.57652555 C18.9198176,3.69465136 19.1489112,3.79691646 19.2352941,3.88332087 L18.9705882,4.05983545 L18.0882353,4.76589379 Z"
               transform="matrix(-1 0 0 1 37.324 0)"
             />
           </g>
           <path
-            stroke={theme.colors.text}
+            stroke={theme.colors.bodyColor}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.059"
@@ -339,8 +339,8 @@ const Hand = ({}) => {
           />
           <g transform="translate(60.73 114.911)">
             <path
-              fill={theme.colors.text}
-              stroke={theme.colors.text}
+              fill={theme.colors.bodyColor}
+              stroke={theme.colors.bodyColor}
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth=".588"
@@ -349,15 +349,15 @@ const Hand = ({}) => {
             <ellipse
               cx="10.588"
               cy="5.322"
-              fill={theme.colors.body}
+              fill={theme.colors.bodyBg}
               rx="4.412"
               ry="4.413"
             />
             <ellipse
               cx="10.588"
               cy="5.322"
-              fill={theme.colors.text}
-              stroke={theme.colors.text}
+              fill={theme.colors.bodyColor}
+              stroke={theme.colors.bodyColor}
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth=".588"
@@ -367,14 +367,14 @@ const Hand = ({}) => {
           </g>
           <g strokeLinecap="round" transform="rotate(-16 511.603 -136.898)">
             <g
-              stroke={theme.colors.body}
+              stroke={theme.colors.bodyBg}
               strokeWidth="1.059"
               transform="rotate(30 5.795 22.948)"
             >
               <ellipse
                 cx="7.5"
                 cy="7.491"
-                fill={theme.colors.text}
+                fill={theme.colors.bodyColor}
                 rx="8.029"
                 ry="8.021"
               />
@@ -382,7 +382,7 @@ const Hand = ({}) => {
             </g>
             <g strokeLinejoin="round">
               <use
-                stroke={theme.colors.body}
+                stroke={theme.colors.bodyBg}
                 strokeWidth="2.118"
                 xlinkHref="#joels-hand-rotated-d"
               />
@@ -394,20 +394,20 @@ const Hand = ({}) => {
             </g>
           </g>
           <path
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             d="M57.5134104 134.320754L54.4323294 133.757961C54.1620816 133.708597 53.9830096 133.449446 54.032361 133.179131 54.0695286 132.97555 54.2288 132.816239 54.4323294 132.779063L57.5134104 132.21627C57.7169399 132.179093 57.8762112 132.019782 57.9133788 131.816201L58.4760316 128.734352C58.525383 128.464037 58.7844694 128.28492 59.0547173 128.334284 59.2582467 128.371461 59.417518 128.530772 59.4546856 128.734352L60.0173384 131.816201C60.054506 132.019782 60.2137774 132.179093 60.4173068 132.21627L63.4983878 132.779063C63.7686357 132.828426 63.9477076 133.087577 63.8983562 133.357893 63.8611886 133.561473 63.7019172 133.720784 63.4983878 133.757961L60.4173068 134.320754C60.2137774 134.357931 60.054506 134.517242 60.0173384 134.720822L59.4546856 137.802671C59.4053342 138.072986 59.1462478 138.252103 58.876 138.202739 58.6724705 138.165562 58.5131992 138.006251 58.4760316 137.802671L57.9133788 134.720822C57.8762112 134.517242 57.7169399 134.357931 57.5134104 134.320754zM82.2192928 130.613947L79.1382118 130.051154C78.8679639 130.001791 78.688892 129.74264 78.7382434 129.472324 78.775411 129.268744 78.9346823 129.109433 79.1382118 129.072256L82.2192928 128.509463C82.4228222 128.472286 82.5820935 128.312975 82.6192612 128.109395L83.1819139 125.027546C83.2312654 124.757231 83.4903518 124.578114 83.7605996 124.627478 83.964129 124.664655 84.1234004 124.823966 84.160568 125.027546L84.7232208 128.109395C84.7603884 128.312975 84.9196597 128.472286 85.1231892 128.509463L88.2042702 129.072256C88.474518 129.12162 88.65359 129.380771 88.6042385 129.651086 88.5670709 129.854666 88.4077996 130.013977 88.2042702 130.051154L85.1231892 130.613947C84.9196597 130.651124 84.7603884 130.810435 84.7232208 131.014015L84.160568 134.095865C84.1112166 134.36618 83.8521302 134.545296 83.5818823 134.495933 83.3783529 134.458756 83.2190815 134.299445 83.1819139 134.095865L82.6192612 131.014015C82.5820935 130.810435 82.4228222 130.651124 82.2192928 130.613947z"
           />
           <ellipse
             cx="64.965"
             cy="128.503"
-            fill={theme.colors.text}
+            fill={theme.colors.tebodyColort}
             rx="1.059"
             ry="1.059"
           />
           <ellipse
             cx="98.318"
             cy="115.97"
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             rx="1.059"
             ry="1.059"
           />
@@ -428,7 +428,7 @@ const Hand = ({}) => {
           <ellipse
             cx="54.024"
             cy="138.211"
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             rx="1"
             ry="1"
             transform="matrix(-1 0 0 1 108.048 0)"
@@ -436,7 +436,7 @@ const Hand = ({}) => {
           <ellipse
             cx="52.436"
             cy="144.389"
-            fill={theme.colors.text}
+            fill={theme.colors.bodyColor}
             rx="1.588"
             ry="1.589"
             transform="matrix(-1 0 0 1 104.872 0)"
@@ -446,7 +446,7 @@ const Hand = ({}) => {
               <use xlinkHref="#joels-hand-rotated-e" />
             </mask>
             <path
-              fill={theme.colors.text}
+              fill={theme.colors.bodyColor}
               d="M1.55607012,12.3968917 C1.5409071,12.2499246 1.53313767,12.10078 1.53313767,11.9498314 C1.53313767,9.55822796 3.48347526,7.61945027 5.88933859,7.61945027 C6.69689813,7.61945027 7.45313372,7.8378918 8.10151296,8.21857755 C8.76370831,5.25643715 11.4225329,3.04161875 14.6017404,3.04161875 C17.8374386,3.04161875 20.5340964,5.33584573 21.1353677,8.37717814 C21.4727883,8.28647059 21.8276971,8.23807615 22.1939763,8.23807615 C24.4279923,8.23807615 26.23902,10.0383697 26.23902,12.2591444 C26.23902,12.3052455 26.2382396,12.3511654 26.2366911,12.3968917 L1.55607012,12.3968917 Z"
               mask="url(#joels-hand-rotated-f)"
               transform="rotate(-7 13.886 7.72)"
@@ -458,21 +458,21 @@ const Hand = ({}) => {
             transform="rotate(-101 85.99 22.853)"
           >
             <use
-              fill={theme.colors.body}
-              stroke={theme.colors.body}
+              fill={theme.colors.bodyColor}
+              stroke={theme.colors.bodyColor}
               strokeWidth="2.118"
               xlinkHref="#joels-hand-rotated-g"
             />
             <use
-              stroke={theme.colors.text}
+              stroke={theme.colors.bodyColor}
               strokeWidth="1.059"
               xlinkHref="#joels-hand-rotated-g"
             />
             <ellipse
               cx="12.353"
               cy="6.209"
-              fill={theme.colors.body}
-              stroke={theme.colors.text}
+              fill={theme.colors.bodyBg}
+              stroke={theme.colors.bodyColor}
               strokeWidth="1.059"
               rx="6.176"
               ry="6.147"

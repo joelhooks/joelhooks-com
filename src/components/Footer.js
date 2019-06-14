@@ -39,8 +39,14 @@ const Footer = ({ author }) => {
             {author && `${author} \u00A9 ${new Date().getFullYear()}`}
           </div>
           <div>
-            <Twitter color={theme.colors.text} hover={theme.colors.primary} />
-            <GitHub color={theme.colors.text} hover={theme.colors.primary} />
+            <Twitter
+              color={theme.colors.bodyColor}
+              hover={theme.colors.primary}
+            />
+            <GitHub
+              color={theme.colors.bodyColor}
+              hover={theme.colors.primary}
+            />
           </div>
         </div>
       </Container>

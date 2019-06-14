@@ -12,8 +12,8 @@ const themes = {
     themeName: 'default',
     colors: {
       primary: colors.pink,
-      text: colors.black,
-      body: colors.white,
+      bodyColor: colors.black,
+      bodyBg: colors.white,
       ...colors,
     },
   },
@@ -21,8 +21,8 @@ const themes = {
     themeName: 'dark',
     colors: {
       primary: colors.pink,
-      text: colors.white,
-      body: colors.black,
+      bodyColor: colors.white,
+      bodyBg: colors.black,
       ...colors,
     },
   },

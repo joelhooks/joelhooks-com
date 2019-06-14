@@ -58,12 +58,12 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               --color-pink: ${theme.colors.pink};
               --color-gray: ${theme.colors.gray};
               --color-primary: ${theme.colors.primary};
-              --color-text: ${theme.colors.text};
-              --color-body: ${theme.colors.body};
+              --color-body-color: ${theme.colors.bodyColor};
+              --color-body-bg: ${theme.colors.bodyBg};
             }
             body {
-              color: ${theme.colors.text};
-              background-color: ${theme.colors.body};
+              color: ${theme.colors.bodyColor};
+              background-color: ${theme.colors.bodyBg};
             }
             ::selection {
               color: ${theme.colors.white};
@@ -82,7 +82,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               border-left: 5px solid ${theme.colors.primary};
             }
             caption {
-              color: ${theme.colors.body};
+              color: ${theme.colors.bodyBg};
             }
 
             ${bpMaxSM} {
@@ -96,7 +96,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             hr {
               margin: 50px 0;
               border: none;
-              border-top: 1px solid ${rgba(theme.colors.text, 0.2)};
+              border-top: 1px solid ${rgba(theme.colors.bodyColor, 0.2)};
               background: none;
             }
             em {

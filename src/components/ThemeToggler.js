@@ -24,7 +24,7 @@ const ThemeToggler = ({ toggleTheme, themeName }) => {
   return (
     <Button
       css={{
-        background: rgba(theme.colors.text, 0.05),
+        background: rgba(theme.colors.bodyColor, 0.05),
         borderRadius: '50%',
         width: '2.375rem',
         height: '2.375rem',
@@ -33,7 +33,7 @@ const ThemeToggler = ({ toggleTheme, themeName }) => {
         alignItems: 'center',
         justifyContent: 'center',
         margin: 0,
-        color: theme.colors.text,
+        color: theme.colors.bodyColor,
         '@media (hover: hover)': {
           ':hover': {
             color: theme.colors.white,

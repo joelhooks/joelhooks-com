@@ -164,14 +164,14 @@ export default () => {
       <Configure distinct={1} />
       <OpenSearch
         css={{
-          background: rgba(theme.colors.text, 0.05),
+          background: rgba(theme.colors.bodyColor, 0.05),
           '@media (hover: hover)': {
             ':hover': {
               background: theme.colors.primary,
               color: theme.colors.white,
             },
           },
-          color: theme.colors.text,
+          color: theme.colors.bodyColor,
         }}
         href="/search"
         onClick={event => {

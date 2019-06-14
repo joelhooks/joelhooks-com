@@ -13,8 +13,12 @@ module.exports = {
       pink: 'var(--color-pink)',
       gray: 'var(--color-gray)',
       primary: 'var(--color-primary)',
-      text: 'var(--color-text)',
-      body: 'var(--color-body)',
+    },
+    textColor: {
+      'body-color': 'var(--color-body-color)',
+    },
+    backgroundColor: {
+      'body-bg': 'var(--color-body-bg)',
     },
     extend: {},
   },
