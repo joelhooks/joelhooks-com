@@ -13,7 +13,7 @@ const themes = {
     colors: {
       primary: colors.pink,
       text: colors.black,
-      bodyBg: colors.white,
+      body: colors.white,
       ...colors,
     },
   },
@@ -22,7 +22,7 @@ const themes = {
     colors: {
       primary: colors.pink,
       text: colors.white,
-      bodyBg: colors.black,
+      body: colors.black,
       ...colors,
     },
   },

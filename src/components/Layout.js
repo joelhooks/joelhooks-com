@@ -52,9 +52,18 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
       <Fragment>
         <Global
           styles={css`
+            :root {
+              --color-black: ${theme.colors.black};
+              --color-white: ${theme.colors.white};
+              --color-pink: ${theme.colors.pink};
+              --color-gray: ${theme.colors.gray};
+              --color-primary: ${theme.colors.primary};
+              --color-text: ${theme.colors.text};
+              --color-body: ${theme.colors.body};
+            }
             body {
               color: ${theme.colors.text};
-              background-color: ${theme.colors.bodyBg};
+              background-color: ${theme.colors.body};
             }
             ::selection {
               color: ${theme.colors.white};
@@ -73,7 +82,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               border-left: 5px solid ${theme.colors.primary};
             }
             caption {
-              color: ${theme.colors.bodyBg};
+              color: ${theme.colors.body};
             }
 
             ${bpMaxSM} {
