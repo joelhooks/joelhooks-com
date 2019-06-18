@@ -66,7 +66,6 @@ class SubscribeForm extends React.Component {
   render() {
     const { submitted, loading, response, errorMessage } = this.state
     const { theme, ...props } = this.props
-    console.log('props: ', this.props)
     return (
       <div {...props}>
         {!submitted && (
@@ -105,7 +104,11 @@ class SubscribeForm extends React.Component {
                 },
               })}
             >
-              <Hand />
+              <Hand
+                baseColor={theme.colors.bodyColor}
+                altColor={theme.colors.bodyBg}
+                primaryColor={theme.colors.primary}
+              />
             </div>
           </div>
         )}

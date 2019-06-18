@@ -46,6 +46,8 @@ const Header = ({ siteTitle }) => {
                   height: '115px',
                 },
               })}
+              baseColor={theme.colors.bodyColor}
+              altColor={theme.colors.bodyBg}
             />
             <span
               css={css(
