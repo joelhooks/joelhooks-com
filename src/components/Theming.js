@@ -1,11 +1,5 @@
 import { createTheming } from '@callstack/react-theme-provider'
-
-const colors = {
-  black: '#131415',
-  white: '#fff',
-  pink: '#ff1493',
-  gray: '#dedede',
-}
+import colors from '../lib/colors'
 
 const themes = {
   default: {
@@ -28,6 +22,6 @@ const themes = {
   },
 }
 
-const { ThemeProvider, useTheme } = createTheming(themes.default)
+const { ThemeProvider, withTheme, useTheme } = createTheming(themes.default)
 
-export { ThemeProvider, useTheme, themes }
+export { ThemeProvider, withTheme, useTheme, themes }

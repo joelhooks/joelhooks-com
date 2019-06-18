@@ -2,8 +2,11 @@ import React from 'react'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
+import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
-import theme from '../../../config/theme'
+import { withTheme } from '../Theming'
+import colors from '../../lib/colors'
+import fonts from '../../lib/typography'
 import { bpMinSM, bpMinMD } from '../../lib/breakpoints'
 import Hand from '../Hand'
 import Button from '../Button'
@@ -62,42 +65,27 @@ class SubscribeForm extends React.Component {
 
   render() {
     const { submitted, loading, response, errorMessage } = this.state
-    const { ...props } = this.props
+    const { theme, ...props } = this.props
+    console.log('props: ', this.props)
     return (
       <div {...props}>
         {!submitted && (
           <div
-            css={css({
-              display: 'flex',
-              flexDirection: 'column-reverse',
-              alignItems: 'center',
-              [bpMinSM]: {
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-              },
-            })}
+            css={css(
+              tw`flex flex-col-reverse items-center sm:flex-row sm:items-start`,
+            )}
           >
-            <div
-              css={css({
-                flexGrow: 1,
-                marginTop: '30px',
-              })}
-            >
+            <div css={css(tw`flex-grow mt-8`)}>
               <h2
                 css={css({
                   margin: '0 0 20px 0',
-                  fontFamily: theme.fonts.semibold,
+                  fontFamily: fonts.semibold,
                 })}
               >
                 Get emails from me about coding, business, learning, and
                 teaching.
               </h2>
-              <p
-                css={css({
-                  fontSize: '17px',
-                  margin: 0,
-                })}
-              >
+              <p css={css(tw`text-base m-0`)}>
                 There will be no spam and you can unsubscribe at any time. I
                 send different content than what is posted here. Over 4000
                 people enjoy it, and you probably will too!
@@ -132,18 +120,14 @@ class SubscribeForm extends React.Component {
             onSubmit={values => this.handleSubmit(values)}
             render={({ errors }) => (
               <Form
-                css={css({
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-end',
-                  marginTop: '20px',
-                  '.field-error': {
-                    color: theme.colors.red,
+                css={css(
+                  {
+                    '.field-error': {
+                      color: theme.colors.red,
+                    },
                   },
-                  [bpMinSM]: {
-                    flexDirection: 'row',
-                  },
-                })}
+                  tw`flex flex-col sm:flex-row items-end mt-5`,
+                )}
               >
                 <label htmlFor="name" css={labelStyles}>
                   <div css={labelInnerStyles}>
@@ -205,7 +189,7 @@ class SubscribeForm extends React.Component {
   }
 }
 
-export default SubscribeForm
+export default withTheme(SubscribeForm)
 
 const labelStyles = css({
   width: '100%',
@@ -230,7 +214,7 @@ const inputFieldStyles = css({
   fontSize: '16px',
   height: '50px',
   borderRadius: '3px',
-  borderColor: theme.colors.bodyColor,
+  borderColor: colors.gray,
   boxShadow: 'none',
   fontWeight: 400,
   '::placeholder': {
