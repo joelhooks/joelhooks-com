@@ -60,7 +60,7 @@ const Header = ({ siteTitle }) => {
                     margin: '60px 0 0 20px',
                   },
                 },
-                tw`hidden sm:block text-sm md:text-base lg:text-lg text`,
+                tw`hidden sm:block text-sm md:text-base lg:text-lg`,
               )}
             >
               {siteTitle}
