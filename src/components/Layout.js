@@ -1,17 +1,20 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
+import { rgba } from 'polished'
 import { MDXProvider } from '@mdx-js/tag'
+import tw from 'tailwind.macro'
 import { Global, css } from '@emotion/core'
-import { ThemeProvider, themes, useTheme } from './Theming'
-import { bpMaxSM } from '../lib/breakpoints'
+
+import colors from '../lib/colors'
+import { ThemeProvider, themes } from './Theming'
+import { bpMinSM, bpMinLG } from '../lib/breakpoints'
 import mdxComponents from './mdx'
 import Header from './Header'
 import reset from '../lib/reset'
 import { fonts } from '../lib/typography'
 import config from '../../config/website'
 import Footer from '../components/Footer'
-import { rgba } from 'polished'
 
 const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
   const initializeTheme = () => {
@@ -53,10 +56,10 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
         <Global
           styles={css`
             :root {
-              --color-black: ${theme.colors.black};
-              --color-white: ${theme.colors.white};
-              --color-pink: ${theme.colors.pink};
-              --color-gray: ${theme.colors.gray};
+              --color-black: ${colors.black};
+              --color-white: ${colors.white};
+              --color-pink: ${colors.pink};
+              --color-gray: ${colors.gray};
               --color-primary: ${theme.colors.primary};
               --color-body-color: ${theme.colors.bodyColor};
               --color-body-bg: ${theme.colors.bodyBg};
@@ -66,7 +69,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               background-color: ${theme.colors.bodyBg};
             }
             ::selection {
-              color: ${theme.colors.white};
+              color: ${colors.white};
               background-color: ${theme.colors.primary};
             }
             a {
@@ -84,13 +87,26 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             caption {
               color: ${theme.colors.bodyBg};
             }
-
-            ${bpMaxSM} {
+            h1 {
+              font-size: 24px;
+            }
+            h2 {
+              font-size: 22px;
+            }
+            ${bpMinSM} {
               h1 {
                 font-size: 28px;
               }
               h2 {
-                font-size: 24px;
+                font-size: 26px;
+              }
+            }
+            ${bpMinLG} {
+              h1 {
+                font-size: 30px;
+              }
+              h2 {
+                font-size: 28px;
               }
             }
             hr {
@@ -117,7 +133,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             }
             input {
               border-radius: 4px;
-              border: 1px solid ${theme.colors.gray};
+              border: 1px solid ${colors.gray};
               padding: 5px 10px;
               box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
               font-family: ${fonts.regular};
@@ -133,14 +149,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             ${reset};
           `}
         />
-        <div
-          css={css`
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            min-height: 100vh;
-          `}
-        >
+        <div css={css(tw`flex flex-col w-full min-h-screen`)}>
           <Helmet
             htmlAttributes={{
               lang: 'en',
@@ -155,7 +164,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
           <MDXProvider components={mdxComponents}>
             <Fragment>{children}</Fragment>
           </MDXProvider>
-          {!noFooter && <Footer author={site.siteMetadata.author.name} />}
+          {noFooter || <Footer author={site.siteMetadata.author.name} />}
         </div>
       </Fragment>
     </ThemeProvider>

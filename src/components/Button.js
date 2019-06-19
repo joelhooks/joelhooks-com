@@ -1,8 +1,10 @@
 import { React } from 'react'
+import { rgba, darken } from 'polished'
 import { css } from '@emotion/core'
 import { Link } from 'gatsby'
+
+import colors from '../lib/colors'
 import { useTheme } from './Theming'
-import { rgba, darken } from 'polished'
 
 const Button = ({ to, children, secondary, ...restProps }) => {
   const theme = useTheme()
@@ -11,15 +13,15 @@ const Button = ({ to, children, secondary, ...restProps }) => {
     border: 'none',
     borderRadius: '4px',
     background: secondary
-      ? rgba(theme.colors.primary, 0.1)
+      ? rgba(theme.colors.primary, 0.2)
       : theme.colors.primary,
-    color: secondary ? theme.colors.primary : theme.colors.white,
+    color: secondary ? theme.colors.primary : colors.white,
     padding: '10px 15px',
     cursor: 'pointer',
     transition: 'all 150ms ease',
     '@media (hover: hover)': {
       ':hover': {
-        color: theme.colors.white,
+        color: colors.white,
         background: darken(0.1, theme.colors.primary),
       },
     },

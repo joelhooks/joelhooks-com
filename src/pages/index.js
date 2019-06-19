@@ -1,20 +1,16 @@
 import React from 'react'
 import { graphql } from 'gatsby'
+import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
-import styled from '@emotion/styled'
+
 import Layout from 'components/Layout'
 import Link from 'components/Link'
 import Button from 'components/Button'
 import Container from 'components/Container'
-import { rhythm } from '../lib/typography'
-import theme from '../../config/theme'
-
-const Description = styled.p`
-  margin-bottom: 10px;
-  display: inline-block;
-`
+import { useTheme } from '../components/Theming'
 
 export default function Index({ data: { site, allMdx } }) {
+  const theme = useTheme()
   return (
     <Layout site={site}>
       <Container
@@ -25,20 +21,27 @@ export default function Index({ data: { site, allMdx } }) {
         {allMdx.edges.map(({ node: post }) => (
           <div
             key={post.id}
-            css={css`
-              margin-bottom: 40px;
-            `}
+            css={css(
+              {
+                ':first-child': {
+                  marginTop: 0,
+                },
+              },
+              tw`mt-8 sm:mt-12 lg:mt-16`,
+            )}
           >
             <h2
-              css={css({
-                marginBottom: rhythm(0.3),
-                transition: theme.transition.ease,
-                '@media (hover: hover)': {
-                  ':hover': {
-                    color: theme.brand.primary,
+              css={css(
+                {
+                  transition: 'all 150ms ease',
+                  '@media (hover: hover)': {
+                    ':hover': {
+                      color: theme.colors.primary,
+                    },
                   },
                 },
-              })}
+                tw`mt-0 mb-4`,
+              )}
             >
               <Link
                 to={post.frontmatter.slug}
@@ -47,15 +50,7 @@ export default function Index({ data: { site, allMdx } }) {
                 {post.frontmatter.title}
               </Link>
             </h2>
-            <Description>
-              {post.excerpt}{' '}
-              {/* <Link
-                to={post.frontmatter.slug}
-                aria-label={`View ${post.frontmatter.title}`}
-              >
-                Read Article →
-              </Link> */}
-            </Description>
+            <p css={css(tw`inline-block m-0`)}>{post.excerpt}</p>
             <span />
           </div>
         ))}

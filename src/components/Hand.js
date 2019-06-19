@@ -1,4 +1,6 @@
 import React from 'react'
+
+import colors from '../lib/colors'
 import { useTheme } from './Theming'
 
 const Hand = ({ baseColor, altColor, primaryColor }) => {
@@ -124,7 +126,7 @@ const Hand = ({ baseColor, altColor, primaryColor }) => {
           ry="1.059"
         />
         <g transform="translate(2.118 .177)">
-          <mask id="joels-hand-rotated-b" fill={theme.colors.white}>
+          <mask id="joels-hand-rotated-b" fill={colors.white}>
             <use xlinkHref="#joels-hand-rotated-a" />
           </mask>
           <ellipse
@@ -418,7 +420,7 @@ const Hand = ({ baseColor, altColor, primaryColor }) => {
             transform="matrix(-1 0 0 1 104.872 0)"
           />
           <g transform="translate(54.024 89.493)">
-            <mask id="joels-hand-rotated-f" fill={theme.colors.white}>
+            <mask id="joels-hand-rotated-f" fill={colors.white}>
               <use xlinkHref="#joels-hand-rotated-e" />
             </mask>
             <path

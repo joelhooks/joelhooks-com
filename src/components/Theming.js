@@ -8,7 +8,6 @@ const themes = {
       primary: colors.pink,
       bodyColor: colors.black,
       bodyBg: colors.white,
-      ...colors,
     },
   },
   dark: {
@@ -17,7 +16,6 @@ const themes = {
       primary: colors.pink,
       bodyColor: colors.white,
       bodyBg: colors.black,
-      ...colors,
     },
   },
 }
