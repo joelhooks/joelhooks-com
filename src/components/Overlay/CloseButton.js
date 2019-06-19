@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
-import theme from '../../../config/theme'
+import colors from '../../lib/colors'
 
 const CloseButton = styled('button')`
   background: transparent;
   border: none;
-  color: ${theme.colors.black};
+  color: ${colors.black};
   cursor: pointer;
   font-size: 0.75rem;
   font-weight: lighter;
