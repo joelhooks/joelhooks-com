@@ -5,7 +5,7 @@ import axios from 'axios'
 import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
 
-import colors from '../lib/colors'
+import colors from '../../lib/colors'
 import { withTheme } from '../Theming'
 import fonts from '../../lib/typography'
 import { bpMinSM, bpMinMD } from '../../lib/breakpoints'

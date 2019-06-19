@@ -23,7 +23,7 @@ export default function Index({ data: { site, allMdx } }) {
             key={post.id}
             css={css(
               {
-                ':first-child': {
+                ':first-of-type': {
                   marginTop: 0,
                 },
               },
