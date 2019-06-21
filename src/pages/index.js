@@ -54,7 +54,12 @@ export default function Index({ data: { site, allMdx } }) {
             <span />
           </div>
         ))}
-        <Button secondary to="/articles" aria-label="Visit blog page">
+        <Button
+          secondary
+          to="/articles"
+          aria-label="Visit blog page"
+          css={css(tw`mt-8 md:mt-10 lg:mt-12`)}
+        >
           Browse all articles
         </Button>
         <hr />
