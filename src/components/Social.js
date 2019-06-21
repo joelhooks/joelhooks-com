@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from './Link'
-import styled from '@emotion/styled'
 import config from '../../config/website'
 
 const Button = props => (
