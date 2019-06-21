@@ -45,7 +45,6 @@ const ThemeToggler = ({ toggleTheme, themeName }) => {
       aria-label={
         themeName === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
       }
-      // css={{ position: 'fixed', right: '20px', top: '20px' }}
       onClick={() => toggleTheme(themeName === 'dark' ? 'default' : 'dark')}
     >
       {themeName === 'dark' ? (
