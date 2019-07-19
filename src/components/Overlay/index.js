@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 import CloseButton from './CloseButton'
-import theme from '../../../config/theme'
+import colors from '../../lib/colors'
 
 const Overlay = styled('div')`
   align-items: center;
-  background: ${theme.colors.bg_color};
+  background: ${colors.gray};
   display: flex;
   height: 100vh;
   justify-content: center;

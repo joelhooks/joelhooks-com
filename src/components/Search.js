@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import algoliasearch from 'algoliasearch/lite'
 import {
@@ -9,9 +10,10 @@ import {
   Highlight,
 } from 'react-instantsearch-dom'
 import { MdSearch } from 'react-icons/md'
+
+import colors from '../lib/colors'
 import Overlay from './Overlay'
 import { useTheme } from './Theming'
-import { rgba } from 'polished'
 
 const client = algoliasearch('DSQGVIFOX3', '29ed94b0481df0099a928e5d4229b5e9')
 
@@ -28,24 +30,24 @@ const List = styled('ul')`
   margin: 0 auto;
   max-width: 650px;
   padding: 0;
-  color: black;
+  color: ${colors.black};
 `
 
 const Result = styled('li')`
   margin-top: 2rem;
-  color: black;
+  color: ${colors.black};
 `
 
 const Heading = styled('h2')`
   font-size: 1.25rem;
   font-weight: 600;
   a {
-    color: DEEPPINK;
+    color: ${colors.pink};
     text-decoration: none;
     :active,
     :focus,
     :hover {
-      color: MEDIUMVIOLETRED;
+      color: ${colors.violet};
     }
   }
 `
@@ -148,7 +150,7 @@ const SearchContainer = styled('div')`
   align-items: flex-start;
   /* margin-left: auto;
   margin-top: 0; */
-  color: black;
+  color: ${colors.black};
 `
 
 // eslint-disable-next-line react/display-name
@@ -168,7 +170,7 @@ export default () => {
           '@media (hover: hover)': {
             ':hover': {
               background: theme.colors.primary,
-              color: theme.colors.white,
+              color: colors.white,
             },
           },
           color: theme.colors.bodyColor,

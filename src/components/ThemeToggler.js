@@ -1,9 +1,11 @@
 import React from 'react'
-import Button from './Button'
+import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { FiMoon, FiSun } from 'react-icons/fi'
+
+import colors from '../lib/colors'
 import { useTheme } from './Theming'
-import { rgba } from 'polished'
+import Button from './Button'
 
 const DarkMode = styled(FiMoon)({
   display: 'flex',
@@ -36,14 +38,13 @@ const ThemeToggler = ({ toggleTheme, themeName }) => {
         color: theme.colors.bodyColor,
         '@media (hover: hover)': {
           ':hover': {
-            color: theme.colors.white,
+            color: colors.white,
           },
         },
       }}
       aria-label={
         themeName === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
       }
-      // css={{ position: 'fixed', right: '20px', top: '20px' }}
       onClick={() => toggleTheme(themeName === 'dark' ? 'default' : 'dark')}
     >
       {themeName === 'dark' ? (
