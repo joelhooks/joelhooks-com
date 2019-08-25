@@ -8,6 +8,7 @@ import Link from 'components/Link'
 import Button from 'components/Button'
 import Container from 'components/Container'
 import { useTheme } from '../components/Theming'
+import Home from './home.mdx'
 
 export default function Index({ data: { site, allMdx } }) {
   const theme = useTheme()
@@ -18,42 +19,7 @@ export default function Index({ data: { site, allMdx } }) {
           padding-bottom: 0;
         `}
       >
-        {allMdx.edges.map(({ node: post }) => (
-          <div
-            key={post.id}
-            css={css(
-              {
-                ':first-of-type': {
-                  marginTop: 0,
-                },
-              },
-              tw`mt-8 sm:mt-12 lg:mt-16`,
-            )}
-          >
-            <h2
-              css={css(
-                {
-                  transition: 'all 150ms ease',
-                  '@media (hover: hover)': {
-                    ':hover': {
-                      color: theme.colors.primary,
-                    },
-                  },
-                },
-                tw`mt-0 mb-4`,
-              )}
-            >
-              <Link
-                to={post.frontmatter.slug}
-                aria-label={`View ${post.frontmatter.title}`}
-              >
-                {post.frontmatter.title}
-              </Link>
-            </h2>
-            <p css={css(tw`inline-block m-0`)}>{post.excerpt}</p>
-            <span />
-          </div>
-        ))}
+        <Home />
         <Button
           secondary
           to="/articles"
