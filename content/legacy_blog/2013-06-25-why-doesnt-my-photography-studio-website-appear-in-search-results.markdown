@@ -16,7 +16,7 @@ clicks through to the site are abysmally low. I'm working on a [book about
 conversion optimization for photographers](https://studioigniter.com/), and our
 studio is the first case study in the process.
 
-![VE Home Page](/images/ve/ve-home.jpg)
+![VE Home Page](./images/ve/ve-home.jpg)
 
 Let's start at the top, with the page title:
 

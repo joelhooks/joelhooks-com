@@ -18,13 +18,13 @@ The official tutorial is _very_ well put together. Unfortunately it utilizes the
 
 ## Kickass (**free!**) Video Tutorials on Egghead.io ~3hrs
 
-<div style="float: left; padding:10px;"><a class="nofancybox" href="https://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(/images/egghead_logo.png);"></div></a></div>You've done the tutorial, and should have a good grasp of the basics. Your next stop is John Lindquist's [egghead.io for free AngularJS videos](https://www.egghead.io/). This series of bite-sized videos will deliver a ton of great information. John has gone through almost all of the "hard" concepts, and presented them in an easy to understand way.
+<div style="float: left; padding:10px;"><a class="nofancybox" href="https://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(./images/egghead_logo.png);"></div></a></div>You've done the tutorial, and should have a good grasp of the basics. Your next stop is John Lindquist's [egghead.io for free AngularJS videos](https://www.egghead.io/). This series of bite-sized videos will deliver a ton of great information. John has gone through almost all of the "hard" concepts, and presented them in an easy to understand way.
 
 _All_ of the videos are great, but the **series on directives is extra fantastic**. Transclusion? No problem. Even after using AngularJS for over a year, I was able to solidify some of the concepts that were confusing for me.
 
 Watch them all and **take some notes**. When you come out of the other side your AngularJS-fu will be starting to take shape.
 
-![ahhhhhhh Learning AngularJS is refreshing - Photo Credit: chotda](/images/lemonade.jpg)
+![ahhhhhhh Learning AngularJS is refreshing - Photo Credit: chotda](./images/lemonade.jpg)
 
 That will take you through Saturday evening, and you deserve a rest. **Send John a donation for his hard work**, pour a tall glass of lemonade, and relax as you reflect on the your new-found knowledge of an awesome framework. Nice work!
 
@@ -34,7 +34,7 @@ Sunday morning.
 
 At this point you should understand the core AngularJS concepts and terminology. Time to brew a fresh pot and get to work.
 
-![AngularJS Fuel - Photo Credit: Bjørn Giesenbauer](/images/french_press.jpg)
+![AngularJS Fuel - Photo Credit: Bjørn Giesenbauer](./images/french_press.jpg)
 
 If you are anything like me, by now you're ready to dig into a **proper example application**. Luckily we have the excellent [angular-app](https://github.com/angular-app/angular-app) project to explore. This non-trivial example focuses on best practices for:
 
@@ -55,7 +55,7 @@ Peter Bacon Darwin and Pewel Kozlowski have done a great job. Front to back, thi
 
 At this point you should have a solid knowledge to start building something. The [ng-boilerplate](https://github.com/joshdmiller/ng-boilerplate) project will get you started. **This is the seed you should use**. It takes the lessons you learned studying angular-app, and provides the foundation upon which to build something substantial.
 
-![a strong engine for your AngularJS app](/images/engine.jpg)
+![a strong engine for your AngularJS app](./images/engine.jpg)
 
 ng-boilerplate, unlike the angular-seed project, is **suitable as a starting point for building a production app**. It's a solid shortcut, and worth study.
 
@@ -83,7 +83,7 @@ The fun isn't over. There is **plenty left to learn**. The weekend _is_ over tho
 
 You've earned it.
 
-![You've Leveled up your AngularJS! - Photo Credit: Cayusa](/images/yellow_belt.jpg)
+![You've Leveled up your AngularJS! - Photo Credit: Cayusa](./images/yellow_belt.jpg)
 
 P.S. Initial project setup is one of the most critical factors to a project's success. Using templates is a great way to get a head start, but using a template without solid understanding of all the moving parts can be dangerous. I'm working on **step-by-step guide to building your own best practices AngularJS project template**. If you want to get notified of its progress, as well as launch-day discounts, sign up to my newsletter below.
 

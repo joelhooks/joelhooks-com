@@ -8,8 +8,7 @@ keywords: ['test']
 banner: './images/banner.jpg'
 ---
 
-<img src="/images/content/no_exit.png" style="display: block; margin: auto"/>
-#####photo by: [Thomas Hawk](https://www.flickr.com/photos/thomashawk/31115789/)
+
 
 I've been wanting to part ways with WordPress for some time. It's been expensive, running a VPS for the hosting. I've been "attacked" on multiple occasions that result in blacklisting from the Google when I ran on much less expensive shared hosting. It is probably theme dependent also, as well as how a given server is configured.
 

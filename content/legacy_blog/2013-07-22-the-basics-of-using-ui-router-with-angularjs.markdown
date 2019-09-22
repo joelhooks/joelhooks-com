@@ -18,7 +18,7 @@ route is encountered.
 AngularJS supplies [URL routing](https://docs.angularjs.org/tutorial/step_07) by default.
 It is adequate, but also has some limitations.
 
-![A resonable application structure](/images/app-layout.png)
+![A resonable application structure](./images/app-layout.png)
 
 ## So what's the problem?
 

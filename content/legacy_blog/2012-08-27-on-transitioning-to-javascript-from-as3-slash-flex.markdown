@@ -11,7 +11,7 @@ I read a good book recently, [Linchpin by Seth Godin](https://www.amazon.com/exe
 
 The "bad parts" of JS dev, to me, is just "same shit; different pile." The biggest problems that I face are wet works issues. Human systems. Training, mentoring, and facilitating. How do I, as the "architect," (I deplore this term, but for lack of a better term right now...) tee my devs up for success. Where do we need to be rigidly disciplined in our development, and where can we just run with it? How do we consistently hit that sweet spot in the enterprise software development Venn diagram?
 
-![Sweet Spot in Software Development](/images/dev-venn.png)
+![Sweet Spot in Software Development](./images/dev-venn.png)
 
 I would have a much harder time with the transition if I couldn't have a firm grip on the rudder, or if I was stuck in an environment that had no will for high quality code. That is what I am looking for. I don't really care about platform/language (_this is only half true, I care, it just isn't at the top of the list_). I am interested in an org that is dedicated to pushing the quality envelope top to bottom. What I want to do is stand on the shoulders of giants, across languages, platforms and disciplines, with an amalgamation of techniques and practices that fit together to create something greater than its parts. I'm not looking to change the world, but rather looking to deliver high quality and provide for my family with a healthy work:life balance.
 

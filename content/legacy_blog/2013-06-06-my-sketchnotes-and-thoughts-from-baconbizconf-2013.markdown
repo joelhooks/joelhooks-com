@@ -17,7 +17,7 @@ my notes with you here, and talk about what I absorbed from these talks.
 
 ## Day 1
 
-![Nathan Barry](/images/bacon/bacon_biz_2013-1.jpg)
+![Nathan Barry](./images/bacon/bacon_biz_2013-1.jpg)
 
 Nathan Barry has had a really good year. He's released several infoproducts
 including [The App Design
@@ -30,7 +30,7 @@ infoproducts. Additionally he's launched his first SAAS product with
 
 Wow.
 
-![Nathan Barry](/images/bacon/bacon_biz_2013-2.jpg)
+![Nathan Barry](./images/bacon/bacon_biz_2013-2.jpg)
 
 My key take-aways from Nathan's talk were:
 
@@ -41,7 +41,7 @@ My key take-aways from Nathan's talk were:
 
 He's an inspiring guy, and his products are of the highest quality.
 
-![Marc-Andre Cournoyer](/images/bacon/bacon_biz_2013-3.jpg)
+![Marc-Andre Cournoyer](./images/bacon/bacon_biz_2013-3.jpg)
 
 Next up was Marc-Andre Cournoyer who wrote [Create Your Own Programming
 Language](https://createyourproglang.com/). Marc really hammered home the need to
@@ -50,7 +50,7 @@ He pointed out that **social proof** is absolutely essential when you are trying
 to sell a product, and that anchoring prices against much higher prices is
 extremely effective.
 
-![Brennan Dunn](/images/bacon/bacon_biz_2013-4.jpg)
+![Brennan Dunn](./images/bacon/bacon_biz_2013-4.jpg)
 
 Brennan Dunn gave a talk on making money via an email newsletter. Email is "old
 school", which means it is tried and true platform for reaching your potential
@@ -62,13 +62,13 @@ I can say from first hand experience that this works. I've bought Brennan's
 books, and even took his [Consultancy
 Masterclass](https://doubleyourfreelancingrate.com/build-a-consultancy).
 
-![Patrick, Nathan, Marc, and Amy](/images/bacon/bacon_biz_2013-5.jpg)
+![Patrick, Nathan, Marc, and Amy](./images/bacon/bacon_biz_2013-5.jpg)
 
 This was a panel on infoproducts. Tiers. Email lists. Charging more.
 
 There was a definite theme.
 
-![Chris & Natalie Nagele](/images/bacon/bacon_biz_2013-6.jpg)
+![Chris & Natalie Nagele](./images/bacon/bacon_biz_2013-6.jpg)
 
 Chris and Natalie from [Wildbit Software](https://wildbit.com/) are the creators
 of Beanstalk. They started out with a 100% remote development team, and have
@@ -89,7 +89,7 @@ interesting to consider that **#1 does not have to be the goal**. They are
 seeing great success delighting their clients in a space with a lot of
 competition. I thought that was cool, and a very good point.
 
-![Patrick McKenzie](/images/bacon/bacon_biz_2013-7.jpg)
+![Patrick McKenzie](./images/bacon/bacon_biz_2013-7.jpg)
 
 If there was any of these talks that had the potential to exponentially pay for
 the cost of admission, it was Patrick's. Known in some circles as Patio11,
@@ -99,7 +99,7 @@ marketing.
 
 And **charging more**.
 
-![Patrick McKenzie](/images/bacon/bacon_biz_2013-8.jpg)
+![Patrick McKenzie](./images/bacon/bacon_biz_2013-8.jpg)
 
 He gave really good advice on the "funnel" and converting visits into sales. He
 reiterated the early advice from Marc about **stomping the shit out of
@@ -109,7 +109,7 @@ I'm excited to put his advice into practice.
 
 ## Day 2 (Lightening Talks)
 
-![Anthony Eden and Lindsay Nixon](/images/bacon/bacon_biz_2013-9.jpg)
+![Anthony Eden and Lindsay Nixon](./images/bacon/bacon_biz_2013-9.jpg)
 
 Anthony Eden founded DNSimple while working another job. He attacked a simple
 problem and delivered a simple solution and has since seen success and growth.
@@ -119,7 +119,7 @@ Lindsay Nixon got sick of lawyering and leveraged the success of traditionally
 published cookbooks into subscription vegan meal-plans that are generating tidy
 profits. Recurring tidy profits.
 
-![Ben Curtis, Ian Landsman, and Thomas Fuchs](/images/bacon/bacon_biz_2013-10.jpg)
+![Ben Curtis, Ian Landsman, and Thomas Fuchs](./images/bacon/bacon_biz_2013-10.jpg)
 
 Ben Curtis of Honeybadger strives to make his customers **awesome**. Honesty,
 responsiveness, and transparency with your customers will help to ensure that
@@ -134,7 +134,7 @@ Thomas Fuchs gave an interesting rundown of tracking metrics like money, churn
 rate, and lifetime customer value. He pointed out how shitty raw data can be,
 and gave some tips on converting that raw data into something usable.
 
-![Matt Brindley & Ryan Delk](/images/bacon/bacon_biz_2013-11.jpg)
+![Matt Brindley & Ryan Delk](./images/bacon/bacon_biz_2013-11.jpg)
 
 Matt Brindley of Litmus told us how they eliminated tension between development
 and support by implementing "support Fridays". The result is less confusion and
@@ -143,7 +143,7 @@ happier customers.
 Ryan Delk from Gumroad broke down some very interesting metrics in regards to
 launches across various mediums. The short story? Email converts to $$.
 
-![Chris Savage & Mike Brown](/images/bacon/bacon_biz_2013-12.jpg)
+![Chris Savage & Mike Brown](./images/bacon/bacon_biz_2013-12.jpg)
 
 Chris Savage from Wistia gave a convincing talk about using video in meaningful
 ways. It made me seriously consider how video can play into a solid marketing
@@ -155,7 +155,7 @@ market the conference, but it sells out and they get world class speakers. If
 you ever wanted a deductible way of hitting New Zealand, you should consider
 Webstock. I know I am.
 
-![Nick, Garrett, Dave, and Scott](/images/bacon/bacon_biz_2013-13.jpg)
+![Nick, Garrett, Dave, and Scott](./images/bacon/bacon_biz_2013-13.jpg)
 
 Nick Disabato got into Kickstarter early with his publishing of Cadence & Slang,
 a wonderful volume on User Experience and interaction design. He presented it as

@@ -45,7 +45,7 @@ The solution is multi-pronged, and starts with
 [NERDTree](https://github.com/scrooloose/nerdtree). The NERD Tree is a
 filesystem explorer that looks something like this:
 
-![NERDTree](/images/nerdtree.png)
+![NERDTree](./images/nerdtree.png)
 
 It opens to your current directory, and allows you to drill down into folders.
 This allows you to traverse your project and open files. It also has file
@@ -88,7 +88,7 @@ Last, but in absolutely no way least, is the elegent
 [EasyMotion](https://github.com/Lokaltog/vim-easymotion). This plugin is all
 about navigating in the file you are currently editing.
 
-![EasyMotion](/images/easymotion.png)
+![EasyMotion](./images/easymotion.png)
 
 When activated with the `word` motion, EasyMotion assigns the first letter of
 every word after the cursor with a letter-based hotkey. After the first 26

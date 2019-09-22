@@ -4,7 +4,7 @@ title: 'Why I Built an AngularJS Training Site on Rails'
 date: 2013-09-15
 ---
 
-If you're into AngularJS at all, you are probably familiar with the kickass [AngularJS video training](https://egghead.io/) from egghead.io. If you haven't seen egghead.io, it is a collection of 50+ short "bite-sized" training videos, largely focused on the AngularJS framework. <div style="float: right; padding:5px;"><a class="nofancybox" href="https://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(/images/egghead_logo.png);"></div></a></div>The videos are created by (and feature) my friend [John Lindquist](https://twitter.com/johnlindquist) playing Webstorm like a violin while explaining basic AngularJS concepts.
+If you're into AngularJS at all, you are probably familiar with the kickass [AngularJS video training](https://egghead.io/) from egghead.io. If you haven't seen egghead.io, it is a collection of 50+ short "bite-sized" training videos, largely focused on the AngularJS framework. <div style="float: right; padding:5px;"><a class="nofancybox" href="https://egghead.io"><div style=" height: 191px; width: 150px; background-image: url(./images/egghead_logo.png);"></div></a></div>The videos are created by (and feature) my friend [John Lindquist](https://twitter.com/johnlindquist) playing Webstorm like a violin while explaining basic AngularJS concepts.
 
 Over the last few months John and I have been discussing egghead.io, and what its future holds. Is it an AngularJS training site? Is John going to be the only presenter? Is the donation model the best approach for keeping the lights on?
 
@@ -12,7 +12,7 @@ Over the last few months John and I have been discussing egghead.io, and what it
 
 egghead.io was a static site, built on AngularJS. It was using the YouTube API to grab a list of videos from a playlist, and list them out in a simple list. It had a permanent "in progress, fixing stuff" message in the top left, and a request (plea?) for donations in the top right. When you would click on of the videos, it would display the embedded video in the page.
 
-![egghead.io on AngularJS](/images/egghead_before.jpg)
+![egghead.io on AngularJS](./images/egghead_before.jpg)
 
 Frankly, this was adequate for John's needs. He just wants to create content and teach people. He didn't want to think about:
 
@@ -34,7 +34,7 @@ This was the first time I've used Rails, outside of tutorial type projects. It h
 
 One of the drawbacks of a single page app, built with AngularJS or another similar framework, is that SEO become extremely tricky. There are approaches for overcoming this, but it is beyond trivial. egghead.io is a web **page** with the purpose of delivering content. Web pages need to searchable, so people hunting Google will actually be able to find them. Egghead had a bit of search traffic. It actually does fairly well (2nd page) in a search for "AngularJS". What wasn't getting search hits was the video lessons themselves.
 
-![egghead.io gets a facelift](/images/egghead_after.jpg)
+![egghead.io gets a facelift](./images/egghead_after.jpg)
 
 By rendering the pages on the server, and delivering them to the browser, Google can now crawl the pages and actually show the pages to searchers interested in the content. It didn't take long to see a bump in organic search traffic.
 
@@ -111,7 +111,7 @@ Along with the transcripts we've been going through the backlog of videos adding
 
 The donation model in open-source software is flawed. It is not charity. It takes a lot of **work** to build high quality open source software. It takes a lot of **work** to write documentation and provide training.
 
-![Ain't too proud to beg.](/images/programmer.jpg)
+![Ain't too proud to beg.](./images/programmer.jpg)
 
 We can do better than asking for hand-outs.
 
@@ -129,7 +129,7 @@ Video provides many distinct challenges from a delivery and SEO perspective. You
 
 We aren't running a charity, and asking for donations is a habit I'd like to see broken in OSS. There are clearly better ways to be compensated for our efforts, and I know that I **love** supporting OSS. It makes my day to send a content producer $$ for a high-quality book, workshop, or other training. I get smarter, they get paid. Everybody wins.
 
-![the before and after of egghead.io](/images/egghead_before_after.jpg)
+![the before and after of egghead.io](./images/egghead_before_after.jpg)
 
 Working on the relaunch of egghead.io has been a lot of fun. It has allowed me to put to use a lot of the things I've been learning over the last year in regards to SEO, conversion rate optimization, and generally building a modern web page. It is **extremely awesome** to have a project that I care deeply about, and can work on lovingly in my free time. I love my enterprise clients, but having a little techno proto-baby to feed and care for fills my heart with joy. Again, I might be a nerd ;)
 

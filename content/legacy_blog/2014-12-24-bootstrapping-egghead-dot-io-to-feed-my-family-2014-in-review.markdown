@@ -72,17 +72,17 @@ I was all over the US in 2014 for the training. My favorite trips were probably 
 
 John and I got to deliver workshops in Paris for ng-europe. This was very exciting for me, as I've never been to France. Paris is amazing, and I will definitely go back. The highlight was a culinary tour by the awesome [Ute Biefang](https://www.uteinparis.com/WELCOME.html). If you like food and are heading to Paris, you should book a tour. It was **fantastic**.
 
-![best meal of 2015, hands down](/images/best_meal_2015.jpg)
+![best meal of 2015, hands down](./images/best_meal_2015.jpg)
 
 This summer we went on a cross-country road trip with our 4 children. It was an epic journey to Vermont via Tennesee, NYC, and Boston.
 
-![apparently a cricket lives here](/images/times_square.jpg)
+![apparently a cricket lives here](./images/times_square.jpg)
 
 In NYC my 7 year old daughter saw a "family" of rats in Central Park and exclaimed, "It's a dream come true!"
 
 One of her favorite books, A Cricket in Times Square, feature a mouse that gets his meals in Central Park. heh
 
-![lovely...](/images/lake_view.jpg)
+![lovely...](./images/lake_view.jpg)
 
 This was our morning view for two weeks. Lake Champlain is awesome. We are going back next year.
 
@@ -90,7 +90,7 @@ This was our morning view for two weeks. Lake Champlain is awesome. We are going
 
 I spent a weekend at a High Performance Driver Education track event. It was **freaking amazing**. So much fear. So much fun.
 
-![vrroooooom](/images/racing_2015.jpg)
+![vrroooooom](./images/racing_2015.jpg)
 
 It was very challenging to drive into corners at speeds your mind **knows** are not "safe", pushing the car to the limits. Highly recommended to anybody, with any vehicle. I love to drive, and thought I was good at it. I learned how little I actually know, even after 25 years of driving. The weekend improved my driving skills immensely, making me more aware of both my vehicle and the road around me.
 
@@ -104,7 +104,7 @@ I've had a love hate relationships with nicotine for many years. It's done. No v
 
 I lost 50 pounds, which is awesome. I've slacked off a bit and am back up 10, but haven't regressed fully into old habits. This is something I'd definitely like to keep up through 2015 and beyond, as it sure is nice to not have that extra weight. I used the [Primal Blueprint](https://www.amazon.com/exec/obidos/ASIN/0982207778/joehoobuiblo-20/ref=nosim/) approach, and found it to be a moderate paleo that is sustainable.
 
-![smaller joel](/images/smaller_joel.jpg)
+![smaller joel](./images/smaller_joel.jpg)
 
 For a brief period I was lifting weights too, and enjoying it. I was using bad form and did something to my elbow. It's hurt for many months, and I dread seeing a doctor because it will probably require cutting. Need to bite the bullet and just get it taken care of.
 

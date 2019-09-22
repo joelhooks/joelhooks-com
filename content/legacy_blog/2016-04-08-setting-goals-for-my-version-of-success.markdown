@@ -44,4 +44,4 @@ For me, those goals have shifted away from specific dollar amounts, and into exp
 
 I'm looking forward to working towards these new goals. It's exciting, and fills me with joy.
 
-![](/images/kickback.png)
+![](./images/kickback.png)

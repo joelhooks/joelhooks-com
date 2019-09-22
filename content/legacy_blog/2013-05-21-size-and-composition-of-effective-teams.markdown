@@ -22,7 +22,7 @@ The first approach is to group teams based on their areas of influence. In this
 case you might have a UI team, a server-side systems team, a qa team, a
 marketing team, etc...
 
-![photo credit: PXLated](/images/silos.jpg)
+![photo credit: PXLated](./images/silos.jpg)
 
 These teams might even be divided along vendor lines, for a project that
 utilizes consultants to help deliver a project. This has some potential for
@@ -48,7 +48,7 @@ pros, as well as representitives from the business side of things including
 product owner/business analyst and marketing gurus. These teams can shephard
 virtually any functionality from start to finish.
 
-![photo credit: Pink Sherbet Photography](/images/rainbow.jpg)
+![photo credit: Pink Sherbet Photography](./images/rainbow.jpg)
 
 When a team is composed in this fashion, daily status meetings start to take on
 more meaning. They facilitate active communication across disciplines and allow

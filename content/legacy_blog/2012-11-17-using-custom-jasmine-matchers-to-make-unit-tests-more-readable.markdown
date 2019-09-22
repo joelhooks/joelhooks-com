@@ -5,7 +5,7 @@ date: 2012-11-17
 comments: true
 ---
 
-![Clean and Dry](/images/clean_and_dry.jpg)
+![Clean and Dry](./images/clean_and_dry.jpg)
 
 [Image from purplemattfish](https://www.flickr.com/photos/29601732@N06/3969905051/)
 

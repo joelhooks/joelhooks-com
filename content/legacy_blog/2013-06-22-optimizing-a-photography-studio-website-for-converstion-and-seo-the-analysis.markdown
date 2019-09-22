@@ -41,7 +41,7 @@ photographs on the cheap. Visual Empathy's website doesn't do either, and the
 first step is to take a look at why this might be the case.
 
 ![No SEO for this website, that much is
-obvious](/images/search_fort_worth_photographer.png)
+obvious](./images/search_fort_worth_photographer.png)
 
 The above is a search for "Fort Worth photographer", which is fairly generic.
 More specific searches don't yield better results, unless you search for "Visual

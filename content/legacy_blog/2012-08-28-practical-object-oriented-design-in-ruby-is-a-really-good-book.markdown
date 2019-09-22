@@ -4,7 +4,7 @@ title: 'Practical Object Oriented Design is Excellent'
 date: 2012-08-28
 ---
 
-![Practical Object-Oriented Design in Ruby](/images/pood.jpeg)
+![Practical Object-Oriented Design in Ruby](./images/pood.jpeg)
 
 I've been reading the Rough Cut of [Practical Object Oriented Design](https://www.amazon.com/exec/obidos/ASIN/0321721330/joehoobuiblo-20/ref=nosim/), and I have been absolutely enjoying every page. It isn't very often that a technical book comes along that really strikes me as a "new classic," but this one qualifies. [Sandi Metz](https://twitter.com/sandimetz) has compiled a concise review of [SOLID design principles](https://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod) in clear approachable language.
 

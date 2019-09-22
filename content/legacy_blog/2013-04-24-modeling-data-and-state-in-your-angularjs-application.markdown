@@ -6,7 +6,7 @@ date: 2013-04-24
 
 ## Respect your data. Contain your state.
 
-<div style="float: right; padding-top: 30px; padding-left: 30px"><img src="/images/AngularJS-Shield-large.png" /></div>
+![](./images/AngularJS-Shield-large.png)
 Data and state are the foundation of your application. These two items should be
 absolutely respected. As you work through the AngularJS documentation, these two
 items are generally stored on the controllers. This works OK, but as your app

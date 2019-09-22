@@ -5,7 +5,7 @@ date: 2013-04-18
 comments: true
 ---
 
-![My Precious](/images/My-Precious.jpg)
+![My Precious](./images/My-Precious.jpg)
 
 For as long as I can remember, all of my computer upgrades have been "bigger and
 badder." Outside of moving from a FULL ATX DESKTOP WORKSTATION to a laptop,

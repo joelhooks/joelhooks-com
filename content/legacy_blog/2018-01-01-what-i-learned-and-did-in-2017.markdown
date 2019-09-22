@@ -10,11 +10,11 @@ In 2016 we moved our family of 6 out of our home of 15 years across the country 
 
 It's hard to even begin to describe the level of trust and commitment that this amazing human has given to me. ❤️
 
-![Our backyard.](/images/2017_review/2C0AF686-AC7C-415F-9ADC-6ACA3FC53C6C.jpg)
+![Our backyard.](./images/2017_review/2C0AF686-AC7C-415F-9ADC-6ACA3FC53C6C.jpg)
 
 Shortly after arriving in the Pacific Wonderland, we made another decision, and on Feb 9th, 2017 she arrived. Our little Romi π.
 
-![A baby?!](/images/2017_review/romi_born.jpg)
+![A baby?!](./images/2017_review/romi_born.jpg)
 
 _**HOLY SHIT 5 FUCKIN KIDS ARE YOU KIDDING ME LOL??**_
 
@@ -24,11 +24,11 @@ Hah.
 
 They don't say this, because it is a lot. At this point I can't even recommend that people have kids, much less 5 of them.
 
-![selfie partner](/images/2017_review/romi_joel_2017.jpg)
+![selfie partner](./images/2017_review/romi_joel_2017.jpg)
 
 I wouldn't change a thing though, and this little firecracker of a baby girl makes me smile every time I see her.
 
-![The fam.](/images/2017_review/20258444_1583018338389007_5030645407557176293_n.jpg)
+![The fam.](./images/2017_review/20258444_1583018338389007_5030645407557176293_n.jpg)
 
 ## They say the Lord giveth...
 
@@ -36,7 +36,7 @@ One of the reasons I love living in the PWN is the closeness of my family. After
 
 It was wonderful. We looked forward to doing it year after year.
 
-![I miss you so much.](/images/2017_review/lizzie.jpg)
+![I miss you so much.](./images/2017_review/lizzie.jpg)
 
 On March 2017 Lizzie was killed in a sudden and random car crash.
 
@@ -172,7 +172,7 @@ Once you get over the fact that you've defaced your arms forever, it's way easie
 
 My approach to tattoo is to pick great artists and let them do what they want. I thematic suggestions, but every tattoo is part of an art collection that I carry around with me. It's an expression of the artist, and not a deep meaningful personal milestone.
 
-![tattoo freakshow](/images/2017_review/joel_tats.jpg)
+![tattoo freakshow](./images/2017_review/joel_tats.jpg)
 
 The abstract colorful pieces are done by Winston the Whale in PDX. The wrapping undead crystal space dragon was done by Joby Cummings.
 
@@ -182,7 +182,7 @@ I'll probably get more.
 
 I traded in my beloved 2015 Subaru Impreza STI.
 
-![vroom vroom](/images/2017_review/IMG_0312.JPG)
+![vroom vroom](./images/2017_review/IMG_0312.JPG)
 
 It's such a great vehicle. Fast (enough), responsive, comfortable, and excellent in all road conditions. The spoiler is even useful when you are going too fast on winding roads (at the track, hopefully).
 
@@ -190,7 +190,7 @@ The intent originally was to hit the track more often, but after the one and onl
 
 So, I got a Jeep.
 
-![wheelin](/images/2017_review/IMG_0370.jpg)
+![wheelin](./images/2017_review/IMG_0370.jpg)
 
 I'll be honest, driving the jeep around town isn't much fun. It's a truck. It's heavy. It's slow.
 
@@ -198,7 +198,7 @@ _Every other vehicle in this reason is a Jeep._
 
 **But**, it's a shit load of fun driving on the trails.
 
-![at the top of the world with my boys](/images/2017_review/IMG_0469.jpg)
+![at the top of the world with my boys](./images/2017_review/IMG_0469.jpg)
 
 We are able to explore the backwoods that this wonderful region has to offer. We can go places that are hard to get to and see spectacular sights.
 
@@ -210,7 +210,7 @@ Good times.
 
 Working with wood is fascinating. From a tree to a useful object. It's something I've wanted to do for a long time, and in 2017 I was able to try it out. I took a class at a local maker space in Portland (ADX), and built a small table.
 
-![hammer of justice](/images/2017_review/IMG_0594.jpg)
+![hammer of justice](./images/2017_review/IMG_0594.jpg)
 
 I finished the table early so I spent the last night of class constructing this joiner's mallet.
 
@@ -222,23 +222,23 @@ I didn't gain much weight. At 43, I worry about death a lot. Being overweight co
 
 For the first time in 30+ years I don't have to wear corrective lenses! I got LASIK. It's awesome. **DO IT**. 100% worth it.
 
-![four eyes](/images/2017_review/lasik_01.jpg)
+![four eyes](./images/2017_review/lasik_01.jpg)
 
 ### Team gatherings
 
 egghead is 100% remote. That means we don't see each other in person very much. This summer we got together in Utah with most of the team.
 
-![](/images/2017_review/IMG_0991.jpg)
+![](./images/2017_review/IMG_0991.jpg)
 
 Living near Portland is nice because people actually visit here, unlike Fort Worth.
 
 I got to prove to Taylor that his job at egghead wasn't an elaborate catfish.
 
-![new friends.](/images/2017_review/IMG_2362.JPG)
+![new friends.](./images/2017_review/IMG_2362.JPG)
 
 And John and I finally had the opportunity to converge our families.
 
-![a good partner](/images/2017_review/9D441857-8612-480B-BBAE-224A5E938654.jpg)
+![a good partner](./images/2017_review/9D441857-8612-480B-BBAE-224A5E938654.jpg)
 
 Next year we are going to gather in Prague. Can't wait!
 
@@ -246,13 +246,13 @@ Next year we are going to gather in Prague. Can't wait!
 
 For the last several summers I've gone to Aspen to Anderson Ranch to have Joshua Davis, the Dark Wizard of computer generated art, school me in his craft. In 2017 we worked on Arduinos, and I learned a ton. In 2018 we are going to do computer vision. Can't wait.
 
-![art is life](/images/2017_review/IMG_0161.jpg)
+![art is life](./images/2017_review/IMG_0161.jpg)
 
 ### THE PATH OF TOTALITY
 
 Holy shit. Total solar eclipse is really really amazing. If you've got the opportunity to see it, do it. Fuck the traffic. Sit your ass in the long line of cars and witness this event.
 
-![total eclipse of the sun](/images/2017_review/IMG_0212.jpg)
+![total eclipse of the sun](./images/2017_review/IMG_0212.jpg)
 
 # 2018 Plans
 
@@ -264,4 +264,4 @@ We aren't going to have any more kids, or move across the country. We might get 
 
 It should be nice.
 
-![](/images/2017_review/IMG_0316.PNG)
+![](./images/2017_review/IMG_0316.PNG)
