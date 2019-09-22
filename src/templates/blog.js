@@ -9,10 +9,10 @@ import Link from 'components/Link'
 import { bpMaxSM, bpMinMD } from '../lib/breakpoints'
 import { useTheme } from 'components/Theming'
 
-const Blog = ({ data: { site, allMdx }, pageContext: { pagination } }) => {
-  const { page, nextPagePath, previousPagePath } = pagination
+const Blog = ({ data: { site, allMdx }, pageContext: { articles } }) => {
+  // const { page, nextPagePath, previousPagePath } = pagination
 
-  const posts = page
+  const posts = articles
     .map(id =>
       allMdx.edges.find(
         edge =>
@@ -94,29 +94,7 @@ const Blog = ({ data: { site, allMdx }, pageContext: { pagination } }) => {
             </Link>
           </div>
         ))}
-        <div
-          css={css({
-            marginTop: '50px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            [bpMaxSM]: {
-              marginTop: '30px',
-            },
-          })}
-        >
-          {previousPagePath ? (
-            <Link to={previousPagePath} aria-label="View previous page">
-              ← Previous Page
-            </Link>
-          ) : (
-            <div />
-          )}
-          {nextPagePath && (
-            <Link to={nextPagePath} aria-label="View next page">
-              Next Page →
-            </Link>
-          )}
-        </div>
+
         <hr
           css={css`
             margin: 50px 0;

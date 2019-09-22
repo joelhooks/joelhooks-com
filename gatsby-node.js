@@ -74,8 +74,14 @@ exports.createPages = ({ actions, graphql }) =>
     const { edges } = data.allMdx
     const { createRedirect, createPage } = actions
     createPosts(createPage, createRedirect, edges)
-    createPaginatedPages(actions.createPage, edges, '/articles', {
-      categories: [],
+
+    createPage({
+      path: '/articles',
+      component: path.resolve(`src/templates/blog.js`),
+      context: {
+        articles: edges.map(value => value.node.id),
+        categories: [],
+      },
     })
   })
 
@@ -88,41 +94,6 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         $components: path.resolve(__dirname, 'src/components'),
       },
     },
-  })
-}
-
-const createPaginatedPages = (createPage, edges, pathPrefix, context) => {
-  const pages = edges.reduce((acc, value, index) => {
-    const pageIndex = Math.floor(index / PAGINATION_OFFSET)
-
-    if (!acc[pageIndex]) {
-      acc[pageIndex] = []
-    }
-
-    acc[pageIndex].push(value.node.id)
-
-    return acc
-  }, [])
-
-  pages.forEach((page, index) => {
-    const nextPagePath = `${pathPrefix}/${index + 1}`
-    const previousPagePath =
-      index === 1 ? pathPrefix : `${pathPrefix}/${index - 1}`
-
-    createPage({
-      path: index > 0 ? `${pathPrefix}/${index}` : `${pathPrefix}`,
-      component: path.resolve(`src/templates/blog.js`),
-      context: {
-        pagination: {
-          page,
-          nextPagePath: index === pages.length - 1 ? null : nextPagePath,
-          previousPagePath: index === 0 ? null : previousPagePath,
-          pageCount: pages.length,
-          pathPrefix,
-        },
-        ...context,
-      },
-    })
   })
 }
 
