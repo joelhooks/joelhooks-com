@@ -116,11 +116,15 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               background: none;
             }
             em {
-              font-family: ${fonts.regularItalic};
+              font-family: ${fonts.regular};
+              background: ${colors.pink};
+              color: ${colors.whiite};
             }
             strong {
+              font-family: ${fonts.semibold};
+              font-weight: normal;
               em {
-                font-family: ${fonts.semiboldItalic};
+                font-family: inherit;
               }
             }
             h1,
