@@ -25,7 +25,7 @@ Handbook](https://nathanbarry.com/app-design-handbook/), [Designing Web
 Applications](https://nathanbarry.com/webapps/), and most recently
 [Authority](https://nathanbarry.com/authority/) which is about... self publishing
 infoproducts. Additionally he's launched his first SAAS product with
-[ConvertKit](https://convertkit.com/). This dude is **busy**. He's also made
+[ConvertKit](https://convertkit.com?lmref=ia534A). This dude is **busy**. He's also made
 **$200k** in the last 9 months across these products.
 
 Wow.
