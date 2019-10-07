@@ -18,6 +18,7 @@ export default function Post({
   const author = mdx.frontmatter.author || config.author.name
   const date = mdx.frontmatter.date
   const title = mdx.frontmatter.title
+  const description = mdx.frontmatter.description
   const banner = mdx.frontmatter.banner
 
   return (

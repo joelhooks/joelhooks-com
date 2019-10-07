@@ -4,56 +4,61 @@ import { css } from '@emotion/core'
 import colors from '../lib/colors'
 import { useTheme } from './Theming'
 
-import { TwitterShareButton, FacebookShareButton } from 'react-share'
+import { TwitterIcon, TwitterShareButton } from 'react-share'
 
 const Share = ({ url, title, twitterHandle }) => {
   const theme = useTheme()
   return (
-    <div
-      css={css`
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        div {
-          margin-right: 20px;
-          cursor: pointer;
-          :hover {
-            color: ${theme.colors.primary};
-          }
-        }
-        span {
-          margin-right: 20px;
-          font-size: 70%;
-          text-transform: uppercase;
-          line-height: 2.5;
-          opacity: 0.7;
-        }
-      `}
-    >
+    <div>
       <div
         css={css`
-          flex-grow: 1;
-          border-top: 1px solid ${colors.gray};
-        `}
-      />
-      <span>Share article</span>
-      <TwitterShareButton
-        url={url}
-        quote={title}
-        via={twitterHandle.split('@').join('')}
-      >
-        Twitter
-      </TwitterShareButton>
-      <FacebookShareButton
-        url={url}
-        quote={title}
-        via={twitterHandle.split('@').join('')}
-        css={css`
-          cursor: pointer;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
         `}
       >
-        Facebook
-      </FacebookShareButton>
+        <div
+          css={css`
+            padding-bottom: 25px;
+          `}
+        >
+          <TwitterShareButton
+            url={url}
+            title={title}
+            via={twitterHandle.split('@').join('')}
+            css={css`
+              cursor: pointer;
+              :hover {
+                color: ${theme.colors.primary};
+              }
+            `}
+          >
+            <div
+              css={css`
+                padding-left: 10px;
+              `}
+            >
+              <strong>
+                ✨✨ click here to share this article with your friends on
+                Twitter ✨✨
+              </strong>
+            </div>
+          </TwitterShareButton>
+        </div>
+        <div
+          css={css`
+            padding-top: 10px;
+            opacity: 0.7;
+            max-width: 75%;
+            font-size: 12px;
+          `}
+        >
+          <strong>This site isn't collecting analytics</strong>. 0. It's a huge
+          help to me if you share it on Twitter if you enjoy it. That way other
+          people can also enjoy it and I notice that it was enjoyed. 🙏
+        </div>
+      </div>
     </div>
   )
 }

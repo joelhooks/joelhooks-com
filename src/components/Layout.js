@@ -116,9 +116,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               background: none;
             }
             em {
-              font-family: ${fonts.regular};
-              background: ${colors.pink};
-              color: ${colors.white};
+              font-family: ${fonts.regularItalic};
             }
             strong {
               font-family: ${fonts.semibold};
