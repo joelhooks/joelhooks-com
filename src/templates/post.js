@@ -48,7 +48,9 @@ export default function Post({
               margin: '0 0 30px 0',
               [bpMinMD]: {
                 margin: '0 0 50px 0',
+                fontSize: '3rem',
               },
+              fontSize: '1.75rem',
             })}
           >
             {title}
