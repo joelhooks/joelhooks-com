@@ -378,7 +378,7 @@ const Hand = ({ baseColor, altColor, primaryColor }) => {
           <ellipse
             cx="64.965"
             cy="128.503"
-            fill={theme.colors.tebaseColort}
+            fill={baseColor}
             rx="1.059"
             ry="1.059"
           />
