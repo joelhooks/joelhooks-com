@@ -1,8 +1,6 @@
 const path = require('path')
 
 const _ = require('lodash')
-const paginate = require('gatsby-awesome-pagination')
-const PAGINATION_OFFSET = 7
 
 const createPosts = (createPage, createRedirect, edges) => {
   edges.forEach(({ node }, i) => {
@@ -115,6 +113,19 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       name: 'id',
       node,
       value: node.id,
+    })
+
+    function extractFirstText(str) {
+      const matches = str.match(/"(.*?)"/)
+      return matches ? matches[1] : str
+    }
+
+    const rootFilePath = extractFirstText(parent.internal.description)
+
+    createNodeField({
+      name: 'github',
+      node,
+      value: `${process.env.REPO_ROOT}/${rootFilePath}`,
     })
 
     createNodeField({

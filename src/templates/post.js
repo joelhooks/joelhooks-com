@@ -20,6 +20,7 @@ export default function Post({
   const title = mdx.frontmatter.title
   const description = mdx.frontmatter.description
   const banner = mdx.frontmatter.banner
+  const github = mdx.fields.github
 
   return (
     <Layout site={site} frontmatter={mdx.frontmatter}>
@@ -72,6 +73,17 @@ export default function Post({
             </div>
           )}
           <MDXRenderer>{mdx.code.body}</MDXRenderer>
+          <div
+            css={css`
+              text-align: center;
+            `}
+          >
+            <a href={github} rel="nofollow">
+              <strong>
+                <em>View this article on Github.</em>
+              </strong>
+            </a>
+          </div>
         </Container>
         {/* <SubscribeForm /> */}
       </article>
@@ -94,6 +106,9 @@ export const pageQuery = graphql`
     }
     mdx(fields: { id: { eq: $id } }) {
       excerpt(pruneLength: 240)
+      fields {
+        github
+      }
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
