@@ -1,0 +1,68 @@
+---
+id: -PqgLmfz7
+slug: simple-serverless-now
+date: 2019-10-22
+title: "Creating a Node.js serverless function as a proxy endpoint using express on Zeit Now"
+published: false
+---
+
+Serverless functions are incredibly convenient. Being able quickly and easily deply api endpoints with almost zero friction is luxurious! 🥰
+
+One of my primary use cases for serverless functions has been to access and coordinate with third party APIs. If I'm deploying a static site with Gatsby for instance, I can user a serverless function to add dynamic features and access data across the internet without exposing tokens/secrets or dealing with CORS issues.
+
+An egghead instructor grabbed [a fun open data Star Wars quote api endpoint](https://www.programmableweb.com/api/star-wars-quotes) to use in a code demo. The trouble is, the original URL wasn't using `https` and wouldn't work for demo code in codesandbox.com or on egghead.io which require ssl.
+
+The demo is baked into the videos already, the workshop is scheduled for release, and we needed a quick way to provide the endpoint and still have it function as demonstrated in the videos.
+
+Eventually we'll want to replace the api completely for full control, but to get this solved quickly I wanted to have something under our control that could be deployed to an `https` endpoint and serve as a drop in [proxy server](https://developer.mozilla.org/en-US/docs/Glossary/Proxy_server) for the original URL.
+
+Here are the tools I chose:
+
+* [express](https://expressjs.com/) to handle the request and response with convenient middleware
+* [axios](https://github.com/axios/axios) to call the original URL being proxied
+* [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) to manage the timing of ansync requests and response
+* [Zeit's Now](https://zeit.co/docs/v2/introduction/) for deploying configuration free serverless functions
+
+Now is configuration free for simple problems like this. It uses a common convention and the tool inspects the `/api` folder for any supported files (`.js` in this case) and  creates a [serverless function](https://zeit.co/docs/v2/serverless-functions/introduction) for any that it discovers. 
+
+It finds `randomQuote.js` which becomes `/api/randomQuote` on the resulting url when deployed to Now.
+
+-> [click here to see it live](https://starwars-quote-proxy-joelhooks.eggheadio1.now.sh/api/randomQuote)
+
+In this case, express is being used because it has nifty middleware plugins features like [cors](https://expressjs.com/en/resources/middleware/cors.html) that "just work".
+
+When you call the endpoint, express uses a wild card to handle any incoming requests. 
+
+I've read that "express doesn't meet the model of now serverless functions" which I take to mean that you probably shouldn't build a multi-endpoint traditional express app using serverless functions.
+
+This is good advice.
+
+For this problem we are using a single serverless function that uses express for convenience and not to build an "express app". 
+
+When the `/api/randomQuote` endpoint receives any request it is captured in an `async` function.
+
+```js
+app.get('*', async (req, res) => {
+  const response = await axios
+    .get('http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote')
+    .then(({data}) => {
+      return data
+    })
+
+  res.send({
+    ...response,
+  })
+})
+```
+
+The `async` function assigns a constant `response` and `await`s the response from a call to `axios.get`. The `await` keyword holds execution of the next line of code until the promise returned by `axios.get` is resolved. 😅
+
+That's a lot going on in a little bit of code. `async/await` is a powerful way to "compress" your code which I recommend learning if it is still unfamiliar. 
+
+There's a very good [egghead course from Marius Schulz on `async/await` in JavaScript](https://egghead.io/courses/asynchronous-javascript-with-async-await?af=1njoh8) if you'd like to learn more.
+
+Finally, we send a response using `res.send` which forwards the response from the original service back to the caller with no CORS issues to suffer from and using SSL so it works where we need it.
+
+With googling and testing the whole thing took about 20 minutes to put together and push to a live "production" endpoint.
+
+💪
