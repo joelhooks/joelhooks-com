@@ -14,7 +14,7 @@ I've been wanting to part ways with WordPress for some time. It's been expensive
 
 What I've really been wanting to do is migrate my words to a static Github repository and serve it up through Github Pages. I'm already shelling out for the Github, why not take advantage. It is also appealing to serve up an entirely static site. Suck it script kiddies.
 
-##Exiting Wordpress
+## Exiting Wordpress
 
 I've got a lot of words written that people still find useful. I don't want to disappoint Rob! And frankly, I don't want to break the internet and leave a trail of broken links across the Google.
 
@@ -28,7 +28,7 @@ All that was left was extracting all of the [individual posts into static pages]
 
 There are other options for this too. [exitWP](https://github.com/thomasf/exitwp/) looks like a solid way to extract posts and create markdown that could potentially be used with [Jekyll](https://github.com/mojombo/jekyll) (and subsequently [Octopress](https://octopress.org/)), but I liked the flat file structure of the straight brute force HTML output.
 
-##Enter Octopress
+## Enter Octopress
 
 Octopress is a wicked open-source blogging platform that leverages a hosted git repository to deliver my words. It hooks up to Github and Heroku, depending on your preference for platform. I've got mine working through Github.
 
@@ -46,6 +46,6 @@ It isn't pretty, but it got all of my post page links wedged into the sitemap. H
 
 Another cool tool that works well with Octopress is [Pow](https://pow.cx/). Octopress is a rack app, and once to point Pow at your Octopress folder, it serves the page up locally at `https://foldername.dev`. Then it's just a matter of running `rake watch` and going to town.
 
-##Conclusion
+## Conclusion
 
 I'm stoked about making progress on my blogspace. It has been on the todo list for some time. It falls well into the [breakable toy](https://redsquirrel.com/dave/work/a2j/patterns/BreakableToys.html) category of things, and that is something I can use right now as I learn new tools. I'm looking forward to improving this space with quality content about modern standards-based web development with open source tools.
