@@ -203,6 +203,12 @@ module.exports = {
         ],
       },
     },
+    {
+      resolve: 'gatsby-plugin-fathom',
+      options: {
+        siteId: process.env.FATHOM_SITE_ID,
+      },
+    },
     'gatsby-plugin-offline',
   ],
 }
