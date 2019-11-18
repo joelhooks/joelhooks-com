@@ -26,6 +26,10 @@ This threw a wrench in the works. Gatsby doesn't allow configurable build direct
 
 ![screenshot of a quote from Kyle Matthews saying that configurable output directories will never be part of Gatsby](./kyle-says-no.png)
 
+I agree. We are at the margins here, but at the same time this feels like a powerful use case that could sell Gatsby as a powerful modern tool that fits nicely and plays well in existing legacy application infrastructures.
+
+Hacks are fine though 😂
+
 We just configured an npm script in our `package.json` to clear the build folder, build the app, create a sub-folder, and move the whole fuckin build manually into the sub-folder.
 
 This step took the most debugging to get the clearing and recursive moving working properly, but configurable Gatsby output folders are very hard and marginally useful so here we are!
