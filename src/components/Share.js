@@ -53,9 +53,7 @@ const Share = ({ url, title, twitterHandle }) => {
             opacity: 0.7,
           }}
         >
-          <strong>This site isn't collecting analytics</strong>. 0. It's a huge
-          help to me if you share it on Twitter if you enjoy it. That way other
-          people can also enjoy it and I notice that it was enjoyed.{' '}
+          Share this article on Twitter if it was useful. It's a big help to me.
           <span role="img" aria-label="praying hands">
             🙏
           </span>
