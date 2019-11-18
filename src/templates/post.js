@@ -80,7 +80,7 @@ export default function Post({
           >
             <a href={github} rel="nofollow">
               <strong>
-                <em>View this article on Github.</em>
+                <em>edit this article on github</em>
               </strong>
             </a>
           </div>
