@@ -42,7 +42,7 @@ const SEO = ({
         frontmatter || postData.childMarkdownRemark.frontmatter || {}
 
       const title = postMeta.title || seo.title
-      const description = postMeta.description || seo.description
+      const description = postMeta.description || excerpt || seo.description
       const image = postImage ? `${seo.canonicalUrl}${postImage}` : seo.image
       const url = postMeta.slug
         ? `${seo.canonicalUrl}${path.sep}${postMeta.slug}`
