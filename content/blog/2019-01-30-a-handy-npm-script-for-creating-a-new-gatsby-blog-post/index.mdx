@@ -190,7 +190,7 @@ if (!fs.existsSync(dir)) {
 }
 ```
 
-The `fs` module needs to be "imported" using require, and then I also added an if/else around the call to `fs.mkdirSync(dir)` to ensure that I wasn't going to overwrite an existing post. Better safe than sorry. Once that runs, you'll see an empty folder is created. Now we can us `fs.writeFileSync` to create the actual file itself:
+The `fs` module needs to be "imported" using require, and then I also added an if/else around the call to `fs.mkdirSync(dir)` to ensure that I wasn't going to overwrite an existing post. Better safe than sorry. Once that runs, you'll see an empty folder is created. Now we can use `fs.writeFileSync` to create the actual file itself:
 
 ```javascript
 const fs = require('fs')
