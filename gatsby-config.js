@@ -201,7 +201,7 @@ module.exports = {
               }, []),
             settings: {
               distinct: true,
-              attributeForDistinction: 'slug',
+              attributeForDistinct: 'slug',
               searchableAttributes: ['title', 'description', 'text', 'slug'],
             },
           },
