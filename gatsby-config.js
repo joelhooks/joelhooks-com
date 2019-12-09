@@ -109,7 +109,7 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allMdx } }) =>
+            serialize: ({query: {site, allMdx}}) =>
               allMdx.edges.map(edge =>
                 Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
@@ -182,12 +182,12 @@ module.exports = {
               }
             }
           `,
-            transformer: ({ data }) =>
-              data.allMdx.edges.reduce((records, { node }) => {
-                const { title, description } = node.frontmatter
-                const { slug } = node.fields
+            transformer: ({data}) =>
+              data.allMdx.edges.reduce((records, {node}) => {
+                const {title, description} = node.frontmatter
+                const {slug} = node.fields
 
-                const base = { slug, title, description }
+                const base = {slug, title, description}
                 const chunks = node.rawBody.split('\n\n')
 
                 return [
@@ -199,6 +199,11 @@ module.exports = {
                   })),
                 ]
               }, []),
+            settings: {
+              distinct: true,
+              attributeForDistinction: 'slug',
+              searchableAttributes: ['title', 'description', 'text', 'slug'],
+            },
           },
         ],
       },
