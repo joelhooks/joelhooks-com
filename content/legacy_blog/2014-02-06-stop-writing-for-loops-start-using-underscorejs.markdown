@@ -125,7 +125,7 @@ For the next 30 days, don't write any for loops. If you see a nasty pile of thos
 
 Beware. Underscore is the gateway to functional programming. What has been seen, can't be unseen. In a good way!
 
-If you're wanting to dig a little deeper, you should jump over to this tutorial on [functional programming in javascript](https://reactive-extensions.github.io/learnrx/). It's great and only takes about 1/2 hour to work through. It is "how the sausage is made" fundamentals for the underscore functions I used above. Lot's of wholesome nerd fun!
+If you're wanting to dig a little deeper, you should jump over to this tutorial on [functional programming in javascript](http://reactivex.io/learnrx/). It's great and only takes about 1/2 hour to work through. It is "how the sausage is made" fundamentals for the underscore functions I used above. Lot's of wholesome nerd fun!
 
 **note**: _As a more performant alternative to underscore, you might check out [lodash](https://lodash.com/benchmarks)_
 
