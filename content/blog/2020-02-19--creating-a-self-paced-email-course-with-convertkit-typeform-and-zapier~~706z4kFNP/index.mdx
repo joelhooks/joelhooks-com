@@ -14,7 +14,7 @@ The project is ambitious, and the end goal is to push the envelope of what and h
 
 Just JavaScript is meant to be fun and interesting without being condescending or fluffy!
 
-That's a tall order, and like most things one of the hardests parts is where to even start.
+That's a tall order, and like most things one of the hardest parts is where to even start.
 
 Is this a "classic egghead course"?
 
@@ -26,7 +26,7 @@ Is this a blog?
 
 In terms of our own mental models for how to start releasing the work, we came to the conclusion that this is essentially a "book" to start out. It's a familiar structure and something that all three of us can agree upon in terms of how to produce the initial "chapters"
 
-But we don't want it to live on a webpage yet and we aren't developing for print, so the question is how will we deliver the content to eager users, create a feedback loop, and start the initial development of a high quality email email list of engaged learners that might also be interested in buying the final product.
+But we don't want it to live on a webpage yet and we aren't developing for print, so the question is how will we deliver the content to eager users, create a feedback loop, and start the initial development of a high quality email list of engaged learners that might also be interested in buying the final product.
 
 To accomplish this we went with the idea of a self-paced email course, which is an idea that I learned from [Brennan Dunn's in depth ConvertKit Masterclass](https://doubleyourfreelancing.com/mastering-convertkit?ref=joel).
 
@@ -34,7 +34,7 @@ With a traditional email course a user subscribes to the course and then the ema
 
 The idea of "self-paced" means that the subscriber can perform some action that will trigger the next email to be sent.
 
-Because we are very interested in assesement and giving learners a sense of proof that they understand the concepts, we wanted to add quiz like exercises at the end of each module.
+Because we are very interested in assessment and giving learners a sense of proof that they understand the concepts, we wanted to add quiz like exercises at the end of each module.
 
 We considered several approaches ranging from a bullet list of "trigger links" inline in the emails to building a bespoke quiz system (Dan, Maggie, and I can all code so the temptation to build a custom thing is strong hah).
 
@@ -69,11 +69,11 @@ All of this will be used to craft an incredible experience when the course is re
 
 ### Setting a Score
 
-ConvertKit automations are triggered by events or changes in user properties. In our case the primary trigger is when somebody subcribes to the form on [JustJavaScript.com](https://justjavascript.com).
+ConvertKit automations are triggered by events or changes in user properties. In our case the primary trigger is when somebody subscribes to the form on [JustJavaScript.com](https://justjavascript.com).
 
 When they subscribe ConverKit sends them a confirmation email (always use double opt-in!) that they need to open and click.
 
-Not that I **always set up custom landing pages** for both the url after they subscribe that the form redirects to as well as the url they land on when they confirm, ptherwise they get default ConvertKit pages which are fine I guess if you don't mind them (I do mind them so I take an extra 30 minutes and make things nice)
+Not that I **always set up custom landing pages** for both the url after they subscribe that the form redirects to as well as the url they land on when they confirm, otherwise they get default ConvertKit pages which are fine I guess if you don't mind them (I do mind them so I take an extra 30 minutes and make things nice)
 
 Once they subscribe we immediately set a "score" property on the subscriber.
 
@@ -95,26 +95,26 @@ Here we are checking if the user as `completed` or `force completed` the particu
 
 If they haven't completed the module we add them to the modules email sequence.
 
-Unfortuantely ConvertKit doesn't allow you to send single emails inside of an automation, so we are using sequences that aren't sequences and only send one email.
+Unfortunately ConvertKit doesn't allow you to send single emails inside of an automation, so we are using sequences that aren't sequences and only send one email.
 
 ![screenshot of a sequence](./03-seqeunce.png)
 
 The sequence is one email and the initial delay is set to 0 which means it sends immediately.
 
-In ConvertKit, when a seqeunce is within an automation the user **exits the sequence immediately** after the final email is sent so in our case that means they return to the automation immediately where they encounter a `24 hour delay` node.
+In ConvertKit, when a sequence is within an automation the user **exits the sequence immediately** after the final email is sent so in our case that means they return to the automation immediately where they encounter a `24 hour delay` node.
 
 If the subscriber does nothing at all, when the 24 hour delay finishes they get the `force completed` tag applied.
 
 ![](./04-events.png)
 
-When you add an event node inside a ConverKit automation it does a couple of things:
+When you add an event node inside a ConvertKit automation it does a couple of things:
 
 * stops the flow of the automation so that if the event is never triggered the subscriber just sits there forever in front of the event
 * pulls the subscriber to the event if it is triggered and they are inside of the automation above the event
 
 So if the user does nothing and the 24 hour delay is up they get the `force completed` tag added and are pulled to the `force completed` event node and sent downstream through the automation.
 
-If the subscriber clicks the Typeform link in the email and completes the quiz however they trigger the Zapier task which tags them as `completed` for this module an **immediate skips past the delay** to the completed event node.
+If the subscriber clicks the Typeform link in the email and completes the quiz however they trigger the Zapier task which tags them as `completed` for this module and **immediately skips past the delay** to the completed event node.
 
 Inside of that branch we also update their score property with a plus 1 so that we can keep an idea of subscribers that are most engaged. We use that engagement score for a couple of things which I will talk about in a moment.
 
@@ -130,7 +130,7 @@ When the subscriber reaches the end of the automation they are sent to a short a
 
 Since we are working on this while users are receiving it, the wait has been a week or two once they finish and we publish the next module.
 
-One of the things that Dan wanted was a way to send the modules initially to a subset of subscribers so that we could get feedback and make tweeks before getting slammed by 35,000 users going through it.
+One of the things that Dan wanted was a way to send the modules initially to a subset of subscribers so that we could get feedback and make tweaks before getting slammed by 35,000 users going through it.
 
 To accomplish this I use the score property and pick users with the waiting tag and send them back through the automation. Then we can get feedback, see if the concepts and quiz is working out, make changes, and send the rest through in a day or two.
 
