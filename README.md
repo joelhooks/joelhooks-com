@@ -39,6 +39,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
+   <td align="center"><a href="http://vojta.io"><img src="https://avatars2.githubusercontent.com/u/25487857?v=4" width="100px;" alt=""/><br /><sub><b>Vojta Holik</b></sub></a><br /><a href="#design-vojtaholik" title="Design">🎨</a></td>
    <td align="center"><a href="http://codedaily.io"><img src="https://avatars1.githubusercontent.com/u/1714673?v=4" width="100px;" alt=""/><br /><sub><b>Jason Brown</b></sub></a><br /><a href="#maintenance-browniefed" title="Maintenance">🚧</a></td>
    <td align="center"><a href="https://github.com/DrShpongle"><img src="https://avatars3.githubusercontent.com/u/1519448?v=4" width="100px;" alt=""/><br /><sub><b>Evgeniy Nagalskiy</b></sub></a><br /><a href="https://github.com/joelhooks/joelhooks-com/commits?author=DrShpongle" title="Code">💻</a></td>
   </tr>
