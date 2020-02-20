@@ -1,6 +1,6 @@
 # Gatsby.js MDX Blog Starter Project
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 A starter project in [Gatsby.js](https://www.gatsbyjs.org/) with [MDX](https://github.com/mdx-js/mdx).
@@ -43,6 +43,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://codedaily.io"><img src="https://avatars1.githubusercontent.com/u/1714673?v=4" width="100px;" alt=""/><br /><sub><b>Jason Brown</b></sub></a><br /><a href="#maintenance-browniefed" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://github.com/DrShpongle"><img src="https://avatars3.githubusercontent.com/u/1519448?v=4" width="100px;" alt=""/><br /><sub><b>Evgeniy Nagalskiy</b></sub></a><br /><a href="https://github.com/joelhooks/joelhooks-com/commits?author=DrShpongle" title="Code">💻</a></td>
     <td align="center"><a href="https://www.marcuslyons.com"><img src="https://avatars1.githubusercontent.com/u/10541922?v=4" width="100px;" alt=""/><br /><sub><b>Marcus Lyons</b></sub></a><br /><a href="#maintenance-marcuslyons" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://brianlovin.com"><img src="https://avatars0.githubusercontent.com/u/1923260?v=4" width="100px;" alt=""/><br /><sub><b>Brian Lovin</b></sub></a><br /><a href="#maintenance-brianlovin" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 
