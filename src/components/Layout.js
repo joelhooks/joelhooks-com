@@ -18,7 +18,6 @@ import Footer from '../components/Footer'
 
 const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
   const darkMode = useDarkMode()
-  console.log('darkMode: ', darkMode)
 
   const {
     description: siteDescription,
