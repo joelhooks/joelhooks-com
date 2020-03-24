@@ -1,10 +1,8 @@
 import React from 'react'
 
 import colors from '../lib/colors'
-import { useTheme } from './Theming'
 
 const Hand = ({ baseColor, altColor, primaryColor }) => {
-  const theme = useTheme()
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

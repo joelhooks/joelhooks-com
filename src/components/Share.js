@@ -1,13 +1,13 @@
 import React from 'react'
 import { css } from '@emotion/core'
-import { useTheme } from './Theming'
 import fonts from '../lib/typography'
 
 import { TwitterIcon, TwitterShareButton } from 'react-share'
 import SparklingCandy from './SparklingCandy'
 
+import colors from '../lib/colors'
+
 const Share = ({ url, title, twitterHandle }) => {
-  const theme = useTheme()
   return (
     <div>
       <div
@@ -30,7 +30,7 @@ const Share = ({ url, title, twitterHandle }) => {
           css={css`
             cursor: pointer;
             :hover {
-              color: ${theme.colors.primary};
+              color: ${colors.primary};
             }
           `}
         >
@@ -39,7 +39,7 @@ const Share = ({ url, title, twitterHandle }) => {
               margin: '1rem 0',
               fontFamily: fonts.semibold,
               span: {
-                color: theme.colors.primary,
+                color: colors.primary,
               },
             }}
           >

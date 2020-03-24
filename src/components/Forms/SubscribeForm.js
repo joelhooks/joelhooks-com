@@ -3,10 +3,10 @@ import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import tw from 'tailwind.macro'
+import useDarkMode from 'use-dark-mode'
 import { css } from '@emotion/core'
 
 import colors from '../../lib/colors'
-import { withTheme } from '../Theming'
 import fonts from '../../lib/typography'
 import { bpMinSM, bpMinMD } from '../../lib/breakpoints'
 import Hand from '../Hand'
@@ -66,9 +66,9 @@ class SubscribeForm extends React.Component {
 
   render() {
     const { submitted, loading, response, errorMessage } = this.state
-    const { theme, ...props } = this.props
+    const { darkMode, ...restProps } = this.props
     return (
-      <div {...props}>
+      <div {...restProps}>
         {!submitted && (
           <div
             css={css(
@@ -106,9 +106,9 @@ class SubscribeForm extends React.Component {
               })}
             >
               <Hand
-                baseColor={theme.colors.bodyColor}
-                altColor={theme.colors.bodyBg}
-                primaryColor={theme.colors.primary}
+                baseColor={darkMode ? colors.white : colors.black}
+                altColor={darkMode ? colors.black : colors.white}
+                primaryColor={colors.primary}
               />
             </div>
           </div>
@@ -193,7 +193,7 @@ class SubscribeForm extends React.Component {
   }
 }
 
-export default withTheme(SubscribeForm)
+export default SubscribeForm
 
 const labelStyles = css({
   width: '100%',
