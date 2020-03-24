@@ -7,4 +7,11 @@ const colors = {
   violet: 'C71585',
 }
 
-export default colors
+const relativeColors = {
+  primary: colors.pink,
+}
+
+export default {
+  ...colors,
+  ...relativeColors,
+}
