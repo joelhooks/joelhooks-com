@@ -2,15 +2,17 @@ import React from 'react'
 import { Link } from 'gatsby'
 import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
-import { useTheme } from './Theming'
+import useDarkMode from 'use-dark-mode'
 import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
 import Logo from './Logo'
 import ThemeToggler from './ThemeToggler'
 
+import colors from '../lib/colors'
+
 const Header = ({ siteTitle }) => {
-  const theme = useTheme()
+  const darkMode = useDarkMode()
   return (
     <header css={css(tw`w-full flex-shrink-0 py-4 md:py-8 lg:py-12 bg-body`)}>
       <Container noVerticalPadding>
@@ -23,7 +25,7 @@ const Header = ({ siteTitle }) => {
               {
                 '@media (hover: hover)': {
                   ':hover': {
-                    color: theme.colors.primary,
+                    color: colors.primary,
                   },
                 },
                 [bpMinXL]: {
@@ -50,8 +52,8 @@ const Header = ({ siteTitle }) => {
                   height: '115px',
                 },
               })}
-              baseColor={theme.colors.bodyColor}
-              altColor={theme.colors.bodyBg}
+              baseColor={darkMode.value ? colors.white : colors.black}
+              altColor={darkMode.value ? colors.black : colors.white}
             />
             <span
               css={css(
@@ -90,11 +92,7 @@ const Header = ({ siteTitle }) => {
           >
             <Search />
 
-            <ThemeToggler
-              css={{}}
-              toggleTheme={theme.toggleTheme}
-              themeName={theme.themeName}
-            />
+            <ThemeToggler />
           </div>
         </nav>
       </Container>

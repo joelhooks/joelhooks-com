@@ -1,19 +1,17 @@
 import React from 'react'
-import {graphql} from 'gatsby'
+import { graphql } from 'gatsby'
 import tw from 'tailwind.macro'
-import {css} from '@emotion/core'
+import { css } from '@emotion/core'
 
 import Layout from 'components/Layout'
 import Link from 'components/Link'
 import Button from 'components/Button'
 import Container from 'components/Container'
-import {useTheme} from '../components/Theming'
 import Home from './home.mdx'
 
-import {ReactPlayer} from 'egghead-react-player'
+import { ReactPlayer } from 'egghead-react-player'
 
-export default function Index({data: {site, allMdx}}) {
-  const theme = useTheme()
+export default function Index({ data: { site, allMdx } }) {
   return (
     <Layout site={site}>
       <Container
@@ -47,8 +45,8 @@ export const pageQuery = graphql`
     }
     allMdx(
       limit: 8
-      sort: {fields: [frontmatter___date], order: DESC}
-      filter: {frontmatter: {published: {ne: false}}}
+      sort: { fields: [frontmatter___date], order: DESC }
+      filter: { frontmatter: { published: { ne: false } } }
     ) {
       edges {
         node {

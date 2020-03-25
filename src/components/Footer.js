@@ -1,17 +1,22 @@
 import React from 'react'
 import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
+import useDarkMode from 'use-dark-mode'
 import SubscribeForm from './Forms/SubscribeForm'
 import { Twitter, GitHub } from './Social'
 import Container from './Container'
-import { useTheme } from './Theming'
+
+import colors from '../lib/colors'
 
 const Footer = ({ author }) => {
-  const theme = useTheme()
+  const darkMode = useDarkMode()
   return (
     <footer>
       <Container noVerticalPadding>
-        <SubscribeForm css={css(tw`mt-10 sm:mt-12`)} />
+        <SubscribeForm
+          css={css(tw`mt-10 sm:mt-12`)}
+          darkMode={darkMode.value}
+        />
         <div
           css={css(
             tw`flex justify-between items-center pt-12 pb-8 sm:pt-16 sm:pb-10`,
@@ -27,12 +32,12 @@ const Footer = ({ author }) => {
           </div>
           <div>
             <Twitter
-              color={theme.colors.bodyColor}
-              hover={theme.colors.primary}
+              color={darkMode.value ? colors.white : colors.black}
+              hover={colors.primary}
             />
             <GitHub
-              color={theme.colors.bodyColor}
-              hover={theme.colors.primary}
+              color={darkMode.value ? colors.white : colors.black}
+              hover={colors.primary}
             />
           </div>
         </div>

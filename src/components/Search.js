@@ -10,10 +10,10 @@ import {
   Highlight,
 } from 'react-instantsearch-dom'
 import { MdSearch } from 'react-icons/md'
+import useDarkMode from 'use-dark-mode'
 
 import colors from '../lib/colors'
 import Overlay from './Overlay'
-import { useTheme } from './Theming'
 
 const client = algoliasearch('DSQGVIFOX3', '29ed94b0481df0099a928e5d4229b5e9')
 
@@ -156,7 +156,7 @@ const SearchContainer = styled('div')`
 // eslint-disable-next-line react/display-name
 export default () => {
   const [active, setActive] = useState(false)
-  const theme = useTheme()
+  const darkMode = useDarkMode()
   return (
     <InstantSearch
       searchClient={client}
@@ -166,14 +166,14 @@ export default () => {
       <Configure distinct={1} />
       <OpenSearch
         css={{
-          background: rgba(theme.colors.bodyColor, 0.05),
+          background: rgba(darkMode.value ? colors.white : colors.black, 0.05),
           '@media (hover: hover)': {
             ':hover': {
-              background: theme.colors.primary,
+              background: colors.primary,
               color: colors.white,
             },
           },
-          color: theme.colors.bodyColor,
+          color: darkMode.value ? colors.white : colors.black,
         }}
         href="/search"
         onClick={event => {

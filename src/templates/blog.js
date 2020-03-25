@@ -7,7 +7,6 @@ import SEO from 'components/SEO'
 import Layout from 'components/Layout'
 import Link from 'components/Link'
 import { bpMaxSM, bpMinMD } from '../lib/breakpoints'
-import { useTheme } from 'components/Theming'
 
 const Blog = ({ data: { site, allMdx }, pageContext: { articles } }) => {
   // const { page, nextPagePath, previousPagePath } = pagination
