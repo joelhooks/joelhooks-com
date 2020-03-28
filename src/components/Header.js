@@ -52,8 +52,6 @@ const Header = ({ siteTitle }) => {
                   height: '115px',
                 },
               })}
-              baseColor={darkMode.value ? colors.white : colors.black}
-              altColor={darkMode.value ? colors.black : colors.white}
             />
             <span
               css={css(

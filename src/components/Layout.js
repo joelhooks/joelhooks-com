@@ -60,6 +60,30 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
                 color: ${colors.primary};
               }
             }
+            .sa {
+              stroke: ${colors.black};
+            }
+            .sb {
+              stroke: ${colors.white};
+            }
+            .fa {
+              fill: ${colors.black};
+            }
+            .fb {
+              fill: ${colors.white};
+            }
+          }
+          .sa {
+            stroke: ${colors.white};
+          }
+          .sb {
+            stroke: ${colors.black};
+          }
+          .fa {
+            fill: ${colors.white};
+          }
+          .fb {
+            fill: ${colors.black};
           }
           ::selection {
             color: ${colors.white};
