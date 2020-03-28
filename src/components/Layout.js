@@ -53,6 +53,14 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
               background-color: ${colors.black};
             }
           }
+          .dark-mode {
+            .social-btn {
+              color: ${colors.white};
+              &:hover {
+                color: ${colors.primary};
+              }
+            }
+          }
           ::selection {
             color: ${colors.white};
             background-color: ${colors.primary};

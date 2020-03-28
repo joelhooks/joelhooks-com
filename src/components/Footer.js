@@ -32,11 +32,13 @@ const Footer = ({ author }) => {
           </div>
           <div>
             <Twitter
-              color={darkMode.value ? colors.white : colors.black}
+              className="social-btn"
+              color={colors.black}
               hover={colors.primary}
             />
             <GitHub
-              color={darkMode.value ? colors.white : colors.black}
+              className="social-btn"
+              color={colors.black}
               hover={colors.primary}
             />
           </div>
