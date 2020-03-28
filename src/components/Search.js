@@ -10,7 +10,6 @@ import {
   Highlight,
 } from 'react-instantsearch-dom'
 import { MdSearch } from 'react-icons/md'
-import useDarkMode from 'use-dark-mode'
 
 import colors from '../lib/colors'
 import Overlay from './Overlay'
@@ -156,7 +155,6 @@ const SearchContainer = styled('div')`
 // eslint-disable-next-line react/display-name
 export default () => {
   const [active, setActive] = useState(false)
-  const darkMode = useDarkMode()
   return (
     <InstantSearch
       searchClient={client}
@@ -165,15 +163,14 @@ export default () => {
     >
       <Configure distinct={1} />
       <OpenSearch
+        id="open-search"
         css={{
-          background: rgba(darkMode.value ? colors.white : colors.black, 0.05),
           '@media (hover: hover)': {
             ':hover': {
               background: colors.primary,
               color: colors.white,
             },
           },
-          color: darkMode.value ? colors.white : colors.black,
         }}
         href="/search"
         onClick={event => {

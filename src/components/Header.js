@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'gatsby'
 import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
-import useDarkMode from 'use-dark-mode'
 import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
@@ -12,7 +11,6 @@ import ThemeToggler from './ThemeToggler'
 import colors from '../lib/colors'
 
 const Header = ({ siteTitle }) => {
-  const darkMode = useDarkMode()
   return (
     <header css={css(tw`w-full flex-shrink-0 py-4 md:py-8 lg:py-12 bg-body`)}>
       <Container noVerticalPadding>

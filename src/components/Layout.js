@@ -72,6 +72,17 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             .fb {
               fill: ${colors.white};
             }
+            caption {
+              color: ${colors.black};
+            }
+            hr {
+              border-top: 1px solid ${rgba(colors.white, 0.2)};
+            }
+            #open-search,
+            #dark-mode-toggler {
+              background: ${rgba(colors.white, 0.05)};
+              color: ${colors.white};
+            }
           }
           .sa {
             stroke: ${colors.white};
@@ -84,6 +95,17 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
           }
           .fb {
             fill: ${colors.black};
+          }
+          #open-search,
+          #dark-mode-toggler {
+            background: ${rgba(colors.black, 0.05)};
+            color: ${colors.black};
+            @media (hover: hover) {
+              &:hover {
+                color: ${colors.white};
+                background: ${colors.primary};
+              }
+            }
           }
           ::selection {
             color: ${colors.white};
@@ -102,7 +124,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             border-left: 5px solid ${colors.primary};
           }
           caption {
-            color: ${darkMode.value ? colors.black : colors.white};
+            color: ${colors.white};
           }
           h1 {
             font-size: 24px;
@@ -129,8 +151,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
           hr {
             margin: 50px 0;
             border: none;
-            border-top: 1px solid
-              ${rgba(darkMode.value ? colors.white : colors.black, 0.2)};
+            border-top: 1px solid ${rgba(colors.black, 0.2)};
             background: none;
           }
           em {
