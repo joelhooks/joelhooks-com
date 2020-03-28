@@ -11,10 +11,16 @@ const Button = props => (
   />
 )
 
-export const Twitter = ({ url = `${config.twitter}`, color, hover }) => (
+export const Twitter = ({
+  url = `${config.twitter}`,
+  color,
+  hover,
+  ...restProps
+}) => (
   <Button
     to={url}
     aria-label="Visit my Twitter"
+    {...restProps}
     css={{ color: color, ':hover': { color: hover } }}
   >
     <svg
@@ -32,10 +38,16 @@ export const Twitter = ({ url = `${config.twitter}`, color, hover }) => (
   </Button>
 )
 
-export const LinkedIn = ({ url = `${config.linkedin}`, color, hover }) => (
+export const LinkedIn = ({
+  url = `${config.linkedin}`,
+  color,
+  hover,
+  ...restProps
+}) => (
   <Button
     to={url}
     aria-label="Visit my LinkedIn"
+    {...restProps}
     css={{ color: color, ':hover': { color: hover } }}
   >
     <svg
@@ -52,10 +64,16 @@ export const LinkedIn = ({ url = `${config.linkedin}`, color, hover }) => (
   </Button>
 )
 
-export const GitHub = ({ url = `${config.github}`, color, hover }) => (
+export const GitHub = ({
+  url = `${config.github}`,
+  color,
+  hover,
+  ...restProps
+}) => (
   <Button
     to={url}
     aria-label="Visit my GitHub"
+    {...restProps}
     css={{ color: color, ':hover': { color: hover } }}
   >
     <svg

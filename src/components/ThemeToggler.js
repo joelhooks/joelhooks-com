@@ -1,10 +1,8 @@
 import React from 'react'
 import useDarkMode from 'use-dark-mode'
-import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { FiMoon, FiSun } from 'react-icons/fi'
 import Button from './Button'
-import colors from '../lib/colors'
 
 const DarkModeIcon = styled(FiMoon)({
   display: 'flex',
@@ -25,8 +23,8 @@ const ThemeToggler = () => {
 
   return (
     <Button
+      id="dark-mode-toggler"
       css={{
-        background: rgba(darkMode.value ? colors.white : colors.black, 0.05),
         borderRadius: '50%',
         width: '2.375rem',
         height: '2.375rem',
@@ -35,17 +33,11 @@ const ThemeToggler = () => {
         alignItems: 'center',
         justifyContent: 'center',
         margin: 0,
-        color: darkMode.value ? colors.white : colors.black,
-        '@media (hover: hover)': {
-          ':hover': {
-            color: colors.white,
-          },
-        },
       }}
       aria-label={
         darkMode.value ? 'Switch to light mode' : 'Switch to dark mode'
       }
-      onClick={() => (darkMode.value ? darkMode.disable() : darkMode.enable())}
+      onClick={darkMode.toggle}
     >
       {darkMode.value ? (
         <DefaultModeIcon title="Switch to light mode" />
