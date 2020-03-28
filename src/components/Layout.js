@@ -46,8 +46,12 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
             --color-body-bg: ${darkMode.value ? colors.black : colors.white};
           }
           body {
-            color: ${darkMode.value ? colors.white : colors.black};
-            background-color: ${darkMode.value ? colors.black : colors.white};
+            color: ${colors.black};
+            background-color: ${colors.white};
+            &.dark-mode {
+              color: ${colors.white};
+              background-color: ${colors.black};
+            }
           }
           ::selection {
             color: ${colors.white};
