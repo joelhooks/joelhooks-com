@@ -53,7 +53,7 @@ const SEO = ({postData, excerpt, frontmatter = {}, postImage, isBlogPost}) => (
             {/* General tags */}
             <title>{title}</title>
             <meta name="description" content={description} />
-            <meta name="image" content={image} />
+            <meta name="image" content={ogImage} />
 
             {/* OpenGraph tags */}
             <meta property="og:url" content={url} />
@@ -77,7 +77,7 @@ const SEO = ({postData, excerpt, frontmatter = {}, postImage, isBlogPost}) => (
             isBlogPost={isBlogPost}
             url={url}
             title={title}
-            image={image}
+            image={ogImage}
             description={description}
             datePublished={datePublished}
             canonicalUrl={seo.canonicalUrl}
