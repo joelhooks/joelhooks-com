@@ -1,18 +1,12 @@
 import path from 'path'
 import React from 'react'
 import Helmet from 'react-helmet'
-import { StaticQuery, graphql } from 'gatsby'
+import {StaticQuery, graphql} from 'gatsby'
 import PropTypes from 'prop-types'
 import SchemaOrg from './SchemaOrg'
 import config from '../../../config/website'
 
-const SEO = ({
-  postData,
-  excerpt,
-  frontmatter = {},
-  postImage,
-  isBlogPost,
-}) => (
+const SEO = ({postData, excerpt, frontmatter = {}, postImage, isBlogPost}) => (
   <StaticQuery
     query={graphql`
       {
@@ -39,7 +33,7 @@ const SEO = ({
         }
       }
     `}
-    render={({ site: { siteMetadata: seo } }) => {
+    render={({site: {siteMetadata: seo}}) => {
       const postMeta =
         frontmatter || postData.childMarkdownRemark.frontmatter || {}
       const title = isBlogPost ? postMeta.title : config.siteTitle
@@ -49,6 +43,9 @@ const SEO = ({
         ? `${seo.canonicalUrl}${path.sep}${postMeta.slug}`
         : seo.canonicalUrl
       const datePublished = isBlogPost ? postMeta.datePublished : false
+      const {fbAppID, twitter} = seo.social
+
+      const ogImage = `https://competent-goodall-d71d0d.netlify.app/opengraph?title=${title}&author=${twitter}&image=${image}&date=${datePublished}&v=0.0.1`
 
       return (
         <React.Fragment>
@@ -63,15 +60,18 @@ const SEO = ({
             {isBlogPost ? <meta property="og:type" content="article" /> : null}
             <meta property="og:title" content={title} />
             <meta property="og:description" content={excerpt || description} />
-            <meta property="og:image" content={image} />
-            <meta property="fb:app_id" content={seo.social.fbAppID} />
+            <meta property="og:image" content={ogImage} />
+            <meta property="fb:app_id" content={fbAppID} />
 
             {/* Twitter Card tags */}
-            <meta name="twitter:card" content="summary" />
-            <meta name="twitter:creator" content={seo.social.twitter} />
+            <meta
+              name="twitter:card"
+              content={isBlogPost ? 'summary_large_image' : 'summary'}
+            />
+            <meta name="twitter:creator" content={twitter} />
             <meta name="twitter:title" content={title} />
             <meta name="twitter:description" content={excerpt || description} />
-            <meta name="twitter:image" content={image} />
+            <meta name="twitter:image" content={ogImage} />
           </Helmet>
           <SchemaOrg
             isBlogPost={isBlogPost}
@@ -104,7 +104,7 @@ SEO.propTypes = {
 
 SEO.defaultProps = {
   isBlogPost: false,
-  postData: { childMarkdownRemark: {} },
+  postData: {childMarkdownRemark: {}},
   postImage: null,
 }
 
