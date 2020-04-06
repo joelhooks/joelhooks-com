@@ -45,7 +45,7 @@ const SEO = ({postData, excerpt, frontmatter = {}, postImage, isBlogPost}) => (
       const {fbAppID, twitter} = seo.social
       const ogImage = `https://competent-goodall-d71d0d.netlify.app/opengraph?title=${encodeURIComponent(
         title,
-      )}&author=${encodeURIComponent(twitter)}&v=0.0.7`
+      )}&author=${encodeURIComponent(twitter)}&v=0.0.8`
 
       return (
         <React.Fragment>
