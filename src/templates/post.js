@@ -1,20 +1,17 @@
 import React from 'react'
-import { graphql } from 'gatsby'
+import {graphql} from 'gatsby'
 import Img from 'gatsby-image'
 import MDXRenderer from 'gatsby-mdx/mdx-renderer'
 import SEO from 'components/SEO'
-import { css } from '@emotion/core'
+import {css} from '@emotion/core'
 import Container from 'components/Container'
 import Layout from '../components/Layout'
 import Share from '../components/Share'
 import config from '../../config/website'
-import { bpMaxSM, bpMinMD, bpMinLG } from '../lib/breakpoints'
+import {bpMaxSM, bpMinMD, bpMinLG} from '../lib/breakpoints'
 import get from 'lodash/get'
 
-export default function Post({
-  data: { site, mdx },
-  pageContext: { next, prev },
-}) {
+export default function Post({data: {site, mdx}, pageContext: {next, prev}}) {
   const author = mdx.frontmatter.author || config.author.name
   const date = mdx.frontmatter.date
   const title = mdx.frontmatter.title
@@ -72,18 +69,18 @@ export default function Post({
               />
             </div>
           )}
-          <MDXRenderer>{mdx.code.body}</MDXRenderer>
           <div
             css={css`
-              text-align: center;
+              text-align: right;
+              opacity: 0.7;
+              padding-bottom: 1em;
             `}
           >
             <a href={github} rel="nofollow">
-              <strong>
-                <em>edit this article on github</em>
-              </strong>
+              <em>edit ✏️</em>
             </a>
           </div>
+          <MDXRenderer>{mdx.code.body}</MDXRenderer>
         </Container>
         {/* <SubscribeForm /> */}
       </article>
@@ -104,7 +101,7 @@ export const pageQuery = graphql`
     site {
       ...site
     }
-    mdx(fields: { id: { eq: $id } }) {
+    mdx(fields: {id: {eq: $id}}) {
       excerpt(pruneLength: 240)
       fields {
         github
