@@ -137,8 +137,7 @@ class SubscribeForm extends React.Component {
                     />
                   </div>
                   <Field
-                    aria-label="your first name"
-                    aria-required="false"
+                    id="name"
                     name="name"
                     placeholder="Jane"
                     type="text"
@@ -155,7 +154,7 @@ class SubscribeForm extends React.Component {
                     />
                   </div>
                   <Field
-                    aria-label="your email address"
+                    id="email"
                     aria-required="true"
                     name="email"
                     placeholder="jane@acme.com"
