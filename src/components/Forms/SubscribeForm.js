@@ -1,13 +1,13 @@
 import React from 'react'
-import { Formik, Field, Form, ErrorMessage } from 'formik'
+import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import tw from 'tailwind.macro'
-import { css } from '@emotion/core'
+import {css} from '@emotion/core'
 
 import colors from '../../lib/colors'
 import fonts from '../../lib/typography'
-import { bpMinSM, bpMinMD } from '../../lib/breakpoints'
+import {bpMinSM, bpMinMD} from '../../lib/breakpoints'
 import Hand from '../Hand'
 import Button from '../Button'
 
@@ -20,7 +20,7 @@ const SubscribeSchema = Yup.object().shape({
   name: Yup.string(),
 })
 
-const PostSubmissionMessage = ({ response }) => (
+const PostSubmissionMessage = ({response}) => (
   <div
     css={css({
       textAlign: 'center',
@@ -40,12 +40,12 @@ class SubscribeForm extends React.Component {
 
   async handleSubmit(values) {
     const url = `https://api.convertkit.com//v3/forms/${FORM_ID}/subscribe`
-    this.setState({ submitted: true, loading: true })
+    this.setState({submitted: true, loading: true})
 
     axios
-      .post(url, { ...values, api_key: process.env.CONVERTKIT_PUBLIC_KEY })
+      .post(url, {...values, api_key: process.env.CONVERTKIT_PUBLIC_KEY})
       .then(
-        ({ data }) => {
+        ({data}) => {
           this.setState({
             submitted: true,
             loading: false,
@@ -64,7 +64,7 @@ class SubscribeForm extends React.Component {
   }
 
   render() {
-    const { submitted, loading, response, errorMessage } = this.state
+    const {submitted, loading, response, errorMessage} = this.state
     return (
       <div {...this.props}>
         {!submitted && (
@@ -80,13 +80,12 @@ class SubscribeForm extends React.Component {
                   fontFamily: fonts.semibold,
                 })}
               >
-                Get emails from me about coding, business, learning, and
-                teaching.
+                Let's chat about coding, business, learning, and teaching.
               </h2>
               <p css={css(tw`text-base m-0`)}>
-                There will be no spam and you can unsubscribe at any time. I
-                send different content than what is posted here. Over 4000
-                people enjoy it, and you probably will too!
+                I send articles and thoughts occasionally and love to have
+                conversations with folks. Lots of people like them, and I'd love
+                to learn what you think as well. You can always unsubscribe.
               </p>
             </div>
             <div
@@ -116,7 +115,7 @@ class SubscribeForm extends React.Component {
             }}
             validationSchema={SubscribeSchema}
             onSubmit={values => this.handleSubmit(values)}
-            render={({ errors }) => (
+            render={({errors}) => (
               <Form
                 css={css(
                   {
