@@ -1,0 +1,29 @@
+---
+id: 6zA6vP7oT
+slug: react-context
+date: 2020-05-12
+title: "Using React Context and Custom React Hooks for State Management in React Apps"
+published: false
+---
+
+In a complicated web application there are going to be several pieces of truly global state that you'll need across your application. This is state that components need, but it's tedious and error prone to use prop drilling to pass state data around too all of the components that might need it.
+
+Referring to [the 5 layers of state in a React application](https://joelhooks.com/5-layers-react-state) we can refer to this layer of state as `shared` or application state.
+
+It's such a common issue with React applications that many libraries have sprung up around solving the problem with managing global application state! When you reach for one of these libraries you are often making a strong commitment to developing a "Redux app" or a "Apollo app" instead of just a React app.
+
+These tools are excellent and worth your time and effort to research and understand if they might be viable for your team and users' needs, but React also ships with excellent tools for solving shared application state with React Context and custom React Hooks.
+
+In [Tanner Linsley's 2020 JS Conf Talk](https://www.youtube.com/watch?v=J-g9ZJha8FE) he gives a solid demonstration of how to cleanly create performant React Context for shared application state.
+
+He demonstrates a clean example of creating a global store using Context that is performant and reusable. I captured the example from this [here in codesandbox](https://codesandbox.io/s/creating-an-appcontext-with-a-makestore-multi-store-approach-f57qb) if you'd like to see it in action.
+
+The interesting approach in Tanner's example is create a nested store `DispatchContext` and `StoreContext` that he credits [this post from Kent C. Dodds for the idea](https://kentcdodds.com/blog/how-to-use-react-context-effectively).
+
+This approach is a simple evolution of component state and can be very useful for global state such as authentication. It is flexible enough that we can create smaller stores that represent "slices" of state in our application and cleanly deliver that state to the components that need it with custom React Hooks.
+
+Michael Jackson gives a compelling argument against using React Context for state management in [this quick demonstration video(https://www.youtube.com/watch?v=3XaXKiXtNjw)]. You can see [the composition approach he suggests in this codesandbox](https://codesandbox.io/s/hungry-bas-ptltc). This is an excellent approach and one that should be strongly considered before reaching for React Context.
+
+Should also note that in [Michael's amazing paid course on React Hooks](https://courses.reacttraining.com/p/react-hooks) he suggests using Context for concerns like auth, so as with everything it's important to do your research and iunderstand the tradeoffs involved!
+
+[Dave Ceddia's React Context course on egghead](https://egghead.io/courses/react-context-for-state-management) is very good if you'd like to dive deeper.
