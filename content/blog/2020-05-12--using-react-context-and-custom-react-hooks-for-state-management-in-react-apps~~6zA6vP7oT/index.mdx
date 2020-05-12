@@ -22,7 +22,7 @@ The interesting approach in Tanner's example is create a nested store `DispatchC
 
 This approach is a simple evolution of component state and can be very useful for global state such as authentication. It is flexible enough that we can create smaller stores that represent "slices" of state in our application and cleanly deliver that state to the components that need it with custom React Hooks.
 
-Michael Jackson gives a compelling argument against using React Context for state management in [this quick demonstration video(https://www.youtube.com/watch?v=3XaXKiXtNjw)]. You can see [the composition approach he suggests in this codesandbox](https://codesandbox.io/s/hungry-bas-ptltc). This is an excellent approach and one that should be strongly considered before reaching for React Context.
+Michael Jackson gives a compelling argument against using React Context for state management in [this quick demonstration video](https://www.youtube.com/watch?v=3XaXKiXtNjw). You can see [the composition approach he suggests in this codesandbox](https://codesandbox.io/s/hungry-bas-ptltc). This is an excellent approach and one that should be strongly considered before reaching for React Context.
 
 Should also note that in [Michael's amazing paid course on React Hooks](https://courses.reacttraining.com/p/react-hooks) he suggests using Context for concerns like auth, so as with everything it's important to do your research and iunderstand the tradeoffs involved!
 
