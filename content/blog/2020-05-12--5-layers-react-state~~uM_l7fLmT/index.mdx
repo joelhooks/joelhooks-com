@@ -7,6 +7,9 @@ published: false
 ---
 
 One of the challenges with state management in React is coming to terms and deciding as a team how you will categorize the layers of state in your application. It's variable and often nuanced to describe the layers but framing them in a simple hierarchy is an excellent tool for communicating with your team.
+
+![a stack of blocks labeled components, application, remote, router, and meta](./5-layers-of-state.png)
+
 One way to frame these layers of states is using the 5 Layers of State that Jed Watson proposed in his excellent talk [A Treatise on State](https://www.youtube.com/watch?v=tBz3UmZG_bk).
 * **Local**: component state using a combination of custom and native React Hooks often in conjunction with [xState as shown in Kyle Shevlin's excellent free egghead course](https://egghead.io/courses/introduction-to-state-machines-using-xstate).
 * **Shared**: this is a graph or network of related components that need to share state up to an including the entire application state up at the top of [the potato plant](https://joelhooks.com/react-potato-plant). There is caching involved at this layer of state and often performance concerns. [React Context, custom React Hooks as shown in Tanner Linsley's 2020 JSConf Hawaii talk](https://www.youtube.com/watch?v=J-g9ZJha8FE). xState is also an excellent tool for managing shared application state.
