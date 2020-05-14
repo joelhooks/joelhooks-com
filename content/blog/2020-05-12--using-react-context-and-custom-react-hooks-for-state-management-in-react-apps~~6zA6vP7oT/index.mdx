@@ -6,7 +6,7 @@ title: "Using React Context and Custom React Hooks for State Management in React
 published: false
 ---
 
-In a complicated web application there are going to be several pieces of truly global state that you'll need across your application. This is state that components need, but it's tedious and error prone to use prop drilling to pass state data around too all of the components that might need it.
+In a complicated web application there are going to be several pieces of truly global state that you'll need across your application. This is state that components need, but it's tedious and error prone to use prop drilling to pass state data around to all of the components that might need it.
 
 Referring to [the 5 layers of state in a React application](https://joelhooks.com/5-layers-react-state) we can refer to this layer of state as `shared` or application state.
 
@@ -24,6 +24,6 @@ This approach is a simple evolution of component state and can be very useful fo
 
 Michael Jackson gives a compelling argument against using React Context for state management in [this quick demonstration video](https://www.youtube.com/watch?v=3XaXKiXtNjw). You can see [the composition approach he suggests in this codesandbox](https://codesandbox.io/s/hungry-bas-ptltc). This is an excellent approach and one that should be strongly considered before reaching for React Context.
 
-Should also note that in [Michael's amazing paid course on React Hooks](https://courses.reacttraining.com/p/react-hooks) he suggests using Context for concerns like auth, so as with everything it's important to do your research and iunderstand the tradeoffs involved!
+Should also note that in [Michael's amazing paid course on React Hooks](https://courses.reacttraining.com/p/react-hooks) he suggests using Context for concerns like auth, so as with everything it's important to do your research and understand the tradeoffs involved!
 
 [Dave Ceddia's React Context course on egghead](https://egghead.io/courses/react-context-for-state-management) is very good if you'd like to dive deeper.
