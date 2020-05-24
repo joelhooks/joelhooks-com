@@ -34,7 +34,7 @@ This. More of this.
 
 ## Improving egghead.io
 
-While my initial "design" for egghead was OK, it was plain-old-boostrap, and generally kind of meh. But, they call **bootstrap** bootstrap for a reason. We are bootstrapping a business, spending just what we have to and delivering value.
+While my initial "design" for egghead was OK, it was plain-old-bootstrap, and generally kind of meh. But, they call **bootstrap** bootstrap for a reason. We are bootstrapping a business, spending just what we have to and delivering value.
 
 As revenues have increased, I've been able to slowly build a team. This has been wonderful, because building something by yourself gets very very lonely.
 
