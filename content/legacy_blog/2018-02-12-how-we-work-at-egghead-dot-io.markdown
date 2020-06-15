@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'how we work at egghead.io'
+title: 'how we work at egghead.io in 2018'
 date: 2018-02-15
 ---
 
