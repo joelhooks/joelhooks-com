@@ -1,0 +1,33 @@
+---
+id: Fvwvjdy7m
+slug: calibre-kindle-to-pdf
+date: 2020-07-11
+title: "Use Calibre to Convert Kindle Books You've Purchased to PDF"
+published: false
+categories: ['notes']
+---
+
+Calibre can be used to convert kindle books to PDF by installing a plugin called DeDRM_tools. You'll need the serial number of [your Kindle device](https://www.amazon.com/mycd). As far as I know this only works with books you've purchased and if you own a Kindle.
+
+1. Install [Calibre v4.20.0](https://calibre-ebook.com/download_osx)
+1. Download the latest release of DeDRM_tools v6.8.0 from [their Github releases page](https://github.com/apprenticeharper/DeDRM_tools/releases)
+1. Open calibre's Preferences dialog 
+1. Click on the "Plugins" button
+1. click on the button, "Load plugin from file"
+1. Navigate to the unzipped DeDRM_tools folder
+1. find the file `DeDRM_plugin.zip`  
+1. Click to select the file and select "Open"
+1. Click "Yes" in the "Are you sure?" dialog box
+1. Click the "OK" button in the "Success" dialog box
+1. Enter your [Kindle Device's](https://www.amazon.com/mycd) serial number in the customisation dialog for `eInk Kindle Books`
+1. Be sure to click `OK` and not `Cancel`
+1. In your [Kindle Content list](https://www.amazon.com/mycd), click the `...` "actions" button for the book you want to convert
+1. Click `download & transfer to USB`
+1. Select the device that matches the serial number above
+1. Drag the downloaded file onto Calibre
+1. Click `Convert books` in Calibre
+1. Choose the format you want and click `OK`
+
+Now after a brief wait you'll have **a PDF file that can be opened and annotated wherever you please**.
+
+I highly recommend [PDF Expert and an iPad Pro w/ the Pencil 2](/pdf-expert).
