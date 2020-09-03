@@ -1,0 +1,47 @@
+---
+id: 70dpp6MqW
+slug: usestate-react-hook-allows-updating-state-with-a-function
+date: 2020-09-03
+title: "useState React hook allows updating state with a function"
+published: false
+---
+
+The `useState` hook in React is a great way to persist and update data within your React components. A simple component might look like this:
+
+```javascript
+import React from 'react'
+
+export default function SimpleComponent() {
+  const [count, setCount] = React.useState(0)
+  const incrementCount = () => setCount(count + 1)
+
+  return (
+    <>
+      <h1>The Count is {count}</h1>
+      <button onClick={incrementCount}>+1</button>
+    </>
+  )
+}
+```
+
+This approach works for most cases but relies on the value of count in the current render.
+
+```javascript
+import React from 'react'
+
+export default function SimpleComponent() {
+  const [count, setCount] = React.useState(0)
+  const incrementCount = () => setCount((previousCount) => previousCount + 1)
+
+  return (
+    <>
+      <h1>The Count is {count}</h1>
+      <button onClick={incrementCount}>+1</button>
+    </>
+  )
+}
+```
+
+In this second example we are passing `setCount` a function: `(previousCount) => previousCount + 1`. This function takes 1 argument, the previous value, and allows you to reference that value.
+
+In most circumstances the first approach is fine, but the ability to pass a [functional update](https://reactjs.org/docs/hooks-reference.html#functional-updates) guarantees that you're updating the correct value if it happened to be update multiple times in the same execution frame.
