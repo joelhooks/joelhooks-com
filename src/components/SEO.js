@@ -43,7 +43,9 @@ const SEO = ({postData, excerpt, frontmatter = {}, postImage, isBlogPost}) => (
         : seo.canonicalUrl
       const datePublished = isBlogPost ? postMeta.datePublished : false
       const {fbAppID, twitter} = seo.social
-      const ogImage = `https://competent-goodall-d71d0d.netlify.app/opengraph?title=${encodeURIComponent(
+      const ogImage = `${
+        process.env.OG_IMAGE_URL
+      }/opengraph?title=${encodeURIComponent(
         title,
       )}&author=${encodeURIComponent(twitter)}&v=0.0.8`
 

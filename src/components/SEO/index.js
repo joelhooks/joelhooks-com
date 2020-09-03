@@ -45,7 +45,9 @@ const SEO = ({postData, excerpt, frontmatter = {}, postImage, isBlogPost}) => (
       const datePublished = isBlogPost ? postMeta.datePublished : false
       const {fbAppID, twitter} = seo.social
 
-      const ogImage = `https://competent-goodall-d71d0d.netlify.app/opengraph?title=${title}&author=${twitter}&image=${image}&date=${datePublished}&v=0.0.5`
+      const ogImage = `${
+        process.env.OG_IMAGE_URL
+      }/opengraph?title=${title}&author=${twitter}&image=${image}&date=${datePublished}&v=0.0.5`
 
       return (
         <React.Fragment>
