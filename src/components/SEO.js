@@ -47,7 +47,9 @@ const SEO = ({postData, excerpt, frontmatter = {}, postImage, isBlogPost}) => (
         process.env.OG_IMAGE_URL
       }/opengraph?title=${encodeURIComponent(
         title,
-      )}&author=${encodeURIComponent(twitter)}&v=0.0.10`
+      )}&author=${encodeURIComponent(twitter)}&v=${
+        process.env.OG_IMAGE_VERSION
+      }`
 
       return (
         <React.Fragment>
