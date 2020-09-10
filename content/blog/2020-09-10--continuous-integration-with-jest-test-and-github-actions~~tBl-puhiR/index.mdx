@@ -1,0 +1,149 @@
+---
+id: tBl-puhiR
+slug: jest-and-github-actions
+date: 2020-09-10
+title: "Continuous Integration with Jest Tests and Github Actions"
+published: false
+---
+
+If you want to jump right to the finish line and have an existing Github repository you want to run tests on, drop the following into a file here `.github/workflows/tests.yml` and you'll be running your tests whenever you push to your main branch or a PR is created.
+
+If you'd like to actually understand what is going on, keep scrolling!
+
+```yaml
+name: Tests CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test using Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - run: yarn install
+      - run: yarn test:ci
+
+      - name: Tests ✅
+        if: ${{ success() }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "tests",
+            "state": "success",
+            "description": "Tests passed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
+
+      - name: Tests 🚨
+        if: ${{ failure() }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "tests",
+            "state": "failure",
+            "description": "Tests failed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
+```
+
+This is a relatively generic template that sets up node (in this case v12) and creates an environment for you to execute commands in. In our case, the application is question is using Yarn and has a test command specifically set up for continuous integration or CI that is triggerd with `yarn test:ci`.
+
+Here are the full docs for [Using Node.js with GitHub Actions](https://docs.github.com/en/actions/language-and-framework-guides/using-nodejs-with-github-actions).
+
+## Updating the status of your commit
+
+Most of the time you'll probably want to use a workflow like this to test PRs and other commits to see if the tests past and protect against them being merged if they don't pass.
+
+Once the tests have finished we can use `success()` or `failure()` context ([context and expression syntax documentation for more on this](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions)) within the Github Action to conditionally execute a command based on that state. 
+
+To update the status of the commit[^0] we can `POST` a status update to the repo's status URL with the status of the test run.
+
+If you've protected the branch and require success for this workflow it should update and prevent merging until the tests pass!
+
+One thing to note here is that the workflow needs to be ran once with a status update for it to appear in the **require status checks to pass before merging** section of the **branch protection rules** section of your Github repositories Branches setting.
+
+## Better Error Reporting
+
+One of the issues that you might run into is the error reporting of this workflow isn't great. Luckily we can solve this by creating a custom Jest test results reporter that will convert test results into a format that Github Actions can interpret and use to create more useful error messages.
+
+Save this to `github-actions-reporter.js` in your project:
+
+```javascript
+class GithubActionsReporter {
+  constructor(globalConfig, options) {
+    this._globalConfig = globalConfig
+    this._options = options
+  }
+
+  onRunComplete(contexts, results) {
+    results.testResults.forEach((testResultItem) => {
+      const testFilePath = testResultItem.testFilePath
+
+      testResultItem.testResults.forEach((result) => {
+        if (result.status !== 'failed') {
+          return
+        }
+
+        result.failureMessages.forEach((failureMessages) => {
+          const newLine = '%0A'
+          const message = failureMessages.replace(/\n/g, newLine)
+          const captureGroup = message.match(/:([0-9]+):([0-9]+)/)
+
+          if (!captureGroup) {
+            console.log('Unable to extract line number from call stack')
+            return
+          }
+
+          const [, line, col] = captureGroup
+          console.log(
+            `::error file=${testFilePath},line=${line},col=${col}::${message}`,
+          )
+        })
+      })
+    })
+  }
+}
+
+module.exports = GithubActionsReporter
+```
+
+Credit to Github user stefanbuck[^1] for the code[^2] and rkusa[^3] for the idea to use this approach[^4]. It relies on the [Github Action Workflow Command syntax[^5], which is an esoteric eries of strings that you log to the console to get Github bots to do stuff for you 😅
+
+To enable this you simply need to update your npm script so that `yarn test:ci` uses the custom reporter:
+
+```json
+{
+  "scripts": {
+    "test": "jest --watch",
+    "test:ci": "jest --ci --reporters='default' --reporters='./github-actions-reporter'"
+  }
+}
+```
+
+## Testing Github Actions Locally
+
+The round trip to Github can make actions a real pain in the ass to test, but the [act library](https://github.com/nektos/act) makes local testing relatively straight forward.
+
+This can be installed with `brew install nektos/tap/act` (or the other ways described) quickly and give the core environment for running a local simulation of Github Workflows on your computer.
+
+If you don't already have it installed, Docker[^6] is required. You might also need to run `docker pull buildpack-deps` to make sure the appropriate versions of Node are available for Docker.
+
+Now you can type `act -j test` in the root of your projects and the Github Actions will run locally. Additional configuration is possible and might be required, but out of the box it provides useful feedback and avoids the round trip of triggering a Github Action by pushing changes to your repository.
+
+[^0]: Create a Commit Status documentation https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+[^1]: Stefan Buck https://github.com/stefanbuck
+[^2]: A custom JSON Reporter for Jest so it will work with Github Actions https://github.com/stefanbuck/jest-matcher/blob/82d50fdb31d8cdf12afb9c1da8120b4a738c01b1/json-reporter.js
+[^3]: Markus Ast https://github.com/rkusa
+[^4]: Markus gives Stefan a handy link to some docs in a Github Issue https://github.com/rkusa/jest-action/issues/4#issuecomment-576175353
+[^5]: Github Workflow docs on setting an error messagehttps://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+[^6]: https://hub.docker.com/editions/community/docker-ce-desktop-mac/
