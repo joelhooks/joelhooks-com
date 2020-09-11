@@ -1,0 +1,47 @@
+---
+id: fIaEsci5q
+slug: automated-dependency-management
+date: 2020-09-11
+title: "Should I use automated dependency management?"
+published: false
+---
+
+It's Monday morning. You have a sip of your favorite morning beverage and open your email client.
+
+3632 emails from dependabot spanning every repository you've ever create on Github wait for you.
+
+What do you do?
+
+Most likely ignore them, but keeping your massive list of dependencies updates is on one hand incredibly daunting and on the other crucial for most long term projects.
+
+If you've never sat down to update your dependencies manually and experienced the pain for upgrading stale libraries all at once, I'll be honest, you are living a better life than I am.
+
+It sucks. Painful. Error prone. The very definition of "technical debt".
+
+So these seem to be the choices:
+
+* Automate it and live in a noisy world of many emails from robots dutifully making you aware of updates and opening PRs 😱
+* ignoring the issue entirely until some mitigating factor forces you to do the needful and update your dependencies 😅
+* periodically do the work manually as a good solid habit 😬
+
+Twitter is split right down the middle on this issue:
+
+<div style={{ marginTop: '45px', marginBottom: '45px' }}>
+  <TwitterTweetEmbed
+    tweetId={'1304153028820258816'}
+    options={{ conversation: 'none', align: 'center' }}
+  />
+</div>
+
+For egghead-next[^1] we are automating it. The project is only a couple of months old, but turning on [depfu](https://depfu.com/) immediately started opening PRs and caused a full day of testing, verifying, and approving PRs.
+
+Using depfu allows us to set grouped updates so they are batched with a weekly PR instead of a single PR for every update. This is something that Dependabot doesn't currently support[^2] and was the primary driver for choosing depfu over Dependabot for us.
+
+depfu also allows us to have fine-grained control over the frequency of updates. Minor and dot releases versus major updates.
+
+Keeping dependencies up to date is import. If it's not done early and consistently you can run into severe problems and laborious tasks down the road. 
+
+Automation is an excellent solution if you can control the notifications and churn on the PRs so that it isn't just noise that gets ignored. For most professional projects this is highly recommended.
+
+[^1]: [The next generation of the egghead.io UI using Next.js and TypeScript](https://github.com/eggheadio/egghead-next)
+[^2]: [Open Dependabot issue to support grouped updates](https://github.com/dependabot/dependabot-core/issues/1190)
