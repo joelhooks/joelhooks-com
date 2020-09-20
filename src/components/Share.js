@@ -1,13 +1,13 @@
 import React from 'react'
-import { css } from '@emotion/core'
+import {css} from '@emotion/core'
 import fonts from '../lib/typography'
 
-import { TwitterIcon, TwitterShareButton } from 'react-share'
+import {TwitterIcon, TwitterShareButton} from 'react-share'
 import SparklingCandy from './SparklingCandy'
 
 import colors from '../lib/colors'
 
-const Share = ({ url, title, twitterHandle }) => {
+const Share = ({url, title, twitterHandle}) => {
   return (
     <div>
       <div
@@ -40,11 +40,12 @@ const Share = ({ url, title, twitterHandle }) => {
               fontFamily: fonts.semibold,
               span: {
                 color: colors.primary,
+                fontWeight: 'bold',
               },
             }}
           >
             <span>Click here</span> to share this article with your friends on
-            Twitter.
+            Twitter if you liked it.
           </h2>
         </TwitterShareButton>
 
@@ -53,10 +54,7 @@ const Share = ({ url, title, twitterHandle }) => {
             opacity: 0.7,
           }}
         >
-          Share this article on Twitter if it was useful. It's a big help to me.
-          <span role="img" aria-label="praying hands">
-            🙏
-          </span>
+          It makes me smile when I see it.
         </small>
       </div>
     </div>
