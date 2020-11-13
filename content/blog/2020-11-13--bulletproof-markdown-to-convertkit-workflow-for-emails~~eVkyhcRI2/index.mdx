@@ -1,0 +1,42 @@
+---
+id: eVkyhcRI2
+slug: use-markdown-emails-in-convertkit
+date: 2020-11-13
+title: "Use Markdown for Emails in Convertkit"
+published: false
+---
+
+One time I was hanging out in Philidelphia and witnessed something fantastic. Patrick McKenzie (better know as patio11 on the Internets) delivered a **full on rap** enforcing his long standing rule that **everything is markdown** when it comes to text.
+
+<div style={{ marginTop: '45px', marginBottom: '45px' }}>
+  <TwitterTweetEmbed
+    tweetId={'736214582469890052'}
+    options={{ conversation: 'none', align: 'center' }}
+  />
+</div>
+
+This stuck with me, as many pieces of advice patio11 has given me (all of us) over the years including "charge more" and "dates devalue your content". If you haven't had the opportunity, I recommend reading [Patrick's blog](https://www.kalzumeus.com/start-here-if-youre-new/) completely.
+
+For me, almost everything I write is markdown, or can easily be exported directly to markdown. Over the years this has saved my ass, made my content more portable, and generally been an excellent practice.
+
+One are that this has been modestly challenging for me is with [ConvertKit](https://convertkit.com?lmref=ia534A) (and email marketing in general).
+
+ConvertKit doesn't support markdown. In fact, I despise the editing experience in Convertkit like so many other platforms that provide a janky rich text editing experience. It's a hard problem, and I don't blame Convertkit, as most of their customers are likely to prefer a "Miscrosoft Word style" editing experience.
+
+No thanks.
+
+All of my emails start as simple text files that contain markdown.
+
+I usually write them in a fantastic Mac application called [Markdown Pro](http://www.markdownpro.com/). Markdown Pro has a lot of features. Most of which I ignore. Instead, it's just a notepad that has a nice preview.
+
+When you're done editing markdown, simple right-click on the preview and choose `copy raw html`.
+
+`copy raw html` is the secret sauce here, and what makes going from markdown to Convertkit so easy with Markdown Pro.
+
+This **raw HTML pastes directly into the Convertkit editor**!
+
+Images can be trickier. Usually you'll want upload them to Cloudinary or some other content delivery network (CDN). If needed, you can use `<img/>` tags directly in Markdown Pro with `style="width:400px; height: auto;"` or whatever else you might need for fancy pants layout or whatever.
+
+That's it! Now you've got a local copy of your emails that you can save or even version control, and a well-styled HTML email in [Convertkit](https://convertkit.com?lmref=ia534A). 
+
+Done.
