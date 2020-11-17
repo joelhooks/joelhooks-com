@@ -170,6 +170,7 @@ class SubscribeForm extends React.Component {
                     borderRadius: '3px',
                     fontSize: '16px',
                     padding: '10px 13px',
+                    alignItems: 'center',
                   })}
                 >
                   {!loading && 'Subscribe'}
