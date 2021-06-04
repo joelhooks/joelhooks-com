@@ -35,7 +35,7 @@ export default function Index({ data: { site, allMdx } }) {
         <meta property="fb:app_id" content={fbAppID} />
 
         {/* Twitter Card tags */}
-        <meta name="twitter:card" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:creator" content={twitter} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
