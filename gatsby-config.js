@@ -159,11 +159,11 @@ module.exports = {
         pathToConfigModule: `src/lib/typography`,
       },
     },
-    {
-      resolve: 'gatsby-plugin-fathom',
-      options: {
-        siteId: process.env.FATHOM_SITE_ID,
-      },
-    },
+    // {
+      // resolve: 'gatsby-plugin-fathom',
+      // options: {
+        // siteId: process.env.FATHOM_SITE_ID,
+      // },
+    // },
   ],
 }
