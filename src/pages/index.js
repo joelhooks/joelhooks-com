@@ -1,18 +1,17 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
-import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
+import { MDXRenderer } from "gatsby-plugin-mdx"
 
-import Layout from 'components/Layout'
-import Link from 'components/Link'
-import Button from 'components/Button'
-import Container from 'components/Container'
-import Home from './home.mdx'
+import Layout from '../components/Layout'
+import Link from '../components/Link'
+import Button from '../components/Button'
+import Container from '../components/Container'
 
 import { ReactPlayer } from 'egghead-react-player'
 
-export default function Index({ data: { site, allMdx } }) {
+export default function Index({ data: { site, file } }) {
   const title = site.siteMetadata.title
   const description = site.siteMetadata.description
   const image = site.siteMetadata.image
@@ -48,12 +47,12 @@ export default function Index({ data: { site, allMdx } }) {
             padding-bottom: 0;
           `}
         >
-          <Home />
+          <MDXRenderer>{file.childMdx.body}</MDXRenderer>
           <Button
             secondary
             to="/articles"
             aria-label="Visit blog page"
-            css={css(tw`mt-8 md:mt-10 lg:mt-12`)}
+            className="mt-8 md:mt-10 lg:mt-12"
           >
             Browse all articles
           </Button>
@@ -87,40 +86,9 @@ export const pageQuery = graphql`
         }
       }
     }
-    allMdx(
-      limit: 8
-      sort: { fields: [frontmatter___date], order: DESC }
-      filter: { frontmatter: { published: { ne: false } } }
-    ) {
-      edges {
-        node {
-          excerpt(pruneLength: 190)
-          id
-          fields {
-            title
-            slug
-            date
-          }
-          parent {
-            ... on File {
-              sourceInstanceName
-            }
-          }
-          frontmatter {
-            title
-            date(formatString: "MMMM DD, YYYY")
-            description
-            banner {
-              childImageSharp {
-                sizes(maxWidth: 720) {
-                  ...GatsbyImageSharpSizes
-                }
-              }
-            }
-            slug
-            keywords
-          }
-        }
+    file(relativePath: { eq:"home.mdx" }) {
+      childMdx {
+        body
       }
     }
   }

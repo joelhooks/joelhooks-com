@@ -1,5 +1,4 @@
 import React from 'react'
-import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
 import SubscribeForm from './Forms/SubscribeForm'
 import { Twitter, GitHub } from './Social'
@@ -11,11 +10,9 @@ const Footer = ({ author }) => {
   return (
     <footer>
       <Container noVerticalPadding>
-        <SubscribeForm css={css(tw`mt-10 sm:mt-12`)} />
+        <SubscribeForm className="mt-10 sm:mt-12" />
         <div
-          css={css(
-            tw`flex justify-between items-center pt-12 pb-8 sm:pt-16 sm:pb-10`,
-          )}
+          className="flex justify-between items-center pt-12 pb-8 sm:pt-16 sm:pb-10"
         >
           <div
             css={css({

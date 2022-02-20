@@ -43,16 +43,20 @@ module.exports = {
         ignore: [`**/readme.md`],
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `pages`,
+        path: `${__dirname}/src/pages/`,
+      },
+    },
     'gatsby-plugin-use-dark-mode',
     {
-      resolve: `gatsby-mdx`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
-        globalScope: `
-          import ResponsiveEmbed from "react-responsive-embed";
-          import { TwitterTweetEmbed } from "react-twitter-embed";
-
-          export default { ResponsiveEmbed, TwitterTweetEmbed };
-        `,
+        defaultLayouts: {
+          default: require.resolve(`./src/components/default-page-layout.js`)
+        },
         extensions: ['.mdx', '.md', '.markdown'],
         gatsbyRemarkPlugins: [
           {
@@ -65,6 +69,7 @@ module.exports = {
         ],
       },
     },
+    'gatsby-plugin-postcss',
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     'gatsby-plugin-emotion',
