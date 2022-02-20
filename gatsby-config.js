@@ -155,62 +155,6 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-algolia`,
-      options: {
-        appId: process.env.ALGOLIA_APP_ID,
-        apiKey: process.env.ALGOLIA_API_KEY,
-        indexName: process.env.ALGOLIA_INDEX_NAME, // for all queries
-        queries: [
-          {
-            query: `
-            {
-              allMdx(
-                filter: { frontmatter: { hidden: { ne: true } } }
-
-              ) {
-                edges {
-                  node {
-                    id
-                    rawBody
-                    fields {
-                      slug
-                    }
-                    frontmatter {
-                      title
-                      description
-                    }
-                  }
-                }
-              }
-            }
-          `,
-            transformer: ({data}) =>
-              data.allMdx.edges.reduce((records, {node}) => {
-                const {title, description} = node.frontmatter
-                const {slug} = node.fields
-
-                const base = {slug, title, description}
-                const chunks = node.rawBody.split('\n\n')
-
-                return [
-                  ...records,
-                  ...chunks.map((text, index) => ({
-                    ...base,
-                    objectID: `${slug}-${index}`,
-                    text,
-                  })),
-                ]
-              }, []),
-            settings: {
-              distinct: true,
-              attributeForDistinct: 'slug',
-              searchableAttributes: ['title', 'description', 'text', 'slug'],
-            },
-          },
-        ],
-      },
-    },
-    {
       resolve: 'gatsby-plugin-fathom',
       options: {
         siteId: process.env.FATHOM_SITE_ID,
