@@ -47,7 +47,7 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `pages`,
-        path: `${__dirname}/src/pages/`,
+        path: `${__dirname}/src/mdx-components/`,
       },
     },
     'gatsby-plugin-use-dark-mode',
@@ -117,7 +117,7 @@ module.exports = {
         feeds: [
           {
             serialize: ({query: {site, allMdx}}) =>
-              allMdx.edges.map(edge =>
+              allMdx.edges.filter(edge => edge.node.fields?.date).map(edge =>
                 Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   date: edge.node.fields.date,
