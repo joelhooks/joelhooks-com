@@ -1,10 +1,12 @@
 import React from 'react'
 import {graphql} from 'gatsby'
 import Img from 'gatsby-image'
-import MDXRenderer from 'gatsby-mdx/mdx-renderer'
-import SEO from 'components/SEO'
+import MDXRoot from "gatsby-plugin-mdx/wrap-root-element"
+import { MDXRenderer } from "gatsby-plugin-mdx"
+import CustomMdxProvider from "../components/mdx-provider"
+import SEO from '../components/SEO'
 import {css} from '@emotion/core'
-import Container from 'components/Container'
+import Container from '../components/Container'
 import Layout from '../components/Layout'
 import Share from '../components/Share'
 import config from '../../config/website'
@@ -80,7 +82,11 @@ export default function Post({data: {site, mdx}, pageContext: {next, prev}}) {
               <em>edit ✏️</em>
             </a>
           </div>
-          <MDXRenderer>{mdx.code.body}</MDXRenderer>
+          <MDXRoot>
+            <CustomMdxProvider>
+              <MDXRenderer >{mdx.body}</MDXRenderer>
+            </CustomMdxProvider>
+          </MDXRoot>
         </Container>
         {/* <SubscribeForm /> */}
       </article>
@@ -106,6 +112,7 @@ export const pageQuery = graphql`
       fields {
         github
       }
+      body
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
@@ -121,9 +128,6 @@ export const pageQuery = graphql`
         }
         slug
         keywords
-      }
-      code {
-        body
       }
     }
   }

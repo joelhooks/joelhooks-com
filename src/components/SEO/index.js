@@ -1,4 +1,3 @@
-import path from 'path'
 import React from 'react'
 import Helmet from 'react-helmet'
 import {StaticQuery, graphql} from 'gatsby'
@@ -40,7 +39,7 @@ const SEO = ({postData, excerpt, frontmatter = {}, postImage, isBlogPost}) => (
       const description = postMeta.description || seo.description
       const image = postImage ? `${seo.canonicalUrl}${postImage}` : seo.image
       const url = postMeta.slug
-        ? `${seo.canonicalUrl}${path.sep}${postMeta.slug}`
+        ? `${seo.canonicalUrl}/${postMeta.slug}`
         : seo.canonicalUrl
       const datePublished = isBlogPost ? postMeta.datePublished : false
       const {fbAppID, twitter} = seo.social

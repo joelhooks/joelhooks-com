@@ -4,6 +4,9 @@ const _ = require('lodash')
 
 const createPosts = (createPage, createRedirect, edges) => {
   edges.forEach(({ node }, i) => {
+    if (node.parent.sourceInstanceName === `pages`) {
+      return
+    }
     const prev = i === 0 ? null : edges[i - 1].node
     const next = i === edges.length - 1 ? null : edges[i + 1].node
     const pagePath = node.fields.slug
@@ -53,9 +56,6 @@ exports.createPages = ({ actions, graphql }) =>
               slug
               date
             }
-            code {
-              scope
-            }
           }
         }
       }
@@ -83,17 +83,16 @@ exports.createPages = ({ actions, graphql }) =>
     })
   })
 
-exports.onCreateWebpackConfig = ({ actions }) => {
-  actions.setWebpackConfig({
-    resolve: {
-      modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-      alias: {
-        'react-dom': '@hot-loader/react-dom',
-        $components: path.resolve(__dirname, 'src/components'),
-      },
-    },
-  })
-}
+// exports.onCreateWebpackConfig = ({ actions }) => {
+  // actions.setWebpackConfig({
+    // resolve: {
+      // modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+      // alias: {
+        // $components: path.resolve(__dirname, 'src/components'),
+      // },
+    // },
+  // })
+// }
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions
@@ -101,6 +100,10 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   if (node.internal.type === `Mdx`) {
     const parent = getNode(node.parent)
     const titleSlugged = _.join(_.drop(parent.name.split('-'), 3), '-')
+
+    if (parent.sourceInstanceName === `pages`) {
+      return
+    }
 
     const slug =
       parent.sourceInstanceName === 'legacy'

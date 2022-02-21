@@ -1,0 +1,114 @@
+---
+id: EB5TFcS9n
+slug: react-video-player
+date: 2021-09-10
+title: "React Video Player Component Using Hooks, TypeScript, and xState"
+published: true
+---
+
+There are a lot of interesting options for commercial and open source players. In the last several years `HTMLVideoElement` has become cross platform standard and simplified media player development considerably.
+
+No Flash fallback required!
+
+Despite the availability of a standard approach for loading audio and video media into the browser, if you want custom chrome (user interface for interaction) for the media player, it's effectively all or nothing and you need to build that layer completely.
+
+Projects like [video.js](https://videojs.com/) address this by creating a complete framework for media addressing every aspect for everybody. It's got a plugin ecosystem and for the most part it "just works", but it's showing it's age and end-of-life utility.
+
+We also wanted to extend and skin the player chrome with React specifically.
+
+## "Have you heard about Web Components?"
+
+Web Components are the future of media players in the browser, I've got no doubt. Mux's [media-chrome](https://github.com/muxinc/media-chrome) project highlights the utility of Web Components in a way that truly made them "click" for me and they are making progress every day that will eventually make choosing Web Components a "no-brainer" for this type of fundamental component development.
+
+Right now, they just aren't there yet for the work we need to do, but I suspect the next time we sit down to build a video player, Web Components will be a major contender.
+
+Until then we will likely stick with React.
+
+## Forking video-react
+
+The [video-react](https://github.com/video-react/video-react) project was one among several other projects that builds media chrome around the `HTMLVideoElement` using React. `video-react` follows the patterns of `video.js` and even uses the CSS from the `video-js` project, but follows relatively idiomatic [redux](https://github.com/reduxjs/redux) for state management.
+
+As it turns out, media players are a fantastic example of complex local state that needs to be orchestrated and synchronized across many components in  parallel and orthogonal ways.
+
+`video-react` hadn't had development activity in several years, so we hard forked it as [cueplayer-react](https://github.com/joelhooks/cueplayer-react) and modified it to suit our immediate needs and ship a media player with an integrated notes layer leveraging the standard `HTMLMediaElement` apis as well as the `WEBVTT` data format so notes exist as standard `VTTCue`s to take advantage of the underlying platform functionality.
+
+`video-react` works, but was frustrating because the redux structure tends to be "sprawling" and difficult to trace at the code level. The project also used React class component exclusively, and is written in JavaScript, not TypeScript.
+
+Our standard development practices use TypeScript, React Hooks (function components), React Context, and the [xState](https://github.com/statelyai/xstate) library for complicated state management.
+
+## Modernizing the video player with React Hooks, TypeScript, and xState
+
+Redux, as it was coded in `video-react` uses a global store for state. One of the issue we had was that the global store for state was updated at every "tick" of the video (when the timestamp changes and updates `currentTime`).
+
+This was causing the entire video player component tree to re-render on every tick!
+
+There are ways to mitigate this with redux through selectors, but it made the video player code base different from everything else we do and the internal standards for building apps.
+
+Not having TypeScript or strong typing was also a major concern and if we were going to migrate to TypeScript and modern React using Hooks, every component in the entire project would need to be touched anyway, so it seemed like a great time to replace redux as well.
+
+### Get off my lawn
+
+Most user interfaces are finite state machines, as it happens, but a media player is a well known domain that has "obvious" states that need to function consistently.
+
+It is a near perfect use case for a formalized state machine where often subtle issues with state can be a real headache and a constant battle.
+
+redux itself defines a state machine of sorts, it's just a re-think of the concept around the "flux" architecture as it is most often implemented.
+
+xState on the other hand uses well-trodden specifications that have been around in software since the mid-1980s without a lot of change. That alone is amazing in this world of "sort by new to find the best solution" and era of reinventing stuff with surprise twists and new names.
+
+### Porting from redux to xState
+
+The actually porting was relatively straight forward. Some of the terminology is different, but xState and redux both follow a [command pattern]() that is almost 1:1.
+
+In xState you have a `context` that the machine runs in. This is similar to the redux `store.
+
+With xState you send events to the machine. Depending on the current state and event sent, various actions can be performed that often update the data in the context. 
+
+In redux you trigger "actions" that are sent through a "reducer" (a function that contains a switch statement) and the appropriate case is handled for the event type.
+
+Both xState and redux handle the "updating state causes the entire tree to re-render in React" problem using what they call `selectors`, or functions that specify a piece of the context/store that can be accessed and monitored for changes specifically.
+
+This meant that we could use selectors for `currentTime` so that only components that needed to update with every tick would need to be concerned about that specific piece of data and can respond accordingly with a re-render while the rest of the tree ignores it and does nothing until the pieces of state they are interested in update.
+
+### Porting from React class components to Hooks
+
+In many ways this was more challenging than the state management issues because it's less 1:1 as far as API is concerned.
+
+It involved a lot of `forwardRef` and `useEffect` to get the intended behaviors that "just worked" with class components. The results are more idiomatic and cleaner though, so it was worth the effort.
+
+### Porting from JavaScript to TypeScript
+
+After using TypeScript almost exclusively for a year and a half it is painful to go back and lose the safety net of strong types in a system. For the most part this didn't require a lot of effort because of type inference, so it was mostly repetitive work.
+
+Adding types to an xState machine is interesting, but feels magical when they are configured and running and you get the benefits of autocomplete and type checking across the entire application.
+
+This migration is well worth the effort.
+
+## How it Feels Now
+
+It was a slog to get the port completed, but now the results **feel** awesome. It's obvious where to check for state issues, the application is very performant, and the types are super handy.
+
+Doing this work is going to allow us to add a lot of interesting and immersive functionality to the video player while not being off-norm and different to work on.
+
+If you'd like to check out our port of `video-react` you can find it **[here on github](https://github.com/skillrecordings/products/tree/main/packages/player)**. 
+
+If you'd like to [learn more about xState, this free egghead course from Kyle Shevlin](https://egghead.io/courses/introduction-to-state-machines-using-xstate) is an awesome resource.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

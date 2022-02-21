@@ -5,6 +5,8 @@ import Subtitle from './Subtitle'
 import Paragraph from './Paragraph'
 import Code from './Code'
 import { preToCodeBlock } from 'mdx-utils'
+import ResponsiveEmbed from "react-responsive-embed";
+import { TwitterTweetEmbed } from "react-twitter-embed";
 
 export default {
   h1: props => <Title {...props} />,
@@ -20,4 +22,6 @@ export default {
       return <pre {...preProps} />
     }
   },
+  ResponsiveEmbed,
+  TwitterTweetEmbed
 }

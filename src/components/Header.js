@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import tw from 'tailwind.macro'
 import { css } from '@emotion/core'
-import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from 'lib/breakpoints'
+import { bpMinSM, bpMinMD, bpMinLG, bpMinXL } from '../lib/breakpoints'
 import Search from './Search'
 import Container from './Container'
 import Logo from './Logo'
@@ -12,13 +11,14 @@ import colors from '../lib/colors'
 
 const Header = ({ siteTitle }) => {
   return (
-    <header css={css(tw`w-full flex-shrink-0 py-4 md:py-8 lg:py-12 bg-body`)}>
+    <header className="w-full flex-shrink-0 py-4 md:py-8 lg:py-12 bg-body">
       <Container noVerticalPadding>
-        <nav css={css(tw`w-full flex justify-between items-center`)}>
+        <nav className="w-full flex justify-between items-center">
           <Link
             to="/"
             aria-label="go to homepage"
             activeClassName="active"
+            className="flex text-body-color"
             css={css(
               {
                 '@media (hover: hover)': {
@@ -30,7 +30,6 @@ const Header = ({ siteTitle }) => {
                   transform: 'translate(-70px, 0)',
                 },
               },
-              tw`flex text-body-color`,
             )}
           >
             <Logo
@@ -52,6 +51,7 @@ const Header = ({ siteTitle }) => {
               })}
             />
             <span
+              className="hidden sm:block text-sm md:text-base lg:text-lg"
               css={css(
                 {
                   margin: '20px 0 0 15px',
@@ -65,7 +65,6 @@ const Header = ({ siteTitle }) => {
                     margin: '60px 0 0 20px',
                   },
                 },
-                tw`hidden sm:block text-sm md:text-base lg:text-lg`,
               )}
             >
               {siteTitle}

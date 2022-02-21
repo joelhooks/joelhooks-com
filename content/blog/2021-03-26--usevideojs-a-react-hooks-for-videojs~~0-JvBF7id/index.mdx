@@ -1,0 +1,77 @@
+---
+id: 0-JvBF7id
+slug: usevideojs-a-react-hooks-for-videojs
+date: 2021-03-26
+title: "useVideoJs: a React Hooks for Video.js"
+published: false
+---
+
+The Video.js docs have a good explaination for using Video.js with React, but it focuses on a class based implementation. Getting Video.js to consistently work with React Hooks is fairly straight forward, with a gotcha or two.
+
+Here's the hook:
+
+```jsx
+import * as React from 'react'
+import videojs from 'video.js'
+import 'video.js/dist/video-js.css'
+
+export const useVideoJS = (videoJsOptions: any) => {
+  const videoNode = React.useRef(null)
+  const player = React.useRef<any>(null)
+
+  React.useEffect(() => {
+    player.current = videojs(videoNode.current, videoJsOptions)
+
+    return () => {
+      player.current.dispose()
+    }
+  }, [changedKey])
+
+  const Video = React.useCallback(
+    ({children, ...props}) => {
+      return (
+        <div data-vjs-player key={changedKey}>
+          <video ref={videoNode} className="video-js" {...props}>
+            {children}
+          </video>
+        </div>
+      )
+    },
+    [changedKey],
+  )
+  return {Video, player: player.current}
+}
+```
+
+The hook returns the `Video` component, which is memoized with `useCallback`. This is important! This approach gives us a stable component to use that only updates if the options have changed.
+
+In the `useEffect` we are creating an instance of the player and that is also properly disposed of if the options change.
+
+Now you can use it like this:
+
+```jsx
+import * as React from 'react'
+import {useVideoJs} from './use-video-js'
+
+const MyComponent = () => {
+  const {Video} = useVideoJS({
+      poster: video.poster,
+      sources: [{src: video.url}],
+      controls: true,
+      playbackRates: [0.5, 1, 1.5, 2],
+      responsive: true,
+  })
+
+  return (
+  <Video poster={video.poster} playsInline muted>
+      <track
+          src={video.subtitlesUrl}
+          kind="subtitles"
+          srcLang="en"
+          label="English"
+      />
+  </Video>
+  )
+}
+```
+
