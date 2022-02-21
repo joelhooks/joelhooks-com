@@ -6,7 +6,7 @@ import { TwitterTweetEmbed } from "react-twitter-embed";
 const shortcodes = { ResponsiveEmbed, TwitterTweetEmbed }
 
 const CustomMDXProvider = ({ children }) => (
-  <MDXProvider components={shortcodes}>{children}</MDXProvider>
+  <MDXProvider>{children}</MDXProvider>
 )
 
 export default CustomMDXProvider
