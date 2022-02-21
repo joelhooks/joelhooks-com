@@ -15,6 +15,7 @@ import { fonts } from '../lib/typography'
 import config from '../../config/website'
 import Footer from '../components/Footer'
 
+
 const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
   const darkMode = useDarkMode()
 
