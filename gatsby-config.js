@@ -43,16 +43,20 @@ module.exports = {
         ignore: [`**/readme.md`],
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `pages`,
+        path: `${__dirname}/src/mdx-components/`,
+      },
+    },
     'gatsby-plugin-use-dark-mode',
     {
-      resolve: `gatsby-mdx`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
-        globalScope: `
-          import ResponsiveEmbed from "react-responsive-embed";
-          import { TwitterTweetEmbed } from "react-twitter-embed";
-
-          export default { ResponsiveEmbed, TwitterTweetEmbed };
-        `,
+        defaultLayouts: {
+          default: require.resolve(`./src/components/default-page-layout.js`)
+        },
         extensions: ['.mdx', '.md', '.markdown'],
         gatsbyRemarkPlugins: [
           {
@@ -65,6 +69,7 @@ module.exports = {
         ],
       },
     },
+    'gatsby-plugin-postcss',
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     'gatsby-plugin-emotion',
@@ -112,7 +117,7 @@ module.exports = {
         feeds: [
           {
             serialize: ({query: {site, allMdx}}) =>
-              allMdx.edges.map(edge =>
+              allMdx.edges.filter(edge => edge.node.fields?.date).map(edge =>
                 Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   date: edge.node.fields.date,
@@ -154,67 +159,11 @@ module.exports = {
         pathToConfigModule: `src/lib/typography`,
       },
     },
-    {
-      resolve: `gatsby-plugin-algolia`,
-      options: {
-        appId: process.env.ALGOLIA_APP_ID,
-        apiKey: process.env.ALGOLIA_API_KEY,
-        indexName: process.env.ALGOLIA_INDEX_NAME, // for all queries
-        queries: [
-          {
-            query: `
-            {
-              allMdx(
-                filter: { frontmatter: { hidden: { ne: true } } }
-
-              ) {
-                edges {
-                  node {
-                    id
-                    rawBody
-                    fields {
-                      slug
-                    }
-                    frontmatter {
-                      title
-                      description
-                    }
-                  }
-                }
-              }
-            }
-          `,
-            transformer: ({data}) =>
-              data.allMdx.edges.reduce((records, {node}) => {
-                const {title, description} = node.frontmatter
-                const {slug} = node.fields
-
-                const base = {slug, title, description}
-                const chunks = node.rawBody.split('\n\n')
-
-                return [
-                  ...records,
-                  ...chunks.map((text, index) => ({
-                    ...base,
-                    objectID: `${slug}-${index}`,
-                    text,
-                  })),
-                ]
-              }, []),
-            settings: {
-              distinct: true,
-              attributeForDistinct: 'slug',
-              searchableAttributes: ['title', 'description', 'text', 'slug'],
-            },
-          },
-        ],
-      },
-    },
-    {
-      resolve: 'gatsby-plugin-fathom',
-      options: {
-        siteId: process.env.FATHOM_SITE_ID,
-      },
-    },
+    // {
+      // resolve: 'gatsby-plugin-fathom',
+      // options: {
+        // siteId: process.env.FATHOM_SITE_ID,
+      // },
+    // },
   ],
 }

@@ -3,7 +3,6 @@ import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import { rgba } from 'polished'
 import { MDXProvider } from '@mdx-js/tag'
-import tw from 'tailwind.macro'
 import { Global, css } from '@emotion/core'
 import useDarkMode from 'use-dark-mode'
 
@@ -190,7 +189,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
           ${reset};
         `}
       />
-      <div css={css(tw`flex flex-col w-full min-h-screen`)}>
+      <div className="flex flex-col w-full min-h-screen">
         <Helmet
           htmlAttributes={{
             lang: 'en',

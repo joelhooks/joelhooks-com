@@ -2,7 +2,6 @@ import React from 'react'
 import {Formik, Field, Form, ErrorMessage} from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
-import tw from 'tailwind.macro'
 import {css} from '@emotion/core'
 
 import colors from '../../lib/colors'
@@ -69,11 +68,9 @@ class SubscribeForm extends React.Component {
       <div {...this.props}>
         {!submitted && (
           <div
-            css={css(
-              tw`flex flex-col-reverse items-center sm:flex-row sm:items-start`,
-            )}
+            className="flex flex-col-reverse items-center sm:flex-row sm:items-start"
           >
-            <div css={css(tw`flex-grow mt-8`)}>
+            <div className="flex-grow mt-8">
               <h2
                 css={css({
                   margin: '0 0 20px 0',
@@ -82,7 +79,7 @@ class SubscribeForm extends React.Component {
               >
                 Let's chat about coding, business, learning, and teaching.
               </h2>
-              <p css={css(tw`text-base m-0`)}>
+              <p className="text-base m-0">
                 I send articles and thoughts occasionally and love to have
                 conversations with folks. Lots of people like them, and I'd love
                 to learn what you think as well. You can always unsubscribe.
@@ -117,13 +114,13 @@ class SubscribeForm extends React.Component {
             onSubmit={values => this.handleSubmit(values)}
             render={({errors}) => (
               <Form
+                className="flex flex-col sm:flex-row items-end mt-5"
                 css={css(
                   {
                     '.field-error': {
                       color: colors.red,
                     },
                   },
-                  tw`flex flex-col sm:flex-row items-end mt-5`,
                 )}
               >
                 <label htmlFor="name" css={labelStyles}>
