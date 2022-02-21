@@ -82,11 +82,7 @@ export default function Post({data: {site, mdx}, pageContext: {next, prev}}) {
               <em>edit ✏️</em>
             </a>
           </div>
-          <MDXRoot>
-            <CustomMdxProvider>
-              <MDXRenderer >{mdx.body}</MDXRenderer>
-            </CustomMdxProvider>
-          </MDXRoot>
+            <MDXRenderer>{mdx.body}</MDXRenderer>
         </Container>
         {/* <SubscribeForm /> */}
       </article>
