@@ -17,7 +17,7 @@ import Footer from '../components/Footer'
 
 
 const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
-  const darkMode = useDarkMode()
+  const darkMode = false
 
   const {
     description: siteDescription,
@@ -202,6 +202,7 @@ const Layout = ({ site, frontmatter = {}, children, noFooter }) => {
           ]}
         />
         <Header siteTitle={site.siteMetadata.title} />
+
         <MDXProvider components={mdxComponents}>
           <Fragment>{children}</Fragment>
         </MDXProvider>

@@ -47,7 +47,9 @@ export default function Index({ data: { site, file } }) {
             padding-bottom: 0;
           `}
         >
-          <MDXRenderer>{file.childMdx.body}</MDXRenderer>
+          <div className="prose lg:prose-xl ">
+          <MDXRenderer >{file.childMdx.body}</MDXRenderer>
+          </div>
           <Button
             secondary
             to="/articles"

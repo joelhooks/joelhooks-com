@@ -82,7 +82,7 @@ export default function Post({data: {site, mdx}, pageContext: {next, prev}}) {
               <em>edit ✏️</em>
             </a>
           </div>
-            <MDXRenderer>{mdx.body}</MDXRenderer>
+            <div className="prose lg:prose-xl"><MDXRenderer>{mdx.body}</MDXRenderer></div>
         </Container>
         {/* <SubscribeForm /> */}
       </article>

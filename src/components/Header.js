@@ -13,12 +13,12 @@ const Header = ({ siteTitle }) => {
   return (
     <header className="w-full flex-shrink-0 py-4 md:py-8 lg:py-12 bg-body">
       <Container noVerticalPadding>
-        <nav className="w-full flex justify-between items-center">
+        <nav className="w-full flex  justify-between items-center">
           <Link
             to="/"
             aria-label="go to homepage"
             activeClassName="active"
-            className="flex text-body-color"
+            className="flex text-body-color "
             css={css(
               {
                 '@media (hover: hover)': {
@@ -86,8 +86,7 @@ const Header = ({ siteTitle }) => {
             }}
           >
             <Search />
-
-            <ThemeToggler />
+            {/*<ThemeToggler />*/}
           </div>
         </nav>
       </Container>

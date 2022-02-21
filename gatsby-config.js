@@ -50,7 +50,6 @@ module.exports = {
         path: `${__dirname}/src/mdx-components/`,
       },
     },
-    'gatsby-plugin-use-dark-mode',
     {
       resolve: `gatsby-plugin-mdx`,
       options: {

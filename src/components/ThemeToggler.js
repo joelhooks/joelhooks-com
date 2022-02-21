@@ -19,7 +19,7 @@ const DefaultModeIcon = styled(FiSun)({
 })
 
 const ThemeToggler = () => {
-  const darkMode = useDarkMode()
+  const darkMode = false
 
   return (
     <Button
