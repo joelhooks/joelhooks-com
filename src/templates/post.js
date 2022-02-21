@@ -1,7 +1,9 @@
 import React from 'react'
 import {graphql} from 'gatsby'
 import Img from 'gatsby-image'
+import MDXRoot from "gatsby-plugin-mdx/wrap-root-element"
 import { MDXRenderer } from "gatsby-plugin-mdx"
+import CustomMdxProvider from "../components/mdx-provider"
 import SEO from '../components/SEO'
 import {css} from '@emotion/core'
 import Container from '../components/Container'
@@ -80,7 +82,11 @@ export default function Post({data: {site, mdx}, pageContext: {next, prev}}) {
               <em>edit ✏️</em>
             </a>
           </div>
-          <MDXRenderer>{mdx.body}</MDXRenderer>
+          <MDXRoot>
+            <CustomMdxProvider>
+              <MDXRenderer >{mdx.body}</MDXRenderer>
+            </CustomMdxProvider>
+          </MDXRoot>
         </Container>
         {/* <SubscribeForm /> */}
       </article>
